@@ -1,0 +1,29 @@
+<resources>
+    <string name="app_name">KateringConnect</string>
+    <string name="title_beranda">Beranda</string>
+    <string name="title_riwayat">Riwayat</string>
+    <string name="title_akun">Akun</string>
+    <string name="login_title">Katering\nConnect</string>
+    <string name="tv_email">Email</string>
+    <string name="tv_password">Password</string>
+    <string name="login">Masuk</string>
+    <string name="tv_notRegistered">Belum punya akun ?</string>
+    <string name="tv_jenis_akun">Jenis Akun</string>
+    <string name="akun_pembeli">Akun Pembeli</string>
+    <string name="akun_vendor">Akun Vendor</string>
+    <string name="tv_name">Nama</string>
+    <string name="tv_city">Kota</string>
+    <string name="tv_address">Alamat</string>
+    <string name="tv_no_phone">No. Telp</string>
+    <string name="register">Daftar</string>
+    <string name="tv_Registered">Sudah punya akun ?</string>
+
+    <string-array name="Cities">
+        <item>Surabaya</item>
+        <item>Malang</item>
+        <item>Jakarta</item>
+        <item>Bandung</item>
+        <item>Yogyakarta</item>
+        <item>Balikpapan</item>
+    </string-array>
+</resources>
