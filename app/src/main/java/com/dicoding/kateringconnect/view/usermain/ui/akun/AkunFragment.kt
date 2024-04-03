@@ -1,5 +1,6 @@
-package com.dicoding.kateringconnect.view.main.ui.akun
+package com.dicoding.kateringconnect.view.usermain.ui.akun
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -8,6 +9,9 @@ import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.dicoding.kateringconnect.databinding.FragmentAkunBinding
+import com.dicoding.kateringconnect.view.login.LoginActivity
+import com.dicoding.kateringconnect.view.register.RegisterActivity
+import com.dicoding.kateringconnect.view.usermain.UserMainActivity
 
 class AkunFragment : Fragment() {
 
@@ -22,19 +26,19 @@ class AkunFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        val akunViewModel =
-            ViewModelProvider(this, ViewModelProvider.NewInstanceFactory()).get(
-                AkunViewModel::class.java
-            )
 
         _binding = FragmentAkunBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
-        val textView: TextView = binding.textNotifications
-        akunViewModel.text.observe(viewLifecycleOwner) {
-            textView.text = it
-        }
+        setupAction()
         return root
+    }
+
+    private fun setupAction() {
+        binding.btnLogout.setOnClickListener{
+            val intent = Intent(requireContext(), LoginActivity::class.java)
+            startActivity(intent)
+        }
     }
 
     override fun onDestroyView() {

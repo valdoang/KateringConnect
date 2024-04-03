@@ -3,7 +3,7 @@
     <string name="title_beranda">Beranda</string>
     <string name="title_riwayat">Riwayat</string>
     <string name="title_akun">Akun</string>
-    <string name="login_title">Katering\nConnect</string>
+    <string name="katering">Katering</string>
     <string name="tv_email">Email</string>
     <string name="tv_password">Password</string>
     <string name="login">Masuk</string>
@@ -17,6 +17,10 @@
     <string name="tv_no_phone">No. Telp</string>
     <string name="register">Daftar</string>
     <string name="tv_Registered">Sudah punya akun ?</string>
+    <string name="connect">Connect</string>
+    <string name="title_akun_anda">Akun Anda</string>
+    <string name="logout">Keluar</string>
+    <string name="edit_akun">Edit Akun</string>
 
     <string-array name="Cities">
         <item>Surabaya</item>

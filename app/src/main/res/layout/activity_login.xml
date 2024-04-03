@@ -7,17 +7,30 @@
     tools:context=".view.login.LoginActivity">
 
     <TextView
-        android:id="@+id/login_title"
+        android:id="@+id/title_katering"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="120dp"
-        android:text="@string/login_title"
+        android:layout_marginEnd="16dp"
+        android:text="@string/katering"
         android:textColor="@color/black"
         android:fontFamily="@font/kaushan_script"
         android:textSize="45sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/title_connect"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="32dp"
+        android:text="@string/connect"
+        android:textColor="@color/black"
+        android:fontFamily="@font/kaushan_script"
+        android:textSize="45sp"
+        app:layout_constraintStart_toStartOf="@id/title_katering"
+        app:layout_constraintTop_toBottomOf="@id/title_katering" />
 
     <TextView
         android:id="@+id/tv_email"
@@ -30,7 +43,7 @@
         android:textColor="@color/black"
         android:textSize="14sp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/login_title" />
+        app:layout_constraintTop_toBottomOf="@id/title_connect" />
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/emailEditTextLayout"

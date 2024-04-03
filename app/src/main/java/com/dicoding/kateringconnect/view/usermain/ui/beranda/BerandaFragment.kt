@@ -1,12 +1,10 @@
-package com.dicoding.kateringconnect.view.main.ui.beranda
+package com.dicoding.kateringconnect.view.usermain.ui.beranda
 
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
 import com.dicoding.kateringconnect.databinding.FragmentBerandaBinding
 
 class BerandaFragment : Fragment() {
@@ -22,19 +20,9 @@ class BerandaFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        val berandaViewModel =
-            ViewModelProvider(
-                this,
-                ViewModelProvider.NewInstanceFactory()
-            ).get(BerandaViewModel::class.java)
-
         _binding = FragmentBerandaBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
-        val textView: TextView = binding.textHome
-        berandaViewModel.text.observe(viewLifecycleOwner) {
-            textView.text = it
-        }
         return root
     }
 

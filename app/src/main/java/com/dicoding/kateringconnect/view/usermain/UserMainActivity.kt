@@ -1,4 +1,4 @@
-package com.dicoding.kateringconnect.view.main
+package com.dicoding.kateringconnect.view.usermain
 
 import android.os.Bundle
 import com.google.android.material.bottomnavigation.BottomNavigationView
@@ -8,16 +8,17 @@ import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import com.dicoding.kateringconnect.R
-import com.dicoding.kateringconnect.databinding.ActivityMainBinding
+import com.dicoding.kateringconnect.databinding.ActivityUserMainBinding
 
-class MainActivity : AppCompatActivity() {
+class UserMainActivity : AppCompatActivity() {
 
-    private lateinit var binding: ActivityMainBinding
+    private lateinit var binding: ActivityUserMainBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        supportActionBar?.hide()
 
-        binding = ActivityMainBinding.inflate(layoutInflater)
+        binding = ActivityUserMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
         val navView: BottomNavigationView = binding.navView

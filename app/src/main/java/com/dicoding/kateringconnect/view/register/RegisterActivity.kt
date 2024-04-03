@@ -1,11 +1,8 @@
 package com.dicoding.kateringconnect.view.register
 
 import android.content.Intent
-import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.view.WindowInsets
-import android.view.WindowManager
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.RadioButton
@@ -14,7 +11,6 @@ import android.widget.Toast
 import com.dicoding.kateringconnect.R
 import com.dicoding.kateringconnect.databinding.ActivityRegisterBinding
 import com.dicoding.kateringconnect.view.login.LoginActivity
-import com.dicoding.kateringconnect.view.main.MainActivity
 
 class RegisterActivity : AppCompatActivity() {
     private lateinit var binding: ActivityRegisterBinding
@@ -24,23 +20,10 @@ class RegisterActivity : AppCompatActivity() {
         binding = ActivityRegisterBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        setupView()
+        supportActionBar?.hide()
         setupAction()
         rgJenisAkun()
         acCity()
-    }
-
-    private fun setupView() {
-        @Suppress("DEPRECATION")
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-            window.insetsController?.hide(WindowInsets.Type.statusBars())
-        } else {
-            window.setFlags(
-                WindowManager.LayoutParams.FLAG_FULLSCREEN,
-                WindowManager.LayoutParams.FLAG_FULLSCREEN
-            )
-        }
-        supportActionBar?.hide()
     }
 
     private fun rgJenisAkun() {
