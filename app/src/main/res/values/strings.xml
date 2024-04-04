@@ -30,4 +30,9 @@
         <item>Yogyakarta</item>
         <item>Balikpapan</item>
     </string-array>
+    <string name="title_activity_vendor_main">VendorMainActivity</string>
+    <string name="title_home">Home</string>
+    <string name="title_dashboard">Dashboard</string>
+    <string name="title_notifications">Notifications</string>
+    <string name="title_vendor_beranda">Pesanan Masuk</string>
 </resources>

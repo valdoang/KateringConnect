@@ -5,17 +5,13 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
-import com.dicoding.kateringconnect.databinding.FragmentAkunBinding
+import com.dicoding.kateringconnect.databinding.FragmentUserAkunBinding
 import com.dicoding.kateringconnect.view.login.LoginActivity
-import com.dicoding.kateringconnect.view.register.RegisterActivity
-import com.dicoding.kateringconnect.view.usermain.UserMainActivity
 
-class AkunFragment : Fragment() {
+class UserAkunFragment : Fragment() {
 
-    private var _binding: FragmentAkunBinding? = null
+    private var _binding: FragmentUserAkunBinding? = null
 
     // This property is only valid between onCreateView and
     // onDestroyView.
@@ -27,7 +23,7 @@ class AkunFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
 
-        _binding = FragmentAkunBinding.inflate(inflater, container, false)
+        _binding = FragmentUserAkunBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
         setupAction()

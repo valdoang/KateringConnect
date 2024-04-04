@@ -11,6 +11,7 @@ import android.widget.Toast
 import com.dicoding.kateringconnect.R
 import com.dicoding.kateringconnect.databinding.ActivityRegisterBinding
 import com.dicoding.kateringconnect.view.login.LoginActivity
+import com.dicoding.kateringconnect.view.vendormain.VendorMainActivity
 
 class RegisterActivity : AppCompatActivity() {
     private lateinit var binding: ActivityRegisterBinding
@@ -57,9 +58,8 @@ class RegisterActivity : AppCompatActivity() {
             finish()
         }
         binding.registerButton.setOnClickListener {
-            val intent = Intent(this, LoginActivity::class.java)
+            val intent = Intent(this, VendorMainActivity::class.java)
             startActivity(intent)
-            finish()
         }
     }
 }
