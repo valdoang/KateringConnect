@@ -31,7 +31,7 @@ class UserAkunFragment : Fragment() {
     }
 
     private fun setupAction() {
-        binding.btnLogout.setOnClickListener{
+        binding.btnUserLogout.setOnClickListener{
             val intent = Intent(requireContext(), LoginActivity::class.java)
             startActivity(intent)
         }

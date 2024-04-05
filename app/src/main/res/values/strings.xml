@@ -35,4 +35,9 @@
     <string name="title_dashboard">Dashboard</string>
     <string name="title_notifications">Notifications</string>
     <string name="title_vendor_beranda">Pesanan Masuk</string>
+    <string name="nasi_kotak">Nasi Kotak</string>
+    <string name="tumpeng">Tumpeng</string>
+    <string name="prasmanan">Prasmanan</string>
+    <string name="kategori">Kategori</string>
+    <string name="galeri">Galeri</string>
 </resources>
