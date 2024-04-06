@@ -12,6 +12,12 @@
         android:theme="@style/Theme.KateringConnect"
         tools:targetApi="31">
         <activity
+            android:name=".view.galeri.AddGaleriActivity"
+            android:exported="false" />
+        <activity
+            android:name=".view.akun.EditAkunActivity"
+            android:exported="false" />
+        <activity
             android:name=".view.vendormain.VendorMainActivity"
             android:exported="false"
             android:label="@string/title_activity_vendor_main" />

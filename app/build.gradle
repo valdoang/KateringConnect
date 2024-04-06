@@ -52,4 +52,7 @@ dependencies {
 
     //LottieFiles
     implementation "com.airbnb.android:lottie:6.4.0"
+
+    //ZoomLayout
+    implementation("com.otaliastudios:zoomlayout:1.9.0")
 }

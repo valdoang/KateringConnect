@@ -18,7 +18,7 @@
             android:layout_marginTop="16dp"
             android:text="@string/title_akun_anda"
             android:fontFamily="@font/poppins_bold"
-            android:textColor="@color/orange"
+            android:textColor="@color/black"
             android:textSize="20sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"

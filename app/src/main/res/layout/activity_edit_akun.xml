@@ -4,58 +4,67 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:focusableInTouchMode="false"
-    tools:context=".view.register.RegisterActivity">
+    tools:context=".view.akun.EditAkunActivity">
 
     <TextView
-        android:id="@+id/tv_jenis_akun"
+        android:id="@+id/title_edit_akun"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:fontFamily="@font/poppins_light"
-        android:text="@string/tv_jenis_akun"
+        android:layout_marginTop="16dp"
+        android:text="@string/title_edit_akun"
+        android:fontFamily="@font/poppins_bold"
         android:textColor="@color/black"
-        android:textSize="14sp"
-        android:layout_marginStart="32dp"
-        android:layout_marginTop="32dp"
+        android:textSize="20sp"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"/>
+        app:layout_constraintTop_toTopOf="parent" />
 
-    <RadioGroup
-        android:id="@+id/rg_jenis_akun"
+    <ImageButton
+        android:id="@+id/ib_back"
+        android:layout_width="35dp"
+        android:layout_height="35dp"
+        android:src="@drawable/ic_baseline_arrow_back_24"
+        android:background="@color/white"
+        android:layout_marginTop="16dp"
+        android:layout_marginStart="16dp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"/>
+
+    <ImageView
+        android:id="@+id/iv_edit_photo"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:src="@drawable/default_profile"
+        android:layout_marginTop="16dp"
+        app:layout_constraintTop_toBottomOf="@id/title_edit_akun"
+        app:layout_constraintStart_toStartOf="@id/title_edit_akun"
+        app:layout_constraintEnd_toEndOf="@id/title_edit_akun"/>
+
+    <TextView
+        android:id="@+id/tv_add_photo"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        app:layout_constraintTop_toBottomOf="@+id/tv_jenis_akun"
-        app:layout_constraintStart_toStartOf="@+id/tv_jenis_akun">
-        <RadioButton
-            android:id="@+id/pembeli"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/akun_pembeli"
-            android:fontFamily="@font/poppins_light"
-            android:textSize="14sp"
-            android:layout_marginEnd="8dp"/>
-        <RadioButton
-            android:id="@+id/vendor"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/akun_vendor"
-            android:fontFamily="@font/poppins_light"
-            android:textSize="14sp"/>
-    </RadioGroup>
+        android:layout_marginTop="8dp"
+        android:text="@string/edit_foto"
+        android:fontFamily="@font/poppins_bold"
+        android:textColor="@color/orange"
+        android:textSize="14sp"
+        app:layout_constraintEnd_toEndOf="@id/iv_edit_photo"
+        app:layout_constraintStart_toStartOf="@id/iv_edit_photo"
+        app:layout_constraintTop_toBottomOf="@id/iv_edit_photo" />
 
     <TextView
         android:id="@+id/tv_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="32dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="16dp"
         android:text="@string/tv_name"
         android:fontFamily="@font/poppins_light"
         android:textSize="14sp"
         android:textColor="@color/black"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/rg_jenis_akun" />
+        app:layout_constraintTop_toBottomOf="@id/tv_add_photo" />
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/nameEditTextLayout"
@@ -72,7 +81,7 @@
         app:startIconDrawable="@drawable/ic_baseline_person_24">
 
         <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/ed_register_name"
+            android:id="@+id/ed_edit_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:ems="10"
@@ -105,9 +114,9 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tv_city"
         app:startIconDrawable="@drawable/ic_baseline_location_city_24">
-        
+
         <AutoCompleteTextView
-            android:id="@+id/ac_register_city"
+            android:id="@+id/ac_edit_city"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:inputType="none"/>
@@ -141,7 +150,7 @@
         app:startIconDrawable="@drawable/ic_baseline_location_on_24">
 
         <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/ed_register_address"
+            android:id="@+id/ed_edit_address"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:ems="10"
@@ -176,129 +185,26 @@
         app:startIconDrawable="@drawable/ic_baseline_phone_24">
 
         <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/ed_register_no_phone"
+            android:id="@+id/ed_edit_no_phone"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:ems="10"
             android:inputType="text" />
-    </com.google.android.material.textfield.TextInputLayout>
-
-    <TextView
-        android:id="@+id/tv_email"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="32dp"
-        android:layout_marginTop="8dp"
-        android:fontFamily="@font/poppins_light"
-        android:text="@string/tv_email"
-        android:textColor="@color/black"
-        android:textSize="14sp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/noPhoneEditTextLayout" />
-
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/emailEditTextLayout"
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-        app:boxCornerRadiusBottomEnd="16dp"
-        app:boxCornerRadiusTopStart="16dp"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="32dp"
-        android:layout_marginEnd="32dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tv_email"
-        app:startIconDrawable="@drawable/ic_baseline_email_24">
-
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/ed_register_email"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:ems="10"
-            android:inputType="text" />
-
-    </com.google.android.material.textfield.TextInputLayout>
-
-    <TextView
-        android:id="@+id/tv_password"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="32dp"
-        android:layout_marginTop="8dp"
-        android:fontFamily="@font/poppins_light"
-        android:text="@string/tv_password"
-        android:textSize="14sp"
-        android:textColor="@color/black"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/emailEditTextLayout" />
-
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/passwordEditTextLayout"
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-        app:boxCornerRadiusBottomEnd="16dp"
-        app:boxCornerRadiusTopStart="16dp"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="32dp"
-        android:layout_marginEnd="32dp"
-        app:passwordToggleEnabled="true"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tv_password"
-        app:startIconDrawable="@drawable/ic_baseline_lock_24">
-
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/ed_register_password"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:ems="10"
-            android:inputType="textPassword"
-            app:passwordToggleEnabled="true"
-            tools:ignore="SpeakableTextPresentCheck"/>
-
     </com.google.android.material.textfield.TextInputLayout>
 
     <Button
-        android:id="@+id/registerButton"
+        android:id="@+id/btn_simpan"
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         android:layout_width="0dp"
-        android:layout_height="64dp"
-        android:layout_marginStart="32dp"
+        android:layout_height="50dp"
+        android:layout_marginStart="70dp"
         android:layout_marginTop="32dp"
-        android:layout_marginEnd="32dp"
+        android:layout_marginEnd="70dp"
         android:fontFamily="@font/poppins_bold"
-        android:text="@string/register"
+        android:text="@string/simpan"
         android:textSize="16sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/passwordEditTextLayout" />
-
-    <TextView
-        android:id="@+id/tv_notRegistered"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="60dp"
-        android:layout_marginTop="20dp"
-        android:fontFamily="@font/poppins_light"
-        android:text="@string/tv_Registered"
-        android:textColor="@color/black"
-        android:textSize="14sp"
-        app:layout_constraintStart_toStartOf="@+id/registerButton"
-        app:layout_constraintEnd_toEndOf="@id/registerButton"
-        app:layout_constraintTop_toBottomOf="@+id/registerButton" />
-
-    <TextView
-        android:id="@+id/tv_toLogin"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:layout_marginStart="4dp"
-        android:fontFamily="@font/poppins_light"
-        android:text="@string/login"
-        android:textColor="@color/orange"
-        android:textSize="14sp"
-        app:layout_constraintStart_toEndOf="@+id/tv_notRegistered"
-        app:layout_constraintTop_toBottomOf="@+id/registerButton" />
-
+        app:layout_constraintTop_toBottomOf="@+id/noPhoneEditTextLayout" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

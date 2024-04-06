@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.dicoding.kateringconnect.databinding.FragmentUserAkunBinding
+import com.dicoding.kateringconnect.view.akun.EditAkunActivity
 import com.dicoding.kateringconnect.view.login.LoginActivity
 
 class UserAkunFragment : Fragment() {
@@ -31,6 +32,10 @@ class UserAkunFragment : Fragment() {
     }
 
     private fun setupAction() {
+        binding.btnUserEditAkun.setOnClickListener{
+            val intent = Intent(requireContext(), EditAkunActivity::class.java)
+            startActivity(intent)
+        }
         binding.btnUserLogout.setOnClickListener{
             val intent = Intent(requireContext(), LoginActivity::class.java)
             startActivity(intent)

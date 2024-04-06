@@ -18,9 +18,9 @@
     <string name="register">Daftar</string>
     <string name="tv_Registered">Sudah punya akun ?</string>
     <string name="connect">Connect</string>
-    <string name="title_akun_anda">Akun Anda</string>
+    <string name="title_akun_anda">Profil Anda</string>
     <string name="logout">Keluar</string>
-    <string name="edit_akun">Edit Akun</string>
+    <string name="edit_akun">Edit Profil</string>
 
     <string-array name="Cities">
         <item>Surabaya</item>
@@ -31,13 +31,26 @@
         <item>Balikpapan</item>
     </string-array>
     <string name="title_activity_vendor_main">VendorMainActivity</string>
-    <string name="title_home">Home</string>
-    <string name="title_dashboard">Dashboard</string>
-    <string name="title_notifications">Notifications</string>
     <string name="title_vendor_beranda">Pesanan Masuk</string>
     <string name="nasi_kotak">Nasi Kotak</string>
     <string name="tumpeng">Tumpeng</string>
     <string name="prasmanan">Prasmanan</string>
     <string name="kategori">Kategori</string>
     <string name="galeri">Galeri</string>
+    <string name="title_edit_akun">Edit Profil</string>
+    <string name="simpan">Simpan</string>
+    <string name="title_tambah_menu">Tambah Menu</string>
+    <string name="tv_desc">Keterangan</string>
+    <string name="tv_price">Harga</string>
+    <string name="tv_jenis">Jenis</string>
+    <string name="tambah">Tambah</string>
+    <string name="title_edit_menu">Edit Menu</string>
+    <string name="hapus">Hapus</string>
+    <string name="title_tambah_galeri">Tambah Galeri</string>
+    <string name="edit_foto">Edit foto</string>
+    <string name="add_photo">Tambahkan foto</string>
+    <string name="from_galeri">Ambil dari galeri</string>
+    <string name="from_camera">Ambil dari kamera</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>
