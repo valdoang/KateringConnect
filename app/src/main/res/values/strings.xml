@@ -51,6 +51,13 @@
     <string name="add_photo">Tambahkan foto</string>
     <string name="from_galeri">Ambil dari galeri</string>
     <string name="from_camera">Ambil dari kamera</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="pesan">Pesan</string>
+    <string name="tv_jumlah">Jumlah</string>
+    <string name="tv_catatan">Catatan</string>
+    <string name="tv_pembayaran">Metode Pembayaran</string>
+    <string name="tunai">Tunai</string>
+    <string name="bank_bca">Bank BCA</string>
+    <string name="bank_bri">Bank BRI</string>
+    <string name="tv_user_info">Informasi Anda</string>
+    <string name="total_pembayaran">Total Pembayaran</string>
 </resources>

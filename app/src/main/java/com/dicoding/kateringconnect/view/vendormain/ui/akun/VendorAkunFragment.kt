@@ -10,8 +10,8 @@ import com.dicoding.kateringconnect.databinding.FragmentVendorAkunBinding
 import com.dicoding.kateringconnect.view.galeri.AddGaleriActivity
 import com.dicoding.kateringconnect.view.menu.AddMenuFragment
 import com.dicoding.kateringconnect.view.akun.EditAkunActivity
-import com.dicoding.kateringconnect.view.galeri.DetailGaleriFragment
 import com.dicoding.kateringconnect.view.login.LoginActivity
+import com.dicoding.kateringconnect.view.menu.MenuActivity
 
 class VendorAkunFragment : Fragment() {
 
@@ -49,6 +49,10 @@ class VendorAkunFragment : Fragment() {
         }
         binding.fabAddGaleri.setOnClickListener {
             val intent = Intent(requireContext(), AddGaleriActivity::class.java)
+            startActivity(intent)
+        }
+        binding.cvNasiKotak.setOnClickListener {
+            val intent = Intent(requireContext(), MenuActivity::class.java)
             startActivity(intent)
         }
     }

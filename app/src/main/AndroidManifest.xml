@@ -12,6 +12,15 @@
         android:theme="@style/Theme.KateringConnect"
         tools:targetApi="31">
         <activity
+            android:name=".view.pemesanan.PemesananActivity"
+            android:exported="false" />
+        <activity
+            android:name=".view.menu.MenuActivity"
+            android:exported="false" />
+        <activity
+            android:name=".view.vendor.DetailVendorActivity"
+            android:exported="false" />
+        <activity
             android:name=".view.galeri.AddGaleriActivity"
             android:exported="false" />
         <activity

@@ -55,4 +55,7 @@ dependencies {
 
     //ZoomLayout
     implementation("com.otaliastudios:zoomlayout:1.9.0")
+
+    //Sticky Scroll View
+    implementation 'com.github.amarjain07:StickyScrollView:1.0.3'
 }
