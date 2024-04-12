@@ -7,19 +7,19 @@
 
     <fragment
         android:id="@+id/navigation_vendor_beranda"
-        android:name="com.dicoding.kateringconnect.view.vendormain.ui.beranda.VendorBerandaFragment"
+        android:name="com.dicoding.kateringconnect.view.vendor.main.ui.beranda.VendorBerandaFragment"
         android:label="@string/title_beranda"
         tools:layout="@layout/fragment_vendor_beranda" />
 
     <fragment
         android:id="@+id/navigation_vendor_riwayat"
-        android:name="com.dicoding.kateringconnect.view.vendormain.ui.riwayat.VendorRiwayatFragment"
+        android:name="com.dicoding.kateringconnect.view.vendor.main.ui.riwayat.VendorRiwayatFragment"
         android:label="@string/title_riwayat"
         tools:layout="@layout/fragment_vendor_riwayat" />
 
     <fragment
         android:id="@+id/navigation_vendor_akun"
-        android:name="com.dicoding.kateringconnect.view.vendormain.ui.akun.VendorAkunFragment"
+        android:name="com.dicoding.kateringconnect.view.vendor.main.ui.akun.VendorAkunFragment"
         android:label="@string/title_akun"
         tools:layout="@layout/fragment_vendor_akun" />
 </navigation>

@@ -12,30 +12,8 @@
         android:theme="@style/Theme.KateringConnect"
         tools:targetApi="31">
         <activity
-            android:name=".view.pemesanan.PemesananActivity"
-            android:exported="false" />
-        <activity
-            android:name=".view.menu.MenuActivity"
-            android:exported="false" />
-        <activity
-            android:name=".view.vendor.DetailVendorActivity"
-            android:exported="false" />
-        <activity
-            android:name=".view.galeri.AddGaleriActivity"
-            android:exported="false" />
-        <activity
-            android:name=".view.akun.EditAkunActivity"
-            android:exported="false" />
-        <activity
-            android:name=".view.vendormain.VendorMainActivity"
-            android:exported="false"
-            android:label="@string/title_activity_vendor_main" />
-        <activity
-            android:name=".view.register.RegisterActivity"
-            android:exported="false" />
-        <activity
-            android:name=".view.login.LoginActivity"
-            android:exported="true">
+            android:name=".view.both.splash.SplashScreenActivity"
+            android:exported="true" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -43,7 +21,44 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".view.usermain.UserMainActivity"
+            android:name=".view.vendor.menu.VendorMenuActivity"
+            android:exported="false" />
+        <activity
+            android:name=".view.vendor.DetailPesananActivity"
+            android:exported="false" />
+        <activity
+            android:name=".view.vendor.DetailRiwayatPesananActivity"
+            android:exported="false" />
+        <activity
+            android:name=".view.user.DetailRiwayatPemesananActivity"
+            android:exported="false" />
+        <activity
+            android:name=".view.user.PemesananActivity"
+            android:exported="false" />
+        <activity
+            android:name=".view.user.menu.UserMenuActivity"
+            android:exported="false" />
+        <activity
+            android:name=".view.user.DetailVendorActivity"
+            android:exported="false" />
+        <activity
+            android:name=".view.vendor.galeri.AddGaleriActivity"
+            android:exported="false" />
+        <activity
+            android:name=".view.both.akun.EditAkunActivity"
+            android:exported="false" />
+        <activity
+            android:name=".view.vendor.main.VendorMainActivity"
+            android:exported="false"
+            android:label="@string/title_activity_vendor_main" />
+        <activity
+            android:name=".view.both.register.RegisterActivity"
+            android:exported="false" />
+        <activity
+            android:name=".view.both.login.LoginActivity"
+            android:exported="false"/>
+        <activity
+            android:name=".view.user.main.UserMainActivity"
             android:exported="true" />
     </application>
 

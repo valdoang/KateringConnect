@@ -11,7 +11,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        tools:context=".view.pemesanan.PemesananActivity">
+        tools:context=".view.user.PemesananActivity">
 
         <androidx.cardview.widget.CardView
             android:id="@+id/cv_header"
@@ -232,10 +232,10 @@
                     android:id="@+id/tv_metode_pembayaran"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/tv_pembayaran"
+                    android:text="@string/tv_metode_pembayaran"
                     android:fontFamily="@font/poppins_bold"
                     android:textColor="@color/black"
-                    android:layout_marginTop="16dp"
+                    android:layout_marginTop="8dp"
                     android:layout_marginStart="16dp"
                     android:textSize="16sp"
                     app:layout_constraintStart_toStartOf="parent"
@@ -300,7 +300,7 @@
                     android:text="@string/tv_user_info"
                     android:fontFamily="@font/poppins_bold"
                     android:textColor="@color/black"
-                    android:layout_marginTop="16dp"
+                    android:layout_marginTop="8dp"
                     android:layout_marginStart="16dp"
                     android:textSize="16sp"
                     app:layout_constraintStart_toStartOf="parent"
@@ -391,7 +391,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="16dp"
                     android:layout_marginTop="1dp"
-                    android:layout_marginBottom="8dp"
+                    android:layout_marginBottom="16dp"
                     android:text="08121654849"
                     android:textSize="14sp"
                     android:fontFamily="@font/poppins"
