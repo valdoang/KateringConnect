@@ -2,6 +2,9 @@
     <!-- Base application theme. -->
     <style name="Theme.KateringConnect" parent="Theme.MaterialComponents.Light.DarkActionBar">
         <!-- Primary brand color. -->
+        <item name="android:windowDrawsSystemBarBackgrounds">true</item>
+        <item name="android:statusBarColor">@android:color/transparent</item>
+        <item name="android:windowLightStatusBar" tools:targetApi="m">true</item>
         <item name="colorPrimary">@color/red</item>
         <item name="colorPrimaryDark">@color/green</item>
         <item name="colorAccent">@color/teal_200</item>

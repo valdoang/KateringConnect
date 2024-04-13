@@ -71,9 +71,17 @@
     <string name="selesaikan">Selesaikan</string>
     <string name="pesan_lagi">Pesan Lagi</string>
     <string name="beri_nilai">Beri Nilai</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="kirim">Kirim</string>
     <string name="nilai_pesananmu">Nilai Pesananmu</string>
     <string name="splash">splash</string>
+    <string name="success_signout">Berhasil Keluar</string>
+    <string name="success_login">Login Berhasil</string>
+    <string name="success_register">Registrasi Berhasil</string>
+    <string name="already_exists_email">Email Sudah Ada</string>
+    <string name="wrong_email_pass">Email atau Password Salah</string>
+    <string name="please_entry_email_pass">Tolong Masukkan Email dan Password</string>
+    <string name="keluar">Keluar</string>
+    <string name="keluar_title">Keluar?</string>
+    <string name="keluar_message">Anda akan kembali ke halaman Login.</string>
+    <string name="batal">BATAL</string>
 </resources>

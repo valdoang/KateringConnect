@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "316223371282",
+    "project_id": "katering-connect",
+    "storage_bucket": "katering-connect.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:316223371282:android:a3bb795c769f12de7d80cb",
+        "android_client_info": {
+          "package_name": "com.valdoang.kateringconnect"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAmehDEL7clRrLv2Pl_P_tqhd1IPKA7bks"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
