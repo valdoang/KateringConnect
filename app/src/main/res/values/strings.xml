@@ -79,9 +79,20 @@
     <string name="success_register">Registrasi Berhasil</string>
     <string name="already_exists_email">Email Sudah Ada</string>
     <string name="wrong_email_pass">Email atau Password Salah</string>
-    <string name="please_entry_email_pass">Tolong Masukkan Email dan Password</string>
+    <string name="please_entry_email_pass">Tolong Masukkan Email atau Password</string>
+    <string name="can_not_blank">Tidak Boleh Ada Yang Kosong</string>
     <string name="keluar">Keluar</string>
     <string name="keluar_title">Keluar?</string>
     <string name="keluar_message">Anda akan kembali ke halaman Login.</string>
     <string name="batal">BATAL</string>
+    <string name="pembeli">Pembeli</string>
+    <string name="vendor">Vendor</string>
+    <string name="entry_email">Masukkan Email</string>
+    <string name="entry_password">Masukkan Password</string>
+    <string name="entry_name">Masukkan Nama</string>
+    <string name="entry_city">Masukkan Kota</string>
+    <string name="entry_address">Masukkan Alamat</string>
+    <string name="entry_no_phone">Masukkan Nomor Telepon</string>
+    <string name="minimum_character">Minimal 8 Karakter</string>
+    <string name="failed_show_data">Gagal Menampilkan Data</string>
 </resources>
