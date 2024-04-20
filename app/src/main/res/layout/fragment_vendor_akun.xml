@@ -46,12 +46,14 @@
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintEnd_toEndOf="parent"/>
 
-        <ImageView
+        <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/iv_vendor_akun"
-            android:layout_width="100dp"
-            android:layout_height="100dp"
+            android:layout_width="120dp"
+            android:layout_height="120dp"
             android:src="@drawable/default_profile"
             android:layout_marginTop="80dp"
+            app:civ_border_width="2dp"
+            app:civ_border_color="@color/grey"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"/>
@@ -397,17 +399,17 @@
             android:id="@+id/fab_add_menu"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:clickable="true"
             android:src="@drawable/ic_baseline_add_24"
             android:layout_marginTop="8dp"
+            android:layout_marginBottom="100dp"
             app:layout_constraintTop_toBottomOf="@id/fab_add_galeri"
-            app:layout_constraintEnd_toEndOf="@id/fab_add_galeri"/>
+            app:layout_constraintEnd_toEndOf="@id/fab_add_galeri"
+            app:layout_constraintBottom_toBottomOf="parent"/>
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/fab_add_galeri"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:clickable="true"
             android:src="@drawable/ic_baseline_galeri_24"
             android:background="@color/green"
             android:layout_marginTop="24dp"

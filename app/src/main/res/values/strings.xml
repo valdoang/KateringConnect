@@ -95,4 +95,6 @@
     <string name="entry_no_phone">Masukkan Nomor Telepon</string>
     <string name="minimum_character">Minimal 8 Karakter</string>
     <string name="failed_show_data">Gagal Menampilkan Data</string>
+    <string name="success_upload_photo">Berhasil Mengubah Foto</string>
+    <string name="fail_upload_photo">Gagal Mengubah Foto</string>
 </resources>

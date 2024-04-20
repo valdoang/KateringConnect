@@ -6,9 +6,11 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import com.bumptech.glide.Glide
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
@@ -31,6 +33,7 @@ class VendorAkunFragment : Fragment() {
     private lateinit var tvCity: TextView
     private lateinit var tvAddress: TextView
     private lateinit var tvNoPhone: TextView
+    private lateinit var ivVendorAkun: ImageView
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -46,6 +49,7 @@ class VendorAkunFragment : Fragment() {
         tvCity = binding.tvCity
         tvAddress = binding.tvAddress
         tvNoPhone = binding.tvNoPhone
+        ivVendorAkun = binding.ivVendorAkun
 
         setupAccount()
         setupAction()
@@ -56,22 +60,21 @@ class VendorAkunFragment : Fragment() {
     private fun setupAccount() {
         val userId = firebaseAuth.currentUser!!.uid
         val ref = db.collection("user").document(userId)
-        ref.get().addOnSuccessListener { document ->
+        ref.addSnapshotListener { document,_ ->
             if (document != null) {
+                val foto = document.data?.get("foto").toString()
                 val nama = document.data?.get("nama").toString()
                 val kota = document.data?.get("kota").toString()
                 val alamat = document.data?.get("alamat").toString()
                 val telepon = document.data?.get("telepon").toString()
 
+                Glide.with(activity!!).load(foto).error(R.drawable.default_profile).into(ivVendorAkun)
                 tvName.text = nama
                 tvCity.text = kota
                 tvAddress.text = alamat
                 tvNoPhone.text = telepon
             }
         }
-            .addOnFailureListener{
-                Toast.makeText(requireContext(), R.string.failed_show_data, Toast.LENGTH_SHORT).show()
-            }
     }
 
     private fun setupAction() {
