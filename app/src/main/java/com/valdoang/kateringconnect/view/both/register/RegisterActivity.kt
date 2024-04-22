@@ -84,7 +84,6 @@ class RegisterActivity : AppCompatActivity() {
         }
 
         btnRegister.setOnClickListener {
-            progressBar.visibility = View.VISIBLE
             val sName = etName.text.toString().trim()
             val sNoPhone = etNoPhone.text.toString().trim()
             val sAddress = etAddress.text.toString().trim()
@@ -126,6 +125,7 @@ class RegisterActivity : AppCompatActivity() {
                     etPassword.error = getString(R.string.minimum_character)
                 }
                 else -> {
+                    progressBar.visibility = View.VISIBLE
                     firebaseAuth.createUserWithEmailAndPassword(sEmail, sPassword)
                         .addOnCompleteListener(this) { task ->
                             if(task.isSuccessful) {
@@ -146,6 +146,7 @@ class RegisterActivity : AppCompatActivity() {
                                 }
                                 Toast.makeText(this, R.string.success_register, Toast.LENGTH_SHORT).show()
                             } else {
+                                progressBar.visibility = View.GONE
                                 Toast.makeText(this, R.string.already_exists_email, Toast.LENGTH_SHORT).show()
                             }
                         }

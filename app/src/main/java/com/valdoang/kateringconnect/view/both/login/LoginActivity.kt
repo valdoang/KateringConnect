@@ -46,8 +46,6 @@ class LoginActivity : AppCompatActivity() {
         firebaseAuth = Firebase.auth
 
         btnLogin.setOnClickListener {
-            progressBar.visibility = View.VISIBLE
-
             val sEmail = etEmail.text.toString().trim()
             val sPassword = etPassword.text.toString().trim()
 
@@ -62,12 +60,14 @@ class LoginActivity : AppCompatActivity() {
                     etPassword.error = getString(R.string.minimum_character)
                 }
                 else -> {
+                    progressBar.visibility = View.VISIBLE
                     firebaseAuth.signInWithEmailAndPassword(sEmail, sPassword)
                         .addOnCompleteListener(this) { task ->
                             if(task.isSuccessful) {
                                 checkUser()
                                 Toast.makeText(this, R.string.success_login, Toast.LENGTH_SHORT).show()
                             } else {
+                                progressBar.visibility = View.GONE
                                 Toast.makeText(this, R.string.wrong_email_pass, Toast.LENGTH_SHORT).show()
                             }
                         }

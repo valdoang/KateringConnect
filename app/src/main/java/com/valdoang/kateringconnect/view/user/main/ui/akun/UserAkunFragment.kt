@@ -1,15 +1,12 @@
 package com.valdoang.kateringconnect.view.user.main.ui.akun
 
-import android.app.AlertDialog
 import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
-import android.widget.ProgressBar
 import android.widget.TextView
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.bumptech.glide.Glide
 import com.google.firebase.auth.FirebaseAuth
@@ -18,7 +15,7 @@ import com.google.firebase.ktx.Firebase
 import com.valdoang.kateringconnect.R
 import com.valdoang.kateringconnect.databinding.FragmentUserAkunBinding
 import com.valdoang.kateringconnect.view.both.akun.EditAkunActivity
-import com.valdoang.kateringconnect.view.both.login.LoginActivity
+import com.valdoang.kateringconnect.view.both.alertdialog.LogoutFragment
 
 class UserAkunFragment : Fragment() {
 
@@ -80,23 +77,8 @@ class UserAkunFragment : Fragment() {
             startActivity(intent)
         }
         binding.btnUserLogout.setOnClickListener{
-            val builder = AlertDialog.Builder(requireContext())
-            builder.setTitle(resources.getString(R.string.keluar_title))
-            builder.setMessage(resources.getString(R.string.keluar_message))
-            builder.setPositiveButton(resources.getString(R.string.keluar)) { _, _ ->
-                firebaseAuth.signOut()
-                Intent(activity, LoginActivity::class.java).also { intent ->
-                    intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-                    activity?.startActivity(intent)
-                }
-                Toast.makeText(activity, R.string.success_signout, Toast.LENGTH_SHORT).show()
-            }
-            builder.setNegativeButton(resources.getString(R.string.batal)) { dialog, _ ->
-                dialog.dismiss()
-            }
-            builder.setCancelable(false)
-            val dialog = builder.create()
-            dialog.show()
+            val dialog = LogoutFragment()
+            dialog.show(this.parentFragmentManager, "logoutDialog")
         }
     }
 

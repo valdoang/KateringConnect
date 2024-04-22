@@ -35,7 +35,7 @@
     <string name="nasi_kotak">Nasi Kotak</string>
     <string name="tumpeng">Tumpeng</string>
     <string name="prasmanan">Prasmanan</string>
-    <string name="kategori">Kategori</string>
+    <string name="menu">Menu</string>
     <string name="galeri">Galeri</string>
     <string name="title_edit_akun">Edit Profil</string>
     <string name="simpan">Simpan</string>
@@ -97,4 +97,14 @@
     <string name="failed_show_data">Gagal Menampilkan Data</string>
     <string name="success_upload_photo">Berhasil Mengubah Foto</string>
     <string name="fail_upload_photo">Gagal Mengubah Foto</string>
+    <string name="success_upload_gallery">Berhasil Menambahkan Foto</string>
+    <string name="fail_upload_gallery">Gagal Menambahkan Foto</string>
+    <string name="delete_data">Hapus Data?</string>
+    <string name="delete_message">Data ini akan terhapus secara permanen dari penyimpanan.</string>
+    <string name="tidak">Tidak</string>
+    <string name="ya">Ya</string>
+    <string name="logout_alert">Apakah Anda yakin ingin keluar?</string>
+    <string name="success_delete_photo">Foto berhasil dihapus</string>
+    <string name="delete_photo_alert">Apakah Anda yakin ingin \n menghapus foto ini?</string>
+    <string name="hapus_foto">Hapus foto</string>
 </resources>

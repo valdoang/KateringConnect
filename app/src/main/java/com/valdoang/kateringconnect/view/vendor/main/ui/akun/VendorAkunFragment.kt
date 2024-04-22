@@ -1,26 +1,31 @@
 package com.valdoang.kateringconnect.view.vendor.main.ui.akun
 
-import android.app.AlertDialog
+import android.content.ContentValues.TAG
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
-import android.widget.Toast
+import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.valdoang.kateringconnect.R
+import com.valdoang.kateringconnect.adapter.GalleryAdapter
 import com.valdoang.kateringconnect.databinding.FragmentVendorAkunBinding
+import com.valdoang.kateringconnect.model.Gallery
 import com.valdoang.kateringconnect.view.vendor.galeri.AddGaleriActivity
 import com.valdoang.kateringconnect.view.vendor.menu.AddMenuFragment
 import com.valdoang.kateringconnect.view.both.akun.EditAkunActivity
 import com.valdoang.kateringconnect.view.vendor.galeri.DetailGaleriFragment
-import com.valdoang.kateringconnect.view.both.login.LoginActivity
+import com.valdoang.kateringconnect.view.both.alertdialog.LogoutFragment
 import com.valdoang.kateringconnect.view.vendor.menu.VendorMenuActivity
 
 class VendorAkunFragment : Fragment() {
@@ -34,6 +39,9 @@ class VendorAkunFragment : Fragment() {
     private lateinit var tvAddress: TextView
     private lateinit var tvNoPhone: TextView
     private lateinit var ivVendorAkun: ImageView
+    private lateinit var recyclerView: RecyclerView
+    private lateinit var galleryList: ArrayList<Gallery>
+    private lateinit var galleryAdapter: GalleryAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -51,7 +59,10 @@ class VendorAkunFragment : Fragment() {
         tvNoPhone = binding.tvNoPhone
         ivVendorAkun = binding.ivVendorAkun
 
+        galleryList = arrayListOf()
+
         setupAccount()
+        setupView()
         setupAction()
         hideUI()
         return root
@@ -59,8 +70,8 @@ class VendorAkunFragment : Fragment() {
 
     private fun setupAccount() {
         val userId = firebaseAuth.currentUser!!.uid
-        val ref = db.collection("user").document(userId)
-        ref.addSnapshotListener { document,_ ->
+        val userRef = db.collection("user").document(userId)
+        userRef.addSnapshotListener { document,_ ->
             if (document != null) {
                 val foto = document.data?.get("foto").toString()
                 val nama = document.data?.get("nama").toString()
@@ -75,6 +86,42 @@ class VendorAkunFragment : Fragment() {
                 tvNoPhone.text = telepon
             }
         }
+
+        val galleryRef = db.collection("gallery").whereEqualTo("userId", userId)
+        galleryRef.addSnapshotListener{ snapshot,_ ->
+            if (snapshot != null) {
+                Log.d(TAG, "Current data: ${snapshot.documents}")
+                galleryList.clear()
+                for (data in snapshot.documents) {
+                    val gallery: Gallery? = data.toObject(Gallery::class.java)
+                    if (gallery != null) {
+                        gallery.id = data.id
+                        galleryList.add(gallery)
+                    }
+                }
+
+                galleryAdapter.setItems(galleryList)
+                galleryAdapter.setOnItemClickCallback(object :
+                    GalleryAdapter.OnItemClickCallback {
+                    override fun onItemClicked(data: Gallery) {
+                        val args = Bundle()
+                        args.putString("id", data.id)
+                        val newFragment: DialogFragment = DetailGaleriFragment()
+                        newFragment.arguments = args
+                        newFragment.show(parentFragmentManager, "TAG")
+                    }
+                })
+            }
+        }
+    }
+
+    private fun setupView() {
+        recyclerView = binding.rvVendorGaleri
+        recyclerView.layoutManager = GridLayoutManager(requireContext(),2)
+
+        galleryAdapter = GalleryAdapter(requireContext())
+        recyclerView.adapter = galleryAdapter
+        galleryAdapter.setItems(galleryList)
     }
 
     private fun setupAction() {
@@ -83,39 +130,20 @@ class VendorAkunFragment : Fragment() {
             startActivity(intent)
         }
         binding.btnVendorLogout.setOnClickListener{
-            val builder = AlertDialog.Builder(requireContext())
-            builder.setTitle(resources.getString(R.string.keluar_title))
-            builder.setMessage(resources.getString(R.string.keluar_message))
-            builder.setPositiveButton(resources.getString(R.string.keluar)) { _, _ ->
-                firebaseAuth.signOut()
-                Intent(activity, LoginActivity::class.java).also { intent ->
-                    intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-                    activity?.startActivity(intent)
-                }
-                Toast.makeText(activity, R.string.success_signout, Toast.LENGTH_SHORT).show()
-            }
-            builder.setNegativeButton(resources.getString(R.string.batal)) { dialog, _ ->
-                dialog.dismiss()
-            }
-            builder.setCancelable(false)
-            val dialog = builder.create()
-            dialog.show()
+            val dialog = LogoutFragment()
+            dialog.show(this.parentFragmentManager, "logoutDialog")
         }
-        binding.fabAddMenu.setOnClickListener {
+        binding.btnAddMenu.setOnClickListener {
             val dialog = AddMenuFragment()
             dialog.show(this.parentFragmentManager, "addDialog")
         }
-        binding.fabAddGaleri.setOnClickListener {
+        binding.btnAddGaleri.setOnClickListener {
             val intent = Intent(requireContext(), AddGaleriActivity::class.java)
             startActivity(intent)
         }
         binding.cvNasiKotak.setOnClickListener {
             val intent = Intent(requireContext(), VendorMenuActivity::class.java)
             startActivity(intent)
-        }
-        binding.tvVendorGaleri.setOnClickListener {
-            val dialog = DetailGaleriFragment()
-            dialog.show(this.parentFragmentManager, "detailDialog")
         }
     }
 

@@ -25,8 +25,8 @@ class DetailVendorActivity : AppCompatActivity() {
         binding.titleVendorAkun.visibility = View.GONE
         binding.btnVendorLogout.visibility = View.GONE
         binding.btnVendorEditAkun.visibility = View.GONE
-        binding.fabAddGaleri.visibility = View.GONE
-        binding.fabAddMenu.visibility = View.GONE
+        binding.btnAddGaleri.visibility = View.GONE
+        binding.btnAddMenu.visibility = View.GONE
     }
 
     private fun setupAction() {
