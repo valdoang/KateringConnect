@@ -30,6 +30,13 @@
         <item>Yogyakarta</item>
         <item>Balikpapan</item>
     </string-array>
+
+    <string-array name="Jenis">
+        <item>Nasi Kotak</item>
+        <item>Tumpeng</item>
+        <item>Prasmanan</item>
+    </string-array>
+
     <string name="title_activity_vendor_main">VendorMainActivity</string>
     <string name="title_vendor_beranda">Pesanan Masuk</string>
     <string name="nasi_kotak">Nasi Kotak</string>
@@ -91,12 +98,19 @@
     <string name="entry_password">Masukkan Password</string>
     <string name="entry_name">Masukkan Nama</string>
     <string name="entry_city">Masukkan Kota</string>
+    <string name="entry_jenis">Masukkan Jenis</string>
+    <string name="entry_desc">Masukkan Keterangan</string>
+    <string name="entry_price">Masukkan Harga</string>
     <string name="entry_address">Masukkan Alamat</string>
     <string name="entry_no_phone">Masukkan Nomor Telepon</string>
     <string name="minimum_character">Minimal 8 Karakter</string>
     <string name="failed_show_data">Gagal Menampilkan Data</string>
     <string name="success_upload_photo">Berhasil Mengubah Foto</string>
     <string name="fail_upload_photo">Gagal Mengubah Foto</string>
+    <string name="success_upload_menu">Berhasil Menambahkan Menu</string>
+    <string name="fail_upload_menu">Gagal Menambahkan Menu</string>
+    <string name="success_update_data">Berhasil Mengubah Data</string>
+    <string name="fail_update_data">Gagal Mengubah Data</string>
     <string name="success_upload_gallery">Berhasil Menambahkan Foto</string>
     <string name="fail_upload_gallery">Gagal Menambahkan Foto</string>
     <string name="delete_data">Hapus Data?</string>
@@ -107,4 +121,7 @@
     <string name="success_delete_photo">Foto berhasil dihapus</string>
     <string name="delete_photo_alert">Apakah Anda yakin ingin \n menghapus foto ini?</string>
     <string name="hapus_foto">Hapus foto</string>
+    <string name="kategori_nasi_kuning">Kategori Nasi Kuning</string>
+    <string name="kategori_tumpeng">Kategori Tumpeng</string>
+    <string name="kategori_prasmanan">Kategori Prasmanan</string>
 </resources>

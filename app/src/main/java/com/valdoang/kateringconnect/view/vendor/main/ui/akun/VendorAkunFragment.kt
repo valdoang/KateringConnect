@@ -22,7 +22,7 @@ import com.valdoang.kateringconnect.adapter.GalleryAdapter
 import com.valdoang.kateringconnect.databinding.FragmentVendorAkunBinding
 import com.valdoang.kateringconnect.model.Gallery
 import com.valdoang.kateringconnect.view.vendor.galeri.AddGaleriActivity
-import com.valdoang.kateringconnect.view.vendor.menu.AddMenuFragment
+import com.valdoang.kateringconnect.view.vendor.menu.AddMenuActivity
 import com.valdoang.kateringconnect.view.both.akun.EditAkunActivity
 import com.valdoang.kateringconnect.view.vendor.galeri.DetailGaleriFragment
 import com.valdoang.kateringconnect.view.both.alertdialog.LogoutFragment
@@ -42,6 +42,8 @@ class VendorAkunFragment : Fragment() {
     private lateinit var recyclerView: RecyclerView
     private lateinit var galleryList: ArrayList<Gallery>
     private lateinit var galleryAdapter: GalleryAdapter
+    private var foto: String? = null
+    private var nama: String? = null
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -73,8 +75,8 @@ class VendorAkunFragment : Fragment() {
         val userRef = db.collection("user").document(userId)
         userRef.addSnapshotListener { document,_ ->
             if (document != null) {
-                val foto = document.data?.get("foto").toString()
-                val nama = document.data?.get("nama").toString()
+                foto = document.data?.get("foto").toString()
+                nama = document.data?.get("nama").toString()
                 val kota = document.data?.get("kota").toString()
                 val alamat = document.data?.get("alamat").toString()
                 val telepon = document.data?.get("telepon").toString()
@@ -134,8 +136,8 @@ class VendorAkunFragment : Fragment() {
             dialog.show(this.parentFragmentManager, "logoutDialog")
         }
         binding.btnAddMenu.setOnClickListener {
-            val dialog = AddMenuFragment()
-            dialog.show(this.parentFragmentManager, "addDialog")
+            val intent = Intent(requireContext(), AddMenuActivity::class.java)
+            startActivity(intent)
         }
         binding.btnAddGaleri.setOnClickListener {
             val intent = Intent(requireContext(), AddGaleriActivity::class.java)
@@ -143,6 +145,23 @@ class VendorAkunFragment : Fragment() {
         }
         binding.cvNasiKotak.setOnClickListener {
             val intent = Intent(requireContext(), VendorMenuActivity::class.java)
+            intent.putExtra(VendorMenuActivity.EXTRA_JENIS, getString(R.string.nasi_kotak))
+            intent.putExtra(VendorMenuActivity.EXTRA_FOTO, foto)
+            intent.putExtra(VendorMenuActivity.EXTRA_NAMA, nama)
+            startActivity(intent)
+        }
+        binding.cvTumpeng.setOnClickListener {
+            val intent = Intent(requireContext(), VendorMenuActivity::class.java)
+            intent.putExtra(VendorMenuActivity.EXTRA_JENIS, getString(R.string.tumpeng))
+            intent.putExtra(VendorMenuActivity.EXTRA_FOTO, foto)
+            intent.putExtra(VendorMenuActivity.EXTRA_NAMA, nama)
+            startActivity(intent)
+        }
+        binding.cvPrasmanan.setOnClickListener {
+            val intent = Intent(requireContext(), VendorMenuActivity::class.java)
+            intent.putExtra(VendorMenuActivity.EXTRA_JENIS, getString(R.string.prasmanan))
+            intent.putExtra(VendorMenuActivity.EXTRA_FOTO, foto)
+            intent.putExtra(VendorMenuActivity.EXTRA_NAMA, nama)
             startActivity(intent)
         }
     }

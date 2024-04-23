@@ -56,6 +56,7 @@ class RegisterActivity : AppCompatActivity() {
 
         setupAcCity()
         setupAction()
+        register()
     }
 
     private fun setupAcCity() {
@@ -65,6 +66,14 @@ class RegisterActivity : AppCompatActivity() {
     }
 
     private fun setupAction() {
+        binding.tvToLogin.setOnClickListener{
+            val intent = Intent(this, LoginActivity::class.java)
+            startActivity(intent)
+            finish()
+        }
+    }
+
+    private fun register() {
         firebaseAuth = Firebase.auth
 
         var sJenisAkun = ""
@@ -152,12 +161,6 @@ class RegisterActivity : AppCompatActivity() {
                         }
                 }
             }
-        }
-
-        binding.tvToLogin.setOnClickListener{
-            val intent = Intent(this, LoginActivity::class.java)
-            startActivity(intent)
-            finish()
         }
     }
 }

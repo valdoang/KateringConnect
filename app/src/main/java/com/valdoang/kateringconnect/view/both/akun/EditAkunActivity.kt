@@ -105,7 +105,13 @@ class EditAkunActivity : AppCompatActivity() {
                 "telepon" to sNoPhone
             )
             db.collection("user").document(userId).update(updateMap)
-            onBackPressed()
+                .addOnSuccessListener {
+                    onBackPressed()
+                    Toast.makeText(this, R.string.success_update_data, Toast.LENGTH_SHORT).show()
+                }
+                .addOnFailureListener{
+                    Toast.makeText(this, R.string.fail_update_data, Toast.LENGTH_SHORT).show()
+                }
         }
     }
 

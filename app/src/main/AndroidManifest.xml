@@ -28,6 +28,9 @@
             android:name=".view.vendor.menu.VendorMenuActivity"
             android:exported="false" />
         <activity
+            android:name=".view.vendor.menu.AddMenuActivity"
+            android:exported="false" />
+        <activity
             android:name=".view.vendor.DetailPesananActivity"
             android:exported="false" />
         <activity
