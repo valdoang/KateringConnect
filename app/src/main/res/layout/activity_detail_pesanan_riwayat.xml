@@ -88,7 +88,7 @@
         android:id="@+id/cv_user_info"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:cardCornerRadius="8dp"
+        app:cardCornerRadius="16dp"
         android:layout_marginTop="16dp"
         android:layout_marginStart="30dp"
         android:layout_marginEnd="30dp"
@@ -215,7 +215,7 @@
         android:id="@+id/cv_rincian_pesanan"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:cardCornerRadius="8dp"
+        app:cardCornerRadius="16dp"
         android:layout_marginTop="16dp"
         android:layout_marginStart="30dp"
         android:layout_marginEnd="30dp"
@@ -424,7 +424,7 @@
 
     </androidx.cardview.widget.CardView>
 
-    <Button
+    <com.google.android.material.button.MaterialButton
         android:id="@+id/btn_selesaikan"
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         android:layout_width="0dp"
@@ -434,12 +434,13 @@
         android:layout_marginEnd="70dp"
         android:fontFamily="@font/poppins_bold"
         android:text="@string/selesaikan"
+        app:cornerRadius="10dp"
         android:textSize="16sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/cv_rincian_pesanan" />
 
-    <Button
+    <com.google.android.material.button.MaterialButton
         android:id="@+id/btn_beri_nilai"
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         android:layout_width="0dp"
@@ -449,12 +450,13 @@
         android:layout_marginEnd="70dp"
         android:fontFamily="@font/poppins_bold"
         android:text="@string/beri_nilai"
+        app:cornerRadius="10dp"
         android:textSize="16sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/btn_selesaikan" />
 
-    <Button
+    <com.google.android.material.button.MaterialButton
         android:id="@+id/btn_pesan_lagi"
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         android:layout_width="0dp"
@@ -465,6 +467,7 @@
         android:fontFamily="@font/poppins_bold"
         android:text="@string/pesan_lagi"
         android:textSize="16sp"
+        app:cornerRadius="10dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/btn_beri_nilai" />

@@ -36,7 +36,7 @@
         android:layout_height="140dp"
         android:src="@drawable/default_profile"
         android:layout_marginTop="60dp"
-        app:civ_border_width="2dp"
+        app:civ_border_width="0.5dp"
         app:civ_border_color="@color/grey"
         app:layout_constraintTop_toBottomOf="@id/title_user_akun"
         app:layout_constraintStart_toStartOf="@id/title_user_akun"
@@ -59,7 +59,7 @@
         android:id="@+id/cv_user_info"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:cardCornerRadius="8dp"
+        app:cardCornerRadius="16dp"
         android:layout_marginTop="8dp"
         android:layout_marginStart="50dp"
         android:layout_marginEnd="50dp"
@@ -146,7 +146,7 @@
 
     </androidx.cardview.widget.CardView>
 
-    <Button
+    <com.google.android.material.button.MaterialButton
         android:id="@+id/btn_user_edit_akun"
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         android:layout_width="0dp"
@@ -157,11 +157,12 @@
         android:fontFamily="@font/poppins_bold"
         android:text="@string/edit_akun"
         android:textSize="16sp"
+        app:cornerRadius="10dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/cv_user_info" />
 
-    <Button
+    <com.google.android.material.button.MaterialButton
         android:id="@+id/btn_user_logout"
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         android:layout_width="0dp"
@@ -172,6 +173,7 @@
         android:fontFamily="@font/poppins_bold"
         android:text="@string/logout"
         android:textSize="16sp"
+        app:cornerRadius="10dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/btn_user_edit_akun" />

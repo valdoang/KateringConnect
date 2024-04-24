@@ -88,6 +88,7 @@
     <string name="wrong_email_pass">Email atau Password Salah</string>
     <string name="please_entry_email_pass">Tolong Masukkan Email atau Password</string>
     <string name="can_not_blank">Tidak Boleh Ada Yang Kosong</string>
+    <string name="add_photo_alert">Tambahkan Foto Terlebih Dahulu</string>
     <string name="keluar">Keluar</string>
     <string name="keluar_title">Keluar?</string>
     <string name="keluar_message">Anda akan kembali ke halaman Login.</string>
@@ -111,6 +112,8 @@
     <string name="fail_upload_menu">Gagal Menambahkan Menu</string>
     <string name="success_update_data">Berhasil Mengubah Data</string>
     <string name="fail_update_data">Gagal Mengubah Data</string>
+    <string name="success_delete_data">Berhasil Menghapus Data</string>
+    <string name="fail_delete_data">Gagal Menghapus Data</string>
     <string name="success_upload_gallery">Berhasil Menambahkan Foto</string>
     <string name="fail_upload_gallery">Gagal Menambahkan Foto</string>
     <string name="delete_data">Hapus Data?</string>

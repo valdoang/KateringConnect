@@ -96,16 +96,17 @@
                 app:layout_constraintTop_toBottomOf="@id/tv_pemesanan_date"
                 app:layout_constraintEnd_toEndOf="parent" />
 
-            <Button
+            <com.google.android.material.button.MaterialButton
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="100dp"
                 android:layout_height="40dp"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:layout_marginTop="4dp"
                 android:fontFamily="@font/poppins_bold"
                 android:text="Pesan Lagi"
+                app:cornerRadius="10dp"
                 android:textSize="12sp"
-                android:layout_marginTop="4dp"
-                app:layout_constraintTop_toBottomOf="@id/tv_pemesanan_status"
-                app:layout_constraintEnd_toEndOf="@id/tv_pemesanan_status"/>
+                app:layout_constraintEnd_toEndOf="@id/tv_pemesanan_status"
+                app:layout_constraintTop_toBottomOf="@id/tv_pemesanan_status" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.cardview.widget.CardView>

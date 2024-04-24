@@ -6,21 +6,21 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.valdoang.kateringconnect.databinding.ItemMenuBinding
-import com.valdoang.kateringconnect.model.Menu
-import com.valdoang.kateringconnect.utils.withNumberingFormat
+import com.valdoang.kateringconnect.R
+import com.valdoang.kateringconnect.databinding.ItemUserBerandaBinding
+import com.valdoang.kateringconnect.model.Vendor
 
-class MenuAdapter(
+class UserBerandaAdapter(
     private val context: Context
-) : RecyclerView.Adapter<MenuAdapter.MyViewHolder>() {
+) : RecyclerView.Adapter<UserBerandaAdapter.MyViewHolder>() {
 
-    private val menuList = ArrayList<Menu>()
+    private val vendorList = ArrayList<Vendor>()
     private var onItemClickCallback: OnItemClickCallback? = null
 
     @SuppressLint("NotifyDataSetChanged")
-    fun setItems(itemList: List<Menu>) {
-        menuList.clear()
-        menuList.addAll(itemList)
+    fun setItems(itemList: List<Vendor>) {
+        vendorList.clear()
+        vendorList.addAll(itemList)
         notifyDataSetChanged()
     }
 
@@ -29,35 +29,35 @@ class MenuAdapter(
         this.onItemClickCallback = onItemClickCallback
     }
 
-    inner class MyViewHolder(private val binding: ItemMenuBinding) :
+    inner class MyViewHolder(private val binding: ItemUserBerandaBinding) :
         RecyclerView.ViewHolder(binding.root) {
-        fun bind(menu: Menu) {
+        fun bind(vendor: Vendor) {
             binding.root.setOnClickListener {
-                onItemClickCallback?.onItemClicked(menu)
+                onItemClickCallback?.onItemClicked(vendor)
             }
 
             binding.apply {
-                Glide.with(context).load(menu.foto).into(ivMenu)
-                tvMenuName.text = menu.nama
-                tvMenuPrice.text = menu.harga?.withNumberingFormat()
+                Glide.with(context).load(vendor.foto).error(R.drawable.default_vendor_profile).into(ivKatering)
+                tvKateringName.text = vendor.nama
+                tvKateringAddress.text = vendor.alamat
             }
         }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
-        val itemView = ItemMenuBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        val itemView = ItemUserBerandaBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return MyViewHolder(itemView)
     }
 
     override fun getItemCount(): Int {
-        return menuList.size
+        return vendorList.size
     }
 
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
-        holder.bind(menuList[position])
+        holder.bind(vendorList[position])
     }
 
     interface OnItemClickCallback {
-        fun onItemClicked(data: Menu)
+        fun onItemClicked(data: Vendor)
     }
 }

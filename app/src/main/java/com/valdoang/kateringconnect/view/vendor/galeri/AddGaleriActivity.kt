@@ -49,7 +49,12 @@ class AddGaleriActivity : AppCompatActivity() {
         }
 
         binding.btnSimpan.setOnClickListener {
-            uploadPhoto()
+            if(currentImageUri == null) {
+                Toast.makeText(this, R.string.add_photo_alert, Toast.LENGTH_SHORT).show()
+            }
+            else {
+                uploadPhoto()
+            }
         }
 
         binding.tvAddPhoto.setOnClickListener {

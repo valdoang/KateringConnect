@@ -1,18 +1,15 @@
-package com.valdoang.kateringconnect.view.both.akun
+package com.valdoang.kateringconnect.view.vendor.menu
 
 import android.net.Uri
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.widget.*
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.appcompat.app.AppCompatActivity
 import androidx.cardview.widget.CardView
-import androidx.core.content.ContentProviderCompat.requireContext
 import com.bumptech.glide.Glide
-import com.valdoang.kateringconnect.R
-import com.valdoang.kateringconnect.databinding.ActivityEditAkunBinding
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
@@ -20,25 +17,30 @@ import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.ktx.storage
+import com.valdoang.kateringconnect.R
+import com.valdoang.kateringconnect.databinding.ActivityEditMenuBinding
 import com.valdoang.kateringconnect.utils.getImageUri
 
-class EditAkunActivity : AppCompatActivity() {
-    private lateinit var binding: ActivityEditAkunBinding
+
+class EditMenuActivity : AppCompatActivity() {
+    private lateinit var binding: ActivityEditMenuBinding
     private lateinit var firebaseAuth: FirebaseAuth
     private var db = Firebase.firestore
     private var storageRef = Firebase.storage
-    private lateinit var progressBar: ProgressBar
+    private lateinit var ivFoto: ImageView
     private lateinit var etName: EditText
-    private lateinit var acCity: AutoCompleteTextView
-    private lateinit var etAddress: EditText
-    private lateinit var etNoPhone: EditText
-    private lateinit var ivEditPhoto: ImageView
+    private lateinit var etDesc: EditText
+    private lateinit var etPrice: EditText
+    private lateinit var acJenis: AutoCompleteTextView
+    private var storageKeys = ""
+    private var jenis = ""
+    private var menuId: String? = null
     private var currentImageUri: Uri? = null
-    private var kota = ""
+    private lateinit var progressBar: ProgressBar
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivityEditAkunBinding.inflate(layoutInflater)
+        binding = ActivityEditMenuBinding.inflate(layoutInflater)
         setContentView(binding.root)
         supportActionBar?.hide()
 
@@ -46,71 +48,70 @@ class EditAkunActivity : AppCompatActivity() {
         storageRef = FirebaseStorage.getInstance()
 
         progressBar = binding.progressBar
-        etName = binding.edEditName
-        acCity = binding.acEditCity
-        etAddress = binding.edEditAddress
-        etNoPhone = binding.edEditNoPhone
-        ivEditPhoto = binding.ivEditPhoto
+        ivFoto = binding.ivEditPhoto
+        etName = binding.edAddName
+        etDesc = binding.edAddDesc
+        etPrice = binding.edAddPrice
+        acJenis = binding.acAddJenis
 
-        setupAcCity()
-        setupAccount()
+        menuId = intent.getStringExtra(EXTRA_ID)
+
+        setupAcJenis()
+        setData(menuId!!)
         setupAction()
         updateData()
+        deleteData()
+        closeDialog()
     }
 
-    private fun setupAccount() {
-        val userId = firebaseAuth.currentUser!!.uid
-        val ref = db.collection("user").document(userId)
-        ref.addSnapshotListener { document,_ ->
-            if (document != null) {
-                val foto = document.data?.get("foto").toString()
-                Glide.with(applicationContext).load(foto).error(R.drawable.default_profile).into(ivEditPhoto)
+    private fun setupAcJenis() {
+        val jenis = resources.getStringArray(R.array.Jenis)
+        val dropdownAdapter = ArrayAdapter(this, R.layout.dropdown_item, jenis)
+        acJenis.setAdapter(dropdownAdapter)
+    }
 
+    private fun setData(menuId: String) {
+        val ref = db.collection("menu").document(menuId)
+            ref.addSnapshotListener{document,_ ->
+                if (document != null) {
+                    val foto = document.data?.get("foto").toString()
+                    Glide.with(applicationContext).load(foto).error(R.drawable.galeri).into(ivFoto)
+                }
             }
-        }
-
         ref.get().addOnSuccessListener { document ->
             if (document != null) {
                 val nama = document.data?.get("nama").toString()
-                kota = document.data?.get("kota").toString()
-                val alamat = document.data?.get("alamat").toString()
-                val telepon = document.data?.get("telepon").toString()
-
+                val desc = document.data?.get("keterangan").toString()
+                val price = document.data?.get("harga").toString()
+                jenis = document.data?.get("jenis").toString()
+                storageKeys = document.data?.get("storageKeys").toString()
                 etName.setText(nama)
-                acCity.setText(kota,false)
-                etAddress.setText(alamat)
-                etNoPhone.setText(telepon)
+                etDesc.setText(desc)
+                etPrice.setText(price)
+                acJenis.setText(jenis, false)
             }
         }
     }
 
-    private fun setupAcCity() {
-        val cities = resources.getStringArray(R.array.Cities)
-        val dropdownAdapter = ArrayAdapter(this, R.layout.dropdown_item, cities)
-        acCity.setAdapter(dropdownAdapter)
-    }
-
     private fun updateData() {
-        acCity.onItemClickListener = AdapterView.OnItemClickListener{
+        acJenis.onItemClickListener = AdapterView.OnItemClickListener{
                 adapterView, _, i, _ ->
 
-            kota = adapterView.getItemAtPosition(i).toString()
+            jenis = adapterView.getItemAtPosition(i).toString()
         }
 
-        binding.btnSimpan.setOnClickListener {
+        binding.btnSimpan.setOnClickListener{
             val sName = etName.text.toString().trim()
-            val sNoPhone = etNoPhone.text.toString().trim()
-            val sAddress = etAddress.text.toString().trim()
-
-            val userId = firebaseAuth.currentUser!!.uid
+            val sDesc = etDesc.text.toString().trim()
+            val sPrice = etPrice.text.toString().trim()
 
             val updateMap = mapOf(
                 "nama" to sName,
-                "kota" to kota,
-                "alamat" to sAddress,
-                "telepon" to sNoPhone
+                "keterangan" to sDesc,
+                "harga" to sPrice,
+                "jenis" to jenis
             )
-            db.collection("user").document(userId).update(updateMap)
+            db.collection("menu").document(menuId!!).update(updateMap)
                 .addOnSuccessListener {
                     onBackPressed()
                     Toast.makeText(this, R.string.success_update_data, Toast.LENGTH_SHORT).show()
@@ -121,11 +122,27 @@ class EditAkunActivity : AppCompatActivity() {
         }
     }
 
-    private fun setupAction() {
-        binding.ibBack.setOnClickListener {
+    private fun deleteData() {
+        binding.btnHapus.setOnClickListener{
+            onBackPressed()
+            db.collection("menu").document(menuId!!).delete()
+            storageRef.getReference("menuImages").child(storageKeys).delete()
+                .addOnSuccessListener {
+                    Toast.makeText(this, R.string.success_delete_data, Toast.LENGTH_SHORT).show()
+                }
+                .addOnFailureListener{
+                    Toast.makeText(this, R.string.fail_delete_data, Toast.LENGTH_SHORT).show()
+                }
+        }
+    }
+
+    private fun closeDialog() {
+        binding.ibBack.setOnClickListener{
             onBackPressed()
         }
+    }
 
+    private fun setupAction() {
         binding.tvAddPhoto.setOnClickListener {
             val dialog = BottomSheetDialog(this)
             val view = layoutInflater.inflate(R.layout.bottom_sheet_add_photo, null)
@@ -151,9 +168,8 @@ class EditAkunActivity : AppCompatActivity() {
 
     private fun uploadPhoto() {
         progressBar.visibility = View.VISIBLE
-        val userId = firebaseAuth.currentUser!!.uid
         currentImageUri?.let {
-            storageRef.getReference("userImages").child(userId)
+            storageRef.getReference("menuImages").child(storageKeys)
                 .putFile(it)
                 .addOnSuccessListener { task ->
                     task.metadata!!.reference!!.downloadUrl
@@ -161,7 +177,7 @@ class EditAkunActivity : AppCompatActivity() {
                             val mapImage = mapOf(
                                 "foto" to uri.toString()
                             )
-                            db.collection("user").document(userId).update(mapImage)
+                            db.collection("menu").document(menuId!!).update(mapImage)
                                 .addOnSuccessListener {
                                     progressBar.visibility = View.GONE
                                     Toast.makeText(this, R.string.success_upload_photo, Toast.LENGTH_SHORT).show()
@@ -191,5 +207,9 @@ class EditAkunActivity : AppCompatActivity() {
         if (isSuccess) {
             uploadPhoto()
         }
+    }
+
+    companion object {
+        const val EXTRA_ID = "extra_id"
     }
 }

@@ -31,6 +31,9 @@
             android:name=".view.vendor.menu.AddMenuActivity"
             android:exported="false" />
         <activity
+            android:name=".view.vendor.menu.EditMenuActivity"
+            android:exported="false" />
+        <activity
             android:name=".view.vendor.DetailPesananActivity"
             android:exported="false" />
         <activity
@@ -41,9 +44,6 @@
             android:exported="false" />
         <activity
             android:name=".view.user.PemesananActivity"
-            android:exported="false" />
-        <activity
-            android:name=".view.user.menu.UserMenuActivity"
             android:exported="false" />
         <activity
             android:name=".view.user.DetailVendorActivity"

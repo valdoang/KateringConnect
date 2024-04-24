@@ -1,16 +1,16 @@
 package com.valdoang.kateringconnect.view.vendor.menu
 
 import android.content.ContentValues
+import android.content.ContentValues.TAG
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.widget.ImageView
+import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.ContentProviderCompat.requireContext
-import androidx.fragment.app.DialogFragment
 import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.google.firebase.auth.FirebaseAuth
@@ -18,12 +18,10 @@ import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.valdoang.kateringconnect.R
-import com.valdoang.kateringconnect.adapter.GalleryAdapter
 import com.valdoang.kateringconnect.adapter.MenuAdapter
 import com.valdoang.kateringconnect.databinding.ActivityMenuBinding
-import com.valdoang.kateringconnect.model.Gallery
 import com.valdoang.kateringconnect.model.Menu
-import com.valdoang.kateringconnect.view.vendor.galeri.DetailGaleriFragment
+import com.valdoang.kateringconnect.view.user.menu.DetailMenuFragment
 
 class VendorMenuActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMenuBinding
@@ -38,6 +36,8 @@ class VendorMenuActivity : AppCompatActivity() {
     private lateinit var recyclerView: RecyclerView
     private lateinit var menuList: ArrayList<Menu>
     private lateinit var menuAdapter: MenuAdapter
+    private var userJenis = ""
+    private lateinit var progressBar: ProgressBar
 
 
 
@@ -55,6 +55,7 @@ class VendorMenuActivity : AppCompatActivity() {
         tvKategori = binding.tvKategori
         tvName = binding.tvVendorName
         ivPhoto = binding.ivVendorPhoto
+        progressBar = binding.progressBar
 
         firebaseAuth = Firebase.auth
         menuList = arrayListOf()
@@ -86,43 +87,62 @@ class VendorMenuActivity : AppCompatActivity() {
     }
 
     private fun setupMenu() {
-        val userId = firebaseAuth.currentUser!!.uid
-        val menuRef = db.collection("menu").whereEqualTo("userId", userId).whereEqualTo("jenis", jenis)
-        menuRef.addSnapshotListener{ snapshot,_ ->
-            if (snapshot != null) {
-                Log.d(ContentValues.TAG, "Current data: ${snapshot.documents}")
-                menuList.clear()
-                for (data in snapshot.documents) {
-                    val menu: Menu? = data.toObject(Menu::class.java)
-                    if (menu != null) {
-                        menu.id = data.id
-                        menuList.add(menu)
+        progressBar.visibility = View.VISIBLE
+        var userId = firebaseAuth.currentUser!!.uid
+        db.collection("user").document(userId).get()
+            .addOnSuccessListener { document ->
+                progressBar.visibility = View.GONE
+                if (document != null) {
+                    userJenis = document.data?.get("jenis").toString()
+                    if (userJenis == getString(R.string.pembeli)) {
+                        userId = intent.getStringExtra(EXTRA_ID).toString()
                     }
-                }
+                    val menuRef = db.collection("menu").whereEqualTo("userId", userId).whereEqualTo("jenis", jenis)
+                    menuRef.addSnapshotListener{ snapshot,_ ->
+                        if (snapshot != null) {
+                            Log.d(TAG, "Current data: ${snapshot.documents}")
+                            menuList.clear()
+                            for (data in snapshot.documents) {
+                                val menu: Menu? = data.toObject(Menu::class.java)
+                                if (menu != null) {
+                                    menu.id = data.id
+                                    menuList.add(menu)
+                                }
+                            }
 
-                menuAdapter.setItems(menuList)
-                menuAdapter.setOnItemClickCallback(object :
-                    MenuAdapter.OnItemClickCallback {
-                    override fun onItemClicked(data: Menu) {
-                        val args = Bundle()
-                        args.putString("id", data.id)
-                        val newFragment: DialogFragment = EditMenuFragment()
-                        newFragment.arguments = args
-                        newFragment.show(supportFragmentManager, "TAG")
+                            menuAdapter.setItems(menuList)
+                            menuAdapter.setOnItemClickCallback(object :
+                                MenuAdapter.OnItemClickCallback {
+                                override fun onItemClicked(data: Menu) {
+                                    if (userJenis == getString(R.string.pembeli)) {
+                                        val dialog = DetailMenuFragment()
+                                        dialog.show(supportFragmentManager, "detailDialog")
+                                    }
+                                    else if (userJenis == getString(R.string.vendor)) {
+                                        val intent =Intent(this@VendorMenuActivity, EditMenuActivity::class.java)
+                                        intent.putExtra(EditMenuActivity.EXTRA_ID, data.id)
+                                        startActivity(intent)
+                                    }
+                                }
+                            })
+
+                            if (menuList.isEmpty()) {
+                                binding.noDataAnimation.visibility = View.VISIBLE
+                                binding.tvNoData.visibility = View.VISIBLE
+                            }
+                            else {
+                                binding.noDataAnimation.visibility = View.GONE
+                                binding.tvNoData.visibility = View.GONE
+                            }
+                        }
                     }
-                })
-
-                if (menuList.isNotEmpty()) {
-                    binding.noDataAnimation.visibility = View.GONE
-                    binding.tvNoData.visibility = View.GONE
                 }
             }
-        }
     }
 
     private fun setupView() {
         recyclerView = binding.rvMenu
-        recyclerView.layoutManager = LinearLayoutManager(this)
+        recyclerView.layoutManager = GridLayoutManager(this,2)
 
         menuAdapter = MenuAdapter(this)
         recyclerView.adapter = menuAdapter
@@ -139,5 +159,6 @@ class VendorMenuActivity : AppCompatActivity() {
         const val EXTRA_JENIS = "extra_jenis"
         const val EXTRA_FOTO = "extra_foto"
         const val EXTRA_NAMA = "extra_nama"
+        const val EXTRA_ID = "extra_id"
     }
 }
