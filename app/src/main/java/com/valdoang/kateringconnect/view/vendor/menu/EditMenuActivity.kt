@@ -72,7 +72,7 @@ class EditMenuActivity : AppCompatActivity() {
 
     private fun setData(menuId: String) {
         val ref = db.collection("menu").document(menuId)
-            ref.addSnapshotListener{document,_ ->
+        ref.addSnapshotListener{document,_ ->
                 if (document != null) {
                     val foto = document.data?.get("foto").toString()
                     Glide.with(applicationContext).load(foto).error(R.drawable.galeri).into(ivFoto)

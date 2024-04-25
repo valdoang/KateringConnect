@@ -1,6 +1,7 @@
 package com.valdoang.kateringconnect.view.user
 
 import android.content.ContentValues
+import android.content.ContentValues.TAG
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
@@ -21,7 +22,7 @@ import com.valdoang.kateringconnect.adapter.GalleryAdapter
 import com.valdoang.kateringconnect.databinding.FragmentVendorAkunBinding
 import com.valdoang.kateringconnect.model.Gallery
 import com.valdoang.kateringconnect.view.vendor.galeri.DetailGaleriFragment
-import com.valdoang.kateringconnect.view.vendor.menu.VendorMenuActivity
+import com.valdoang.kateringconnect.view.both.menu.MenuActivity
 
 class DetailVendorActivity : AppCompatActivity() {
     private lateinit var binding: FragmentVendorAkunBinding
@@ -91,7 +92,7 @@ class DetailVendorActivity : AppCompatActivity() {
         val galleryRef = db.collection("gallery").whereEqualTo("userId", vendorId)
         galleryRef.addSnapshotListener{ snapshot,_ ->
             if (snapshot != null) {
-                Log.d(ContentValues.TAG, "Current data: ${snapshot.documents}")
+                Log.d(TAG, "Current data: ${snapshot.documents}")
                 galleryList.clear()
                 for (data in snapshot.documents) {
                     val gallery: Gallery? = data.toObject(Gallery::class.java)
@@ -131,27 +132,27 @@ class DetailVendorActivity : AppCompatActivity() {
         }
 
         binding.cvNasiKotak.setOnClickListener {
-            val intent = Intent(this, VendorMenuActivity::class.java)
-            intent.putExtra(VendorMenuActivity.EXTRA_JENIS, getString(R.string.nasi_kotak))
-            intent.putExtra(VendorMenuActivity.EXTRA_FOTO, foto)
-            intent.putExtra(VendorMenuActivity.EXTRA_NAMA, nama)
-            intent.putExtra(VendorMenuActivity.EXTRA_ID, vendorId)
+            val intent = Intent(this, MenuActivity::class.java)
+            intent.putExtra(MenuActivity.EXTRA_JENIS, getString(R.string.nasi_kotak))
+            intent.putExtra(MenuActivity.EXTRA_FOTO, foto)
+            intent.putExtra(MenuActivity.EXTRA_NAMA, nama)
+            intent.putExtra(MenuActivity.EXTRA_ID, vendorId)
             startActivity(intent)
         }
         binding.cvTumpeng.setOnClickListener {
-            val intent = Intent(this, VendorMenuActivity::class.java)
-            intent.putExtra(VendorMenuActivity.EXTRA_JENIS, getString(R.string.tumpeng))
-            intent.putExtra(VendorMenuActivity.EXTRA_FOTO, foto)
-            intent.putExtra(VendorMenuActivity.EXTRA_NAMA, nama)
-            intent.putExtra(VendorMenuActivity.EXTRA_ID, vendorId)
+            val intent = Intent(this, MenuActivity::class.java)
+            intent.putExtra(MenuActivity.EXTRA_JENIS, getString(R.string.tumpeng))
+            intent.putExtra(MenuActivity.EXTRA_FOTO, foto)
+            intent.putExtra(MenuActivity.EXTRA_NAMA, nama)
+            intent.putExtra(MenuActivity.EXTRA_ID, vendorId)
             startActivity(intent)
         }
         binding.cvPrasmanan.setOnClickListener {
-            val intent = Intent(this, VendorMenuActivity::class.java)
-            intent.putExtra(VendorMenuActivity.EXTRA_JENIS, getString(R.string.prasmanan))
-            intent.putExtra(VendorMenuActivity.EXTRA_FOTO, foto)
-            intent.putExtra(VendorMenuActivity.EXTRA_NAMA, nama)
-            intent.putExtra(VendorMenuActivity.EXTRA_ID, vendorId)
+            val intent = Intent(this, MenuActivity::class.java)
+            intent.putExtra(MenuActivity.EXTRA_JENIS, getString(R.string.prasmanan))
+            intent.putExtra(MenuActivity.EXTRA_FOTO, foto)
+            intent.putExtra(MenuActivity.EXTRA_NAMA, nama)
+            intent.putExtra(MenuActivity.EXTRA_ID, vendorId)
             startActivity(intent)
         }
     }

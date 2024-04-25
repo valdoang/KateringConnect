@@ -25,7 +25,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".view.vendor.menu.VendorMenuActivity"
+            android:name=".view.both.menu.MenuActivity"
             android:exported="false" />
         <activity
             android:name=".view.vendor.menu.AddMenuActivity"

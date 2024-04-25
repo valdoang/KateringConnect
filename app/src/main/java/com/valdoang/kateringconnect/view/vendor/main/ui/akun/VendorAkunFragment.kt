@@ -26,7 +26,7 @@ import com.valdoang.kateringconnect.view.vendor.menu.AddMenuActivity
 import com.valdoang.kateringconnect.view.both.akun.EditAkunActivity
 import com.valdoang.kateringconnect.view.vendor.galeri.DetailGaleriFragment
 import com.valdoang.kateringconnect.view.both.alertdialog.LogoutFragment
-import com.valdoang.kateringconnect.view.vendor.menu.VendorMenuActivity
+import com.valdoang.kateringconnect.view.both.menu.MenuActivity
 
 class VendorAkunFragment : Fragment() {
 
@@ -144,24 +144,24 @@ class VendorAkunFragment : Fragment() {
             startActivity(intent)
         }
         binding.cvNasiKotak.setOnClickListener {
-            val intent = Intent(requireContext(), VendorMenuActivity::class.java)
-            intent.putExtra(VendorMenuActivity.EXTRA_JENIS, getString(R.string.nasi_kotak))
-            intent.putExtra(VendorMenuActivity.EXTRA_FOTO, foto)
-            intent.putExtra(VendorMenuActivity.EXTRA_NAMA, nama)
+            val intent = Intent(requireContext(), MenuActivity::class.java)
+            intent.putExtra(MenuActivity.EXTRA_JENIS, getString(R.string.nasi_kotak))
+            intent.putExtra(MenuActivity.EXTRA_FOTO, foto)
+            intent.putExtra(MenuActivity.EXTRA_NAMA, nama)
             startActivity(intent)
         }
         binding.cvTumpeng.setOnClickListener {
-            val intent = Intent(requireContext(), VendorMenuActivity::class.java)
-            intent.putExtra(VendorMenuActivity.EXTRA_JENIS, getString(R.string.tumpeng))
-            intent.putExtra(VendorMenuActivity.EXTRA_FOTO, foto)
-            intent.putExtra(VendorMenuActivity.EXTRA_NAMA, nama)
+            val intent = Intent(requireContext(), MenuActivity::class.java)
+            intent.putExtra(MenuActivity.EXTRA_JENIS, getString(R.string.tumpeng))
+            intent.putExtra(MenuActivity.EXTRA_FOTO, foto)
+            intent.putExtra(MenuActivity.EXTRA_NAMA, nama)
             startActivity(intent)
         }
         binding.cvPrasmanan.setOnClickListener {
-            val intent = Intent(requireContext(), VendorMenuActivity::class.java)
-            intent.putExtra(VendorMenuActivity.EXTRA_JENIS, getString(R.string.prasmanan))
-            intent.putExtra(VendorMenuActivity.EXTRA_FOTO, foto)
-            intent.putExtra(VendorMenuActivity.EXTRA_NAMA, nama)
+            val intent = Intent(requireContext(), MenuActivity::class.java)
+            intent.putExtra(MenuActivity.EXTRA_JENIS, getString(R.string.prasmanan))
+            intent.putExtra(MenuActivity.EXTRA_FOTO, foto)
+            intent.putExtra(MenuActivity.EXTRA_NAMA, nama)
             startActivity(intent)
         }
     }

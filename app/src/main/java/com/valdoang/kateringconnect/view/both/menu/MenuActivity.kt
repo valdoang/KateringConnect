@@ -1,6 +1,5 @@
-package com.valdoang.kateringconnect.view.vendor.menu
+package com.valdoang.kateringconnect.view.both.menu
 
-import android.content.ContentValues
 import android.content.ContentValues.TAG
 import android.content.Intent
 import android.os.Bundle
@@ -10,6 +9,7 @@ import android.widget.ImageView
 import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.DialogFragment
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
@@ -21,9 +21,11 @@ import com.valdoang.kateringconnect.R
 import com.valdoang.kateringconnect.adapter.MenuAdapter
 import com.valdoang.kateringconnect.databinding.ActivityMenuBinding
 import com.valdoang.kateringconnect.model.Menu
+import com.valdoang.kateringconnect.view.both.alertdialog.DeleteGalleryFragment
 import com.valdoang.kateringconnect.view.user.menu.DetailMenuFragment
+import com.valdoang.kateringconnect.view.vendor.menu.EditMenuActivity
 
-class VendorMenuActivity : AppCompatActivity() {
+class MenuActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMenuBinding
     private lateinit var firebaseAuth: FirebaseAuth
     private var db = Firebase.firestore
@@ -115,11 +117,14 @@ class VendorMenuActivity : AppCompatActivity() {
                                 MenuAdapter.OnItemClickCallback {
                                 override fun onItemClicked(data: Menu) {
                                     if (userJenis == getString(R.string.pembeli)) {
-                                        val dialog = DetailMenuFragment()
-                                        dialog.show(supportFragmentManager, "detailDialog")
+                                        val args = Bundle()
+                                        args.putString("id", data.id)
+                                        val newFragment: DialogFragment = DetailMenuFragment()
+                                        newFragment.arguments = args
+                                        newFragment.show(supportFragmentManager, "detailDialog")
                                     }
                                     else if (userJenis == getString(R.string.vendor)) {
-                                        val intent =Intent(this@VendorMenuActivity, EditMenuActivity::class.java)
+                                        val intent =Intent(this@MenuActivity, EditMenuActivity::class.java)
                                         intent.putExtra(EditMenuActivity.EXTRA_ID, data.id)
                                         startActivity(intent)
                                     }

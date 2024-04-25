@@ -123,8 +123,17 @@
     <string name="logout_alert">Apakah Anda yakin ingin keluar?</string>
     <string name="success_delete_photo">Foto berhasil dihapus</string>
     <string name="delete_photo_alert">Apakah Anda yakin ingin \n menghapus foto ini?</string>
-    <string name="hapus_foto">Hapus foto</string>
+    <string name="hapus_foto">Hapus Foto</string>
     <string name="kategori_nasi_kuning">Kategori Nasi Kuning</string>
     <string name="kategori_tumpeng">Kategori Tumpeng</string>
     <string name="kategori_prasmanan">Kategori Prasmanan</string>
+    <string name="pilih_waktu">Pilih waktu</string>
+    <string name="pilih_tanggal">Pilih tanggal</string>
+    <string name="entry_jumlah">Masukkan Jumlah</string>
+    <string name="minimum_jumlah">Minimal Pembelian 10 Porsi</string>
+    <string name="entry_catatan">Masukkan Catatan</string>
+    <string name="entry_tanggal">Pilih Tanggal</string>
+    <string name="entry_waktu">Pilih Waktu</string>
+    <string name="entry_metode_pembayaran">Pilih Metode Pembayaran</string>
+    <string name="fail_pemesanan">Gagal Melakukan Pemesanan</string>
 </resources>
