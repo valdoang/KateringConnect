@@ -1,11 +1,8 @@
-package com.valdoang.kateringconnect.view.user
+package com.valdoang.kateringconnect.view.user.pemesanan
 
 import android.app.DatePickerDialog
-import android.content.ContentValues
-import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import android.widget.EditText
 import android.widget.ProgressBar
@@ -13,8 +10,7 @@ import android.widget.RadioButton
 import android.widget.RadioGroup
 import android.widget.TextView
 import android.widget.Toast
-import androidx.core.content.ContentProviderCompat.requireContext
-import androidx.core.content.ContextCompat
+import androidx.fragment.app.DialogFragment
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.ktx.firestore
@@ -25,7 +21,6 @@ import com.valdoang.kateringconnect.utils.TimePickerFragment
 import com.valdoang.kateringconnect.utils.textChangedListener
 import com.valdoang.kateringconnect.utils.withDateFormat
 import com.valdoang.kateringconnect.utils.withNumberingFormat
-import com.valdoang.kateringconnect.view.user.main.UserMainActivity
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -51,6 +46,9 @@ class PemesananActivity : AppCompatActivity(), TimePickerFragment.DialogTimeList
     private lateinit var progressBar: ProgressBar
     private val calendar = Calendar.getInstance()
     private var vendorId = ""
+    private var menuNama = ""
+    private var menuHarga = ""
+    private var menuDesc = ""
     private val dateFormat = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
     private val timeFormat = SimpleDateFormat("HH:mm", Locale.getDefault())
 
@@ -92,13 +90,13 @@ class PemesananActivity : AppCompatActivity(), TimePickerFragment.DialogTimeList
         val ref = db.collection("menu").document(menuId)
         ref.get().addOnSuccessListener { document ->
             if (document != null) {
-                val nama = document.data?.get("nama").toString()
-                val desc = document.data?.get("keterangan").toString()
-                val price = document.data?.get("harga").toString()
+                menuNama = document.data?.get("nama").toString()
+                menuDesc = document.data?.get("keterangan").toString()
+                menuHarga = document.data?.get("harga").toString()
                 vendorId = document.data?.get("userId").toString()
-                tvMenuName.text = nama
-                tvMenuDesc.text = desc
-                tvMenuPrice.text = price.withNumberingFormat()
+                tvMenuName.text = menuNama
+                tvMenuDesc.text = menuDesc
+                tvMenuPrice.text = menuHarga.withNumberingFormat()
 
                 db.collection("user").document(vendorId)
                     .get().addOnSuccessListener {
@@ -114,7 +112,7 @@ class PemesananActivity : AppCompatActivity(), TimePickerFragment.DialogTimeList
                     } else if (it.toLong() < 10) {
                         etJumlah.error = getString(R.string.minimum_jumlah)
                     } else {
-                        tvTotalPembayaran.text = (it.toLong() * price.toLong()).withNumberingFormat()
+                        tvTotalPembayaran.text = (it.toLong() * menuHarga.toLong()).withNumberingFormat()
                     }
                 }
             }
@@ -152,15 +150,31 @@ class PemesananActivity : AppCompatActivity(), TimePickerFragment.DialogTimeList
 
         binding.btnPesan.setOnClickListener {
             val userId = firebaseAuth.currentUser!!.uid
+            val userNama = tvUserName.text
+            val userKota = tvUserCity.text
+            val userAlamat = tvUserAddress.text
+            val userTelepon = tvUserNoPhone.text
+
+            val sStatus = getString(R.string.status_proses)
+            val sVendorNama = tvVendorName.text
             val sJumlah = etJumlah.text.toString().trim()
             val sCatatan = etCatatan.text.toString().trim()
-            val sDate = calendar.timeInMillis
+            val sDate = calendar.timeInMillis.toString()
             val sTotalPembayaran = tvTotalPembayaran.text.toString().trim()
 
             val pemesananMap = hashMapOf(
                 "menuId" to menuId,
+                "menuNama" to menuNama,
+                "menuHarga" to menuHarga,
+                "menuKeterangan" to menuDesc,
                 "userId" to userId,
+                "userNama" to userNama,
+                "userKota" to userKota,
+                "userAlamat" to userAlamat,
+                "userTelepon" to userTelepon,
                 "vendorId" to vendorId,
+                "vendorNama" to sVendorNama,
+                "status" to sStatus,
                 "jumlah" to sJumlah,
                 "catatan" to sCatatan,
                 "jadwal" to sDate,
@@ -189,13 +203,10 @@ class PemesananActivity : AppCompatActivity(), TimePickerFragment.DialogTimeList
                 }
                 else -> {
                     progressBar.visibility = View.VISIBLE
-                    db.collection("pemesanan").document()
+                    db.collection("pesanan").document()
                         .set(pemesananMap).addOnSuccessListener {
-                            //PIKIRIN LAGI NANTI GIMANA ENAKNYA!!
-                            Toast.makeText(this, "Pesananan Diproses!", Toast.LENGTH_SHORT).show()
-                            val intent = Intent(this, UserMainActivity::class.java)
-                            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-                            startActivity(intent)
+                            val newFragment: DialogFragment = PemesananBerhasilFragment()
+                            newFragment.show(supportFragmentManager, "TAG")
                         }
                         .addOnFailureListener {
                             progressBar.visibility = View.GONE

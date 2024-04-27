@@ -1,4 +1,4 @@
-package com.valdoang.kateringconnect.view.user
+package com.valdoang.kateringconnect.view.user.berinilai
 
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable

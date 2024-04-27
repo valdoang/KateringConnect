@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".view.vendor.DetailPesananActivity">
+    tools:context=".view.vendor.detailpesanan.DetailPesananActivity">
 
     <ImageButton
         android:id="@+id/ib_back"
@@ -258,11 +258,36 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="1dp"
                 android:layout_marginEnd="16dp"
-                android:text="8En7sxeC3Tah8heoeMxN"
+                tools:text="8En7sxeC3Tah8heoeMxN"
                 android:textSize="14sp"
                 android:fontFamily="@font/poppins"
                 android:textColor="@color/black"
                 app:layout_constraintTop_toBottomOf="@id/tv_rincian_pesanan"
+                app:layout_constraintEnd_toEndOf="parent"/>
+
+            <TextView
+                android:id="@+id/tv_status"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="1dp"
+                android:text="@string/tv_status"
+                android:textSize="14sp"
+                android:fontFamily="@font/poppins"
+                android:textColor="@color/black"
+                app:layout_constraintTop_toBottomOf="@id/tv_id"
+                app:layout_constraintStart_toStartOf="@id/tv_id"/>
+
+            <TextView
+                android:id="@+id/tv_status_value"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="1dp"
+                android:layout_marginEnd="16dp"
+                tools:text="Proses"
+                android:textSize="14sp"
+                android:fontFamily="@font/poppins"
+                android:textColor="@color/black"
+                app:layout_constraintTop_toBottomOf="@id/tv_id_value"
                 app:layout_constraintEnd_toEndOf="parent"/>
 
             <TextView
@@ -274,8 +299,8 @@
                 android:textSize="14sp"
                 android:fontFamily="@font/poppins"
                 android:textColor="@color/black"
-                app:layout_constraintTop_toBottomOf="@id/tv_id"
-                app:layout_constraintStart_toStartOf="@id/tv_id"/>
+                app:layout_constraintTop_toBottomOf="@id/tv_status"
+                app:layout_constraintStart_toStartOf="@id/tv_status"/>
 
             <TextView
                 android:id="@+id/tv_jumlah_value"
@@ -283,11 +308,11 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="1dp"
                 android:layout_marginEnd="16dp"
-                android:text="25"
+                tools:text="25"
                 android:textSize="14sp"
                 android:fontFamily="@font/poppins"
                 android:textColor="@color/black"
-                app:layout_constraintTop_toBottomOf="@id/tv_id_value"
+                app:layout_constraintTop_toBottomOf="@id/tv_status_value"
                 app:layout_constraintEnd_toEndOf="parent"/>
 
             <TextView
@@ -308,7 +333,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="1dp"
                 android:layout_marginEnd="16dp"
-                android:text="Rp. 875.000"
+                tools:text="Rp. 875.000"
                 android:textSize="14sp"
                 android:fontFamily="@font/poppins"
                 android:textColor="@color/black"
@@ -333,7 +358,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="1dp"
                 android:layout_marginEnd="16dp"
-                android:text="Bank BCA"
+                tools:text="Bank BCA"
                 android:textSize="14sp"
                 android:fontFamily="@font/poppins"
                 android:textColor="@color/black"
@@ -359,7 +384,7 @@
                 android:layout_marginTop="1dp"
                 android:layout_marginEnd="16dp"
                 android:layout_marginStart="170dp"
-                android:text="Ayam nya minta yang ayam bakar"
+                tools:text="Ayam nya minta yang ayam bakar"
                 android:textAlignment="textEnd"
                 android:textSize="14sp"
                 android:fontFamily="@font/poppins"
@@ -386,7 +411,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="1dp"
                 android:layout_marginEnd="16dp"
-                android:text="19 Maret 2024"
+                tools:text="19 Maret 2024"
                 android:textSize="14sp"
                 android:fontFamily="@font/poppins"
                 android:textColor="@color/black"
@@ -412,7 +437,7 @@
                 android:layout_marginTop="1dp"
                 android:layout_marginEnd="16dp"
                 android:layout_marginBottom="16dp"
-                android:text="09:00"
+                tools:text="09:00"
                 android:textSize="14sp"
                 android:fontFamily="@font/poppins"
                 android:textColor="@color/black"

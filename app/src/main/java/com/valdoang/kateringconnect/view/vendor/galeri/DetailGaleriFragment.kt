@@ -1,5 +1,7 @@
 package com.valdoang.kateringconnect.view.vendor.galeri
 
+import android.content.DialogInterface
+import android.content.Intent
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
@@ -24,6 +26,8 @@ import com.valdoang.kateringconnect.R
 import com.valdoang.kateringconnect.databinding.FragmentDetailGaleriBinding
 import com.valdoang.kateringconnect.view.both.alertdialog.DeleteGalleryFragment
 import com.valdoang.kateringconnect.view.both.menu.MenuActivity
+import com.valdoang.kateringconnect.view.user.main.UserMainActivity
+import com.valdoang.kateringconnect.view.vendor.main.VendorMainActivity
 
 class DetailGaleriFragment : DialogFragment() {
     private var _binding: FragmentDetailGaleriBinding? = null

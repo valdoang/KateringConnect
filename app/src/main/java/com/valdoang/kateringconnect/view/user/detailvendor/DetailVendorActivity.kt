@@ -1,6 +1,5 @@
-package com.valdoang.kateringconnect.view.user
+package com.valdoang.kateringconnect.view.user.detailvendor
 
-import android.content.ContentValues
 import android.content.ContentValues.TAG
 import android.content.Intent
 import android.os.Bundle

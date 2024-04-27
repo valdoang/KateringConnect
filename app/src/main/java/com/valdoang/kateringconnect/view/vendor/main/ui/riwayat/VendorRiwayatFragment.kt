@@ -7,7 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.valdoang.kateringconnect.databinding.FragmentVendorRiwayatBinding
-import com.valdoang.kateringconnect.view.vendor.DetailRiwayatPesananActivity
+import com.valdoang.kateringconnect.view.vendor.detailriwayat.DetailRiwayatPesananActivity
 
 class VendorRiwayatFragment : Fragment() {
 

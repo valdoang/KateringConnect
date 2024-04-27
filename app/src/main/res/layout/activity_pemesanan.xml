@@ -11,7 +11,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        tools:context=".view.user.PemesananActivity">
+        tools:context=".view.user.pemesanan.PemesananActivity">
 
         <androidx.cardview.widget.CardView
             android:id="@+id/cv_header"
@@ -59,7 +59,7 @@
             android:id="@+id/tv_menu_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Paket 1"
+            tools:text="Paket 1"
             android:fontFamily="@font/poppins_bold"
             android:textColor="@color/black"
             android:layout_marginTop="16dp"
@@ -74,7 +74,7 @@
             android:id="@+id/tv_menu_price"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Rp. 35.000"
+            tools:text="35.000"
             android:fontFamily="@font/poppins"
             android:textColor="@color/black"
             android:layout_marginTop="16dp"
@@ -87,7 +87,7 @@
             android:id="@+id/tv_menu_desc"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Nasi Liwet, Ayam Suwir/Ayam Bakar, Telur Asin, Oseng Daun Pepaya, Dadar Jagung, Cumi Cabe Ijo, Timun, Sambel Dabu, Kerupuk"
+            tools:text="Nasi Liwet, Ayam Suwir/Ayam Bakar, Telur Asin, Oseng Daun Pepaya, Dadar Jagung, Cumi Cabe Ijo, Timun, Sambel Dabu, Kerupuk"
             android:fontFamily="@font/poppins"
             android:textColor="@color/black"
             android:layout_marginTop="4dp"

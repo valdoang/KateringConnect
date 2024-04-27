@@ -8,18 +8,15 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.Window
-import android.widget.EditText
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.fragment.app.DialogFragment
 import com.bumptech.glide.Glide
-import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
-import com.google.firebase.storage.ktx.storage
 import com.valdoang.kateringconnect.databinding.FragmentDetailMenuBinding
 import com.valdoang.kateringconnect.utils.withNumberingFormat
-import com.valdoang.kateringconnect.view.user.PemesananActivity
+import com.valdoang.kateringconnect.view.user.pemesanan.PemesananActivity
 
 class DetailMenuFragment : DialogFragment() {
     private var _binding: FragmentDetailMenuBinding? = null

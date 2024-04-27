@@ -18,7 +18,7 @@ import com.google.firebase.ktx.Firebase
 import com.valdoang.kateringconnect.adapter.UserBerandaAdapter
 import com.valdoang.kateringconnect.databinding.FragmentUserBerandaBinding
 import com.valdoang.kateringconnect.model.Vendor
-import com.valdoang.kateringconnect.view.user.DetailVendorActivity
+import com.valdoang.kateringconnect.view.user.detailvendor.DetailVendorActivity
 
 class UserBerandaFragment : Fragment() {
 

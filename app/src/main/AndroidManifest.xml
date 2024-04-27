@@ -34,19 +34,19 @@
             android:name=".view.vendor.menu.EditMenuActivity"
             android:exported="false" />
         <activity
-            android:name=".view.vendor.DetailPesananActivity"
+            android:name=".view.vendor.detailpesanan.DetailPesananActivity"
             android:exported="false" />
         <activity
-            android:name=".view.vendor.DetailRiwayatPesananActivity"
+            android:name=".view.vendor.detailriwayat.DetailRiwayatPesananActivity"
             android:exported="false" />
         <activity
-            android:name=".view.user.DetailRiwayatPemesananActivity"
+            android:name=".view.user.detailriwayat.DetailRiwayatPemesananActivity"
             android:exported="false" />
         <activity
-            android:name=".view.user.PemesananActivity"
+            android:name=".view.user.pemesanan.PemesananActivity"
             android:exported="false" />
         <activity
-            android:name=".view.user.DetailVendorActivity"
+            android:name=".view.user.detailvendor.DetailVendorActivity"
             android:exported="false" />
         <activity
             android:name=".view.vendor.galeri.AddGaleriActivity"

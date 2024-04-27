@@ -1,4 +1,4 @@
-package com.valdoang.kateringconnect.view.vendor
+package com.valdoang.kateringconnect.view.vendor.detailriwayat
 
 import android.os.Bundle
 import android.view.View

@@ -136,4 +136,10 @@
     <string name="entry_waktu">Pilih Waktu</string>
     <string name="entry_metode_pembayaran">Pilih Metode Pembayaran</string>
     <string name="fail_pemesanan">Gagal Melakukan Pemesanan</string>
+    <string name="pemesanan_berhasil">PEMESANAN BERHASIL</string>
+    <string name="riwayat_jumlah">%1$sx</string>
+    <string name="status_proses">Proses</string>
+    <string name="status_selesai">Selesai</string>
+    <string name="data_kosong">Data Kosong</string>
+    <string name="tv_status">Status</string>
 </resources>
