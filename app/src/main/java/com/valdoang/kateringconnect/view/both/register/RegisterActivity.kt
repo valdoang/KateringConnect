@@ -1,19 +1,11 @@
 package com.valdoang.kateringconnect.view.both.register
 
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Patterns
 import android.view.View
-import android.widget.AdapterView
-import android.widget.ArrayAdapter
-import android.widget.AutoCompleteTextView
-import android.widget.Button
-import android.widget.EditText
-import android.widget.ProgressBar
-import android.widget.RadioButton
-import android.widget.RadioGroup
-import android.widget.Toast
-import com.google.firebase.FirebaseApp
+import android.widget.*
+import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.ktx.firestore
@@ -77,7 +69,6 @@ class RegisterActivity : AppCompatActivity() {
         firebaseAuth = Firebase.auth
 
         var sJenisAkun = ""
-        var sCity = ""
         rgJenisAkun.setOnCheckedChangeListener { _, checkedId ->
             val rbJenisAkun: RadioButton = findViewById(checkedId)
             when (rbJenisAkun.text) {
@@ -86,15 +77,10 @@ class RegisterActivity : AppCompatActivity() {
             }
         }
 
-        acCity.onItemClickListener = AdapterView.OnItemClickListener{
-                adapterView, _, i, _ ->
-
-            sCity = adapterView.getItemAtPosition(i).toString()
-        }
-
         btnRegister.setOnClickListener {
             val sName = etName.text.toString().trim()
             val sNoPhone = etNoPhone.text.toString().trim()
+            val sCity = acCity.text.toString().trim()
             val sAddress = etAddress.text.toString().trim()
             val sEmail = etEmail.text.toString().trim()
             val sPassword = etPassword.text.toString().trim()
@@ -126,6 +112,9 @@ class RegisterActivity : AppCompatActivity() {
                 }
                 sEmail.isEmpty() -> {
                     etEmail.error = getString(R.string.entry_email)
+                }
+                !Patterns.EMAIL_ADDRESS.matcher(sEmail).matches() -> {
+                    etEmail.error = getString(R.string.not_valid_email)
                 }
                 sPassword.isEmpty() -> {
                     etPassword.error = getString(R.string.entry_password)

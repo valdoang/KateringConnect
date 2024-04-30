@@ -2,6 +2,7 @@ package com.valdoang.kateringconnect.view.both.login
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Patterns
 import android.view.View
 import android.widget.Button
 import android.widget.EditText
@@ -52,6 +53,9 @@ class LoginActivity : AppCompatActivity() {
             when {
                 sEmail.isEmpty() -> {
                     etEmail.error = getString(R.string.entry_email)
+                }
+                !Patterns.EMAIL_ADDRESS.matcher(sEmail).matches() -> {
+                    etEmail.error = getString(R.string.not_valid_email)
                 }
                 sPassword.isEmpty() -> {
                     etPassword.error = getString(R.string.entry_password)

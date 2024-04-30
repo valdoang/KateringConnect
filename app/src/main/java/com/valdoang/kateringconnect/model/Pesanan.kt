@@ -1,6 +1,6 @@
 package com.valdoang.kateringconnect.model
 
-data class Riwayat(
+data class Pesanan(
     var id: String? = null,
     var menuId: String? = null,
     var menuNama: String? = null,
@@ -11,6 +11,8 @@ data class Riwayat(
     var userKota: String? = null,
     var userAlamat: String? = null,
     var userTelepon: String? = null,
+    var fotoUser: String? = null,
+    var fotoVendor: String? = null,
     var vendorId: String? = null,
     var vendorNama: String? = null,
     var status: String? = null,

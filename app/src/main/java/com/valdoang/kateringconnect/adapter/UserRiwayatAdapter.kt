@@ -4,11 +4,13 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.valdoang.kateringconnect.R
 import com.valdoang.kateringconnect.databinding.ItemUserRiwayatBinding
-import com.valdoang.kateringconnect.model.Riwayat
+import com.valdoang.kateringconnect.model.Pesanan
 import com.valdoang.kateringconnect.utils.withTimestampToDateTimeFormat
 import com.valdoang.kateringconnect.view.user.pemesanan.PemesananActivity
 
@@ -16,13 +18,13 @@ class UserRiwayatAdapter(
     private val context: Context
 ) : RecyclerView.Adapter<UserRiwayatAdapter.MyViewHolder>() {
 
-    private val riwayatList = ArrayList<Riwayat>()
+    private val pesananList = ArrayList<Pesanan>()
     private var onItemClickCallback: OnItemClickCallback? = null
 
     @SuppressLint("NotifyDataSetChanged")
-    fun setItems(itemList: List<Riwayat>) {
-        riwayatList.clear()
-        riwayatList.addAll(itemList)
+    fun setItems(itemList: List<Pesanan>) {
+        pesananList.clear()
+        pesananList.addAll(itemList)
         notifyDataSetChanged()
     }
 
@@ -33,30 +35,36 @@ class UserRiwayatAdapter(
 
     inner class MyViewHolder(private val binding: ItemUserRiwayatBinding) :
         RecyclerView.ViewHolder(binding.root) {
-        fun bind(riwayat: Riwayat) {
+        fun bind(pesanan: Pesanan) {
             binding.root.setOnClickListener {
-                onItemClickCallback?.onItemClicked(riwayat)
+                onItemClickCallback?.onItemClicked(pesanan)
             }
 
             binding.apply {
-                tvPemesananDate.text = riwayat.jadwal?.withTimestampToDateTimeFormat()
-                tvPemesananName.text = riwayat.vendorNama
-                tvPemesananJumlah.text = itemView.context.getString(R.string.riwayat_jumlah, riwayat.jumlah)
-                tvPemesananMenu.text = riwayat.menuNama
-                tvPemesananTotal.text = riwayat.totalPembayaran
-                if (riwayat.status == context.getString(R.string.status_proses)) {
+                tvPemesananDate.text = pesanan.jadwal?.withTimestampToDateTimeFormat()
+                Glide.with(context).load(pesanan.fotoVendor).error(R.drawable.default_vendor_profile).into(ivVendor)
+                tvPemesananName.text = pesanan.vendorNama
+                tvPemesananJumlah.text = context.getString(R.string.riwayat_jumlah, pesanan.jumlah)
+                tvPemesananMenu.text = pesanan.menuNama
+                tvPemesananTotal.text = pesanan.totalPembayaran
+                if (pesanan.status == context.getString(R.string.status_proses)) {
                     tvPemesananStatus.text = context.getString(R.string.status_proses)
                     tvPemesananStatus.setTextColor(context.resources.getColor(R.color.orange))
                     tvPemesananStatus.background = context.resources.getDrawable(R.drawable.status_proses_bg)
-                } else if (riwayat.status == context.getString(R.string.status_selesai)) {
+                    btnPesanLagi.visibility = View.GONE
+                } else if (pesanan.status == context.getString(R.string.status_selesai)) {
                     tvPemesananStatus.text = context.getString(R.string.status_selesai)
                     tvPemesananStatus.setTextColor(context.resources.getColor(R.color.green_200))
                     tvPemesananStatus.background = context.resources.getDrawable(R.drawable.status_selesai_bg)
+                } else if (pesanan.status == context.getString(R.string.status_batal)) {
+                    tvPemesananStatus.text = context.getString(R.string.status_batal)
+                    tvPemesananStatus.setTextColor(context.resources.getColor(R.color.grey_200))
+                    tvPemesananStatus.background = context.resources.getDrawable(R.drawable.status_batal_bg)
                 }
 
                 btnPesanLagi.setOnClickListener {
                     val intent = Intent(context, PemesananActivity::class.java)
-                    intent.putExtra(PemesananActivity.EXTRA_ID, riwayat.menuId)
+                    intent.putExtra(PemesananActivity.EXTRA_ID, pesanan.menuId)
                     context.startActivity(intent)
                 }
             }
@@ -70,14 +78,14 @@ class UserRiwayatAdapter(
     }
 
     override fun getItemCount(): Int {
-        return riwayatList.size
+        return pesananList.size
     }
 
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
-        holder.bind(riwayatList[position])
+        holder.bind(pesananList[position])
     }
 
     interface OnItemClickCallback {
-        fun onItemClicked(data: Riwayat)
+        fun onItemClicked(data: Pesanan)
     }
 }

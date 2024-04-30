@@ -121,7 +121,7 @@
             android:id="@+id/ac_edit_city"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:inputType="none"/>
+            android:inputType="textCapSentences"/>
     </com.google.android.material.textfield.TextInputLayout>
 
     <TextView

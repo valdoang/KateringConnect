@@ -3,6 +3,7 @@ package com.valdoang.kateringconnect.view.user.detailriwayat
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
+import android.widget.Button
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.DialogFragment
@@ -21,7 +22,7 @@ class DetailRiwayatPemesananActivity : AppCompatActivity() {
     private lateinit var binding: ActivityDetailPesananRiwayatBinding
     private lateinit var firebaseAuth: FirebaseAuth
     private var db = Firebase.firestore
-    private var riwayatId: String? = null
+    private var pesananId: String? = null
     private var menuId: String? = null
     private var vendorId = ""
     private lateinit var tvVendorNama: TextView
@@ -40,6 +41,8 @@ class DetailRiwayatPemesananActivity : AppCompatActivity() {
     private lateinit var tvPesananCatatan: TextView
     private lateinit var tvPesananTanggal: TextView
     private lateinit var tvPesananJam: TextView
+    private lateinit var btnBeriNilai: Button
+    private lateinit var btnPesanLagi: Button
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -49,7 +52,7 @@ class DetailRiwayatPemesananActivity : AppCompatActivity() {
         
         firebaseAuth =Firebase.auth
         
-        riwayatId = intent.getStringExtra(EXTRA_ID)
+        pesananId = intent.getStringExtra(EXTRA_ID)
 
         tvVendorNama = binding.tvVendorName
         tvMenuNama = binding.tvMenuName
@@ -67,16 +70,18 @@ class DetailRiwayatPemesananActivity : AppCompatActivity() {
         tvPesananCatatan = binding.tvCatatanValue
         tvPesananTanggal = binding.tvTanggalValue
         tvPesananJam = binding.tvJamValue
+        btnBeriNilai = binding.btnBeriNilai
+        btnPesanLagi = binding.btnPesanLagi
         
         setupAction()
         hideUI()
         editUI()
-        setupRiwayat()
+        setupData()
     }
 
-    private fun setupRiwayat() {
-        db.collection("pesanan").document(riwayatId!!)
-            .get().addOnSuccessListener { pesanan -> 
+    private fun setupData() {
+        db.collection("pesanan").document(pesananId!!)
+            .get().addOnSuccessListener { pesanan ->
                 if (pesanan != null) {
                     val pesananId = pesanan.id
                     menuId = pesanan.data?.get("menuId").toString()
@@ -96,6 +101,10 @@ class DetailRiwayatPemesananActivity : AppCompatActivity() {
                     val userAlamat = pesanan.data?.get("userAlamat").toString()
                     val userTelepon = pesanan.data?.get("userTelepon").toString()
 
+                    if (status == getString(R.string.status_batal) || status == getString(R.string.status_selesai)) {
+                        btnBeriNilai.visibility = View.VISIBLE
+                        btnPesanLagi.visibility = View.VISIBLE
+                    }
 
                     tvMenuHarga.text = menuHarga
                     tvMenuDesc.text = menuDesc
@@ -125,14 +134,14 @@ class DetailRiwayatPemesananActivity : AppCompatActivity() {
         binding.ibBack.setOnClickListener {
             onBackPressed()
         }
-        binding.btnBeriNilai.setOnClickListener {
+        btnBeriNilai.setOnClickListener {
             val args = Bundle()
             args.putString("id", vendorId)
             val dialog: DialogFragment = BeriNilaiFragment()
             dialog.arguments = args
             dialog.show(this.supportFragmentManager, "beriNilaiDialog")
         }
-        binding.btnPesanLagi.setOnClickListener {
+        btnPesanLagi.setOnClickListener {
             val intent = Intent(this, PemesananActivity::class.java)
             intent.putExtra(PemesananActivity.EXTRA_ID, menuId)
             startActivity(intent)
@@ -141,6 +150,7 @@ class DetailRiwayatPemesananActivity : AppCompatActivity() {
 
     private fun hideUI() {
         binding.btnSelesaikan.visibility = View.GONE
+        binding.btnBatalkan.visibility = View.GONE
     }
 
     private fun editUI() {

@@ -96,6 +96,7 @@
     <string name="pembeli">Pembeli</string>
     <string name="vendor">Vendor</string>
     <string name="entry_email">Masukkan Email</string>
+    <string name="not_valid_email">Alamat Email Tidak Valid</string>
     <string name="entry_password">Masukkan Password</string>
     <string name="entry_name">Masukkan Nama</string>
     <string name="entry_city">Masukkan Kota</string>
@@ -140,6 +141,12 @@
     <string name="riwayat_jumlah">%1$sx</string>
     <string name="status_proses">Proses</string>
     <string name="status_selesai">Selesai</string>
+    <string name="status_batal">Batal</string>
     <string name="data_kosong">Data Kosong</string>
     <string name="tv_status">Status</string>
+    <string name="tv_address_city">%1$s, %2$s</string>
+    <string name="minimum_date">Hanya bisa memilih tanggal setelah hari ini</string>
+    <string name="batalkan">Batalkan</string>
+    <string name="no_one_change">Anda belum mengubah apapun</string>
+    <string name="ok">OK</string>
 </resources>

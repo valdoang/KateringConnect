@@ -110,7 +110,7 @@
             android:id="@+id/ac_register_city"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:inputType="none"/>
+            android:inputType="textCapSentences"/>
     </com.google.android.material.textfield.TextInputLayout>
 
     <TextView
@@ -180,7 +180,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:ems="10"
-            android:inputType="text" />
+            android:inputType="number" />
     </com.google.android.material.textfield.TextInputLayout>
 
     <TextView

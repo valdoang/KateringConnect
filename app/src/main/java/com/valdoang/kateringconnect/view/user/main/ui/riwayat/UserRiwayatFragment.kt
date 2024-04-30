@@ -8,6 +8,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ProgressBar
+import androidx.core.content.ContentProviderCompat.requireContext
+import androidx.core.content.ContextCompat.startActivity
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -17,7 +19,7 @@ import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.valdoang.kateringconnect.adapter.UserRiwayatAdapter
 import com.valdoang.kateringconnect.databinding.FragmentUserRiwayatBinding
-import com.valdoang.kateringconnect.model.Riwayat
+import com.valdoang.kateringconnect.model.Pesanan
 import com.valdoang.kateringconnect.view.user.detailriwayat.DetailRiwayatPemesananActivity
 
 class UserRiwayatFragment : Fragment() {
@@ -30,7 +32,7 @@ class UserRiwayatFragment : Fragment() {
     private lateinit var firebaseAuth: FirebaseAuth
     private var db = Firebase.firestore
     private lateinit var recyclerView: RecyclerView
-    private lateinit var riwayatList: ArrayList<Riwayat>
+    private lateinit var pesananList: ArrayList<Pesanan>
     private lateinit var userRiwayatAdapter: UserRiwayatAdapter
     private lateinit var progressBar: ProgressBar
 
@@ -44,7 +46,7 @@ class UserRiwayatFragment : Fragment() {
         val root: View = binding.root
 
         firebaseAuth = Firebase.auth
-        riwayatList = arrayListOf()
+        pesananList = arrayListOf()
         progressBar = binding.progressBar
 
         setupView()
@@ -60,31 +62,30 @@ class UserRiwayatFragment : Fragment() {
         vendorRef.addSnapshotListener{ snapshot,_ ->
             progressBar.visibility = View.GONE
             if (snapshot != null) {
-                Log.d(ContentValues.TAG,"Current data: ${snapshot.documents}")
-                riwayatList.clear()
+                pesananList.clear()
                 for (data in snapshot.documents) {
-                    val riwayat: Riwayat? = data.toObject(Riwayat::class.java)
-                    if (riwayat != null) {
-                        riwayat.id = data.id
-                        riwayatList.add(riwayat)
+                    val pesanan: Pesanan? = data.toObject(Pesanan::class.java)
+                    if (pesanan != null) {
+                        pesanan.id = data.id
+                        pesananList.add(pesanan)
                     }
                 }
 
-                riwayatList.sortBy { riwayat ->
-                    riwayat.status
+                pesananList.sortByDescending { pesanan ->
+                    pesanan.status?.last()
                 }
 
-                userRiwayatAdapter.setItems(riwayatList)
+                userRiwayatAdapter.setItems(pesananList)
                 userRiwayatAdapter.setOnItemClickCallback(object :
                     UserRiwayatAdapter.OnItemClickCallback {
-                    override fun onItemClicked(data: Riwayat) {
+                    override fun onItemClicked(data: Pesanan) {
                         val intent = Intent(requireContext(), DetailRiwayatPemesananActivity::class.java)
                         intent.putExtra(DetailRiwayatPemesananActivity.EXTRA_ID, data.id)
                         startActivity(intent)
                     }
                 })
 
-                if (riwayatList.isEmpty()) {
+                if (pesananList.isEmpty()) {
                     binding.noHistoryAnimationUser.visibility = View.VISIBLE
                     binding.tvEmptyData.visibility = View.VISIBLE
 
@@ -103,7 +104,7 @@ class UserRiwayatFragment : Fragment() {
 
         userRiwayatAdapter = UserRiwayatAdapter(requireContext())
         recyclerView.adapter = userRiwayatAdapter
-        userRiwayatAdapter.setItems(riwayatList)
+        userRiwayatAdapter.setItems(pesananList)
     }
 
     override fun onDestroyView() {

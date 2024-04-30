@@ -1,18 +1,18 @@
 package com.valdoang.kateringconnect.view.both.akun
 
 import android.net.Uri
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.text.InputType.TYPE_CLASS_TEXT
+import android.text.InputType.TYPE_TEXT_FLAG_MULTI_LINE
+import android.text.InputType.TYPE_TEXT_VARIATION_POSTAL_ADDRESS
 import android.util.Log
 import android.view.View
 import android.widget.*
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.appcompat.app.AppCompatActivity
 import androidx.cardview.widget.CardView
-import androidx.core.content.ContentProviderCompat.requireContext
 import com.bumptech.glide.Glide
-import com.valdoang.kateringconnect.R
-import com.valdoang.kateringconnect.databinding.ActivityEditAkunBinding
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
@@ -20,7 +20,10 @@ import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.ktx.storage
+import com.valdoang.kateringconnect.R
+import com.valdoang.kateringconnect.databinding.ActivityEditAkunBinding
 import com.valdoang.kateringconnect.utils.getImageUri
+
 
 class EditAkunActivity : AppCompatActivity() {
     private lateinit var binding: ActivityEditAkunBinding
@@ -34,7 +37,10 @@ class EditAkunActivity : AppCompatActivity() {
     private lateinit var etNoPhone: EditText
     private lateinit var ivEditPhoto: ImageView
     private var currentImageUri: Uri? = null
+    private var nama = ""
     private var kota = ""
+    private var alamat = ""
+    private var telepon = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -71,10 +77,10 @@ class EditAkunActivity : AppCompatActivity() {
 
         ref.get().addOnSuccessListener { document ->
             if (document != null) {
-                val nama = document.data?.get("nama").toString()
+                nama = document.data?.get("nama").toString()
                 kota = document.data?.get("kota").toString()
-                val alamat = document.data?.get("alamat").toString()
-                val telepon = document.data?.get("telepon").toString()
+                alamat = document.data?.get("alamat").toString()
+                telepon = document.data?.get("telepon").toString()
 
                 etName.setText(nama)
                 acCity.setText(kota,false)
@@ -91,33 +97,34 @@ class EditAkunActivity : AppCompatActivity() {
     }
 
     private fun updateData() {
-        acCity.onItemClickListener = AdapterView.OnItemClickListener{
-                adapterView, _, i, _ ->
-
-            kota = adapterView.getItemAtPosition(i).toString()
-        }
-
         binding.btnSimpan.setOnClickListener {
             val sName = etName.text.toString().trim()
             val sNoPhone = etNoPhone.text.toString().trim()
             val sAddress = etAddress.text.toString().trim()
+            val sKota = acCity.text.toString().trim()
 
             val userId = firebaseAuth.currentUser!!.uid
 
             val updateMap = mapOf(
                 "nama" to sName,
-                "kota" to kota,
+                "kota" to sKota,
                 "alamat" to sAddress,
                 "telepon" to sNoPhone
             )
-            db.collection("user").document(userId).update(updateMap)
-                .addOnSuccessListener {
-                    onBackPressed()
-                    Toast.makeText(this, R.string.success_update_data, Toast.LENGTH_SHORT).show()
-                }
-                .addOnFailureListener{
-                    Toast.makeText(this, R.string.fail_update_data, Toast.LENGTH_SHORT).show()
-                }
+            if (sName == nama && sNoPhone == telepon && sAddress == alamat && sKota == kota) {
+                Toast.makeText(this, R.string.no_one_change, Toast.LENGTH_SHORT).show()
+            }
+            else {
+                db.collection("user").document(userId).update(updateMap)
+                    .addOnSuccessListener {
+                        onBackPressed()
+                        Toast.makeText(this, R.string.success_update_data, Toast.LENGTH_SHORT)
+                            .show()
+                    }
+                    .addOnFailureListener {
+                        Toast.makeText(this, R.string.fail_update_data, Toast.LENGTH_SHORT).show()
+                    }
+            }
         }
     }
 

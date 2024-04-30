@@ -49,6 +49,8 @@ class PemesananActivity : AppCompatActivity(), TimePickerFragment.DialogTimeList
     private var menuNama = ""
     private var menuHarga = ""
     private var menuDesc = ""
+    private var fotoUser = ""
+    private var fotoVendor = ""
     private val dateFormat = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
     private val timeFormat = SimpleDateFormat("HH:mm", Locale.getDefault())
 
@@ -102,6 +104,8 @@ class PemesananActivity : AppCompatActivity(), TimePickerFragment.DialogTimeList
                     .get().addOnSuccessListener {
                         if (it != null) {
                             val namaVendor = it.data?.get("nama").toString()
+                            fotoVendor = it.data?.get("foto").toString()
+
                             tvVendorName.text = namaVendor
                         }
                     }
@@ -128,6 +132,7 @@ class PemesananActivity : AppCompatActivity(), TimePickerFragment.DialogTimeList
                 val kota = document.data?.get("kota").toString()
                 val alamat = document.data?.get("alamat").toString()
                 val telepon = document.data?.get("telepon").toString()
+                fotoUser = document.data?.get("foto").toString()
                 tvUserName.text = nama
                 tvUserCity.text = kota
                 tvUserAddress.text = alamat
@@ -172,6 +177,8 @@ class PemesananActivity : AppCompatActivity(), TimePickerFragment.DialogTimeList
                 "userKota" to userKota,
                 "userAlamat" to userAlamat,
                 "userTelepon" to userTelepon,
+                "fotoUser" to fotoUser,
+                "fotoVendor" to fotoVendor,
                 "vendorId" to vendorId,
                 "vendorNama" to sVendorNama,
                 "status" to sStatus,
@@ -200,6 +207,9 @@ class PemesananActivity : AppCompatActivity(), TimePickerFragment.DialogTimeList
                 }
                 sMetodePembayaran.isEmpty() -> {
                     Toast.makeText(this, R.string.entry_metode_pembayaran, Toast.LENGTH_SHORT).show()
+                }
+                calendar.timeInMillis <= System.currentTimeMillis() -> {
+                    Toast.makeText(this, R.string.minimum_date, Toast.LENGTH_SHORT).show()
                 }
                 else -> {
                     progressBar.visibility = View.VISIBLE

@@ -45,9 +45,9 @@
 
     <TextView
         android:id="@+id/tv_menu_name"
-        android:layout_width="wrap_content"
+        android:layout_width="150dp"
         android:layout_height="wrap_content"
-        android:text="Paket 1"
+        tools:text="Paket 1"
         android:fontFamily="@font/poppins_bold"
         android:textColor="@color/black"
         android:layout_marginTop="16dp"
@@ -60,7 +60,7 @@
         android:id="@+id/tv_menu_price"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Rp. 35.000"
+        tools:text="35.000"
         android:fontFamily="@font/poppins"
         android:textColor="@color/black"
         android:layout_marginTop="16dp"
@@ -73,7 +73,7 @@
         android:id="@+id/tv_menu_desc"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Nasi Liwet, Ayam Suwir/Ayam Bakar, Telur Asin, Oseng Daun Pepaya, Dadar Jagung, Cumi Cabe Ijo, Timun, Sambel Dabu, Kerupuk"
+        tools:text="Nasi Liwet, Ayam Suwir/Ayam Bakar, Telur Asin, Oseng Daun Pepaya, Dadar Jagung, Cumi Cabe Ijo, Timun, Sambel Dabu, Kerupuk"
         android:fontFamily="@font/poppins"
         android:textColor="@color/black"
         android:layout_marginTop="4dp"
@@ -129,7 +129,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="1dp"
-                android:text="David Subjianto"
+                tools:text="David Subjianto"
                 android:textSize="14sp"
                 android:fontFamily="@font/poppins"
                 android:textColor="@color/black"
@@ -152,7 +152,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="1dp"
-                android:text="Surabaya"
+                tools:text="Surabaya"
                 android:textSize="14sp"
                 android:fontFamily="@font/poppins"
                 android:textColor="@color/black"
@@ -175,7 +175,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="1dp"
-                android:text="Jl. Menganti"
+                tools:text="Jl. Menganti"
                 android:textSize="14sp"
                 android:fontFamily="@font/poppins"
                 android:textColor="@color/black"
@@ -199,7 +199,7 @@
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="1dp"
                 android:layout_marginBottom="16dp"
-                android:text="08121654849"
+                tools:text="08121654849"
                 android:textSize="14sp"
                 android:fontFamily="@font/poppins"
                 android:textColor="@color/black"
@@ -466,6 +466,22 @@
         app:layout_constraintTop_toBottomOf="@+id/cv_rincian_pesanan" />
 
     <com.google.android.material.button.MaterialButton
+        android:id="@+id/btn_batalkan"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        android:layout_width="0dp"
+        android:layout_height="50dp"
+        android:layout_marginStart="70dp"
+        android:layout_marginTop="0dp"
+        android:layout_marginEnd="70dp"
+        android:fontFamily="@font/poppins_bold"
+        android:text="@string/batalkan"
+        app:cornerRadius="10dp"
+        android:textSize="16sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/btn_selesaikan" />
+
+    <com.google.android.material.button.MaterialButton
         android:id="@+id/btn_beri_nilai"
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         android:layout_width="0dp"
@@ -473,13 +489,14 @@
         android:layout_marginStart="70dp"
         android:layout_marginTop="16dp"
         android:layout_marginEnd="70dp"
+        android:visibility="gone"
         android:fontFamily="@font/poppins_bold"
         android:text="@string/beri_nilai"
         app:cornerRadius="10dp"
         android:textSize="16sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/btn_selesaikan" />
+        app:layout_constraintTop_toBottomOf="@+id/btn_batalkan" />
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/btn_pesan_lagi"
@@ -489,6 +506,7 @@
         android:layout_marginStart="70dp"
         android:layout_marginTop="0dp"
         android:layout_marginEnd="70dp"
+        android:visibility="gone"
         android:fontFamily="@font/poppins_bold"
         android:text="@string/pesan_lagi"
         android:textSize="16sp"

@@ -7,14 +7,19 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ArrayAdapter
+import android.widget.AutoCompleteTextView
 import android.widget.ProgressBar
+import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
+import com.valdoang.kateringconnect.R
 import com.valdoang.kateringconnect.adapter.UserBerandaAdapter
 import com.valdoang.kateringconnect.databinding.FragmentUserBerandaBinding
 import com.valdoang.kateringconnect.model.Vendor
@@ -30,6 +35,7 @@ class UserBerandaFragment : Fragment() {
     private lateinit var firebaseAuth: FirebaseAuth
     private var db = Firebase.firestore
     private var userKota = ""
+    private var addKota = ""
     private lateinit var recyclerView: RecyclerView
     private lateinit var vendorList: ArrayList<Vendor>
     private lateinit var userBerandaAdapter: UserBerandaAdapter
@@ -47,6 +53,7 @@ class UserBerandaFragment : Fragment() {
         vendorList = arrayListOf()
         progressBar = binding.progressBar
 
+        setupAction()
         setupView()
         setupData()
 
@@ -56,12 +63,12 @@ class UserBerandaFragment : Fragment() {
     private fun setupData() {
         progressBar.visibility = View.VISIBLE
         val userId = firebaseAuth.currentUser!!.uid
-        db.collection("user").document(userId).get()
-            .addOnSuccessListener { document ->
+        db.collection("user").document(userId)
+            .addSnapshotListener{ document,_ ->
                 progressBar.visibility = View.GONE
                 if (document != null) {
                     userKota = document.data?.get("kota").toString()
-                    val vendorRef = db.collection("user").whereEqualTo("jenis", "Vendor").whereEqualTo("kota", userKota)
+                    val vendorRef = db.collection("user").whereEqualTo("jenis", "Vendor").whereIn("kota", listOf(userKota, addKota) )
                     vendorRef.addSnapshotListener{ snapshot,_ ->
                         if (snapshot != null) {
                             Log.d(TAG,"Current data: ${snapshot.documents}")
@@ -106,6 +113,47 @@ class UserBerandaFragment : Fragment() {
         userBerandaAdapter = UserBerandaAdapter(requireContext())
         recyclerView.adapter = userBerandaAdapter
         userBerandaAdapter.setItems(vendorList)
+    }
+
+    private fun setupAction() {
+        binding.ibCity.setOnClickListener {
+            val dialog = BottomSheetDialog(requireContext())
+            val view = layoutInflater.inflate(R.layout.bottom_sheet_add_city, null)
+
+            val acCity = view.findViewById<AutoCompleteTextView>(R.id.ac_add_city)
+
+            val cities = resources.getStringArray(R.array.Cities)
+            val dropdownAdapter = ArrayAdapter(requireContext(), R.layout.dropdown_item, cities)
+            acCity.setAdapter(dropdownAdapter)
+
+            acCity.setText(addKota, false)
+
+            val tvTampilkan = view.findViewById<TextView>(R.id.tv_tampilkan)
+            val tvBatalkan = view.findViewById<TextView>(R.id.tv_batalkan)
+
+            if (addKota != "") {
+                tvBatalkan.visibility = View.VISIBLE
+            }
+            else {
+                tvBatalkan.visibility = View.GONE
+            }
+
+            tvTampilkan.setOnClickListener {
+                addKota = acCity.text.toString().trim()
+                setupData()
+                dialog.dismiss()
+            }
+
+            tvBatalkan.setOnClickListener {
+                acCity.setText(null, false)
+                addKota = acCity.text.toString().trim()
+                setupData()
+                dialog.dismiss()
+            }
+
+            dialog.setContentView(view)
+            dialog.show()
+        }
     }
 
     override fun onDestroyView() {

@@ -9,6 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import android.widget.Toast
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
@@ -92,7 +93,6 @@ class VendorAkunFragment : Fragment() {
         val galleryRef = db.collection("gallery").whereEqualTo("userId", userId)
         galleryRef.addSnapshotListener{ snapshot,_ ->
             if (snapshot != null) {
-                Log.d(TAG, "Current data: ${snapshot.documents}")
                 galleryList.clear()
                 for (data in snapshot.documents) {
                     val gallery: Gallery? = data.toObject(Gallery::class.java)

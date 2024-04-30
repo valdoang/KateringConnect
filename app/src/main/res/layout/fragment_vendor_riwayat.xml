@@ -15,7 +15,7 @@
         android:fontFamily="@font/poppins_bold"
         android:textColor="@color/black"
         android:textSize="20sp"
-        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginStart="24dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -30,16 +30,27 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintEnd_toEndOf="parent"/>
 
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/white_200"
+        android:layout_marginTop="8dp"
+        app:layout_constraintTop_toBottomOf="@id/title_vendor_riwayat"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv_vendor_riwayat"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="32dp"
-        android:layout_marginStart="32dp"
+        android:layout_height="match_parent"
+        android:layout_marginTop="70dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginBottom="80dp"
         app:layout_constraintTop_toBottomOf="@id/title_vendor_riwayat"
-        app:layout_constraintStart_toStartOf="@id/title_vendor_riwayat"
-        app:layout_constraintEnd_toEndOf="@id/title_vendor_riwayat"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
         tools:listitem="@layout/item_vendor_beranda_riwayat"/>
 
     <com.airbnb.lottie.LottieAnimationView
@@ -47,6 +58,7 @@
         android:layout_width="250dp"
         android:layout_height="250dp"
         android:layout_marginTop="160dp"
+        android:visibility="gone"
         app:lottie_autoPlay="true"
         app:lottie_fileName="nohistory.json"
         app:lottie_loop="true"
@@ -58,7 +70,8 @@
         android:id="@+id/tv_empty_data"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Data Kosong"
+        android:text="@string/data_kosong"
+        android:visibility="gone"
         android:textSize="16sp"
         android:layout_marginTop="220dp"
         android:fontFamily="@font/poppins"
@@ -66,5 +79,15 @@
         app:layout_constraintTop_toTopOf="@id/no_history_animation_vendor"
         app:layout_constraintStart_toStartOf="@id/no_history_animation_vendor"
         app:layout_constraintEnd_toEndOf="@id/no_history_animation_vendor"/>
+
+    <ProgressBar
+        android:id="@+id/progressBar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

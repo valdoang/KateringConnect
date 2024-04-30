@@ -6,7 +6,6 @@
     android:layout_height="match_parent"
     tools:context=".view.user.main.ui.beranda.UserBerandaFragment">
 
-
     <TextView
         android:id="@+id/title_beranda"
         android:layout_width="wrap_content"
@@ -16,9 +15,20 @@
         android:fontFamily="@font/poppins_bold"
         android:textColor="@color/black"
         android:textSize="20sp"
-        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginStart="24dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageButton
+        android:id="@+id/ib_city"
+        android:layout_width="35dp"
+        android:layout_height="35dp"
+        android:src="@drawable/ic_baseline_location_city_black_24"
+        android:background="@color/white"
+        android:layout_marginTop="14dp"
+        android:layout_marginEnd="16dp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/ib_chat"/>
 
     <ImageButton
         android:id="@+id/ib_chat"
@@ -31,11 +41,20 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintEnd_toEndOf="parent"/>
 
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/white_200"
+        android:layout_marginTop="8dp"
+        app:layout_constraintTop_toBottomOf="@id/title_beranda"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv_user_beranda"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="60dp"
+        android:layout_marginTop="70dp"
         android:layout_marginEnd="16dp"
         android:layout_marginStart="16dp"
         android:layout_marginBottom="80dp"

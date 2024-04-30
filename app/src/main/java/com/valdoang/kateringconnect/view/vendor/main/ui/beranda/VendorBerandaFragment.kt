@@ -1,12 +1,25 @@
 package com.valdoang.kateringconnect.view.vendor.main.ui.beranda
 
+import android.content.ContentValues
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ProgressBar
+import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.ktx.Firebase
+import com.valdoang.kateringconnect.R
+import com.valdoang.kateringconnect.adapter.VendorBerandaRiwayatAdapter
 import com.valdoang.kateringconnect.databinding.FragmentVendorBerandaBinding
+import com.valdoang.kateringconnect.model.Pesanan
 import com.valdoang.kateringconnect.view.vendor.detailpesanan.DetailPesananActivity
 
 class VendorBerandaFragment : Fragment() {
@@ -16,6 +29,12 @@ class VendorBerandaFragment : Fragment() {
     // This property is only valid between onCreateView and
     // onDestroyView.
     private val binding get() = _binding!!
+    private lateinit var firebaseAuth: FirebaseAuth
+    private var db = Firebase.firestore
+    private lateinit var recyclerView: RecyclerView
+    private lateinit var pesananList: ArrayList<Pesanan>
+    private lateinit var vendorBerandaRiwayatAdapter: VendorBerandaRiwayatAdapter
+    private lateinit var progressBar: ProgressBar
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -25,16 +44,68 @@ class VendorBerandaFragment : Fragment() {
         
         _binding = FragmentVendorBerandaBinding.inflate(inflater, container, false)
         val root: View = binding.root
-        setupAction()
+        
+        firebaseAuth = Firebase.auth
+        pesananList = arrayListOf()
+        progressBar = binding.progressBar
+        
+        setupView()
+        setupData()
         
         return root
     }
 
-    private fun setupAction() {
-        binding.titleBeranda.setOnClickListener {
-            val intent = Intent(requireContext(), DetailPesananActivity::class.java)
-            startActivity(intent)
+    private fun setupData() {
+        progressBar.visibility = View.VISIBLE
+        val userId= firebaseAuth.currentUser!!.uid
+        val ref = db.collection("pesanan").whereEqualTo("vendorId", userId).whereEqualTo("status", getString(
+            R.string.status_proses))
+        ref.addSnapshotListener{ snapshot,_ ->
+            progressBar.visibility = View.GONE
+            if (snapshot != null) {
+                pesananList.clear()
+                for (data in snapshot.documents) {
+                    val pesanan: Pesanan? = data.toObject(Pesanan::class.java)
+                    if (pesanan != null) {
+                        pesanan.id = data.id
+                        pesananList.add(pesanan)
+                    }
+                }
+
+                pesananList.sortBy { pesanan ->
+                    pesanan.jadwal
+                }
+
+                vendorBerandaRiwayatAdapter.setItems(pesananList)
+                vendorBerandaRiwayatAdapter.setOnItemClickCallback(object :
+                    VendorBerandaRiwayatAdapter.OnItemClickCallback {
+                    override fun onItemClicked(data: Pesanan) {
+                        val intent = Intent(requireContext(), DetailPesananActivity::class.java)
+                        intent.putExtra(DetailPesananActivity.EXTRA_ID, data.id)
+                        startActivity(intent)
+                    }
+                })
+
+                if (pesananList.isEmpty()) {
+                    binding.noDataAnimation.visibility = View.VISIBLE
+                    binding.tvNoData.visibility = View.VISIBLE
+
+                }
+                else {
+                    binding.noDataAnimation.visibility = View.GONE
+                    binding.tvNoData.visibility = View.GONE
+                }
+            }
         }
+    }
+
+    private fun setupView() {
+        recyclerView = binding.rvVendorBeranda
+        recyclerView.layoutManager = LinearLayoutManager(requireContext())
+
+        vendorBerandaRiwayatAdapter = VendorBerandaRiwayatAdapter(requireContext())
+        recyclerView.adapter = vendorBerandaRiwayatAdapter
+        vendorBerandaRiwayatAdapter.setItems(pesananList)
     }
 
     override fun onDestroyView() {

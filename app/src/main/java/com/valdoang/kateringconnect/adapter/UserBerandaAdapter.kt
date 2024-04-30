@@ -39,7 +39,7 @@ class UserBerandaAdapter(
             binding.apply {
                 Glide.with(context).load(vendor.foto).error(R.drawable.default_vendor_profile).into(ivKatering)
                 tvKateringName.text = vendor.nama
-                tvKateringAddress.text = vendor.alamat
+                tvKateringAddress.text = context.getString(R.string.tv_address_city, vendor.alamat, vendor.kota)
             }
         }
     }

@@ -33,6 +33,9 @@ class EditMenuActivity : AppCompatActivity() {
     private lateinit var etPrice: EditText
     private lateinit var acJenis: AutoCompleteTextView
     private var storageKeys = ""
+    private var nama = ""
+    private var desc = ""
+    private var price = ""
     private var jenis = ""
     private var menuId: String? = null
     private var currentImageUri: Uri? = null
@@ -80,9 +83,9 @@ class EditMenuActivity : AppCompatActivity() {
             }
         ref.get().addOnSuccessListener { document ->
             if (document != null) {
-                val nama = document.data?.get("nama").toString()
-                val desc = document.data?.get("keterangan").toString()
-                val price = document.data?.get("harga").toString()
+                nama = document.data?.get("nama").toString()
+                desc = document.data?.get("keterangan").toString()
+                price = document.data?.get("harga").toString()
                 jenis = document.data?.get("jenis").toString()
                 storageKeys = document.data?.get("storageKeys").toString()
                 etName.setText(nama)
@@ -94,31 +97,38 @@ class EditMenuActivity : AppCompatActivity() {
     }
 
     private fun updateData() {
-        acJenis.onItemClickListener = AdapterView.OnItemClickListener{
+        /*acJenis.onItemClickListener = AdapterView.OnItemClickListener{
                 adapterView, _, i, _ ->
 
             jenis = adapterView.getItemAtPosition(i).toString()
-        }
+        }*/
 
         binding.btnSimpan.setOnClickListener{
             val sName = etName.text.toString().trim()
             val sDesc = etDesc.text.toString().trim()
             val sPrice = etPrice.text.toString().trim()
+            val sJenis = acJenis.text.toString().trim()
 
             val updateMap = mapOf(
                 "nama" to sName,
                 "keterangan" to sDesc,
                 "harga" to sPrice,
-                "jenis" to jenis
+                "jenis" to sJenis
             )
-            db.collection("menu").document(menuId!!).update(updateMap)
-                .addOnSuccessListener {
-                    onBackPressed()
-                    Toast.makeText(this, R.string.success_update_data, Toast.LENGTH_SHORT).show()
-                }
-                .addOnFailureListener{
-                    Toast.makeText(this, R.string.fail_update_data, Toast.LENGTH_SHORT).show()
-                }
+            if (sName == nama && sDesc == desc && sPrice == price && sJenis == jenis) {
+                Toast.makeText(this, R.string.no_one_change, Toast.LENGTH_SHORT).show()
+            }
+            else {
+                db.collection("menu").document(menuId!!).update(updateMap)
+                    .addOnSuccessListener {
+                        onBackPressed()
+                        Toast.makeText(this, R.string.success_update_data, Toast.LENGTH_SHORT)
+                            .show()
+                    }
+                    .addOnFailureListener {
+                        Toast.makeText(this, R.string.fail_update_data, Toast.LENGTH_SHORT).show()
+                    }
+            }
         }
     }
 
