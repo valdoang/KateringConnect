@@ -5,7 +5,9 @@ import android.os.Bundle
 import android.view.View
 import android.widget.Button
 import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat.startActivity
 import androidx.fragment.app.DialogFragment
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
@@ -72,16 +74,17 @@ class DetailRiwayatPemesananActivity : AppCompatActivity() {
         tvPesananJam = binding.tvJamValue
         btnBeriNilai = binding.btnBeriNilai
         btnPesanLagi = binding.btnPesanLagi
-        
+
+        setupData()
         setupAction()
         hideUI()
         editUI()
-        setupData()
     }
 
     private fun setupData() {
         db.collection("pesanan").document(pesananId!!)
-            .get().addOnSuccessListener { pesanan ->
+            .addSnapshotListener { pesanan,_ ->
+                Toast.makeText(this, "Ambil data", Toast.LENGTH_SHORT).show()
                 if (pesanan != null) {
                     val pesananId = pesanan.id
                     menuId = pesanan.data?.get("menuId").toString()
@@ -100,9 +103,17 @@ class DetailRiwayatPemesananActivity : AppCompatActivity() {
                     val userKota = pesanan.data?.get("userKota").toString()
                     val userAlamat = pesanan.data?.get("userAlamat").toString()
                     val userTelepon = pesanan.data?.get("userTelepon").toString()
+                    val nilai = pesanan.data?.get("nilai")
 
-                    if (status == getString(R.string.status_batal) || status == getString(R.string.status_selesai)) {
+                    if (status == getString(R.string.status_selesai) && nilai == null) {
                         btnBeriNilai.visibility = View.VISIBLE
+                        btnPesanLagi.visibility = View.VISIBLE
+                    }
+                    else if (status == getString(R.string.status_selesai) && nilai == true) {
+                        btnBeriNilai.visibility = View.GONE
+                        btnPesanLagi.visibility = View.VISIBLE
+                    }
+                    else if (status == getString(R.string.status_batal) ) {
                         btnPesanLagi.visibility = View.VISIBLE
                     }
 
@@ -125,7 +136,6 @@ class DetailRiwayatPemesananActivity : AppCompatActivity() {
                     tvPesananTanggal.text = jadwal.withTimestamptoDateFormat()
                     tvPesananJam.text = jadwal.withTimestamptoTimeFormat()
 
-
                 }
             }
     }
@@ -136,7 +146,7 @@ class DetailRiwayatPemesananActivity : AppCompatActivity() {
         }
         btnBeriNilai.setOnClickListener {
             val args = Bundle()
-            args.putString("id", vendorId)
+            args.putString("id", pesananId)
             val dialog: DialogFragment = BeriNilaiFragment()
             dialog.arguments = args
             dialog.show(this.supportFragmentManager, "beriNilaiDialog")

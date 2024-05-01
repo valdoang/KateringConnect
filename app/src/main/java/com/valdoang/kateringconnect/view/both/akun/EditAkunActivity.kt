@@ -112,14 +112,12 @@ class EditAkunActivity : AppCompatActivity() {
                 "telepon" to sNoPhone
             )
             if (sName == nama && sNoPhone == telepon && sAddress == alamat && sKota == kota) {
-                Toast.makeText(this, R.string.no_one_change, Toast.LENGTH_SHORT).show()
+                onBackPressed()
             }
             else {
                 db.collection("user").document(userId).update(updateMap)
                     .addOnSuccessListener {
                         onBackPressed()
-                        Toast.makeText(this, R.string.success_update_data, Toast.LENGTH_SHORT)
-                            .show()
                     }
                     .addOnFailureListener {
                         Toast.makeText(this, R.string.fail_update_data, Toast.LENGTH_SHORT).show()
@@ -171,7 +169,6 @@ class EditAkunActivity : AppCompatActivity() {
                             db.collection("user").document(userId).update(mapImage)
                                 .addOnSuccessListener {
                                     progressBar.visibility = View.GONE
-                                    Toast.makeText(this, R.string.success_upload_photo, Toast.LENGTH_SHORT).show()
                                 }
                                 .addOnFailureListener{
                                     Toast.makeText(this, R.string.fail_upload_photo, Toast.LENGTH_SHORT).show()

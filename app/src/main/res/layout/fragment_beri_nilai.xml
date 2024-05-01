@@ -53,7 +53,7 @@
         app:boxCornerRadiusTopStart="10dp"
         app:boxCornerRadiusBottomEnd="10dp"
         android:layout_width="0dp"
-        android:layout_height="100dp"
+        android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:layout_marginStart="32dp"
         android:layout_marginEnd="32dp"
@@ -65,6 +65,7 @@
             android:id="@+id/ed_comment"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:hint="Bagikan penilaianmu"
             android:ems="10"
             android:inputType="text" />
     </com.google.android.material.textfield.TextInputLayout>

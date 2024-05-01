@@ -69,7 +69,6 @@ class LoginActivity : AppCompatActivity() {
                         .addOnCompleteListener(this) { task ->
                             if(task.isSuccessful) {
                                 checkUser()
-                                Toast.makeText(this, R.string.success_login, Toast.LENGTH_SHORT).show()
                             } else {
                                 progressBar.visibility = View.GONE
                                 Toast.makeText(this, R.string.wrong_email_pass, Toast.LENGTH_SHORT).show()

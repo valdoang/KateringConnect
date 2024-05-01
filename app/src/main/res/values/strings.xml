@@ -149,4 +149,7 @@
     <string name="batalkan">Batalkan</string>
     <string name="no_one_change">Anda belum mengubah apapun</string>
     <string name="ok">OK</string>
+    <string name="fail_set_rating">Gagal Memberikan Penilaian</string>
+    <string name="tidak_ada_penilaian">Tidak ada penilaian</string>
+    <string name="vendor_star">%1$s (%2$s)</string>
 </resources>

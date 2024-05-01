@@ -42,7 +42,7 @@ class UserRiwayatAdapter(
 
             binding.apply {
                 tvPemesananDate.text = pesanan.jadwal?.withTimestampToDateTimeFormat()
-                Glide.with(context).load(pesanan.fotoVendor).error(R.drawable.default_vendor_profile).into(ivVendor)
+                Glide.with(context).load(pesanan.vendorFoto).error(R.drawable.default_vendor_profile).into(ivVendor)
                 tvPemesananName.text = pesanan.vendorNama
                 tvPemesananJumlah.text = context.getString(R.string.riwayat_jumlah, pesanan.jumlah)
                 tvPemesananMenu.text = pesanan.menuNama
@@ -56,10 +56,12 @@ class UserRiwayatAdapter(
                     tvPemesananStatus.text = context.getString(R.string.status_selesai)
                     tvPemesananStatus.setTextColor(context.resources.getColor(R.color.green_200))
                     tvPemesananStatus.background = context.resources.getDrawable(R.drawable.status_selesai_bg)
+                    btnPesanLagi.visibility = View.VISIBLE
                 } else if (pesanan.status == context.getString(R.string.status_batal)) {
                     tvPemesananStatus.text = context.getString(R.string.status_batal)
                     tvPemesananStatus.setTextColor(context.resources.getColor(R.color.grey_200))
                     tvPemesananStatus.background = context.resources.getDrawable(R.drawable.status_batal_bg)
+                    btnPesanLagi.visibility = View.VISIBLE
                 }
 
                 btnPesanLagi.setOnClickListener {

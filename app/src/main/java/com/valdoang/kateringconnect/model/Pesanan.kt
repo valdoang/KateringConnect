@@ -11,8 +11,8 @@ data class Pesanan(
     var userKota: String? = null,
     var userAlamat: String? = null,
     var userTelepon: String? = null,
-    var fotoUser: String? = null,
-    var fotoVendor: String? = null,
+    var userFoto: String? = null,
+    var vendorFoto: String? = null,
     var vendorId: String? = null,
     var vendorNama: String? = null,
     var status: String? = null,
@@ -21,4 +21,5 @@ data class Pesanan(
     var jadwal: String? = null,
     var metodePembayaran: String? = null,
     var totalPembayaran: String? = null,
+    var nilai: Boolean? = null
 )

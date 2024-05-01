@@ -42,7 +42,7 @@ class VendorBerandaRiwayatAdapter(
                 tvPesananJumlah.text = context.getString(R.string.riwayat_jumlah, pesanan.jumlah)
                 tvPesananMenu.text = pesanan.menuNama
                 tvPesananDate.text = pesanan.jadwal?.withTimestampToDateTimeFormat()
-                Glide.with(context).load(pesanan.fotoUser).error(R.drawable.default_profile).into(ivUser)
+                Glide.with(context).load(pesanan.userFoto).error(R.drawable.default_profile).into(ivUser)
                 tvPesananName.text = pesanan.userNama
                 tvPesananAddress.text = context.getString(R.string.tv_address_city, pesanan.userAlamat, pesanan.userKota)
                 if (pesanan.status == context.getString(R.string.status_proses)) {

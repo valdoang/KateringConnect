@@ -142,7 +142,6 @@ class RegisterActivity : AppCompatActivity() {
                                         startActivity(intent)
                                     }
                                 }
-                                Toast.makeText(this, R.string.success_register, Toast.LENGTH_SHORT).show()
                             } else {
                                 progressBar.visibility = View.GONE
                                 Toast.makeText(this, R.string.already_exists_email, Toast.LENGTH_SHORT).show()

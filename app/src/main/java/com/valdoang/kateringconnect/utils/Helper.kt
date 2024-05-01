@@ -3,9 +3,8 @@ package com.valdoang.kateringconnect.utils
 import android.text.Editable
 import android.text.TextWatcher
 import android.widget.EditText
-import java.text.DateFormat
-import java.text.NumberFormat
-import java.text.SimpleDateFormat
+import java.math.RoundingMode
+import java.text.*
 import java.util.*
 
 fun String.withNumberingFormat(): String {
@@ -57,4 +56,10 @@ fun EditText.textChangedListener(onTextChanged: (String) -> Unit) {
         override fun afterTextChanged(editable: Editable?) {
         }
     })
+}
+
+fun Double.roundOffDecimal(): String {
+    val df = DecimalFormat("#.#", DecimalFormatSymbols(Locale.ENGLISH))
+    df.roundingMode = RoundingMode.CEILING
+    return df.format(this)
 }
