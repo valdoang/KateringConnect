@@ -62,7 +62,7 @@ class UserAkunFragment : Fragment() {
                 val alamat = document.data?.get("alamat").toString()
                 val telepon = document.data?.get("telepon").toString()
 
-                Glide.with(activity!!).load(foto).error(R.drawable.default_profile).into(ivUserAkun)
+                Glide.with(this).load(foto).error(R.drawable.default_profile).into(ivUserAkun)
                 tvName.text = nama
                 tvCity.text = kota
                 tvAddress.text = alamat

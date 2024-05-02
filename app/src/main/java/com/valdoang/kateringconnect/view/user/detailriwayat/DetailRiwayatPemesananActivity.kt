@@ -84,7 +84,6 @@ class DetailRiwayatPemesananActivity : AppCompatActivity() {
     private fun setupData() {
         db.collection("pesanan").document(pesananId!!)
             .addSnapshotListener { pesanan,_ ->
-                Toast.makeText(this, "Ambil data", Toast.LENGTH_SHORT).show()
                 if (pesanan != null) {
                     val pesananId = pesanan.id
                     menuId = pesanan.data?.get("menuId").toString()

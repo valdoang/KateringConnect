@@ -8,6 +8,7 @@ import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.fragment.app.DialogFragment
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -24,6 +25,7 @@ import com.valdoang.kateringconnect.model.Star
 import com.valdoang.kateringconnect.utils.roundOffDecimal
 import com.valdoang.kateringconnect.utils.withNumberingFormat
 import com.valdoang.kateringconnect.view.both.menu.MenuActivity
+import com.valdoang.kateringconnect.view.both.nilai.NilaiActivity
 import com.valdoang.kateringconnect.view.vendor.galeri.DetailGaleriFragment
 
 class DetailVendorActivity : AppCompatActivity() {
@@ -166,6 +168,12 @@ class DetailVendorActivity : AppCompatActivity() {
     private fun setupAction() {
         binding.ibBack.setOnClickListener {
             onBackPressed()
+        }
+
+        binding.cvStar.setOnClickListener {
+            val intent = Intent(this, NilaiActivity::class.java)
+            intent.putExtra(NilaiActivity.EXTRA_ID, vendorId)
+            startActivity(intent)
         }
 
         binding.cvNasiKotak.setOnClickListener {

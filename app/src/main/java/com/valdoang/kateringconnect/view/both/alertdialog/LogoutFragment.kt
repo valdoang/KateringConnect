@@ -64,7 +64,6 @@ class LogoutFragment : DialogFragment() {
                 intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
                 activity?.startActivity(intent)
             }
-            Toast.makeText(activity, R.string.success_signout, Toast.LENGTH_SHORT).show()
             dismiss()
         }
     }

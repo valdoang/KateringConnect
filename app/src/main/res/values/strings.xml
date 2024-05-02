@@ -152,4 +152,7 @@
     <string name="fail_set_rating">Gagal Memberikan Penilaian</string>
     <string name="tidak_ada_penilaian">Tidak ada penilaian</string>
     <string name="vendor_star">%1$s (%2$s)</string>
+    <string name="jumlah_penilaian">%1$s penilaian</string>
+    <string name="menu_dipesan">Yang dipesan: %1$s %2$sx</string>
+    <string name="nilai_dan_ulasan">Nilai dan Ulasan</string>
 </resources>

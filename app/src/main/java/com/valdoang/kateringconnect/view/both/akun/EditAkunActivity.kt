@@ -23,6 +23,7 @@ import com.google.firebase.storage.ktx.storage
 import com.valdoang.kateringconnect.R
 import com.valdoang.kateringconnect.databinding.ActivityEditAkunBinding
 import com.valdoang.kateringconnect.utils.getImageUri
+import java.util.*
 
 
 class EditAkunActivity : AppCompatActivity() {
@@ -157,8 +158,9 @@ class EditAkunActivity : AppCompatActivity() {
     private fun uploadPhoto() {
         progressBar.visibility = View.VISIBLE
         val userId = firebaseAuth.currentUser!!.uid
+        val filename = UUID.randomUUID().toString()
         currentImageUri?.let {
-            storageRef.getReference("userImages").child(userId)
+            storageRef.getReference("userImages").child(filename)
                 .putFile(it)
                 .addOnSuccessListener { task ->
                     task.metadata!!.reference!!.downloadUrl

@@ -19,12 +19,14 @@ import com.valdoang.kateringconnect.R
 import com.valdoang.kateringconnect.adapter.GalleryAdapter
 import com.valdoang.kateringconnect.databinding.FragmentVendorAkunBinding
 import com.valdoang.kateringconnect.model.Gallery
+import com.valdoang.kateringconnect.model.Nilai
 import com.valdoang.kateringconnect.model.Star
 import com.valdoang.kateringconnect.utils.roundOffDecimal
 import com.valdoang.kateringconnect.utils.withNumberingFormat
 import com.valdoang.kateringconnect.view.both.akun.EditAkunActivity
 import com.valdoang.kateringconnect.view.both.alertdialog.LogoutFragment
 import com.valdoang.kateringconnect.view.both.menu.MenuActivity
+import com.valdoang.kateringconnect.view.both.nilai.NilaiActivity
 import com.valdoang.kateringconnect.view.vendor.galeri.AddGaleriActivity
 import com.valdoang.kateringconnect.view.vendor.galeri.DetailGaleriFragment
 import com.valdoang.kateringconnect.view.vendor.menu.AddMenuActivity
@@ -47,6 +49,7 @@ class VendorAkunFragment : Fragment() {
     private lateinit var galleryAdapter: GalleryAdapter
     private var foto: String? = null
     private var nama: String? = null
+    private var vendorId = ""
     private var totalNilai = 0.0
 
     override fun onCreateView(
@@ -77,7 +80,7 @@ class VendorAkunFragment : Fragment() {
     }
 
     private fun setupAccount() {
-        val vendorId = firebaseAuth.currentUser!!.uid
+        vendorId = firebaseAuth.currentUser!!.uid
 
         val nilaiRef = db.collection("nilai").whereEqualTo("vendorId", vendorId)
         nilaiRef.addSnapshotListener { snapshot,_ ->
@@ -118,7 +121,7 @@ class VendorAkunFragment : Fragment() {
                 val alamat = document.data?.get("alamat").toString()
                 val telepon = document.data?.get("telepon").toString()
 
-                Glide.with(activity!!).load(foto).error(R.drawable.default_vendor_profile).into(ivVendorAkun)
+                Glide.with(this).load(foto).error(R.drawable.default_vendor_profile).into(ivVendorAkun)
                 tvName.text = nama
                 tvCity.text = kota
                 tvAddress.text = alamat
@@ -163,6 +166,11 @@ class VendorAkunFragment : Fragment() {
     }
 
     private fun setupAction() {
+        binding.cvStar.setOnClickListener {
+            val intent = Intent(requireContext(), NilaiActivity::class.java)
+            intent.putExtra(NilaiActivity.EXTRA_ID, vendorId)
+            startActivity(intent)
+        }
         binding.btnVendorEditAkun.setOnClickListener{
             val intent = Intent(requireContext(), EditAkunActivity::class.java)
             startActivity(intent)

@@ -44,6 +44,15 @@ fun String.withTimestampToDateTimeFormat(): String {
     return "$dateParse - $timeParse"
 }
 
+fun String.withTimestampToDateTimeFormat2(): String {
+    val format = SimpleDateFormat("dd/MM/yyyy H:mm", Locale.getDefault())
+    val date = format.format(this.toLong())
+    val parse = format.parse(date) as Date
+    val dateParse = DateFormat.getDateInstance(DateFormat.LONG).format(parse)
+    val timeParse = DateFormat.getTimeInstance(DateFormat.SHORT).format(parse)
+    return "$dateParse $timeParse"
+}
+
 fun EditText.textChangedListener(onTextChanged: (String) -> Unit) {
     this.addTextChangedListener(object : TextWatcher {
         override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
