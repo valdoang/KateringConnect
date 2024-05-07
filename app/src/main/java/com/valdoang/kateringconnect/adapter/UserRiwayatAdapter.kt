@@ -11,6 +11,7 @@ import com.bumptech.glide.Glide
 import com.valdoang.kateringconnect.R
 import com.valdoang.kateringconnect.databinding.ItemUserRiwayatBinding
 import com.valdoang.kateringconnect.model.Pesanan
+import com.valdoang.kateringconnect.utils.withNumberingFormat
 import com.valdoang.kateringconnect.utils.withTimestampToDateTimeFormat
 import com.valdoang.kateringconnect.view.user.pemesanan.PemesananActivity
 
@@ -46,7 +47,7 @@ class UserRiwayatAdapter(
                 tvPemesananName.text = pesanan.vendorNama
                 tvPemesananJumlah.text = context.getString(R.string.riwayat_jumlah, pesanan.jumlah)
                 tvPemesananMenu.text = pesanan.menuNama
-                tvPemesananTotal.text = pesanan.totalPembayaran
+                tvPemesananTotal.text = pesanan.totalPembayaran?.withNumberingFormat()
                 if (pesanan.status == context.getString(R.string.status_proses)) {
                     tvPemesananStatus.text = context.getString(R.string.status_proses)
                     tvPemesananStatus.setTextColor(context.resources.getColor(R.color.orange))

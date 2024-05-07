@@ -137,6 +137,7 @@
     <string name="entry_waktu">Pilih Waktu</string>
     <string name="entry_metode_pembayaran">Pilih Metode Pembayaran</string>
     <string name="fail_pemesanan">Gagal Melakukan Pemesanan</string>
+    <string name="fail_penambahan">Gagal Melakukan Penambahan Porsi</string>
     <string name="pemesanan_berhasil">PEMESANAN BERHASIL</string>
     <string name="riwayat_jumlah">%1$sx</string>
     <string name="status_proses">Proses</string>
@@ -155,4 +156,9 @@
     <string name="jumlah_penilaian">%1$s penilaian</string>
     <string name="menu_dipesan">Yang dipesan: %1$s %2$sx</string>
     <string name="nilai_dan_ulasan">Nilai dan Ulasan</string>
+    <string name="ongkos_kirim">Ongkos Kirim</string>
+    <string name="tv_subtotal">Subtotal</string>
+    <string name="tidak_ada">Tidak Ada</string>
+    <string name="tambah_jumlah_porsi">Ingin menambah jumlah porsi?</string>
+    <string name="penambahan_berhasil">PENAMBAHAN BERHASIL</string>
 </resources>

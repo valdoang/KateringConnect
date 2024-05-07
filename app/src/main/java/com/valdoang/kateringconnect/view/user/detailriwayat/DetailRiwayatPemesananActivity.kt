@@ -5,9 +5,7 @@ import android.os.Bundle
 import android.view.View
 import android.widget.Button
 import android.widget.TextView
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.ContextCompat.startActivity
 import androidx.fragment.app.DialogFragment
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
@@ -15,10 +13,12 @@ import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.valdoang.kateringconnect.R
 import com.valdoang.kateringconnect.databinding.ActivityDetailPesananRiwayatBinding
+import com.valdoang.kateringconnect.utils.withNumberingFormat
 import com.valdoang.kateringconnect.utils.withTimestamptoDateFormat
 import com.valdoang.kateringconnect.utils.withTimestamptoTimeFormat
 import com.valdoang.kateringconnect.view.user.berinilai.BeriNilaiFragment
 import com.valdoang.kateringconnect.view.user.pemesanan.PemesananActivity
+import com.valdoang.kateringconnect.view.user.tambahpesanan.TambahPesananFragment
 
 class DetailRiwayatPemesananActivity : AppCompatActivity() {
     private lateinit var binding: ActivityDetailPesananRiwayatBinding
@@ -39,19 +39,22 @@ class DetailRiwayatPemesananActivity : AppCompatActivity() {
     private lateinit var tvPesananStatus: TextView
     private lateinit var tvPesananJumlah: TextView
     private lateinit var tvPesananTotalPembayaran: TextView
+    private lateinit var tvPesananSubtotal: TextView
+    private lateinit var tvPesananOngkir: TextView
     private lateinit var tvPesananMetodePembayaran: TextView
     private lateinit var tvPesananCatatan: TextView
     private lateinit var tvPesananTanggal: TextView
     private lateinit var tvPesananJam: TextView
     private lateinit var btnBeriNilai: Button
     private lateinit var btnPesanLagi: Button
+    private lateinit var tvTambahJumlahPorsi: TextView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityDetailPesananRiwayatBinding.inflate(layoutInflater)
         setContentView(binding.root)
         supportActionBar?.hide()
-        
+
         firebaseAuth =Firebase.auth
         
         pesananId = intent.getStringExtra(EXTRA_ID)
@@ -68,12 +71,15 @@ class DetailRiwayatPemesananActivity : AppCompatActivity() {
         tvPesananStatus = binding.tvStatusValue
         tvPesananJumlah = binding.tvJumlahValue
         tvPesananTotalPembayaran = binding.tvTotalValue
+        tvPesananSubtotal = binding.tvSubtotalValue
+        tvPesananOngkir = binding.tvOngkirValue
         tvPesananMetodePembayaran = binding.tvPembayaranValue
         tvPesananCatatan = binding.tvCatatanValue
         tvPesananTanggal = binding.tvTanggalValue
         tvPesananJam = binding.tvJamValue
         btnBeriNilai = binding.btnBeriNilai
         btnPesanLagi = binding.btnPesanLagi
+        tvTambahJumlahPorsi = binding.tvTambahJumlahPorsi
 
         setupData()
         setupAction()
@@ -96,6 +102,8 @@ class DetailRiwayatPemesananActivity : AppCompatActivity() {
                     val jadwal = pesanan.data?.get("jadwal").toString()
                     val metodePembayaran = pesanan.data?.get("metodePembayaran").toString()
                     val totalPembayaran = pesanan.data?.get("totalPembayaran").toString()
+                    val subtotal = pesanan.data?.get("subtotal").toString()
+                    val ongkir = pesanan.data?.get("ongkir").toString()
                     val menuHarga = pesanan.data?.get("menuHarga").toString()
                     val menuDesc = pesanan.data?.get("menuKeterangan").toString()
                     val userNama = pesanan.data?.get("userNama").toString()
@@ -115,8 +123,11 @@ class DetailRiwayatPemesananActivity : AppCompatActivity() {
                     else if (status == getString(R.string.status_batal) ) {
                         btnPesanLagi.visibility = View.VISIBLE
                     }
+                    else if (status == getString(R.string.status_proses) ) {
+                        tvTambahJumlahPorsi.visibility = View.VISIBLE
+                    }
 
-                    tvMenuHarga.text = menuHarga
+                    tvMenuHarga.text = menuHarga.withNumberingFormat()
                     tvMenuDesc.text = menuDesc
 
                     tvUserNama.text = userNama
@@ -129,9 +140,15 @@ class DetailRiwayatPemesananActivity : AppCompatActivity() {
                     tvPesananId.text = pesananId
                     tvPesananStatus.text = status
                     tvPesananJumlah.text = jumlah
-                    tvPesananTotalPembayaran.text = totalPembayaran
+                    tvPesananTotalPembayaran.text = totalPembayaran.withNumberingFormat()
+                    tvPesananSubtotal.text = subtotal.withNumberingFormat()
+                    tvPesananOngkir.text = ongkir.withNumberingFormat()
                     tvPesananMetodePembayaran.text = metodePembayaran
-                    tvPesananCatatan.text = catatan
+                    if (catatan == "") {
+                        tvPesananCatatan.text = getString(R.string.tidak_ada)
+                    } else {
+                        tvPesananCatatan.text = catatan
+                    }
                     tvPesananTanggal.text = jadwal.withTimestamptoDateFormat()
                     tvPesananJam.text = jadwal.withTimestamptoTimeFormat()
 
@@ -154,6 +171,13 @@ class DetailRiwayatPemesananActivity : AppCompatActivity() {
             val intent = Intent(this, PemesananActivity::class.java)
             intent.putExtra(PemesananActivity.EXTRA_ID, menuId)
             startActivity(intent)
+        }
+        tvTambahJumlahPorsi.setOnClickListener {
+            val args = Bundle()
+            args.putString("id", pesananId)
+            val dialog: DialogFragment = TambahPesananFragment()
+            dialog.arguments = args
+            dialog.show(this.supportFragmentManager, "tambahPesananDialog")
         }
     }
 

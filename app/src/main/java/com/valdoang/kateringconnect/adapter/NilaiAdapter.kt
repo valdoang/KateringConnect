@@ -10,7 +10,6 @@ import com.valdoang.kateringconnect.R
 import com.valdoang.kateringconnect.databinding.ItemNilaiBinding
 import com.valdoang.kateringconnect.model.Nilai
 import com.valdoang.kateringconnect.utils.withTimestampToDateTimeFormat
-import com.valdoang.kateringconnect.utils.withTimestampToDateTimeFormat2
 
 class NilaiAdapter(
     private val context: Context
@@ -34,7 +33,7 @@ class NilaiAdapter(
                 rbStar.rating = nilai.nilai!!.toFloat()
                 tvUlasan.text = nilai.ulasan
                 tvMenu.text = context.getString(R.string.menu_dipesan, nilai.menuNama, nilai.jumlahPesanan)
-                tvTanggal.text = nilai.tanggal!!.withTimestampToDateTimeFormat2()
+                tvTanggal.text = nilai.tanggal!!.withTimestampToDateTimeFormat()
             }
         }
     }

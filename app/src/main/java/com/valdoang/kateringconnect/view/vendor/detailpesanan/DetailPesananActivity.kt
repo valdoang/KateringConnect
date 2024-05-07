@@ -11,6 +11,7 @@ import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.valdoang.kateringconnect.R
 import com.valdoang.kateringconnect.databinding.ActivityDetailPesananRiwayatBinding
+import com.valdoang.kateringconnect.utils.withNumberingFormat
 import com.valdoang.kateringconnect.utils.withTimestamptoDateFormat
 import com.valdoang.kateringconnect.utils.withTimestamptoTimeFormat
 import com.valdoang.kateringconnect.view.user.detailriwayat.DetailRiwayatPemesananActivity
@@ -34,6 +35,8 @@ class DetailPesananActivity : AppCompatActivity() {
     private lateinit var tvPesananStatus: TextView
     private lateinit var tvPesananJumlah: TextView
     private lateinit var tvPesananTotalPembayaran: TextView
+    private lateinit var tvPesananSubtotal: TextView
+    private lateinit var tvPesananOngkir: TextView
     private lateinit var tvPesananMetodePembayaran: TextView
     private lateinit var tvPesananCatatan: TextView
     private lateinit var tvPesananTanggal: TextView
@@ -63,6 +66,8 @@ class DetailPesananActivity : AppCompatActivity() {
         tvPesananStatus = binding.tvStatusValue
         tvPesananJumlah = binding.tvJumlahValue
         tvPesananTotalPembayaran = binding.tvTotalValue
+        tvPesananSubtotal = binding.tvSubtotalValue
+        tvPesananOngkir = binding.tvOngkirValue
         tvPesananMetodePembayaran = binding.tvPembayaranValue
         tvPesananCatatan = binding.tvCatatanValue
         tvPesananTanggal = binding.tvTanggalValue
@@ -90,6 +95,8 @@ class DetailPesananActivity : AppCompatActivity() {
                     val jadwal = pesanan.data?.get("jadwal").toString()
                     val metodePembayaran = pesanan.data?.get("metodePembayaran").toString()
                     val totalPembayaran = pesanan.data?.get("totalPembayaran").toString()
+                    val subtotal = pesanan.data?.get("subtotal").toString()
+                    val ongkir = pesanan.data?.get("ongkir").toString()
                     val menuHarga = pesanan.data?.get("menuHarga").toString()
                     val menuDesc = pesanan.data?.get("menuKeterangan").toString()
                     val userNama = pesanan.data?.get("userNama").toString()
@@ -98,7 +105,7 @@ class DetailPesananActivity : AppCompatActivity() {
                     val userTelepon = pesanan.data?.get("userTelepon").toString()
 
 
-                    tvMenuHarga.text = menuHarga
+                    tvMenuHarga.text = menuHarga.withNumberingFormat()
                     tvMenuDesc.text = menuDesc
 
                     tvUserNama.text = userNama
@@ -112,8 +119,14 @@ class DetailPesananActivity : AppCompatActivity() {
                     tvPesananStatus.text = status
                     tvPesananJumlah.text = jumlah
                     tvPesananTotalPembayaran.text = totalPembayaran
-                    tvPesananMetodePembayaran.text = metodePembayaran
-                    tvPesananCatatan.text = catatan
+                    tvPesananSubtotal.text = subtotal.withNumberingFormat()
+                    tvPesananOngkir.text = ongkir.withNumberingFormat()
+                    tvPesananMetodePembayaran.text = metodePembayaran.withNumberingFormat()
+                    if (catatan == "") {
+                        tvPesananCatatan.text = getString(R.string.tidak_ada)
+                    } else {
+                        tvPesananCatatan.text = catatan
+                    }
                     tvPesananTanggal.text = jadwal.withTimestamptoDateFormat()
                     tvPesananJam.text = jadwal.withTimestamptoTimeFormat()
 

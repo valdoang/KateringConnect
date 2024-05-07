@@ -21,5 +21,7 @@ data class Pesanan(
     var jadwal: String? = null,
     var metodePembayaran: String? = null,
     var totalPembayaran: String? = null,
+    var subtotal: String? = null,
+    var ongkir: String? = null,
     var nilai: Boolean? = null
 )
