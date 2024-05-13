@@ -161,4 +161,7 @@
     <string name="tidak_ada">Tidak Ada</string>
     <string name="tambah_jumlah_porsi">Ingin menambah jumlah porsi?</string>
     <string name="penambahan_berhasil">PENAMBAHAN BERHASIL</string>
+    <string name="chat">Chat</string>
+    <string name="chat_kosong">Chat Kosong</string>
+    <string name="ketik_sesuatu">Ketik sesuatu ...</string>
 </resources>

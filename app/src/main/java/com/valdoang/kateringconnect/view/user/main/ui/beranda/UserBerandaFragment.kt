@@ -23,6 +23,7 @@ import com.valdoang.kateringconnect.R
 import com.valdoang.kateringconnect.adapter.UserBerandaAdapter
 import com.valdoang.kateringconnect.databinding.FragmentUserBerandaBinding
 import com.valdoang.kateringconnect.model.Vendor
+import com.valdoang.kateringconnect.view.both.chat.ChatActivity
 import com.valdoang.kateringconnect.view.user.detailvendor.DetailVendorActivity
 
 class UserBerandaFragment : Fragment() {
@@ -71,7 +72,6 @@ class UserBerandaFragment : Fragment() {
                     val vendorRef = db.collection("user").whereEqualTo("jenis", "Vendor").whereIn("kota", listOf(userKota, addKota) )
                     vendorRef.addSnapshotListener{ snapshot,_ ->
                         if (snapshot != null) {
-                            Log.d(TAG,"Current data: ${snapshot.documents}")
                             vendorList.clear()
                             for (data in snapshot.documents) {
                                 val vendor: Vendor? = data.toObject(Vendor::class.java)
@@ -153,6 +153,11 @@ class UserBerandaFragment : Fragment() {
 
             dialog.setContentView(view)
             dialog.show()
+        }
+
+        binding.ibChat.setOnClickListener {
+            val intent = Intent(requireContext(), ChatActivity::class.java)
+            startActivity(intent)
         }
     }
 

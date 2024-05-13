@@ -20,6 +20,7 @@ import com.valdoang.kateringconnect.R
 import com.valdoang.kateringconnect.adapter.VendorBerandaRiwayatAdapter
 import com.valdoang.kateringconnect.databinding.FragmentVendorRiwayatBinding
 import com.valdoang.kateringconnect.model.Pesanan
+import com.valdoang.kateringconnect.view.both.chat.ChatActivity
 import com.valdoang.kateringconnect.view.vendor.detailriwayat.DetailRiwayatPesananActivity
 
 class VendorRiwayatFragment : Fragment() {
@@ -51,6 +52,7 @@ class VendorRiwayatFragment : Fragment() {
 
         setupView()
         setupData()
+        setupAction()
 
         return root
     }
@@ -106,6 +108,13 @@ class VendorRiwayatFragment : Fragment() {
         vendorBerandaRiwayatAdapter = VendorBerandaRiwayatAdapter(requireContext())
         recyclerView.adapter = vendorBerandaRiwayatAdapter
         vendorBerandaRiwayatAdapter.setItems(pesananList)
+    }
+
+    private fun setupAction() {
+        binding.ibChat.setOnClickListener {
+            val intent = Intent(requireContext(), ChatActivity::class.java)
+            startActivity(intent)
+        }
     }
 
     override fun onDestroyView() {

@@ -24,6 +24,7 @@ import com.valdoang.kateringconnect.model.Gallery
 import com.valdoang.kateringconnect.model.Star
 import com.valdoang.kateringconnect.utils.roundOffDecimal
 import com.valdoang.kateringconnect.utils.withNumberingFormat
+import com.valdoang.kateringconnect.view.both.chat.RoomChatActivity
 import com.valdoang.kateringconnect.view.both.menu.MenuActivity
 import com.valdoang.kateringconnect.view.both.nilai.NilaiActivity
 import com.valdoang.kateringconnect.view.vendor.galeri.DetailGaleriFragment
@@ -198,6 +199,11 @@ class DetailVendorActivity : AppCompatActivity() {
             intent.putExtra(MenuActivity.EXTRA_FOTO, foto)
             intent.putExtra(MenuActivity.EXTRA_NAMA, nama)
             intent.putExtra(MenuActivity.EXTRA_ID, vendorId)
+            startActivity(intent)
+        }
+        binding.ibChat.setOnClickListener {
+            val intent = Intent(this, RoomChatActivity::class.java)
+            intent.putExtra(RoomChatActivity.EXTRA_ID, vendorId)
             startActivity(intent)
         }
     }

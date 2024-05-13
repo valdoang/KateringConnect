@@ -16,6 +16,7 @@ import com.valdoang.kateringconnect.R
 import com.valdoang.kateringconnect.databinding.FragmentUserAkunBinding
 import com.valdoang.kateringconnect.view.both.akun.EditAkunActivity
 import com.valdoang.kateringconnect.view.both.alertdialog.LogoutFragment
+import com.valdoang.kateringconnect.view.both.chat.ChatActivity
 
 class UserAkunFragment : Fragment() {
 
@@ -79,6 +80,10 @@ class UserAkunFragment : Fragment() {
         binding.btnUserLogout.setOnClickListener{
             val dialog = LogoutFragment()
             dialog.show(this.parentFragmentManager, "logoutDialog")
+        }
+        binding.ibChat.setOnClickListener {
+            val intent = Intent(requireContext(), ChatActivity::class.java)
+            startActivity(intent)
         }
     }
 

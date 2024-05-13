@@ -3,7 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    tools:context=".view.both.chat.ChatActivity">
 
     <ImageButton
         android:id="@+id/ib_back"
@@ -11,81 +12,55 @@
         android:layout_height="35dp"
         android:src="@drawable/ic_baseline_arrow_back_24"
         android:background="@color/white"
-        android:layout_marginTop="24dp"
+        android:layout_marginTop="16dp"
         android:layout_marginStart="16dp"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"/>
 
-    <de.hdodenhof.circleimageview.CircleImageView
-        android:id="@+id/iv_vendor_photo"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:src="@drawable/default_profile"
-        app:civ_border_width="0.5dp"
-        app:civ_border_color="@color/grey"
-        android:layout_marginTop="16dp"
-        android:layout_marginStart="4dp"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toEndOf="@id/ib_back" />
-
     <TextView
-        android:id="@+id/tv_vendor_name"
+        android:id="@+id/title_chat"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="2dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginStart="24dp"
+        android:text="@string/chat"
         android:fontFamily="@font/poppins_bold"
-        tools:text="Murni Catering"
         android:textColor="@color/black"
-        android:textSize="16sp"
-        app:layout_constraintStart_toEndOf="@id/iv_vendor_photo"
-        app:layout_constraintTop_toTopOf="@id/iv_vendor_photo" />
-
-    <TextView
-        android:id="@+id/tv_kategori"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:fontFamily="@font/poppins"
-        tools:text="Kategori Nasi Kuning"
-        android:textColor="@color/black"
-        android:textSize="14sp"
-        app:layout_constraintStart_toEndOf="@id/iv_vendor_photo"
-        app:layout_constraintTop_toBottomOf="@id/tv_vendor_name" />
+        android:textSize="20sp"
+        app:layout_constraintStart_toEndOf="@id/ib_back"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:background="@color/white_200"
         android:layout_marginTop="8dp"
-        app:layout_constraintTop_toBottomOf="@id/tv_kategori"
+        app:layout_constraintTop_toBottomOf="@id/title_chat"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"/>
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rv_menu"
+        android:id="@+id/rv_chat"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="100dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginStart="16dp"
+        android:layout_marginTop="70dp"
         android:layout_marginBottom="50dp"
-        app:layout_constraintTop_toBottomOf="@id/tv_kategori"
+        app:layout_constraintTop_toBottomOf="@id/title_chat"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
-        tools:listitem="@layout/item_menu"/>
+        tools:listitem="@layout/item_chat"/>
 
     <com.airbnb.lottie.LottieAnimationView
         android:id="@+id/no_data_animation"
         android:layout_width="300dp"
         android:layout_height="300dp"
-        android:layout_marginTop="160dp"
+        android:layout_marginTop="170dp"
         android:visibility="gone"
         app:lottie_autoPlay="true"
         app:lottie_fileName="nodata.json"
         app:lottie_loop="true"
-        app:layout_constraintTop_toBottomOf="@id/tv_kategori"
+        app:layout_constraintTop_toBottomOf="@id/title_chat"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
@@ -93,7 +68,7 @@
         android:id="@+id/tv_no_data"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Data Kosong"
+        android:text="@string/chat_kosong"
         android:textSize="16sp"
         android:visibility="gone"
         android:layout_marginTop="250dp"

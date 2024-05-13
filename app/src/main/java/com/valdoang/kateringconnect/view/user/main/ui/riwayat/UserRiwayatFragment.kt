@@ -20,6 +20,7 @@ import com.google.firebase.ktx.Firebase
 import com.valdoang.kateringconnect.adapter.UserRiwayatAdapter
 import com.valdoang.kateringconnect.databinding.FragmentUserRiwayatBinding
 import com.valdoang.kateringconnect.model.Pesanan
+import com.valdoang.kateringconnect.view.both.chat.ChatActivity
 import com.valdoang.kateringconnect.view.user.detailriwayat.DetailRiwayatPemesananActivity
 
 class UserRiwayatFragment : Fragment() {
@@ -51,6 +52,7 @@ class UserRiwayatFragment : Fragment() {
 
         setupView()
         setupData()
+        setupAction()
 
         return root
     }
@@ -105,6 +107,13 @@ class UserRiwayatFragment : Fragment() {
         userRiwayatAdapter = UserRiwayatAdapter(requireContext())
         recyclerView.adapter = userRiwayatAdapter
         userRiwayatAdapter.setItems(pesananList)
+    }
+
+    private fun setupAction() {
+        binding.ibChat.setOnClickListener {
+            val intent = Intent(requireContext(), ChatActivity::class.java)
+            startActivity(intent)
+        }
     }
 
     override fun onDestroyView() {

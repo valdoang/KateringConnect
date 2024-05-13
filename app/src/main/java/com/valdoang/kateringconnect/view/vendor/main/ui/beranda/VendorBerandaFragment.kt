@@ -1,14 +1,11 @@
 package com.valdoang.kateringconnect.view.vendor.main.ui.beranda
 
-import android.content.ContentValues
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ProgressBar
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -20,6 +17,7 @@ import com.valdoang.kateringconnect.R
 import com.valdoang.kateringconnect.adapter.VendorBerandaRiwayatAdapter
 import com.valdoang.kateringconnect.databinding.FragmentVendorBerandaBinding
 import com.valdoang.kateringconnect.model.Pesanan
+import com.valdoang.kateringconnect.view.both.chat.ChatActivity
 import com.valdoang.kateringconnect.view.vendor.detailpesanan.DetailPesananActivity
 
 class VendorBerandaFragment : Fragment() {
@@ -51,6 +49,7 @@ class VendorBerandaFragment : Fragment() {
         
         setupView()
         setupData()
+        setupAction()
         
         return root
     }
@@ -106,6 +105,13 @@ class VendorBerandaFragment : Fragment() {
         vendorBerandaRiwayatAdapter = VendorBerandaRiwayatAdapter(requireContext())
         recyclerView.adapter = vendorBerandaRiwayatAdapter
         vendorBerandaRiwayatAdapter.setItems(pesananList)
+    }
+
+    private fun setupAction() {
+        binding.ibChat.setOnClickListener {
+            val intent = Intent(requireContext(), ChatActivity::class.java)
+            startActivity(intent)
+        }
     }
 
     override fun onDestroyView() {

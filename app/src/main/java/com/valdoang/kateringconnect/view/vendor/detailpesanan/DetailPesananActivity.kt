@@ -121,7 +121,7 @@ class DetailPesananActivity : AppCompatActivity() {
                     tvPesananTotalPembayaran.text = totalPembayaran
                     tvPesananSubtotal.text = subtotal.withNumberingFormat()
                     tvPesananOngkir.text = ongkir.withNumberingFormat()
-                    tvPesananMetodePembayaran.text = metodePembayaran.withNumberingFormat()
+                    tvPesananMetodePembayaran.text = metodePembayaran
                     if (catatan == "") {
                         tvPesananCatatan.text = getString(R.string.tidak_ada)
                     } else {

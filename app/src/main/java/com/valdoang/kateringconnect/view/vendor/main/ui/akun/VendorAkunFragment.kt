@@ -19,12 +19,12 @@ import com.valdoang.kateringconnect.R
 import com.valdoang.kateringconnect.adapter.GalleryAdapter
 import com.valdoang.kateringconnect.databinding.FragmentVendorAkunBinding
 import com.valdoang.kateringconnect.model.Gallery
-import com.valdoang.kateringconnect.model.Nilai
 import com.valdoang.kateringconnect.model.Star
 import com.valdoang.kateringconnect.utils.roundOffDecimal
 import com.valdoang.kateringconnect.utils.withNumberingFormat
 import com.valdoang.kateringconnect.view.both.akun.EditAkunActivity
 import com.valdoang.kateringconnect.view.both.alertdialog.LogoutFragment
+import com.valdoang.kateringconnect.view.both.chat.ChatActivity
 import com.valdoang.kateringconnect.view.both.menu.MenuActivity
 import com.valdoang.kateringconnect.view.both.nilai.NilaiActivity
 import com.valdoang.kateringconnect.view.vendor.galeri.AddGaleriActivity
@@ -206,6 +206,10 @@ class VendorAkunFragment : Fragment() {
             intent.putExtra(MenuActivity.EXTRA_JENIS, getString(R.string.prasmanan))
             intent.putExtra(MenuActivity.EXTRA_FOTO, foto)
             intent.putExtra(MenuActivity.EXTRA_NAMA, nama)
+            startActivity(intent)
+        }
+        binding.ibChat.setOnClickListener {
+            val intent = Intent(requireContext(), ChatActivity::class.java)
             startActivity(intent)
         }
     }
