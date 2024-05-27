@@ -7,7 +7,9 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.valdoang.kateringconnect.databinding.ItemMenuBinding
+import com.valdoang.kateringconnect.databinding.ItemVendorMenuBinding
 import com.valdoang.kateringconnect.model.Menu
+import com.valdoang.kateringconnect.utils.withCurrencyFormat
 import com.valdoang.kateringconnect.utils.withNumberingFormat
 
 class MenuAdapter(
@@ -15,7 +17,6 @@ class MenuAdapter(
 ) : RecyclerView.Adapter<MenuAdapter.MyViewHolder>() {
 
     private val menuList = ArrayList<Menu>()
-    private var onItemClickCallback: OnItemClickCallback? = null
 
     @SuppressLint("NotifyDataSetChanged")
     fun setItems(itemList: List<Menu>) {
@@ -24,28 +25,22 @@ class MenuAdapter(
         notifyDataSetChanged()
     }
 
-
-    fun setOnItemClickCallback(onItemClickCallback: OnItemClickCallback) {
-        this.onItemClickCallback = onItemClickCallback
-    }
-
-    inner class MyViewHolder(private val binding: ItemMenuBinding) :
+    inner class MyViewHolder(private val binding: ItemVendorMenuBinding) :
         RecyclerView.ViewHolder(binding.root) {
         fun bind(menu: Menu) {
-            binding.root.setOnClickListener {
-                onItemClickCallback?.onItemClicked(menu)
-            }
-
             binding.apply {
                 Glide.with(context).load(menu.foto).into(ivMenu)
                 tvMenuName.text = menu.nama
-                tvMenuPrice.text = menu.harga?.withNumberingFormat()
+                tvMenuPrice.text = menu.harga?.withCurrencyFormat()
+                tvEdit.setOnClickListener {
+                    //Intent ke EditMenuActivity
+                }
             }
         }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
-        val itemView = ItemMenuBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        val itemView = ItemVendorMenuBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return MyViewHolder(itemView)
     }
 
@@ -55,9 +50,5 @@ class MenuAdapter(
 
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
         holder.bind(menuList[position])
-    }
-
-    interface OnItemClickCallback {
-        fun onItemClicked(data: Menu)
     }
 }

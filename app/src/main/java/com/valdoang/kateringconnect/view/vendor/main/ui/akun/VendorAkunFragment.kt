@@ -7,9 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
-import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.Fragment
-import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.google.firebase.auth.FirebaseAuth
@@ -25,11 +23,9 @@ import com.valdoang.kateringconnect.utils.withNumberingFormat
 import com.valdoang.kateringconnect.view.both.akun.EditAkunActivity
 import com.valdoang.kateringconnect.view.both.alertdialog.LogoutFragment
 import com.valdoang.kateringconnect.view.both.chat.ChatActivity
-import com.valdoang.kateringconnect.view.both.menu.MenuActivity
 import com.valdoang.kateringconnect.view.both.nilai.NilaiActivity
 import com.valdoang.kateringconnect.view.vendor.galeri.AddGaleriActivity
-import com.valdoang.kateringconnect.view.vendor.galeri.DetailGaleriFragment
-import com.valdoang.kateringconnect.view.vendor.menu.AddMenuActivity
+import com.valdoang.kateringconnect.view.vendor.menu.MenuActivity
 
 class VendorAkunFragment : Fragment() {
 
@@ -73,7 +69,7 @@ class VendorAkunFragment : Fragment() {
         galleryList = arrayListOf()
 
         setupAccount()
-        setupView()
+        //setupView()
         setupAction()
         hideUI()
         return root
@@ -129,7 +125,7 @@ class VendorAkunFragment : Fragment() {
             }
         }
 
-        val galleryRef = db.collection("gallery").whereEqualTo("userId", vendorId)
+        /*val galleryRef = db.collection("gallery").whereEqualTo("userId", vendorId)
         galleryRef.addSnapshotListener{ snapshot,_ ->
             if (snapshot != null) {
                 galleryList.clear()
@@ -153,17 +149,17 @@ class VendorAkunFragment : Fragment() {
                     }
                 })
             }
-        }
+        }*/
     }
 
-    private fun setupView() {
+    /*private fun setupView() {
         recyclerView = binding.rvVendorGaleri
         recyclerView.layoutManager = GridLayoutManager(requireContext(),2)
 
         galleryAdapter = GalleryAdapter(requireContext())
         recyclerView.adapter = galleryAdapter
         galleryAdapter.setItems(galleryList)
-    }
+    }*/
 
     private fun setupAction() {
         binding.cvStar.setOnClickListener {
@@ -171,42 +167,21 @@ class VendorAkunFragment : Fragment() {
             intent.putExtra(NilaiActivity.EXTRA_ID, vendorId)
             startActivity(intent)
         }
-        binding.btnVendorEditAkun.setOnClickListener{
-            val intent = Intent(requireContext(), EditAkunActivity::class.java)
+        binding.cvMenu.setOnClickListener {
+            val intent = Intent(requireContext(), MenuActivity::class.java)
             startActivity(intent)
         }
-        binding.btnVendorLogout.setOnClickListener{
-            val dialog = LogoutFragment()
-            dialog.show(this.parentFragmentManager, "logoutDialog")
-        }
-        binding.btnAddMenu.setOnClickListener {
-            val intent = Intent(requireContext(), AddMenuActivity::class.java)
-            startActivity(intent)
-        }
-        binding.btnAddGaleri.setOnClickListener {
+        binding.cvGaleri.setOnClickListener {
             val intent = Intent(requireContext(), AddGaleriActivity::class.java)
             startActivity(intent)
         }
-        binding.cvNasiKotak.setOnClickListener {
-            val intent = Intent(requireContext(), MenuActivity::class.java)
-            intent.putExtra(MenuActivity.EXTRA_JENIS, getString(R.string.nasi_kotak))
-            intent.putExtra(MenuActivity.EXTRA_FOTO, foto)
-            intent.putExtra(MenuActivity.EXTRA_NAMA, nama)
+        binding.cvEditProfile.setOnClickListener {
+            val intent = Intent(requireContext(), EditAkunActivity::class.java)
             startActivity(intent)
         }
-        binding.cvTumpeng.setOnClickListener {
-            val intent = Intent(requireContext(), MenuActivity::class.java)
-            intent.putExtra(MenuActivity.EXTRA_JENIS, getString(R.string.tumpeng))
-            intent.putExtra(MenuActivity.EXTRA_FOTO, foto)
-            intent.putExtra(MenuActivity.EXTRA_NAMA, nama)
-            startActivity(intent)
-        }
-        binding.cvPrasmanan.setOnClickListener {
-            val intent = Intent(requireContext(), MenuActivity::class.java)
-            intent.putExtra(MenuActivity.EXTRA_JENIS, getString(R.string.prasmanan))
-            intent.putExtra(MenuActivity.EXTRA_FOTO, foto)
-            intent.putExtra(MenuActivity.EXTRA_NAMA, nama)
-            startActivity(intent)
+        binding.cvLogout.setOnClickListener {
+            val dialog = LogoutFragment()
+            dialog.show(this.parentFragmentManager, "logoutDialog")
         }
         binding.ibChat.setOnClickListener {
             val intent = Intent(requireContext(), ChatActivity::class.java)

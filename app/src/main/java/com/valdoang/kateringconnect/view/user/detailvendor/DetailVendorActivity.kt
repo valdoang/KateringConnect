@@ -1,16 +1,11 @@
 package com.valdoang.kateringconnect.view.user.detailvendor
 
-import android.content.ContentValues.TAG
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.ContentProviderCompat.requireContext
-import androidx.fragment.app.DialogFragment
-import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.google.firebase.auth.FirebaseAuth
@@ -25,9 +20,7 @@ import com.valdoang.kateringconnect.model.Star
 import com.valdoang.kateringconnect.utils.roundOffDecimal
 import com.valdoang.kateringconnect.utils.withNumberingFormat
 import com.valdoang.kateringconnect.view.both.chat.RoomChatActivity
-import com.valdoang.kateringconnect.view.both.menu.MenuActivity
 import com.valdoang.kateringconnect.view.both.nilai.NilaiActivity
-import com.valdoang.kateringconnect.view.vendor.galeri.DetailGaleriFragment
 
 class DetailVendorActivity : AppCompatActivity() {
     private lateinit var binding: FragmentVendorAkunBinding
@@ -68,17 +61,17 @@ class DetailVendorActivity : AppCompatActivity() {
         ivVendorAkun = binding.ivVendorAkun
 
         setupAccount()
-        setupView()
+        //setupView()
         setupAction()
         hideUI()
     }
 
     private fun hideUI() {
         binding.titleVendorAkun.visibility = View.GONE
-        binding.btnVendorLogout.visibility = View.GONE
-        binding.btnVendorEditAkun.visibility = View.GONE
-        binding.btnAddGaleri.visibility = View.GONE
-        binding.btnAddMenu.visibility = View.GONE
+        binding.cvMenu.visibility = View.GONE
+        binding.cvGaleri.visibility = View.GONE
+        binding.cvEditProfile.visibility = View.GONE
+        binding.cvLogout.visibility = View.GONE
     }
 
     private fun setupAccount() {
@@ -130,7 +123,7 @@ class DetailVendorActivity : AppCompatActivity() {
             }
         }
 
-        val galleryRef = db.collection("gallery").whereEqualTo("userId", vendorId)
+        /*val galleryRef = db.collection("gallery").whereEqualTo("userId", vendorId)
         galleryRef.addSnapshotListener{ snapshot,_ ->
             if (snapshot != null) {
                 galleryList.clear()
@@ -154,17 +147,17 @@ class DetailVendorActivity : AppCompatActivity() {
                     }
                 })
             }
-        }
+        }*/
     }
 
-    private fun setupView() {
+    /*private fun setupView() {
         recyclerView = binding.rvVendorGaleri
         recyclerView.layoutManager = GridLayoutManager(this,2)
 
         galleryAdapter = GalleryAdapter(this)
         recyclerView.adapter = galleryAdapter
         galleryAdapter.setItems(galleryList)
-    }
+    }*/
 
     private fun setupAction() {
         binding.ibBack.setOnClickListener {
@@ -174,31 +167,6 @@ class DetailVendorActivity : AppCompatActivity() {
         binding.cvStar.setOnClickListener {
             val intent = Intent(this, NilaiActivity::class.java)
             intent.putExtra(NilaiActivity.EXTRA_ID, vendorId)
-            startActivity(intent)
-        }
-
-        binding.cvNasiKotak.setOnClickListener {
-            val intent = Intent(this, MenuActivity::class.java)
-            intent.putExtra(MenuActivity.EXTRA_JENIS, getString(R.string.nasi_kotak))
-            intent.putExtra(MenuActivity.EXTRA_FOTO, foto)
-            intent.putExtra(MenuActivity.EXTRA_NAMA, nama)
-            intent.putExtra(MenuActivity.EXTRA_ID, vendorId)
-            startActivity(intent)
-        }
-        binding.cvTumpeng.setOnClickListener {
-            val intent = Intent(this, MenuActivity::class.java)
-            intent.putExtra(MenuActivity.EXTRA_JENIS, getString(R.string.tumpeng))
-            intent.putExtra(MenuActivity.EXTRA_FOTO, foto)
-            intent.putExtra(MenuActivity.EXTRA_NAMA, nama)
-            intent.putExtra(MenuActivity.EXTRA_ID, vendorId)
-            startActivity(intent)
-        }
-        binding.cvPrasmanan.setOnClickListener {
-            val intent = Intent(this, MenuActivity::class.java)
-            intent.putExtra(MenuActivity.EXTRA_JENIS, getString(R.string.prasmanan))
-            intent.putExtra(MenuActivity.EXTRA_FOTO, foto)
-            intent.putExtra(MenuActivity.EXTRA_NAMA, nama)
-            intent.putExtra(MenuActivity.EXTRA_ID, vendorId)
             startActivity(intent)
         }
         binding.ibChat.setOnClickListener {

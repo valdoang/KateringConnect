@@ -4,65 +4,67 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/white_200"
     tools:context=".view.user.main.ui.riwayat.UserRiwayatFragment">
 
-    <TextView
-        android:id="@+id/title_user_riwayat"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:text="@string/title_riwayat"
-        android:fontFamily="@font/poppins_bold"
-        android:textColor="@color/black"
-        android:textSize="20sp"
-        android:layout_marginStart="24dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <ImageButton
-        android:id="@+id/ib_chat"
-        android:layout_width="35dp"
-        android:layout_height="35dp"
-        android:src="@drawable/ic_baseline_chat_24"
-        android:background="@color/white"
-        android:layout_marginTop="14dp"
-        android:layout_marginEnd="16dp"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"/>
-
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="@color/white_200"
-        android:layout_marginTop="8dp"
-        app:layout_constraintTop_toBottomOf="@id/title_user_riwayat"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"/>
-
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rv_user_riwayat"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="70dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginBottom="80dp"
-        app:layout_constraintTop_toBottomOf="@id/title_user_riwayat"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        tools:listitem="@layout/item_user_riwayat"/>
+        android:orientation="vertical">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/white"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <TextView
+                android:id="@+id/title_user_riwayat"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:layout_marginBottom="8dp"
+                android:text="@string/title_riwayat"
+                android:fontFamily="@font/poppins_bold"
+                android:textColor="@color/black"
+                android:textSize="20sp"
+                android:layout_marginStart="24dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"/>
+
+            <ImageButton
+                android:id="@+id/ib_chat"
+                android:layout_width="35dp"
+                android:layout_height="35dp"
+                android:src="@drawable/ic_baseline_chat_24"
+                android:background="@color/white"
+                android:layout_marginTop="14dp"
+                android:layout_marginEnd="16dp"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"/>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv_user_riwayat"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginBottom="80dp"
+            tools:listitem="@layout/item_user_riwayat"/>
+
+    </LinearLayout>
 
     <com.airbnb.lottie.LottieAnimationView
         android:id="@+id/no_history_animation_user"
         android:layout_width="250dp"
         android:layout_height="250dp"
-        android:layout_marginTop="160dp"
+        android:layout_marginTop="240dp"
         android:visibility="gone"
         app:lottie_autoPlay="true"
         app:lottie_fileName="nohistory.json"
         app:lottie_loop="true"
-        app:layout_constraintTop_toBottomOf="@id/title_user_riwayat"
+        app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 

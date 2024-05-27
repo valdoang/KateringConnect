@@ -8,7 +8,7 @@ import android.widget.*
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
-import androidx.cardview.widget.CardView
+import androidx.constraintlayout.widget.ConstraintLayout
 import com.bumptech.glide.Glide
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.firebase.auth.FirebaseAuth
@@ -18,12 +18,12 @@ import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.ktx.storage
 import com.valdoang.kateringconnect.R
-import com.valdoang.kateringconnect.databinding.ActivityEditMenuBinding
+import com.valdoang.kateringconnect.databinding.ActivityAddEditMenuBinding
 import com.valdoang.kateringconnect.utils.getImageUri
 
 
 class EditMenuActivity : AppCompatActivity() {
-    private lateinit var binding: ActivityEditMenuBinding
+    private lateinit var binding: ActivityAddEditMenuBinding
     private lateinit var firebaseAuth: FirebaseAuth
     private var db = Firebase.firestore
     private var storageRef = Firebase.storage
@@ -31,7 +31,8 @@ class EditMenuActivity : AppCompatActivity() {
     private lateinit var etName: EditText
     private lateinit var etDesc: EditText
     private lateinit var etPrice: EditText
-    private lateinit var acJenis: AutoCompleteTextView
+    private lateinit var acKategori: AutoCompleteTextView
+    private lateinit var tvHapus: TextView
     private var storageKeys = ""
     private var nama = ""
     private var desc = ""
@@ -43,7 +44,7 @@ class EditMenuActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivityEditMenuBinding.inflate(layoutInflater)
+        binding = ActivityAddEditMenuBinding.inflate(layoutInflater)
         setContentView(binding.root)
         supportActionBar?.hide()
 
@@ -55,11 +56,13 @@ class EditMenuActivity : AppCompatActivity() {
         etName = binding.edAddName
         etDesc = binding.edAddDesc
         etPrice = binding.edAddPrice
-        acJenis = binding.acAddJenis
+        acKategori = binding.acAddKategori
+        tvHapus = binding.tvHapus
 
         menuId = intent.getStringExtra(EXTRA_ID)
 
-        setupAcJenis()
+        setupView()
+        setupAcKategori()
         setData(menuId!!)
         setupAction()
         updateData()
@@ -67,10 +70,16 @@ class EditMenuActivity : AppCompatActivity() {
         closeDialog()
     }
 
-    private fun setupAcJenis() {
-        val jenis = resources.getStringArray(R.array.Jenis)
-        val dropdownAdapter = ArrayAdapter(this, R.layout.dropdown_item, jenis)
-        acJenis.setAdapter(dropdownAdapter)
+    private fun setupView() {
+        binding.btnSimpan.text = getString(R.string.simpan)
+        tvHapus.visibility = View.VISIBLE
+    }
+
+
+    private fun setupAcKategori() {
+        val kategori = resources.getStringArray(R.array.Kategori)
+        val dropdownAdapter = ArrayAdapter(this, R.layout.dropdown_item, kategori)
+        acKategori.setAdapter(dropdownAdapter)
     }
 
     private fun setData(menuId: String) {
@@ -78,7 +87,7 @@ class EditMenuActivity : AppCompatActivity() {
         ref.addSnapshotListener{document,_ ->
                 if (document != null) {
                     val foto = document.data?.get("foto").toString()
-                    Glide.with(applicationContext).load(foto).error(R.drawable.galeri).into(ivFoto)
+                    Glide.with(applicationContext).load(foto).error(R.drawable.addphoto).into(ivFoto)
                 }
             }
         ref.get().addOnSuccessListener { document ->
@@ -91,31 +100,25 @@ class EditMenuActivity : AppCompatActivity() {
                 etName.setText(nama)
                 etDesc.setText(desc)
                 etPrice.setText(price)
-                acJenis.setText(jenis, false)
+                acKategori.setText(jenis, false)
             }
         }
     }
 
     private fun updateData() {
-        /*acJenis.onItemClickListener = AdapterView.OnItemClickListener{
-                adapterView, _, i, _ ->
-
-            jenis = adapterView.getItemAtPosition(i).toString()
-        }*/
-
         binding.btnSimpan.setOnClickListener{
             val sName = etName.text.toString().trim()
             val sDesc = etDesc.text.toString().trim()
             val sPrice = etPrice.text.toString().trim()
-            val sJenis = acJenis.text.toString().trim()
+            val sKategori = acKategori.text.toString().trim()
 
             val updateMap = mapOf(
                 "nama" to sName,
                 "keterangan" to sDesc,
                 "harga" to sPrice,
-                "jenis" to sJenis
+                "kategori" to sKategori
             )
-            if (sName == nama && sDesc == desc && sPrice == price && sJenis == jenis) {
+            if (sName == nama && sDesc == desc && sPrice == price && sKategori == jenis) {
                 Toast.makeText(this, R.string.no_one_change, Toast.LENGTH_SHORT).show()
             }
             else {
@@ -133,7 +136,7 @@ class EditMenuActivity : AppCompatActivity() {
     }
 
     private fun deleteData() {
-        binding.btnHapus.setOnClickListener{
+        tvHapus.setOnClickListener{
             onBackPressed()
             db.collection("menu").document(menuId!!).delete()
             storageRef.getReference("menuImages").child(storageKeys).delete()
@@ -157,8 +160,8 @@ class EditMenuActivity : AppCompatActivity() {
             val dialog = BottomSheetDialog(this)
             val view = layoutInflater.inflate(R.layout.bottom_sheet_add_photo, null)
 
-            val cvGaleri = view.findViewById<CardView>(R.id.cv_gallery)
-            val cvCamera = view.findViewById<CardView>(R.id.cv_camera)
+            val cvGaleri = view.findViewById<ConstraintLayout>(R.id.cv_gallery)
+            val cvCamera = view.findViewById<ConstraintLayout>(R.id.cv_camera)
 
             cvGaleri.setOnClickListener {
                 launcherGallery.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))

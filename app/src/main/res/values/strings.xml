@@ -20,7 +20,7 @@
     <string name="connect">Connect</string>
     <string name="title_akun_anda">Profil Anda</string>
     <string name="logout">Keluar</string>
-    <string name="edit_akun">Edit Profil</string>
+    <string name="edit_akun">Ubah Profil</string>
 
     <string-array name="Cities">
         <item>Surabaya</item>
@@ -31,7 +31,7 @@
         <item>Balikpapan</item>
     </string-array>
 
-    <string-array name="Jenis">
+    <string-array name="Kategori">
         <item>Nasi Kotak</item>
         <item>Tumpeng</item>
         <item>Prasmanan</item>
@@ -46,15 +46,16 @@
     <string name="galeri">Galeri</string>
     <string name="title_edit_akun">Edit Profil</string>
     <string name="simpan">Simpan</string>
-    <string name="title_tambah_menu">Tambah Menu</string>
-    <string name="tv_desc">Keterangan</string>
+    <string name="title_tambah_hidangan_baru">Tambah Hidangan Baru</string>
+    <string name="tv_desc">Deskripsi</string>
     <string name="tv_price">Harga</string>
     <string name="tv_jenis">Jenis</string>
     <string name="tambah">Tambah</string>
     <string name="title_edit_menu">Edit Menu</string>
     <string name="hapus">Hapus</string>
     <string name="title_tambah_galeri">Tambah Galeri</string>
-    <string name="edit_foto">Edit foto</string>
+    <string name="edit_foto">Ubah foto</string>
+    <string name="put_foto">Pasang foto</string>
     <string name="add_photo">Tambahkan foto</string>
     <string name="from_galeri">Ambil dari galeri</string>
     <string name="from_camera">Ambil dari kamera</string>
@@ -100,7 +101,7 @@
     <string name="entry_password">Masukkan Password</string>
     <string name="entry_name">Masukkan Nama</string>
     <string name="entry_city">Masukkan Kota</string>
-    <string name="entry_jenis">Masukkan Jenis</string>
+    <string name="entry_kategori">Masukkan Kategori</string>
     <string name="entry_desc">Masukkan Keterangan</string>
     <string name="entry_price">Masukkan Harga</string>
     <string name="entry_address">Masukkan Alamat</string>
@@ -125,9 +126,6 @@
     <string name="success_delete_photo">Foto berhasil dihapus</string>
     <string name="delete_photo_alert">Apakah Anda yakin ingin \n menghapus foto ini?</string>
     <string name="hapus_foto">Hapus Foto</string>
-    <string name="kategori_nasi_kuning">Kategori Nasi Kuning</string>
-    <string name="kategori_tumpeng">Kategori Tumpeng</string>
-    <string name="kategori_prasmanan">Kategori Prasmanan</string>
     <string name="pilih_waktu">Pilih waktu</string>
     <string name="pilih_tanggal">Pilih tanggal</string>
     <string name="entry_jumlah">Masukkan Jumlah</string>
@@ -163,5 +161,31 @@
     <string name="penambahan_berhasil">PENAMBAHAN BERHASIL</string>
     <string name="chat">Chat</string>
     <string name="chat_kosong">Chat Kosong</string>
-    <string name="ketik_sesuatu">Ketik sesuatu ...</string>
+    <string name="ketik_sesuatu">Ketik sesuatu …</string>
+    <string name="tv_kategori">Kategori *</string>
+    <string name="hapus_hidangan">Hapus Hidangan</string>
+    <string name="menu_tab">Menu</string>
+    <string name="grup_opsi_tab">Grup Opsi</string>
+    <string name="daftar_menu">Daftar Menu</string>
+    <string name="tambah_menu_kategori">Tambah Hidangan atau Kategori</string>
+    <string name="add_foto">Tambah foto</string>
+    <string name="buat_grup_opsi">Buat Grup Opsi</string>
+    <string name="tv_subtitle_hidangan">misal: Paket A, Paket B, Paket 1, Paket 2</string>
+    <string name="tv_title_hidangan">Tambah Hidangan Baru</string>
+    <string name="tv_subtitle_kategori">misal: Nasi Kotak, Prasmanan, Tumpeng</string>
+    <string name="tv_title_kategori">Tambah Kategori Baru</string>
+    <string name="buat_hidangan">Buat Hidangan</string>
+    <string name="tv_nama_hidangan">Nama Hidangan *</string>
+    <string name="tv_harga">Harga *</string>
+    <string name="tv_nama_kategori">Nama Kategori *</string>
+    <string name="title_tambah_kategori">Tambah Kategori Baru</string>
+    <string name="buat_kategori">Buat Kategori</string>
+    <string name="title_buat_grup_opsi">Buat Grup Opsi</string>
+    <string name="hint_grup_opsi">misal: Pilihan Soup, Pilihan Daging</string>
+    <string name="tv_nama_grup_opsi">Nama Grup Opsi *</string>
+    <string name="opsi">Opsi</string>
+    <string name="tambahkan_opsi">Tambahkan Opsi</string>
+    <string name="edit_kategori">Edit Kategori</string>
+    <string name="edit">Edit</string>
+    <string name="tv_pilih_kategori">Pilih Kategori</string>
 </resources>

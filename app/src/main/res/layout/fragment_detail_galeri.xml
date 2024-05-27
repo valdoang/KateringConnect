@@ -50,7 +50,7 @@
                 android:id="@+id/iv_foto"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:src="@drawable/galeri" />
+                android:src="@drawable/gallery" />
 
         </com.otaliastudios.zoom.ZoomLayout>
 

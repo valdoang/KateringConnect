@@ -30,13 +30,15 @@
         app:layout_constraintStart_toEndOf="@id/ib_back"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="@color/white_200"
-        android:layout_marginTop="8dp"
-        app:layout_constraintTop_toBottomOf="@id/title_edit_akun"
-        app:layout_constraintStart_toStartOf="parent"
+    <ImageButton
+        android:id="@+id/ib_save"
+        android:layout_width="35dp"
+        android:layout_height="35dp"
+        android:src="@drawable/ic_baseline_orange_check_30"
+        android:background="@color/white"
+        android:layout_marginTop="14dp"
+        android:layout_marginEnd="16dp"
+        app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintEnd_toEndOf="parent"/>
 
     <de.hdodenhof.circleimageview.CircleImageView
@@ -202,22 +204,6 @@
             android:ems="10"
             android:inputType="text" />
     </com.google.android.material.textfield.TextInputLayout>
-
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/btn_simpan"
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-        android:layout_width="0dp"
-        android:layout_height="50dp"
-        android:layout_marginStart="70dp"
-        android:layout_marginTop="32dp"
-        android:layout_marginEnd="70dp"
-        android:fontFamily="@font/poppins_bold"
-        android:text="@string/simpan"
-        app:cornerRadius="10dp"
-        android:textSize="16sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/noPhoneEditTextLayout" />
 
     <ProgressBar
         android:id="@+id/progressBar"

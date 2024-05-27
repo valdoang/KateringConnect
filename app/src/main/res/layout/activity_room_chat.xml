@@ -55,15 +55,6 @@
         app:layout_constraintStart_toEndOf="@id/iv_user_photo"
         app:layout_constraintTop_toBottomOf="@id/tv_user_name" />
 
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="@color/white_200"
-        android:layout_marginTop="8dp"
-        app:layout_constraintTop_toBottomOf="@id/iv_user_photo"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"/>
-
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv_room_chat"
         android:layout_width="match_parent"

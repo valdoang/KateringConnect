@@ -1,5 +1,6 @@
 package com.valdoang.kateringconnect.view.vendor.menu
 
+import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.util.Log
@@ -8,7 +9,9 @@ import android.widget.*
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
-import androidx.cardview.widget.CardView
+import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
@@ -17,47 +20,106 @@ import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.ktx.storage
 import com.valdoang.kateringconnect.R
-import com.valdoang.kateringconnect.databinding.ActivityAddMenuBinding
+import com.valdoang.kateringconnect.adapter.AcKategoriAdapter
+import com.valdoang.kateringconnect.databinding.ActivityAddEditMenuBinding
+import com.valdoang.kateringconnect.model.AcKategori
 import com.valdoang.kateringconnect.utils.getImageUri
 import java.util.*
 
 class AddMenuActivity : AppCompatActivity() {
 
-    private lateinit var binding: ActivityAddMenuBinding
+    private lateinit var binding: ActivityAddEditMenuBinding
     private lateinit var etName: EditText
     private lateinit var etDesc: EditText
     private lateinit var etPrice: EditText
-    private lateinit var acJenis: AutoCompleteTextView
+    private lateinit var acKategori: AutoCompleteTextView
     private lateinit var progressBar: ProgressBar
     private lateinit var firebaseAuth: FirebaseAuth
     private var db = Firebase.firestore
     private var storageRef = Firebase.storage
     private var currentImageUri: Uri? = null
+    private lateinit var recyclerView: RecyclerView
+    private lateinit var acKategoriList: ArrayList<AcKategori>
+    private lateinit var acKategoriAdapter: AcKategoriAdapter
+    private var idKategori: String? = null
+    private var userId = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivityAddMenuBinding.inflate(layoutInflater)
+        binding = ActivityAddEditMenuBinding.inflate(layoutInflater)
         setContentView(binding.root)
         supportActionBar?.hide()
 
         firebaseAuth = Firebase.auth
         storageRef = FirebaseStorage.getInstance()
+        userId = firebaseAuth.currentUser!!.uid
 
         etName = binding.edAddName
         etDesc = binding.edAddDesc
         etPrice = binding.edAddPrice
-        acJenis = binding.acAddJenis
+        acKategori = binding.acAddKategori
         progressBar = binding.progressBar
 
         setupAction()
-        setupAcJenis()
+        setupAcKategori()
         saveData()
     }
 
-    private fun setupAcJenis() {
-        val jenis = resources.getStringArray(R.array.Jenis)
-        val dropdownAdapter = ArrayAdapter(this, R.layout.dropdown_item, jenis)
-        acJenis.setAdapter(dropdownAdapter)
+    private fun setupAcKategori() {
+        /*val kategori = resources.getStringArray(R.array.Kategori)
+        val dropdownAdapter = ArrayAdapter(this, R.layout.dropdown_item, kategori)
+        acKategori.setAdapter(dropdownAdapter)*/
+
+        acKategori.setOnClickListener {
+            val dialog = BottomSheetDialog(this)
+            val view = layoutInflater.inflate(R.layout.bottom_sheet_ac_kategori, null)
+
+            val rvRadioButton = view.findViewById<RecyclerView>(R.id.rv_kategori)
+            val llTambahKategori = view.findViewById<LinearLayout>(R.id.ll_tambah_kategori)
+
+            //Setup View
+            acKategoriList = arrayListOf()
+
+            recyclerView = rvRadioButton
+            recyclerView.layoutManager = LinearLayoutManager(this)
+
+            acKategoriAdapter = AcKategoriAdapter()
+            recyclerView.adapter = acKategoriAdapter
+            acKategoriAdapter.setItems(acKategoriList)
+
+            //Setup Data
+            val ref = db.collection("user").document(userId).collection("kategoriMenu")
+            ref.addSnapshotListener { snapshot, _ ->
+                if (snapshot != null) {
+                    acKategoriList.clear()
+                    for (data in snapshot.documents) {
+                        val acKategori: AcKategori? = data.toObject(AcKategori::class.java)
+                        if (acKategori != null) {
+                            acKategori.id = data.id
+                            acKategoriList.add(acKategori)
+                        }
+                    }
+
+                    acKategoriAdapter.setItems(acKategoriList)
+                    acKategoriAdapter.setOnItemClickCallback(object :
+                        AcKategoriAdapter.OnItemClickCallback {
+                        override fun onItemClicked(data: AcKategori) {
+                            idKategori = data.id
+                            acKategori.setText(data.nama)
+                            dialog.dismiss()
+                        }
+                    })
+                }
+            }
+
+            llTambahKategori.setOnClickListener {
+                val intent = Intent(this, AddKategoriActivity::class.java)
+                startActivity(intent)
+            }
+
+            dialog.setContentView(view)
+            dialog.show()
+        }
     }
 
     private fun setupAction() {
@@ -69,8 +131,8 @@ class AddMenuActivity : AppCompatActivity() {
             val dialog = BottomSheetDialog(this)
             val view = layoutInflater.inflate(R.layout.bottom_sheet_add_photo, null)
 
-            val cvGaleri = view.findViewById<CardView>(R.id.cv_gallery)
-            val cvCamera = view.findViewById<CardView>(R.id.cv_camera)
+            val cvGaleri = view.findViewById<ConstraintLayout>(R.id.cv_gallery)
+            val cvCamera = view.findViewById<ConstraintLayout>(R.id.cv_camera)
 
             cvGaleri.setOnClickListener {
                 launcherGallery.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
@@ -89,20 +151,11 @@ class AddMenuActivity : AppCompatActivity() {
     }
 
     private fun saveData() {
-        var sJenis = ""
-
-        acJenis.onItemClickListener = AdapterView.OnItemClickListener{
-                adapterView, _, i, _ ->
-
-            sJenis = adapterView.getItemAtPosition(i).toString()
-        }
-
-        binding.btnTambah.setOnClickListener{
+        binding.btnSimpan.setOnClickListener{
             val sName = etName.text.toString().trim()
             val sDesc = etDesc.text.toString().trim()
             val sPrice = etPrice.text.toString().trim()
 
-            val userId = firebaseAuth.currentUser!!.uid
             val filename = UUID.randomUUID().toString()
 
             when {
@@ -118,8 +171,8 @@ class AddMenuActivity : AppCompatActivity() {
                 sPrice.isEmpty() -> {
                     etPrice.error = getString(R.string.entry_price)
                 }
-                sJenis.isEmpty() -> {
-                    acJenis.error = getString(R.string.entry_jenis)
+                idKategori!!.isEmpty() -> {
+                    acKategori.error = getString(R.string.entry_kategori)
                 }
                 else -> {
                     progressBar.visibility = View.VISIBLE
@@ -135,11 +188,10 @@ class AddMenuActivity : AppCompatActivity() {
                                             "nama" to sName,
                                             "keterangan" to sDesc,
                                             "harga" to sPrice,
-                                            "jenis" to sJenis,
-                                            "storageKeys" to filename,
-                                            "userId" to userId
+                                            "kategori" to idKategori,
+                                            "storageKeys" to filename
                                         )
-                                        db.collection("menu").document().set(mapImage)
+                                        db.collection("user").document(userId).collection("menu").document().set(mapImage)
                                             .addOnSuccessListener {
                                                 progressBar.visibility = View.GONE
                                                 onBackPressed()
@@ -178,8 +230,8 @@ class AddMenuActivity : AppCompatActivity() {
 
     private fun showImage() {
         currentImageUri?.let {
-            Log.d("Image URI", "showImage: $it")
             binding.ivEditPhoto.setImageURI(it)
         }
+        binding.tvAddPhoto.text = getString(R.string.edit_foto)
     }
 }

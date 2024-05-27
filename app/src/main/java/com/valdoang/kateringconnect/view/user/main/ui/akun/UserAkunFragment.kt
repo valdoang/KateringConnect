@@ -73,11 +73,11 @@ class UserAkunFragment : Fragment() {
     }
 
     private fun setupAction() {
-        binding.btnUserEditAkun.setOnClickListener{
+        binding.cvEditProfile.setOnClickListener{
             val intent = Intent(requireContext(), EditAkunActivity::class.java)
             startActivity(intent)
         }
-        binding.btnUserLogout.setOnClickListener{
+        binding.cvLogout.setOnClickListener{
             val dialog = LogoutFragment()
             dialog.show(this.parentFragmentManager, "logoutDialog")
         }

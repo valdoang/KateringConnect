@@ -1,7 +1,6 @@
 package com.valdoang.kateringconnect.view.vendor.galeri
 
 import android.net.Uri
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.View
@@ -9,9 +8,8 @@ import android.widget.ProgressBar
 import android.widget.Toast
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.cardview.widget.CardView
-import com.valdoang.kateringconnect.R
-import com.valdoang.kateringconnect.databinding.ActivityAddGaleriBinding
+import androidx.appcompat.app.AppCompatActivity
+import androidx.constraintlayout.widget.ConstraintLayout
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
@@ -19,8 +17,10 @@ import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.ktx.storage
+import com.valdoang.kateringconnect.R
+import com.valdoang.kateringconnect.databinding.ActivityAddGaleriBinding
 import com.valdoang.kateringconnect.utils.getImageUri
-import java.util.UUID
+import java.util.*
 
 class AddGaleriActivity : AppCompatActivity() {
     private lateinit var binding: ActivityAddGaleriBinding
@@ -48,7 +48,7 @@ class AddGaleriActivity : AppCompatActivity() {
             onBackPressed()
         }
 
-        binding.btnSimpan.setOnClickListener {
+        binding.ibSave.setOnClickListener {
             if(currentImageUri == null) {
                 Toast.makeText(this, R.string.add_photo_alert, Toast.LENGTH_SHORT).show()
             }
@@ -61,8 +61,8 @@ class AddGaleriActivity : AppCompatActivity() {
             val dialog = BottomSheetDialog(this)
             val view = layoutInflater.inflate(R.layout.bottom_sheet_add_photo, null)
 
-            val cvGaleri = view.findViewById<CardView>(R.id.cv_gallery)
-            val cvCamera = view.findViewById<CardView>(R.id.cv_camera)
+            val cvGaleri = view.findViewById<ConstraintLayout>(R.id.cv_gallery)
+            val cvCamera = view.findViewById<ConstraintLayout>(R.id.cv_camera)
 
             cvGaleri.setOnClickListener {
                 launcherGallery.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
@@ -129,8 +129,8 @@ class AddGaleriActivity : AppCompatActivity() {
 
     private fun showImage() {
         currentImageUri?.let {
-            Log.d("Image URI", "showImage: $it")
             binding.ivFoto.setImageURI(it)
         }
+        binding.tvAddPhoto.text = getString(R.string.edit_foto)
     }
 }

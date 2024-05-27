@@ -16,6 +16,12 @@
         android:theme="@style/Theme.KateringConnect"
         tools:targetApi="31">
         <activity
+            android:name=".view.vendor.menu.AddGrupOpsiActivity"
+            android:exported="false" />
+        <activity
+            android:name=".view.vendor.menu.AddKategoriActivity"
+            android:exported="false" />
+        <activity
             android:name=".view.both.chat.RoomChatActivity"
             android:exported="false" />
         <activity
@@ -34,7 +40,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".view.both.menu.MenuActivity"
+            android:name=".view.vendor.menu.MenuActivity"
             android:exported="false" />
         <activity
             android:name=".view.vendor.menu.AddMenuActivity"

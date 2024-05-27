@@ -118,7 +118,7 @@ class DetailPesananActivity : AppCompatActivity() {
                     tvPesananId.text = pesananId
                     tvPesananStatus.text = status
                     tvPesananJumlah.text = jumlah
-                    tvPesananTotalPembayaran.text = totalPembayaran
+                    tvPesananTotalPembayaran.text = totalPembayaran.withNumberingFormat()
                     tvPesananSubtotal.text = subtotal.withNumberingFormat()
                     tvPesananOngkir.text = ongkir.withNumberingFormat()
                     tvPesananMetodePembayaran.text = metodePembayaran

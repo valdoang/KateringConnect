@@ -2,9 +2,6 @@ package com.valdoang.kateringconnect.view.both.akun
 
 import android.net.Uri
 import android.os.Bundle
-import android.text.InputType.TYPE_CLASS_TEXT
-import android.text.InputType.TYPE_TEXT_FLAG_MULTI_LINE
-import android.text.InputType.TYPE_TEXT_VARIATION_POSTAL_ADDRESS
 import android.util.Log
 import android.view.View
 import android.widget.*
@@ -12,6 +9,7 @@ import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.cardview.widget.CardView
+import androidx.constraintlayout.widget.ConstraintLayout
 import com.bumptech.glide.Glide
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.firebase.auth.FirebaseAuth
@@ -98,7 +96,7 @@ class EditAkunActivity : AppCompatActivity() {
     }
 
     private fun updateData() {
-        binding.btnSimpan.setOnClickListener {
+        binding.ibSave.setOnClickListener {
             val sName = etName.text.toString().trim()
             val sNoPhone = etNoPhone.text.toString().trim()
             val sAddress = etAddress.text.toString().trim()
@@ -136,8 +134,8 @@ class EditAkunActivity : AppCompatActivity() {
             val dialog = BottomSheetDialog(this)
             val view = layoutInflater.inflate(R.layout.bottom_sheet_add_photo, null)
 
-            val cvGaleri = view.findViewById<CardView>(R.id.cv_gallery)
-            val cvCamera = view.findViewById<CardView>(R.id.cv_camera)
+            val cvGaleri = view.findViewById<ConstraintLayout>(R.id.cv_gallery)
+            val cvCamera = view.findViewById<ConstraintLayout>(R.id.cv_camera)
 
             cvGaleri.setOnClickListener {
                 launcherGallery.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))

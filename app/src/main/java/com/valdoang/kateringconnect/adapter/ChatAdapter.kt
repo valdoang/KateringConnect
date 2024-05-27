@@ -13,8 +13,6 @@ import com.google.firebase.ktx.Firebase
 import com.valdoang.kateringconnect.R
 import com.valdoang.kateringconnect.databinding.ItemChatBinding
 import com.valdoang.kateringconnect.model.Chat
-import com.valdoang.kateringconnect.utils.withTimestampToDateTimeFormat2
-import com.valdoang.kateringconnect.utils.withTimestamptoTimeFormat
 
 class ChatAdapter(
     private val context: Context

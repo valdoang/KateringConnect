@@ -15,6 +15,16 @@ fun Long.withNumberingFormat(): String {
     return NumberFormat.getNumberInstance().format(this.toDouble())
 }
 
+fun String.withCurrencyFormat(): String {
+    val mCurrencyFormat = NumberFormat.getCurrencyInstance()
+    return mCurrencyFormat.format(this.toLong())
+}
+
+fun Long.withCurrencyFormat(): String {
+    val mCurrencyFormat = NumberFormat.getCurrencyInstance()
+    return mCurrencyFormat.format(this)
+}
+
 fun String.withDateFormat(): String {
     val format = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
     val date = format.parse(this) as Date

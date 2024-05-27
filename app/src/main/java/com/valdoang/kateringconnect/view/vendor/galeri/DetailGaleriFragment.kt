@@ -1,7 +1,5 @@
 package com.valdoang.kateringconnect.view.vendor.galeri
 
-import android.content.DialogInterface
-import android.content.Intent
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
@@ -13,7 +11,6 @@ import android.view.Window
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.Toast
-import androidx.cardview.widget.CardView
 import androidx.fragment.app.DialogFragment
 import com.bumptech.glide.Glide
 import com.google.firebase.auth.FirebaseAuth
@@ -25,9 +22,6 @@ import com.google.firebase.storage.ktx.storage
 import com.valdoang.kateringconnect.R
 import com.valdoang.kateringconnect.databinding.FragmentDetailGaleriBinding
 import com.valdoang.kateringconnect.view.both.alertdialog.DeleteGalleryFragment
-import com.valdoang.kateringconnect.view.both.menu.MenuActivity
-import com.valdoang.kateringconnect.view.user.main.UserMainActivity
-import com.valdoang.kateringconnect.view.vendor.main.VendorMainActivity
 
 class DetailGaleriFragment : DialogFragment() {
     private var _binding: FragmentDetailGaleriBinding? = null
@@ -94,7 +88,7 @@ class DetailGaleriFragment : DialogFragment() {
                 if (document != null) {
                     val foto = document.data?.get("foto").toString()
                     storageKeys = document.data?.get("storageKeys").toString()
-                    Glide.with(activity!!).load(foto).error(R.drawable.galeri).into(ivFoto)
+                    Glide.with(activity!!).load(foto).error(R.drawable.gallery).into(ivFoto)
                 }
             }
             .addOnFailureListener {
