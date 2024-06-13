@@ -2,29 +2,28 @@ package com.valdoang.kateringconnect.adapter
 
 import android.annotation.SuppressLint
 import android.content.Context
-import android.content.Intent
-import android.os.Build.VERSION_CODES.M
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.lifecycle.LifecycleOwner
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.valdoang.kateringconnect.R
-import com.valdoang.kateringconnect.databinding.ItemKategoriMenuBinding
-import com.valdoang.kateringconnect.model.AcKategori
+import com.valdoang.kateringconnect.databinding.ItemOpsiShowMenuBinding
 import com.valdoang.kateringconnect.model.KategoriMenu
 import com.valdoang.kateringconnect.model.Menu
 
-class KategoriMenuAdapter(
-    private val context: Context
-): RecyclerView.Adapter<KategoriMenuAdapter.MyViewHolder>() {
+class OpsiShowMenuAdapter(
+    private val context: Context, private var arrayMenuId: ArrayList<String>
+): RecyclerView.Adapter<OpsiShowMenuAdapter.MyViewHolder>() {
 
     private val kategoriMenuList = ArrayList<KategoriMenu>()
     private var menuList = ArrayList<Menu>()
     private var db = Firebase.firestore
+    private var checkAccumulator = 0
 
     @SuppressLint("NotifyDataSetChanged")
     fun setItems(itemList: List<KategoriMenu>) {
@@ -33,7 +32,7 @@ class KategoriMenuAdapter(
         notifyDataSetChanged()
     }
 
-    inner class MyViewHolder(private val binding: ItemKategoriMenuBinding) :
+    inner class MyViewHolder(private val binding: ItemOpsiShowMenuBinding, private val lifecycleOwner: LifecycleOwner) :
         RecyclerView.ViewHolder(binding.root) {
         fun bind(kategoriMenu: KategoriMenu) {
             binding.apply {
@@ -53,39 +52,45 @@ class KategoriMenuAdapter(
 
                 //Setup View
                 val recyclerView: RecyclerView = rvMenu
-                val menuAdapter = MenuAdapter(context)
+                val opsiChooseMenuAdapter = OpsiChooseMenuAdapter(context, arrayMenuId)
                 recyclerView.layoutManager = LinearLayoutManager(context)
-                recyclerView.adapter = menuAdapter
-                menuAdapter.setItems(menuList)
+                recyclerView.adapter = opsiChooseMenuAdapter
+                opsiChooseMenuAdapter.setItems(menuList)
 
                 //Setup Data
                 val userId = FirebaseAuth.getInstance().currentUser!!.uid
                 val ref = db.collection("user").document(userId).collection("kategoriMenu").document(kategoriMenu.id!!).collection("menu")
                 ref.addSnapshotListener { snapshot, _ ->
                     if (snapshot != null) {
+                        checkAccumulator = 0
                         menuList.clear()
                         for (data in snapshot.documents) {
                             val menu: Menu? = data.toObject(Menu::class.java)
                             if (menu != null) {
                                 menu.id = data.id
+                                if (arrayMenuId.contains(menu.id)) {
+                                    checkAccumulator = checkAccumulator.plus(1)
+                                    tvJumlahTersambung.text = context.getString(R.string.jumlah_hidangan_tersambung, checkAccumulator.toString())
+                                }
                                 menuList.add(menu)
                             }
                         }
 
-                        menuAdapter.setItems(menuList)
+                        opsiChooseMenuAdapter.setItems(menuList)
                     }
                 }
 
-                tvEditKategori.setOnClickListener {
-                    //Intent ke EditKategoriActivity
+                opsiChooseMenuAdapter.checkAccumulator.observe(lifecycleOwner) {
+                    tvJumlahTersambung.text = context.getString(R.string.jumlah_hidangan_tersambung, it.toString())
                 }
             }
         }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
-        val itemView = ItemKategoriMenuBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-        return MyViewHolder(itemView)
+        val lifeCycleOwner = parent.context as LifecycleOwner
+        val itemView = ItemOpsiShowMenuBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        return MyViewHolder(itemView, lifeCycleOwner)
     }
 
     override fun getItemCount(): Int {

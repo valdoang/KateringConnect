@@ -178,20 +178,19 @@ class AddMenuActivity : AppCompatActivity() {
                     progressBar.visibility = View.VISIBLE
 
                     currentImageUri?.let {
-                        storageRef.getReference("menuImages").child(filename)
+                        storageRef.getReference("menuImages").child(userId).child(idKategori!!).child(filename)
                             .putFile(it)
                             .addOnSuccessListener { task ->
                                 task.metadata!!.reference!!.downloadUrl
                                     .addOnSuccessListener {uri ->
-                                        val mapImage = mapOf(
+                                        val mapMenu = mapOf(
                                             "foto" to uri.toString(),
                                             "nama" to sName,
                                             "keterangan" to sDesc,
                                             "harga" to sPrice,
-                                            "kategori" to idKategori,
                                             "storageKeys" to filename
                                         )
-                                        db.collection("user").document(userId).collection("menu").document().set(mapImage)
+                                        db.collection("user").document(userId).collection("kategoriMenu").document(idKategori!!).collection("menu").document().set(mapMenu)
                                             .addOnSuccessListener {
                                                 progressBar.visibility = View.GONE
                                                 onBackPressed()

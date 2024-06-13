@@ -1,20 +1,20 @@
 package com.valdoang.kateringconnect.view.vendor.detailpesanan
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import android.widget.Button
 import android.widget.TextView
+import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.valdoang.kateringconnect.R
 import com.valdoang.kateringconnect.databinding.ActivityDetailPesananRiwayatBinding
+import com.valdoang.kateringconnect.utils.Cons
 import com.valdoang.kateringconnect.utils.withNumberingFormat
 import com.valdoang.kateringconnect.utils.withTimestamptoDateFormat
 import com.valdoang.kateringconnect.utils.withTimestamptoTimeFormat
-import com.valdoang.kateringconnect.view.user.detailriwayat.DetailRiwayatPemesananActivity
 
 class DetailPesananActivity : AppCompatActivity() {
     private lateinit var binding: ActivityDetailPesananRiwayatBinding
@@ -52,7 +52,7 @@ class DetailPesananActivity : AppCompatActivity() {
 
         firebaseAuth = Firebase.auth
 
-        pesananId = intent.getStringExtra(DetailRiwayatPemesananActivity.EXTRA_ID)
+        pesananId = intent.getStringExtra(Cons.EXTRA_ID)
 
         tvVendorNama = binding.tvVendorName
         tvMenuNama = binding.tvMenuName
@@ -161,9 +161,5 @@ class DetailPesananActivity : AppCompatActivity() {
 
     private fun hideUI() {
         binding.tvVendorName.visibility = View.GONE
-    }
-
-    companion object {
-        const val EXTRA_ID = "extra_id"
     }
 }

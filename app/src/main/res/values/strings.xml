@@ -188,4 +188,14 @@
     <string name="edit_kategori">Edit Kategori</string>
     <string name="edit">Edit</string>
     <string name="tv_pilih_kategori">Pilih Kategori</string>
+    <string name="tv_tambah_opsi">Tambah Opsi</string>
+    <string name="tv_nama">Nama *</string>
+    <string name="hint_opsi">misal: Soup Kimlo, Daging Lada Hitam</string>
+    <string name="hint_harga">+Rp</string>
+    <string name="tv_harga_opsi">Harga</string>
+    <string name="harga_opsi">+%1$s</string>
+    <string name="ubah_opsi">Ubah Opsi</string>
+    <string name="tv_pilih_hidangan">Pilih Hidangan</string>
+    <string name="tv_desc_pilih_hidangan">Pilih hidangan dari menu Anda yang bisa disesuaikan dengan grup opsi %1$s</string>
+    <string name="jumlah_hidangan_tersambung">%1$s hidangan tersambung</string>
 </resources>
