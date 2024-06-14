@@ -31,12 +31,6 @@
         <item>Balikpapan</item>
     </string-array>
 
-    <string-array name="Kategori">
-        <item>Nasi Kotak</item>
-        <item>Tumpeng</item>
-        <item>Prasmanan</item>
-    </string-array>
-
     <string name="title_activity_vendor_main">VendorMainActivity</string>
     <string name="title_vendor_beranda">Pesanan Masuk</string>
     <string name="nasi_kotak">Nasi Kotak</string>

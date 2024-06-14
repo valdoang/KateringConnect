@@ -2,6 +2,7 @@ package com.valdoang.kateringconnect.utils
 
 import android.text.Editable
 import android.text.TextWatcher
+import android.widget.Button
 import android.widget.EditText
 import java.math.RoundingMode
 import java.text.*
@@ -70,6 +71,21 @@ fun EditText.textChangedListener(onTextChanged: (String) -> Unit) {
 
         override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
             onTextChanged.invoke(s.toString())
+        }
+
+        override fun afterTextChanged(editable: Editable?) {
+        }
+    })
+}
+
+fun EditText.beforeChangedListener(button: Button) {
+    this.addTextChangedListener(object : TextWatcher {
+        override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+            button.isEnabled = false
+        }
+
+        override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+            button.isEnabled = !s.isNullOrBlank()
         }
 
         override fun afterTextChanged(editable: Editable?) {

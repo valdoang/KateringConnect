@@ -62,7 +62,6 @@ class EditMenuActivity : AppCompatActivity() {
         menuId = intent.getStringExtra(EXTRA_ID)
 
         setupView()
-        setupAcKategori()
         setData(menuId!!)
         setupAction()
         updateData()
@@ -73,13 +72,6 @@ class EditMenuActivity : AppCompatActivity() {
     private fun setupView() {
         binding.btnSimpan.text = getString(R.string.simpan)
         tvHapus.visibility = View.VISIBLE
-    }
-
-
-    private fun setupAcKategori() {
-        val kategori = resources.getStringArray(R.array.Kategori)
-        val dropdownAdapter = ArrayAdapter(this, R.layout.dropdown_item, kategori)
-        acKategori.setAdapter(dropdownAdapter)
     }
 
     private fun setData(menuId: String) {

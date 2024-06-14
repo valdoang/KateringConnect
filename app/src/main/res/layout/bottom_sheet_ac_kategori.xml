@@ -18,12 +18,6 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"/>
 
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="2dp"
-        android:background="@color/white_200"
-        app:layout_constraintTop_toTopOf="@id/rv_kategori"/>
-
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv_kategori"
         android:layout_width="match_parent"
@@ -51,7 +45,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
-            android:layout_marginTop="4dp"
+            android:layout_marginTop="6dp"
             android:fontFamily="@font/poppins_bold"
             android:textSize="16sp"
             android:textColor="@color/green"

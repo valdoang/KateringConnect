@@ -5,6 +5,7 @@ import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import androidx.lifecycle.LifecycleOwner
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -17,7 +18,7 @@ import com.valdoang.kateringconnect.model.KategoriMenu
 import com.valdoang.kateringconnect.model.Menu
 
 class OpsiShowMenuAdapter(
-    private val context: Context, private var arrayMenuId: ArrayList<String>
+    private val context: Context, private var arrayMenuId: ArrayList<String>, private var grupOpsiId: String, private var btnSimpan: Button
 ): RecyclerView.Adapter<OpsiShowMenuAdapter.MyViewHolder>() {
 
     private val kategoriMenuList = ArrayList<KategoriMenu>()
@@ -52,7 +53,7 @@ class OpsiShowMenuAdapter(
 
                 //Setup View
                 val recyclerView: RecyclerView = rvMenu
-                val opsiChooseMenuAdapter = OpsiChooseMenuAdapter(context, arrayMenuId)
+                val opsiChooseMenuAdapter = OpsiChooseMenuAdapter(context, arrayMenuId, grupOpsiId, btnSimpan)
                 recyclerView.layoutManager = LinearLayoutManager(context)
                 recyclerView.adapter = opsiChooseMenuAdapter
                 opsiChooseMenuAdapter.setItems(menuList)

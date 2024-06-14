@@ -2,6 +2,7 @@ package com.valdoang.kateringconnect.adapter
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.*
@@ -9,18 +10,24 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.ktx.Firebase
 import com.valdoang.kateringconnect.databinding.ItemOpsiChooseMenuBinding
 import com.valdoang.kateringconnect.model.Menu
 import com.valdoang.kateringconnect.utils.withCurrencyFormat
 
 
 class OpsiChooseMenuAdapter(
-    private val context: Context, private var arrayMenuId: ArrayList<String>
+    private val context: Context, private var arrayMenuId: ArrayList<String>, private var grupOpsiId: String, private var btnSimpan: Button
 ) : RecyclerView.Adapter<OpsiChooseMenuAdapter.MyViewHolder>() {
 
     private val menuList = ArrayList<Menu>()
     private var _checkAccumulator = MutableLiveData(0)
     val checkAccumulator: LiveData<Int> = _checkAccumulator
+    private var arrayMenuIdTemp: ArrayList<String> = ArrayList()
+    private var userId = FirebaseAuth.getInstance().currentUser!!.uid
+    private var db = Firebase.firestore
 
     @SuppressLint("NotifyDataSetChanged")
     fun setItems(itemList: List<Menu>) {
@@ -59,6 +66,21 @@ class OpsiChooseMenuAdapter(
                                 }
                             }
                         }
+
+                        val ref = db.collection("user").document(userId).collection("grupOpsi").document(grupOpsiId)
+                        ref.get().addOnSuccessListener {  grupOpsi ->
+                            if (grupOpsi != null) {
+                                val menuIdTemp = grupOpsi.data?.get("menuId") as? ArrayList<String>
+                                if (menuIdTemp != null) {
+                                    arrayMenuIdTemp = menuIdTemp
+                                }
+                            }
+                        }
+
+                        Log.d("sementara", arrayMenuIdTemp.toString())
+                        Log.d("asli", arrayMenuId.toString())
+
+                        btnSimpan.isEnabled = arrayMenuIdTemp != arrayMenuId
                     }
 
                 checkBox.setOnCheckedChangeListener(checkListener)

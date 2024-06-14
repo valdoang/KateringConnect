@@ -1,6 +1,8 @@
 package com.valdoang.kateringconnect.view.vendor.menu
 
 import android.os.Bundle
+import android.view.View
+import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -23,6 +25,7 @@ class OpsiChooseMenuActivity : AppCompatActivity() {
     private var db = Firebase.firestore
     private var arrayMenuId: ArrayList<String> = ArrayList()
     private val userId = FirebaseAuth.getInstance().currentUser!!.uid
+    private lateinit var btnSimpan: Button
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -34,20 +37,21 @@ class OpsiChooseMenuActivity : AppCompatActivity() {
 
         grupOpsiId = intent.getStringExtra(Cons.EXTRA_ID)
         namaGrupOpsi = intent.getStringExtra(Cons.EXTRA_NAMA)
+        btnSimpan = binding.btnSimpan
 
         setupData()
         setupTv()
         getMenuIdData()
         setupView()
         saveData()
-        tvLewatkan()
+        setupAction()
     }
 
     private fun setupView() {
         recyclerView = binding.rvMenu
         recyclerView.layoutManager = LinearLayoutManager(this)
 
-        opsiShowMenuAdapter = OpsiShowMenuAdapter(this, arrayMenuId)
+        opsiShowMenuAdapter = OpsiShowMenuAdapter(this, arrayMenuId, grupOpsiId!!, btnSimpan)
         recyclerView.adapter = opsiShowMenuAdapter
         opsiShowMenuAdapter.setItems(kategoriMenuList)
     }
@@ -84,19 +88,20 @@ class OpsiChooseMenuActivity : AppCompatActivity() {
                 }
 
                 setupView()
+                }
             }
         }
-    }
 
     private fun saveData() {
-        binding.btnSimpan.setOnClickListener {
+        btnSimpan.setOnClickListener {
             val ref = db.collection("user").document(userId).collection("grupOpsi").document(grupOpsiId!!)
             ref.update("menuId", arrayMenuId)
             finish()
         }
     }
 
-    private fun tvLewatkan() {
+    private fun setupAction() {
+        binding.ibBack.visibility = View.GONE
         binding.tvLewatkan.setOnClickListener {
             finish()
         }

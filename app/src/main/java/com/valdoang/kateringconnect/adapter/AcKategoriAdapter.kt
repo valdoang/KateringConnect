@@ -7,7 +7,9 @@ import androidx.recyclerview.widget.RecyclerView
 import com.valdoang.kateringconnect.databinding.ItemAcKategoriBinding
 import com.valdoang.kateringconnect.model.AcKategori
 
-class AcKategoriAdapter : RecyclerView.Adapter<AcKategoriAdapter.MyViewHolder>() {
+class AcKategoriAdapter(
+    private var idKategori: String
+    ) : RecyclerView.Adapter<AcKategoriAdapter.MyViewHolder>() {
 
     private val acKategoriList = ArrayList<AcKategori>()
     private var onItemClickCallback: OnItemClickCallback? = null
@@ -32,7 +34,8 @@ class AcKategoriAdapter : RecyclerView.Adapter<AcKategoriAdapter.MyViewHolder>()
             }
 
             binding.apply {
-                tvNamaKategori.text = acKategori.nama
+                rbNamaKategori.text = acKategori.nama
+                rbNamaKategori.isChecked = idKategori == acKategori.id
             }
         }
     }

@@ -19,6 +19,7 @@ import com.valdoang.kateringconnect.databinding.ActivityAddGrupOpsiBinding
 import com.valdoang.kateringconnect.model.KategoriMenu
 import com.valdoang.kateringconnect.model.Opsi
 import com.valdoang.kateringconnect.utils.Cons
+import com.valdoang.kateringconnect.utils.beforeChangedListener
 import java.util.*
 
 class AddGrupOpsiActivity : AppCompatActivity() {
@@ -30,7 +31,8 @@ class AddGrupOpsiActivity : AppCompatActivity() {
     private lateinit var recyclerViewOpsi: RecyclerView
     private lateinit var opsiAdapter: OpsiAdapter
     private lateinit var kategoriMenuList: ArrayList<KategoriMenu>
-    private lateinit var etNama: EditText
+    private lateinit var etNamaGrupOpsi: EditText
+    private lateinit var btnSimpan: Button
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -42,7 +44,8 @@ class AddGrupOpsiActivity : AppCompatActivity() {
         opsiList = arrayListOf()
         kategoriMenuList = arrayListOf()
 
-        etNama = binding.edAddNamaGrupOpsi
+        etNamaGrupOpsi = binding.edAddNamaGrupOpsi
+        btnSimpan = binding.btnSimpan
 
         setupView()
         setupAction()
@@ -61,28 +64,23 @@ class AddGrupOpsiActivity : AppCompatActivity() {
             val btnSimpan = view.findViewById<Button>(R.id.btn_simpan)
             val btnBatalkan = view.findViewById<Button>(R.id.btn_batalkan)
 
+            edAddNamaOpsi.beforeChangedListener(btnSimpan)
+
             btnSimpan.setOnClickListener {
                 val opsi = Opsi()
                 val uuid = UUID.randomUUID().toString()
                 val sNama = edAddNamaOpsi.text.toString().trim()
                 var sHarga = edAddHargaOpsi.text.toString().trim()
 
-                when {
-                    sNama.isEmpty() -> {
-                        edAddNamaOpsi.error = getString(R.string.entry_name)
-                    }
-                    else -> {
-                        if (sHarga.isEmpty()) {
-                            sHarga = "0"
-                        }
-                        opsi.id = uuid
-                        opsi.nama = sNama
-                        opsi.harga = sHarga
-                        opsiList.add(opsi)
-                        opsiAdapter.setItems(opsiList)
-                        dialog.dismiss()
-                    }
+                if (sHarga.isEmpty()) {
+                    sHarga = "0"
                 }
+                opsi.id = uuid
+                opsi.nama = sNama
+                opsi.harga = sHarga
+                opsiList.add(opsi)
+                opsiAdapter.setItems(opsiList)
+                dialog.dismiss()
             }
 
             btnBatalkan.setOnClickListener {
@@ -149,42 +147,37 @@ class AddGrupOpsiActivity : AppCompatActivity() {
     }
 
     private fun simpanGrupOpsi() {
-        binding.ibSave.setOnClickListener {
+
+        etNamaGrupOpsi.beforeChangedListener(btnSimpan)
+
+        btnSimpan.setOnClickListener {
             val userId = firebaseAuth.currentUser!!.uid
-            val sNama = etNama.text.toString().trim()
-            val namaGrupOpsi = binding.edAddNamaGrupOpsi.text.toString().trim()
+            val namaGrupOpsi = etNamaGrupOpsi.text.toString().trim()
 
-            when {
-                sNama.isEmpty() -> {
-                    etNama.error = getString(R.string.entry_name)
-                }
-                else -> {
-                    val grupOpsiMap = mapOf(
-                        "nama" to sNama
-                    )
+            val grupOpsiMap = mapOf(
+                "nama" to namaGrupOpsi
+            )
 
-                    val newGrupOpsi = db.collection("user").document(userId).collection("grupOpsi").document()
-                    newGrupOpsi.set(grupOpsiMap)
+            val newGrupOpsi = db.collection("user").document(userId).collection("grupOpsi").document()
+            newGrupOpsi.set(grupOpsiMap)
 
-                    val grupOpsiId = newGrupOpsi.id
+            val grupOpsiId = newGrupOpsi.id
 
-                    for (i in opsiList) {
-                        val opsiMap = mapOf(
-                            "nama" to i.nama,
-                            "harga" to i.harga,
-                            "aktif" to i.aktif
-                        )
+            for (i in opsiList) {
+                val opsiMap = mapOf(
+                    "nama" to i.nama,
+                    "harga" to i.harga,
+                    "aktif" to i.aktif
+                )
 
-                        val newOpsi = db.collection("user").document(userId).collection("grupOpsi").document(grupOpsiId).collection("opsi").document()
-                        newOpsi.set(opsiMap)
-                    }
-                    val intent = Intent(this, OpsiChooseMenuActivity::class.java)
-                    intent.putExtra(Cons.EXTRA_ID, grupOpsiId)
-                    intent.putExtra(Cons.EXTRA_NAMA, namaGrupOpsi)
-                    startActivity(intent)
-                    finish()
-                }
+                val newOpsi = db.collection("user").document(userId).collection("grupOpsi").document(grupOpsiId).collection("opsi").document()
+                newOpsi.set(opsiMap)
             }
+            val intent = Intent(this, OpsiChooseMenuActivity::class.java)
+            intent.putExtra(Cons.EXTRA_ID, grupOpsiId)
+            intent.putExtra(Cons.EXTRA_NAMA, namaGrupOpsi)
+            startActivity(intent)
+            finish()
         }
     }
 

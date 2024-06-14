@@ -41,7 +41,7 @@ class AddMenuActivity : AppCompatActivity() {
     private lateinit var recyclerView: RecyclerView
     private lateinit var acKategoriList: ArrayList<AcKategori>
     private lateinit var acKategoriAdapter: AcKategoriAdapter
-    private var idKategori: String? = null
+    private var idKategori = ""
     private var userId = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -66,10 +66,6 @@ class AddMenuActivity : AppCompatActivity() {
     }
 
     private fun setupAcKategori() {
-        /*val kategori = resources.getStringArray(R.array.Kategori)
-        val dropdownAdapter = ArrayAdapter(this, R.layout.dropdown_item, kategori)
-        acKategori.setAdapter(dropdownAdapter)*/
-
         acKategori.setOnClickListener {
             val dialog = BottomSheetDialog(this)
             val view = layoutInflater.inflate(R.layout.bottom_sheet_ac_kategori, null)
@@ -83,7 +79,7 @@ class AddMenuActivity : AppCompatActivity() {
             recyclerView = rvRadioButton
             recyclerView.layoutManager = LinearLayoutManager(this)
 
-            acKategoriAdapter = AcKategoriAdapter()
+            acKategoriAdapter = AcKategoriAdapter(idKategori)
             recyclerView.adapter = acKategoriAdapter
             acKategoriAdapter.setItems(acKategoriList)
 
@@ -104,7 +100,7 @@ class AddMenuActivity : AppCompatActivity() {
                     acKategoriAdapter.setOnItemClickCallback(object :
                         AcKategoriAdapter.OnItemClickCallback {
                         override fun onItemClicked(data: AcKategori) {
-                            idKategori = data.id
+                            idKategori = data.id!!
                             acKategori.setText(data.nama)
                             dialog.dismiss()
                         }
@@ -171,14 +167,14 @@ class AddMenuActivity : AppCompatActivity() {
                 sPrice.isEmpty() -> {
                     etPrice.error = getString(R.string.entry_price)
                 }
-                idKategori!!.isEmpty() -> {
+                idKategori.isEmpty() -> {
                     acKategori.error = getString(R.string.entry_kategori)
                 }
                 else -> {
                     progressBar.visibility = View.VISIBLE
 
                     currentImageUri?.let {
-                        storageRef.getReference("menuImages").child(userId).child(idKategori!!).child(filename)
+                        storageRef.getReference("menuImages").child(userId).child(idKategori).child(filename)
                             .putFile(it)
                             .addOnSuccessListener { task ->
                                 task.metadata!!.reference!!.downloadUrl
@@ -190,7 +186,9 @@ class AddMenuActivity : AppCompatActivity() {
                                             "harga" to sPrice,
                                             "storageKeys" to filename
                                         )
-                                        db.collection("user").document(userId).collection("kategoriMenu").document(idKategori!!).collection("menu").document().set(mapMenu)
+                                        db.collection("user").document(userId).collection("kategoriMenu").document(
+                                            idKategori
+                                        ).collection("menu").document().set(mapMenu)
                                             .addOnSuccessListener {
                                                 progressBar.visibility = View.GONE
                                                 onBackPressed()

@@ -20,7 +20,8 @@
             android:exported="false" />
         <activity
             android:name=".view.vendor.menu.AddGrupOpsiActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:windowSoftInputMode="adjustPan" />
         <activity
             android:name=".view.vendor.menu.AddKategoriActivity"
             android:exported="false" />
