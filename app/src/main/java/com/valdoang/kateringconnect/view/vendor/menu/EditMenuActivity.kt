@@ -70,7 +70,6 @@ class EditMenuActivity : AppCompatActivity() {
     }
 
     private fun setupView() {
-        binding.btnSimpan.text = getString(R.string.simpan)
         tvHapus.visibility = View.VISIBLE
     }
 
@@ -98,7 +97,7 @@ class EditMenuActivity : AppCompatActivity() {
     }
 
     private fun updateData() {
-        binding.btnSimpan.setOnClickListener{
+        binding.ibSave.setOnClickListener{
             val sName = etName.text.toString().trim()
             val sDesc = etDesc.text.toString().trim()
             val sPrice = etPrice.text.toString().trim()

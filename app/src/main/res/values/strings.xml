@@ -192,4 +192,10 @@
     <string name="tv_pilih_hidangan">Pilih Hidangan</string>
     <string name="tv_desc_pilih_hidangan">Pilih hidangan dari menu Anda yang bisa disesuaikan dengan grup opsi %1$s</string>
     <string name="jumlah_hidangan_tersambung">%1$s hidangan tersambung</string>
+    <string name="tv_pilih_grup_opsi">Pilih Grup Opsi</string>
+    <string name="title_tambah_grup_opsi">Buat Grup Opsi</string>
+    <string name="selesai">Selesai</string>
+    <string name="jumlah_grup_opsi_terpilih">%1$s terpilih</string>
+    <string name="pilih_kategori">Pilih kategori</string>
+    <string name="pilih_grup_opsi">Pilih grup opsi</string>
 </resources>

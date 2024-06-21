@@ -20,11 +20,14 @@ import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.ktx.storage
 import com.valdoang.kateringconnect.R
+import com.valdoang.kateringconnect.adapter.AcGrupOpsiAdapter
 import com.valdoang.kateringconnect.adapter.AcKategoriAdapter
 import com.valdoang.kateringconnect.databinding.ActivityAddEditMenuBinding
 import com.valdoang.kateringconnect.model.AcKategori
+import com.valdoang.kateringconnect.model.GrupOpsi
 import com.valdoang.kateringconnect.utils.getImageUri
 import java.util.*
+import kotlin.collections.ArrayList
 
 class AddMenuActivity : AppCompatActivity() {
 
@@ -33,16 +36,22 @@ class AddMenuActivity : AppCompatActivity() {
     private lateinit var etDesc: EditText
     private lateinit var etPrice: EditText
     private lateinit var acKategori: AutoCompleteTextView
+    private lateinit var acGrupOpsi: AutoCompleteTextView
     private lateinit var progressBar: ProgressBar
     private lateinit var firebaseAuth: FirebaseAuth
     private var db = Firebase.firestore
     private var storageRef = Firebase.storage
     private var currentImageUri: Uri? = null
-    private lateinit var recyclerView: RecyclerView
+    private lateinit var acKategoriRecyclerView: RecyclerView
     private lateinit var acKategoriList: ArrayList<AcKategori>
     private lateinit var acKategoriAdapter: AcKategoriAdapter
     private var idKategori = ""
     private var userId = ""
+    private lateinit var acGrupOpsiRecyclerView: RecyclerView
+    private lateinit var acGrupOpsiList: ArrayList<GrupOpsi>
+    private lateinit var acGrupOpsiAdapter: AcGrupOpsiAdapter
+    private var arrayGrupOpsiId: ArrayList<String> = ArrayList()
+    private lateinit var btnSimpan: ImageButton
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -58,10 +67,13 @@ class AddMenuActivity : AppCompatActivity() {
         etDesc = binding.edAddDesc
         etPrice = binding.edAddPrice
         acKategori = binding.acAddKategori
+        acGrupOpsi = binding.acAddGrupOpsi
         progressBar = binding.progressBar
+        btnSimpan = binding.ibSave
 
         setupAction()
         setupAcKategori()
+        setupAcGrupOpsi()
         saveData()
     }
 
@@ -76,11 +88,11 @@ class AddMenuActivity : AppCompatActivity() {
             //Setup View
             acKategoriList = arrayListOf()
 
-            recyclerView = rvRadioButton
-            recyclerView.layoutManager = LinearLayoutManager(this)
+            acKategoriRecyclerView = rvRadioButton
+            acKategoriRecyclerView.layoutManager = LinearLayoutManager(this)
 
             acKategoriAdapter = AcKategoriAdapter(idKategori)
-            recyclerView.adapter = acKategoriAdapter
+            acKategoriRecyclerView.adapter = acKategoriAdapter
             acKategoriAdapter.setItems(acKategoriList)
 
             //Setup Data
@@ -118,8 +130,64 @@ class AddMenuActivity : AppCompatActivity() {
         }
     }
 
+    private fun setupAcGrupOpsi() {
+        acGrupOpsi.setOnClickListener {
+            val dialog = BottomSheetDialog(this)
+            val view = layoutInflater.inflate(R.layout.bottom_sheet_ac_grup_opsi, null)
+
+            val rvGrupOpsi = view.findViewById<RecyclerView>(R.id.rv_grup_opsi)
+            val llBuatGrupOpsi = view.findViewById<LinearLayout>(R.id.ll_buat_grup_opsi)
+            val btnSelesai = view.findViewById<Button>(R.id.btn_selesai)
+
+            //Setup View
+            acGrupOpsiList = arrayListOf()
+
+            acGrupOpsiRecyclerView = rvGrupOpsi
+            acGrupOpsiRecyclerView.layoutManager = LinearLayoutManager(this)
+
+            acGrupOpsiAdapter = AcGrupOpsiAdapter(arrayGrupOpsiId)
+            acGrupOpsiRecyclerView.adapter = acGrupOpsiAdapter
+            acGrupOpsiAdapter.setItems(acGrupOpsiList)
+
+            //Setup Data
+            val ref = db.collection("user").document(userId).collection("grupOpsi")
+            ref.addSnapshotListener { snapshot, _ ->
+                if (snapshot != null) {
+                    acGrupOpsiList.clear()
+                    for (data in snapshot.documents) {
+                        val acGrupOpsi: GrupOpsi? = data.toObject(GrupOpsi::class.java)
+                        if (acGrupOpsi != null) {
+                            acGrupOpsi.id = data.id
+                            acGrupOpsiList.add(acGrupOpsi)
+                        }
+                    }
+
+                    acGrupOpsiAdapter.setItems(acGrupOpsiList)
+                }
+            }
+
+            llBuatGrupOpsi.setOnClickListener {
+                val intent = Intent(this, AddGrupOpsiActivity::class.java)
+                startActivity(intent)
+            }
+
+            btnSelesai.setOnClickListener {
+                dialog.dismiss()
+                acGrupOpsi.setText(
+                    getString(
+                        R.string.jumlah_grup_opsi_terpilih,
+                        arrayGrupOpsiId.size.toString()
+                    )
+                )
+            }
+
+            dialog.setContentView(view)
+            dialog.show()
+        }
+    }
+
     private fun setupAction() {
-        binding.ibBack.setOnClickListener{
+        binding.ibBack.setOnClickListener {
             onBackPressed()
         }
 
@@ -147,7 +215,7 @@ class AddMenuActivity : AppCompatActivity() {
     }
 
     private fun saveData() {
-        binding.btnSimpan.setOnClickListener{
+        btnSimpan.setOnClickListener {
             val sName = etName.text.toString().trim()
             val sDesc = etDesc.text.toString().trim()
             val sPrice = etPrice.text.toString().trim()
@@ -161,9 +229,6 @@ class AddMenuActivity : AppCompatActivity() {
                 sName.isEmpty() -> {
                     etName.error = getString(R.string.entry_name)
                 }
-                sDesc.isEmpty() -> {
-                    etDesc.error = getString(R.string.entry_desc)
-                }
                 sPrice.isEmpty() -> {
                     etPrice.error = getString(R.string.entry_price)
                 }
@@ -174,11 +239,12 @@ class AddMenuActivity : AppCompatActivity() {
                     progressBar.visibility = View.VISIBLE
 
                     currentImageUri?.let {
-                        storageRef.getReference("menuImages").child(userId).child(idKategori).child(filename)
+                        storageRef.getReference("menuImages").child(userId).child(idKategori)
+                            .child(filename)
                             .putFile(it)
                             .addOnSuccessListener { task ->
                                 task.metadata!!.reference!!.downloadUrl
-                                    .addOnSuccessListener {uri ->
+                                    .addOnSuccessListener { uri ->
                                         val mapMenu = mapOf(
                                             "foto" to uri.toString(),
                                             "nama" to sName,
@@ -186,17 +252,56 @@ class AddMenuActivity : AppCompatActivity() {
                                             "harga" to sPrice,
                                             "storageKeys" to filename
                                         )
-                                        db.collection("user").document(userId).collection("kategoriMenu").document(
-                                            idKategori
-                                        ).collection("menu").document().set(mapMenu)
+                                        val newMenu = db.collection("user").document(userId)
+                                            .collection("kategoriMenu").document(idKategori)
+                                            .collection("menu").document()
+                                        newMenu.set(mapMenu)
                                             .addOnSuccessListener {
                                                 progressBar.visibility = View.GONE
+
+                                                val newMenuId = newMenu.id
+                                                for (i in arrayGrupOpsiId) {
+                                                    val grupOpsiRef =
+                                                        db.collection("user").document(userId)
+                                                            .collection("grupOpsi").document(i)
+                                                    grupOpsiRef.get()
+                                                        .addOnSuccessListener { grupOpsi ->
+                                                            if (grupOpsi != null) {
+                                                                val menuId =
+                                                                    grupOpsi.data?.get("menuId") as? ArrayList<String>
+                                                                if (menuId != null) {
+                                                                    menuId.add(newMenuId)
+                                                                    val grupOpsiMap = mapOf(
+                                                                        "menuId" to menuId
+                                                                    )
+                                                                    grupOpsiRef.update(grupOpsiMap)
+                                                                } else {
+                                                                    val emptyArray: ArrayList<String> =
+                                                                        arrayListOf()
+                                                                    emptyArray.add(newMenuId)
+                                                                    val grupOpsiMap = mapOf(
+                                                                        "menuId" to emptyArray
+                                                                    )
+                                                                    grupOpsiRef.update(grupOpsiMap)
+                                                                }
+                                                            }
+                                                        }
+                                                }
+
                                                 onBackPressed()
-                                                Toast.makeText(this, R.string.success_upload_menu, Toast.LENGTH_SHORT).show()
+                                                Toast.makeText(
+                                                    this,
+                                                    R.string.success_upload_menu,
+                                                    Toast.LENGTH_SHORT
+                                                ).show()
                                             }
-                                            .addOnFailureListener{
+                                            .addOnFailureListener {
                                                 progressBar.visibility = View.GONE
-                                                Toast.makeText(this, R.string.fail_upload_menu, Toast.LENGTH_SHORT).show()
+                                                Toast.makeText(
+                                                    this,
+                                                    R.string.fail_upload_menu,
+                                                    Toast.LENGTH_SHORT
+                                                ).show()
                                             }
                                     }
                             }
