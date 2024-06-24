@@ -53,7 +53,7 @@ class KategoriMenuAdapter(
 
                 //Setup View
                 val recyclerView: RecyclerView = rvMenu
-                val menuAdapter = MenuAdapter(context)
+                val menuAdapter = MenuAdapter(context, kategoriMenu.id!!)
                 recyclerView.layoutManager = LinearLayoutManager(context)
                 recyclerView.adapter = menuAdapter
                 menuAdapter.setItems(menuList)
@@ -70,6 +70,10 @@ class KategoriMenuAdapter(
                                 menu.id = data.id
                                 menuList.add(menu)
                             }
+                        }
+
+                        menuList.sortBy { menu ->
+                            menu.nama
                         }
 
                         menuAdapter.setItems(menuList)

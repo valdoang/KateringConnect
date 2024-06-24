@@ -7,5 +7,5 @@ data class Menu(
     val keterangan: String? = null,
     val harga: String? = null,
     val storageKeys: String? = null,
-    val userId: String? = null
+    val grupOpsiId: ArrayList<String>? = null
 )

@@ -25,7 +25,7 @@
         android:id="@+id/ib_close"
         android:layout_width="35dp"
         android:layout_height="35dp"
-        android:src="@drawable/ic_baseline_close_24"
+        android:src="@drawable/ic_baseline_close_30"
         android:background="@color/white"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"

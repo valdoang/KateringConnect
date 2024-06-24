@@ -2,18 +2,19 @@ package com.valdoang.kateringconnect.adapter
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.content.Intent
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.valdoang.kateringconnect.databinding.ItemMenuBinding
 import com.valdoang.kateringconnect.databinding.ItemVendorMenuBinding
 import com.valdoang.kateringconnect.model.Menu
+import com.valdoang.kateringconnect.utils.Cons
 import com.valdoang.kateringconnect.utils.withCurrencyFormat
-import com.valdoang.kateringconnect.utils.withNumberingFormat
+import com.valdoang.kateringconnect.view.vendor.menu.edit.EditMenuActivity
 
 class MenuAdapter(
-    private val context: Context
+    private val context: Context, private val kategoriMenuId: String
 ) : RecyclerView.Adapter<MenuAdapter.MyViewHolder>() {
 
     private val menuList = ArrayList<Menu>()
@@ -33,7 +34,10 @@ class MenuAdapter(
                 tvMenuName.text = menu.nama
                 tvMenuPrice.text = menu.harga?.withCurrencyFormat()
                 tvEdit.setOnClickListener {
-                    //Intent ke EditMenuActivity
+                    val intent = Intent(context, EditMenuActivity::class.java)
+                    intent.putExtra(Cons.EXTRA_ID, kategoriMenuId)
+                    intent.putExtra(Cons.EXTRA_SEC_ID, menu.id)
+                    context.startActivity(intent)
                 }
             }
         }

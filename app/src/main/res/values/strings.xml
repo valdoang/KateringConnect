@@ -43,7 +43,6 @@
     <string name="title_tambah_hidangan_baru">Tambah Hidangan Baru</string>
     <string name="tv_desc">Deskripsi</string>
     <string name="tv_price">Harga</string>
-    <string name="tv_jenis">Jenis</string>
     <string name="tambah">Tambah</string>
     <string name="title_edit_menu">Edit Menu</string>
     <string name="hapus">Hapus</string>
@@ -156,7 +155,7 @@
     <string name="chat">Chat</string>
     <string name="chat_kosong">Chat Kosong</string>
     <string name="ketik_sesuatu">Ketik sesuatu …</string>
-    <string name="tv_kategori">Kategori *</string>
+    <string name="tv_kategori_wajib">Kategori *</string>
     <string name="hapus_hidangan">Hapus Hidangan</string>
     <string name="menu_tab">Menu</string>
     <string name="grup_opsi_tab">Grup Opsi</string>
@@ -169,8 +168,10 @@
     <string name="tv_subtitle_kategori">misal: Nasi Kotak, Prasmanan, Tumpeng</string>
     <string name="tv_title_kategori">Tambah Kategori Baru</string>
     <string name="buat_hidangan">Buat Hidangan</string>
-    <string name="tv_nama_hidangan">Nama Hidangan *</string>
-    <string name="tv_harga">Harga *</string>
+    <string name="tv_nama_hidangan_wajib">Nama Hidangan *</string>
+    <string name="tv_harga_wajib">Harga *</string>
+    <string name="tv_nama_hidangan">Nama Hidangan</string>
+    <string name="tv_harga">Harga</string>
     <string name="tv_nama_kategori">Nama Kategori *</string>
     <string name="title_tambah_kategori">Tambah Kategori Baru</string>
     <string name="buat_kategori">Buat Kategori</string>
@@ -198,4 +199,7 @@
     <string name="jumlah_grup_opsi_terpilih">%1$s terpilih</string>
     <string name="pilih_kategori">Pilih kategori</string>
     <string name="pilih_grup_opsi">Pilih grup opsi</string>
+    <string name="edit_hidangan">Edit Hidangan</string>
+    <string name="gagal_mengubah">Gagal Mengubah</string>
+    <string name="delete_menu_alert">Apakah Anda yakin ingin menghapus menu?</string>
 </resources>

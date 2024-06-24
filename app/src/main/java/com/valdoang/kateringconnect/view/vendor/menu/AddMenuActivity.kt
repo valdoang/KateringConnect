@@ -22,7 +22,7 @@ import com.google.firebase.storage.ktx.storage
 import com.valdoang.kateringconnect.R
 import com.valdoang.kateringconnect.adapter.AcGrupOpsiAdapter
 import com.valdoang.kateringconnect.adapter.AcKategoriAdapter
-import com.valdoang.kateringconnect.databinding.ActivityAddEditMenuBinding
+import com.valdoang.kateringconnect.databinding.ActivityAddMenuBinding
 import com.valdoang.kateringconnect.model.AcKategori
 import com.valdoang.kateringconnect.model.GrupOpsi
 import com.valdoang.kateringconnect.utils.getImageUri
@@ -31,7 +31,7 @@ import kotlin.collections.ArrayList
 
 class AddMenuActivity : AppCompatActivity() {
 
-    private lateinit var binding: ActivityAddEditMenuBinding
+    private lateinit var binding: ActivityAddMenuBinding
     private lateinit var etName: EditText
     private lateinit var etDesc: EditText
     private lateinit var etPrice: EditText
@@ -55,7 +55,7 @@ class AddMenuActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivityAddEditMenuBinding.inflate(layoutInflater)
+        binding = ActivityAddMenuBinding.inflate(layoutInflater)
         setContentView(binding.root)
         supportActionBar?.hide()
 
@@ -236,6 +236,7 @@ class AddMenuActivity : AppCompatActivity() {
                     acKategori.error = getString(R.string.entry_kategori)
                 }
                 else -> {
+                    btnSimpan.visibility = View.GONE
                     progressBar.visibility = View.VISIBLE
 
                     currentImageUri?.let {
@@ -250,7 +251,8 @@ class AddMenuActivity : AppCompatActivity() {
                                             "nama" to sName,
                                             "keterangan" to sDesc,
                                             "harga" to sPrice,
-                                            "storageKeys" to filename
+                                            "storageKeys" to filename,
+                                            "grupOpsiId" to arrayGrupOpsiId
                                         )
                                         val newMenu = db.collection("user").document(userId)
                                             .collection("kategoriMenu").document(idKategori)
