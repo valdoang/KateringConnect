@@ -18,7 +18,7 @@ import com.valdoang.kateringconnect.adapter.AcGrupOpsiAdapter
 import com.valdoang.kateringconnect.databinding.ActivityEditRvBinding
 import com.valdoang.kateringconnect.model.GrupOpsi
 import com.valdoang.kateringconnect.utils.Cons
-import com.valdoang.kateringconnect.view.vendor.menu.AddGrupOpsiActivity
+import com.valdoang.kateringconnect.view.vendor.menu.grupopsi.AddGrupOpsiActivity
 
 class EditGrupOpsiMenuActivity : AppCompatActivity() {
     private lateinit var binding: ActivityEditRvBinding

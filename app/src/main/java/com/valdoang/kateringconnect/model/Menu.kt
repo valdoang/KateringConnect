@@ -8,5 +8,6 @@ data class Menu(
     val harga: String? = null,
     var aktif: Boolean? = true,
     val storageKeys: String? = null,
-    val grupOpsiId: ArrayList<String>? = null
+    val grupOpsiId: ArrayList<String>? = null,
+    var kategoriMenuId: String? = null
 )

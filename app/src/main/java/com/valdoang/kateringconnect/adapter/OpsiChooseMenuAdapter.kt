@@ -18,7 +18,8 @@ import com.valdoang.kateringconnect.utils.withCurrencyFormat
 
 
 class OpsiChooseMenuAdapter(
-    private val context: Context, private var arrayMenuId: ArrayList<String>, private var grupOpsiId: String, private var btnSimpan: Button
+    private val context: Context, private var arrayMenuId: ArrayList<String>, private var grupOpsiId: String, private var btnSimpan: Button,
+    private var arrayMenu: ArrayList<Menu>
 ) : RecyclerView.Adapter<OpsiChooseMenuAdapter.MyViewHolder>() {
 
     private val menuList = ArrayList<Menu>()
@@ -56,12 +57,14 @@ class OpsiChooseMenuAdapter(
                             if (!arrayMenuId.contains(menuId)){
                                 if (menuId != null) {
                                     arrayMenuId.add(menuId)
+                                    arrayMenu.add(menu)
                                 }
                             }
                         } else {
                             if (arrayMenuId.contains(menuId)){
                                 if (menuId != null) {
                                     arrayMenuId.remove(menuId)
+                                    arrayMenu.remove(menu)
                                 }
                             }
                         }

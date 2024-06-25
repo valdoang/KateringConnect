@@ -13,6 +13,7 @@ import com.valdoang.kateringconnect.R
 import com.valdoang.kateringconnect.adapter.OpsiShowMenuAdapter
 import com.valdoang.kateringconnect.databinding.ActivityOpsiChooseMenuBinding
 import com.valdoang.kateringconnect.model.KategoriMenu
+import com.valdoang.kateringconnect.model.Menu
 import com.valdoang.kateringconnect.utils.Cons
 
 class OpsiChooseMenuActivity : AppCompatActivity() {
@@ -24,6 +25,7 @@ class OpsiChooseMenuActivity : AppCompatActivity() {
     private lateinit var kategoriMenuList: ArrayList<KategoriMenu>
     private var db = Firebase.firestore
     private var arrayMenuId: ArrayList<String> = ArrayList()
+    private var arrayMenu: ArrayList<Menu> = ArrayList()
     private val userId = FirebaseAuth.getInstance().currentUser!!.uid
     private lateinit var btnSimpan: Button
 
@@ -51,7 +53,7 @@ class OpsiChooseMenuActivity : AppCompatActivity() {
         recyclerView = binding.rvMenu
         recyclerView.layoutManager = LinearLayoutManager(this)
 
-        opsiShowMenuAdapter = OpsiShowMenuAdapter(this, arrayMenuId, grupOpsiId!!, btnSimpan)
+        opsiShowMenuAdapter = OpsiShowMenuAdapter(this, arrayMenuId, grupOpsiId!!, btnSimpan, arrayMenu)
         recyclerView.adapter = opsiShowMenuAdapter
         opsiShowMenuAdapter.setItems(kategoriMenuList)
     }
@@ -97,9 +99,34 @@ class OpsiChooseMenuActivity : AppCompatActivity() {
 
     private fun saveData() {
         btnSimpan.setOnClickListener {
-            val ref = db.collection("user").document(userId).collection("grupOpsi").document(grupOpsiId!!)
-            ref.update("menuId", arrayMenuId)
+            val grupOpsiRef = db.collection("user").document(userId).collection("grupOpsi").document(grupOpsiId!!)
+            grupOpsiRef.update("menuId", arrayMenuId)
             finish()
+
+            for (i in arrayMenu) {
+                val menuRef = db.collection("user").document(userId).collection("kategoriMenu").document(i.kategoriMenuId!!).collection("menu").document(i.id!!)
+                menuRef.get().addOnSuccessListener { menu ->
+                    if (menu != null) {
+                        val arrayGrupOpsiId = menu.data?.get("grupOpsiId") as? ArrayList<String>
+                        if (arrayGrupOpsiId != null) {
+                            if (!arrayGrupOpsiId.contains(grupOpsiId)) {
+                                arrayGrupOpsiId.add(grupOpsiId!!)
+                                val grupOpsiMap = mapOf(
+                                    "grupOpsiId" to arrayGrupOpsiId
+                                )
+                                menuRef.update(grupOpsiMap)
+                            }
+                        } else {
+                            val emptyArray: ArrayList<String> = arrayListOf()
+                            emptyArray.add(grupOpsiId!!)
+                            val grupOpsiMap = mapOf(
+                                "grupOpsiId" to emptyArray
+                            )
+                            menuRef.update(grupOpsiMap)
+                        }
+                    }
+                }
+            }
         }
     }
 

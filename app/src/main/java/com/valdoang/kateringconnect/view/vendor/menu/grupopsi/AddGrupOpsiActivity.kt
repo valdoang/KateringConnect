@@ -1,7 +1,8 @@
-package com.valdoang.kateringconnect.view.vendor.menu
+package com.valdoang.kateringconnect.view.vendor.menu.grupopsi
 
 import android.content.Intent
 import android.os.Bundle
+import android.view.View
 import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
@@ -20,6 +21,7 @@ import com.valdoang.kateringconnect.model.KategoriMenu
 import com.valdoang.kateringconnect.model.Opsi
 import com.valdoang.kateringconnect.utils.Cons
 import com.valdoang.kateringconnect.utils.beforeChangedListener
+import com.valdoang.kateringconnect.view.vendor.menu.OpsiChooseMenuActivity
 import java.util.*
 
 class AddGrupOpsiActivity : AppCompatActivity() {
@@ -63,8 +65,11 @@ class AddGrupOpsiActivity : AppCompatActivity() {
             val edAddHargaOpsi = view.findViewById<EditText>(R.id.ed_add_harga_opsi)
             val btnSimpan = view.findViewById<Button>(R.id.btn_simpan)
             val btnBatalkan = view.findViewById<Button>(R.id.btn_batalkan)
+            val tvHapus = view.findViewById<TextView>(R.id.tv_hapus)
 
             edAddNamaOpsi.beforeChangedListener(btnSimpan)
+
+            tvHapus.visibility = View.GONE
 
             btnSimpan.setOnClickListener {
                 val opsi = Opsi()
@@ -104,36 +109,44 @@ class AddGrupOpsiActivity : AppCompatActivity() {
                 val edAddHargaOpsi = view.findViewById<EditText>(R.id.ed_add_harga_opsi)
                 val btnSimpan = view.findViewById<Button>(R.id.btn_simpan)
                 val btnBatalkan = view.findViewById<Button>(R.id.btn_batalkan)
+                val tvNamaOpsi = view.findViewById<TextView>(R.id.tv_nama_opsi)
+                val tvHapus = view.findViewById<TextView>(R.id.tv_hapus)
 
                 tvTambahOpsi.text = getString(R.string.ubah_opsi)
+                tvNamaOpsi.text = getString(R.string.tv_nama)
                 edAddNamaOpsi.setText(data.nama)
                 edAddHargaOpsi.setText(data.harga)
 
+                edAddNamaOpsi.beforeChangedListener(btnSimpan)
+
+                tvHapus.setOnClickListener {
+                    val listPosition = opsiList.indexOfFirst {
+                        it.id == data.id
+                    }
+
+                    opsiList.remove(opsiList[listPosition])
+                    opsiAdapter.setItems(opsiList)
+                    dialog.dismiss()
+                }
+
                 btnSimpan.setOnClickListener {
-                    val listPosition= opsiList.indexOfFirst {
+                    val listPosition = opsiList.indexOfFirst {
                         it.id == data.id
                     }
 
                     val sNama = edAddNamaOpsi.text.toString().trim()
                     var sHarga = edAddHargaOpsi.text.toString().trim()
 
-                    when {
-                        sNama.isEmpty() -> {
-                            edAddNamaOpsi.error = getString(R.string.entry_name)
-                        }
-                        else -> {
-                            if (sHarga.isEmpty()) {
-                                sHarga = "0"
-                            }
-                            val updatedList = opsiList[listPosition].apply {
-                                nama = sNama
-                                harga = sHarga
-                            }
-                            opsiList[listPosition] = updatedList
-                            opsiAdapter.setItems(opsiList)
-                            dialog.dismiss()
-                        }
+                    if (sHarga.isEmpty()) {
+                        sHarga = "0"
                     }
+                    val updatedList = opsiList[listPosition].apply {
+                        nama = sNama
+                        harga = sHarga
+                    }
+                    opsiList[listPosition] = updatedList
+                    opsiAdapter.setItems(opsiList)
+                    dialog.dismiss()
                 }
 
                 btnBatalkan.setOnClickListener {

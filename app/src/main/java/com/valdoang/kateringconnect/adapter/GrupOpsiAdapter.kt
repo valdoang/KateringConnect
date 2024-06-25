@@ -2,6 +2,7 @@ package com.valdoang.kateringconnect.adapter
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -14,6 +15,8 @@ import com.valdoang.kateringconnect.R
 import com.valdoang.kateringconnect.databinding.ItemGrupOpsiBinding
 import com.valdoang.kateringconnect.model.GrupOpsi
 import com.valdoang.kateringconnect.model.Opsi
+import com.valdoang.kateringconnect.utils.Cons
+import com.valdoang.kateringconnect.view.vendor.menu.grupopsi.EditGrupOpsiActivity
 
 class GrupOpsiAdapter(
     private val context: Context
@@ -84,6 +87,9 @@ class GrupOpsiAdapter(
 
                 tvEditGrupOpsi.setOnClickListener {
                     //Intent ke EditGrupOpsiActivity
+                    val intent = Intent(context, EditGrupOpsiActivity::class.java)
+                    intent.putExtra(Cons.EXTRA_ID, grupOpsi.id)
+                    context.startActivity(intent)
                 }
             }
         }

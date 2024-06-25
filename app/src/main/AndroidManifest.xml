@@ -19,6 +19,9 @@
             android:name=".view.vendor.menu.kategori.EditKategoriActivity"
             android:exported="false" />
         <activity
+            android:name=".view.vendor.menu.grupopsi.EditGrupOpsiActivity"
+            android:exported="false" />
+        <activity
             android:name=".view.vendor.menu.edit.EditNamaMenuActivity"
             android:exported="false" />
         <activity
@@ -34,7 +37,7 @@
             android:name=".view.vendor.menu.OpsiChooseMenuActivity"
             android:exported="false" />
         <activity
-            android:name=".view.vendor.menu.AddGrupOpsiActivity"
+            android:name=".view.vendor.menu.grupopsi.AddGrupOpsiActivity"
             android:exported="false"
             android:windowSoftInputMode="adjustPan" />
         <activity

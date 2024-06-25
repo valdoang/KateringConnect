@@ -19,11 +19,11 @@
         app:layout_constraintStart_toStartOf="parent"/>
 
     <TextView
-        android:id="@+id/title_buat_grup_opsi"
+        android:id="@+id/title_edit_grup_opsi"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="22dp"
-        android:text="@string/title_buat_grup_opsi"
+        android:text="@string/title_edit_grup_opsi"
         android:fontFamily="@font/poppins_bold"
         android:textColor="@color/black"
         android:layout_marginStart="24dp"
@@ -37,12 +37,12 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="32dp"
         android:layout_marginTop="32dp"
-        android:text="@string/tv_nama_grup_opsi_wajib"
+        android:text="@string/tv_nama_grup_opsi"
         android:fontFamily="@font/poppins_light"
         android:textSize="14sp"
         android:textColor="@color/black"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/title_buat_grup_opsi" />
+        app:layout_constraintTop_toBottomOf="@id/title_edit_grup_opsi" />
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/namaGrupOpsiEditTextLayout"
@@ -55,7 +55,6 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="32dp"
         android:layout_marginEnd="32dp"
-        app:hintEnabled="false"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tv_nama_grup_opsi">
@@ -65,7 +64,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:ems="10"
-            android:hint="@string/hint_grup_opsi"
             android:inputType="text" />
     </com.google.android.material.textfield.TextInputLayout>
 

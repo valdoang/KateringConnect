@@ -163,7 +163,7 @@ class EditMenuActivity : AppCompatActivity() {
 
     private fun closeDialog() {
         binding.ibBack.setOnClickListener{
-            onBackPressed()
+            finish()
         }
     }
 

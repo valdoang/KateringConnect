@@ -18,7 +18,8 @@ import com.valdoang.kateringconnect.model.KategoriMenu
 import com.valdoang.kateringconnect.model.Menu
 
 class OpsiShowMenuAdapter(
-    private val context: Context, private var arrayMenuId: ArrayList<String>, private var grupOpsiId: String, private var btnSimpan: Button
+    private val context: Context, private var arrayMenuId: ArrayList<String>, private var grupOpsiId: String, private var btnSimpan: Button,
+    private var arrayMenu: ArrayList<Menu>
 ): RecyclerView.Adapter<OpsiShowMenuAdapter.MyViewHolder>() {
 
     private val kategoriMenuList = ArrayList<KategoriMenu>()
@@ -53,7 +54,7 @@ class OpsiShowMenuAdapter(
 
                 //Setup View
                 val recyclerView: RecyclerView = rvMenu
-                val opsiChooseMenuAdapter = OpsiChooseMenuAdapter(context, arrayMenuId, grupOpsiId, btnSimpan)
+                val opsiChooseMenuAdapter = OpsiChooseMenuAdapter(context, arrayMenuId, grupOpsiId, btnSimpan, arrayMenu)
                 recyclerView.layoutManager = LinearLayoutManager(context)
                 recyclerView.adapter = opsiChooseMenuAdapter
                 opsiChooseMenuAdapter.setItems(menuList)
@@ -69,6 +70,7 @@ class OpsiShowMenuAdapter(
                             val menu: Menu? = data.toObject(Menu::class.java)
                             if (menu != null) {
                                 menu.id = data.id
+                                menu.kategoriMenuId = kategoriMenu.id
                                 if (arrayMenuId.contains(menu.id)) {
                                     checkAccumulator = checkAccumulator.plus(1)
                                     tvJumlahTersambung.text = context.getString(R.string.jumlah_hidangan_tersambung, checkAccumulator.toString())

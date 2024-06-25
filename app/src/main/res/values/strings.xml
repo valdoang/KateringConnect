@@ -178,14 +178,16 @@
     <string name="buat_kategori">Buat Kategori</string>
     <string name="title_buat_grup_opsi">Buat Grup Opsi</string>
     <string name="hint_grup_opsi">misal: Pilihan Soup, Pilihan Daging</string>
-    <string name="tv_nama_grup_opsi">Nama Grup Opsi *</string>
+    <string name="tv_nama_grup_opsi_wajib">Nama Grup Opsi *</string>
+    <string name="tv_nama_grup_opsi">Nama Grup Opsi</string>
     <string name="opsi">Opsi</string>
     <string name="tambahkan_opsi">Tambahkan Opsi</string>
     <string name="edit_kategori">Edit Kategori</string>
     <string name="edit">Edit</string>
     <string name="tv_pilih_kategori">Pilih Kategori</string>
     <string name="tv_tambah_opsi">Tambah Opsi</string>
-    <string name="tv_nama">Nama *</string>
+    <string name="tv_nama_wajib">Nama *</string>
+    <string name="tv_nama">Nama</string>
     <string name="hint_opsi">misal: Soup Kimlo, Daging Lada Hitam</string>
     <string name="hint_harga">+Rp</string>
     <string name="tv_harga_opsi">Harga</string>
@@ -211,4 +213,6 @@
     <string name="fail_delete_menu">Gagal Menghapus Menu</string>
     <string name="success_delete_kategori">Berhasil Menghapus Kategori</string>
     <string name="fail_delete_kategori">Gagal Menghapus Kategori</string>
+    <string name="title_edit_grup_opsi">Edit Grup Opsi</string>
+    <string name="hapus_opsi">Hapus Opsi</string>
 </resources>
