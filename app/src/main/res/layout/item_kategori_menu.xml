@@ -22,8 +22,7 @@
             android:layout_marginStart="16dp"
             android:layout_marginBottom="16dp"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"/>
+            app:layout_constraintStart_toStartOf="parent" />
 
         <ImageView
             android:id="@+id/iv_expand_less"
@@ -35,8 +34,7 @@
             android:layout_marginStart="16dp"
             android:layout_marginBottom="16dp"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"/>
+            app:layout_constraintStart_toStartOf="parent" />
 
         <TextView
             android:id="@+id/tv_nama_kategori"
@@ -47,7 +45,21 @@
             android:textColor="@color/black"
             android:fontFamily="@font/poppins_bold"
             android:layout_marginStart="55dp"
+            android:layout_marginTop="16dp"
             app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintBottom_toTopOf="@id/tv_jumlah_hidangan"/>
+
+        <TextView
+            android:id="@+id/tv_jumlah_hidangan"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            tools:text="@string/jumlah_hidangan"
+            android:textSize="12sp"
+            android:textColor="@color/black"
+            android:fontFamily="@font/poppins"
+            android:layout_marginStart="55dp"
+            android:layout_marginBottom="8dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"/>
 

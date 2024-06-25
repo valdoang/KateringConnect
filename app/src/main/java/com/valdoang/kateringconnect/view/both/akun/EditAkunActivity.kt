@@ -8,7 +8,6 @@ import android.widget.*
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
-import androidx.cardview.widget.CardView
 import androidx.constraintlayout.widget.ConstraintLayout
 import com.bumptech.glide.Glide
 import com.google.android.material.bottomsheet.BottomSheetDialog
@@ -111,12 +110,12 @@ class EditAkunActivity : AppCompatActivity() {
                 "telepon" to sNoPhone
             )
             if (sName == nama && sNoPhone == telepon && sAddress == alamat && sKota == kota) {
-                onBackPressed()
+                finish()
             }
             else {
                 db.collection("user").document(userId).update(updateMap)
                     .addOnSuccessListener {
-                        onBackPressed()
+                        finish()
                     }
                     .addOnFailureListener {
                         Toast.makeText(this, R.string.fail_update_data, Toast.LENGTH_SHORT).show()
@@ -127,7 +126,7 @@ class EditAkunActivity : AppCompatActivity() {
 
     private fun setupAction() {
         binding.ibBack.setOnClickListener {
-            onBackPressed()
+            finish()
         }
 
         binding.tvAddPhoto.setOnClickListener {

@@ -68,6 +68,9 @@ class OpsiChooseMenuActivity : AppCompatActivity() {
                         kategoriMenuList.add(kategoriMenu)
                     }
                 }
+                kategoriMenuList.sortBy {
+                    it.nama
+                }
                 opsiShowMenuAdapter.setItems(kategoriMenuList)
             }
 

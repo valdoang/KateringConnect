@@ -10,10 +10,10 @@ import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.valdoang.kateringconnect.R
 import com.valdoang.kateringconnect.databinding.ActivityDetailPesananRiwayatBinding
+import com.valdoang.kateringconnect.utils.Cons
 import com.valdoang.kateringconnect.utils.withNumberingFormat
 import com.valdoang.kateringconnect.utils.withTimestamptoDateFormat
 import com.valdoang.kateringconnect.utils.withTimestamptoTimeFormat
-import com.valdoang.kateringconnect.view.user.detailriwayat.DetailRiwayatPemesananActivity
 
 class DetailRiwayatPesananActivity : AppCompatActivity() {
     private lateinit var binding: ActivityDetailPesananRiwayatBinding
@@ -49,7 +49,7 @@ class DetailRiwayatPesananActivity : AppCompatActivity() {
 
         firebaseAuth = Firebase.auth
 
-        pesananId = intent.getStringExtra(DetailRiwayatPemesananActivity.EXTRA_ID)
+        pesananId = intent.getStringExtra(Cons.EXTRA_ID)
 
         tvVendorNama = binding.tvVendorName
         tvMenuNama = binding.tvMenuName
@@ -132,7 +132,7 @@ class DetailRiwayatPesananActivity : AppCompatActivity() {
 
     private fun setupAction() {
         binding.ibBack.setOnClickListener {
-            onBackPressed()
+            finish()
         }
         binding.titlePesanan.setOnClickListener {
             val updateStatus = mapOf(
@@ -146,9 +146,5 @@ class DetailRiwayatPesananActivity : AppCompatActivity() {
         binding.btnSelesaikan.visibility = View.GONE
         binding.btnBatalkan.visibility = View.GONE
         binding.tvVendorName.visibility = View.GONE
-    }
-
-    companion object {
-        const val EXTRA_ID = "extra_id"
     }
 }

@@ -1,14 +1,11 @@
 package com.valdoang.kateringconnect.view.vendor.main.ui.riwayat
 
-import android.content.ContentValues
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ProgressBar
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -20,6 +17,7 @@ import com.valdoang.kateringconnect.R
 import com.valdoang.kateringconnect.adapter.VendorBerandaRiwayatAdapter
 import com.valdoang.kateringconnect.databinding.FragmentVendorRiwayatBinding
 import com.valdoang.kateringconnect.model.Pesanan
+import com.valdoang.kateringconnect.utils.Cons
 import com.valdoang.kateringconnect.view.both.chat.ChatActivity
 import com.valdoang.kateringconnect.view.vendor.detailriwayat.DetailRiwayatPesananActivity
 
@@ -83,7 +81,7 @@ class VendorRiwayatFragment : Fragment() {
                     VendorBerandaRiwayatAdapter.OnItemClickCallback {
                     override fun onItemClicked(data: Pesanan) {
                         val intent = Intent(requireContext(), DetailRiwayatPesananActivity::class.java)
-                        intent.putExtra(DetailRiwayatPesananActivity.EXTRA_ID, data.id)
+                        intent.putExtra(Cons.EXTRA_ID, data.id)
                         startActivity(intent)
                     }
                 })

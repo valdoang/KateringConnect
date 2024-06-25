@@ -16,6 +16,7 @@ import com.valdoang.kateringconnect.R
 import com.valdoang.kateringconnect.adapter.NilaiAdapter
 import com.valdoang.kateringconnect.databinding.ActivityNilaiBinding
 import com.valdoang.kateringconnect.model.Nilai
+import com.valdoang.kateringconnect.utils.Cons
 import com.valdoang.kateringconnect.utils.roundOffDecimal
 
 class NilaiActivity : AppCompatActivity() {
@@ -41,7 +42,7 @@ class NilaiActivity : AppCompatActivity() {
         firebaseAuth = Firebase.auth
         nilaiList = arrayListOf()
 
-        vendorId = intent.getStringExtra(EXTRA_ID)
+        vendorId = intent.getStringExtra(Cons.EXTRA_ID)
 
         progressBar = binding.progressBar
         rbStar = binding.rbStar
@@ -113,11 +114,7 @@ class NilaiActivity : AppCompatActivity() {
 
     private fun setupAction() {
         binding.ibBack.setOnClickListener {
-            onBackPressed()
+            finish()
         }
-    }
-
-    companion object {
-        const val EXTRA_ID = "extra_id"
     }
 }

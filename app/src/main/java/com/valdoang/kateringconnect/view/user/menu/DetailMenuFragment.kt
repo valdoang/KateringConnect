@@ -15,6 +15,7 @@ import com.bumptech.glide.Glide
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.valdoang.kateringconnect.databinding.FragmentDetailMenuBinding
+import com.valdoang.kateringconnect.utils.Cons
 import com.valdoang.kateringconnect.utils.withNumberingFormat
 import com.valdoang.kateringconnect.view.user.pemesanan.PemesananActivity
 
@@ -78,7 +79,7 @@ class DetailMenuFragment : DialogFragment() {
     private fun pesanMenu(menuId: String) {
         binding.btnPesan.setOnClickListener {
             val intent = Intent(requireContext(), PemesananActivity::class.java)
-            intent.putExtra(PemesananActivity.EXTRA_ID, menuId)
+            intent.putExtra(Cons.EXTRA_ID, menuId)
             startActivity(intent)
         }
     }

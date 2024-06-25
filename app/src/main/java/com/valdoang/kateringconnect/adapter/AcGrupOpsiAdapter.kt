@@ -1,19 +1,15 @@
 package com.valdoang.kateringconnect.adapter
 
 import android.annotation.SuppressLint
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.CompoundButton
 import androidx.recyclerview.widget.RecyclerView
-import com.google.android.play.integrity.internal.i
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.valdoang.kateringconnect.databinding.ItemAcGrupOpsiBinding
-import com.valdoang.kateringconnect.databinding.ItemAcKategoriBinding
 import com.valdoang.kateringconnect.model.GrupOpsi
-import com.valdoang.kateringconnect.model.Opsi
 
 class AcGrupOpsiAdapter(
     private var arrayGrupOpsiId: ArrayList<String>

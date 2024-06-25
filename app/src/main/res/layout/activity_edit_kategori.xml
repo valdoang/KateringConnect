@@ -18,11 +18,11 @@
         app:layout_constraintStart_toStartOf="parent"/>
 
     <TextView
-        android:id="@+id/title_tambah_kategori"
+        android:id="@+id/title_edit_kategori"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="22dp"
-        android:text="@string/title_tambah_kategori"
+        android:text="@string/title_edit_kategori"
         android:fontFamily="@font/poppins_bold"
         android:textColor="@color/black"
         android:layout_marginStart="24dp"
@@ -36,12 +36,12 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="32dp"
         android:layout_marginTop="32dp"
-        android:text="@string/tv_nama_kategori_wajib"
+        android:text="@string/tv_nama_kategori"
         android:fontFamily="@font/poppins_light"
         android:textSize="14sp"
         android:textColor="@color/black"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/title_tambah_kategori" />
+        app:layout_constraintTop_toBottomOf="@id/title_edit_kategori" />
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/namaKategoriEditTextLayout"
@@ -54,19 +54,31 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="32dp"
         android:layout_marginEnd="32dp"
-        app:hintEnabled="false"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tv_nama_kategori">
 
         <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/ed_add_nama_kategori"
+            android:id="@+id/ed_edit_nama_kategori"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:ems="10"
-            android:hint="@string/tv_subtitle_kategori"
             android:inputType="text" />
     </com.google.android.material.textfield.TextInputLayout>
+
+    <TextView
+        android:id="@+id/tv_hapus"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
+        android:text="@string/hapus_kategori"
+        android:fontFamily="@font/poppins_bold"
+        android:textColor="@color/red"
+        android:textSize="16sp"
+        android:layout_marginBottom="16dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/namaKategoriEditTextLayout" />
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/btn_simpan"
@@ -78,7 +90,7 @@
         android:layout_marginBottom="16dp"
         android:enabled="false"
         android:fontFamily="@font/poppins_bold"
-        android:text="@string/buat_kategori"
+        android:text="@string/simpan"
         app:cornerRadius="10dp"
         android:textSize="16sp"
         app:layout_constraintEnd_toEndOf="parent"

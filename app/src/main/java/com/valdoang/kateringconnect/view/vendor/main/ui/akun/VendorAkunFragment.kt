@@ -18,6 +18,7 @@ import com.valdoang.kateringconnect.adapter.GalleryAdapter
 import com.valdoang.kateringconnect.databinding.FragmentVendorAkunBinding
 import com.valdoang.kateringconnect.model.Gallery
 import com.valdoang.kateringconnect.model.Star
+import com.valdoang.kateringconnect.utils.Cons
 import com.valdoang.kateringconnect.utils.roundOffDecimal
 import com.valdoang.kateringconnect.utils.withNumberingFormat
 import com.valdoang.kateringconnect.view.both.akun.EditAkunActivity
@@ -164,7 +165,7 @@ class VendorAkunFragment : Fragment() {
     private fun setupAction() {
         binding.cvStar.setOnClickListener {
             val intent = Intent(requireContext(), NilaiActivity::class.java)
-            intent.putExtra(NilaiActivity.EXTRA_ID, vendorId)
+            intent.putExtra(Cons.EXTRA_ID, vendorId)
             startActivity(intent)
         }
         binding.cvMenu.setOnClickListener {

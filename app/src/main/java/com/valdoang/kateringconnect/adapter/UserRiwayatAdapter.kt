@@ -11,6 +11,7 @@ import com.bumptech.glide.Glide
 import com.valdoang.kateringconnect.R
 import com.valdoang.kateringconnect.databinding.ItemUserRiwayatBinding
 import com.valdoang.kateringconnect.model.Pesanan
+import com.valdoang.kateringconnect.utils.Cons
 import com.valdoang.kateringconnect.utils.withNumberingFormat
 import com.valdoang.kateringconnect.utils.withTimestampToDateTimeFormat
 import com.valdoang.kateringconnect.view.user.pemesanan.PemesananActivity
@@ -67,7 +68,7 @@ class UserRiwayatAdapter(
 
                 btnPesanLagi.setOnClickListener {
                     val intent = Intent(context, PemesananActivity::class.java)
-                    intent.putExtra(PemesananActivity.EXTRA_ID, pesanan.menuId)
+                    intent.putExtra(Cons.EXTRA_ID, pesanan.menuId)
                     context.startActivity(intent)
                 }
             }

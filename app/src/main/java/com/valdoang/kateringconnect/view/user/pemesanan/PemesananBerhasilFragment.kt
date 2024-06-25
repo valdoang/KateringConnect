@@ -9,7 +9,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.Window
-import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.fragment.app.DialogFragment
 import com.valdoang.kateringconnect.databinding.FragmentPemesananBerhasilBinding
 import com.valdoang.kateringconnect.view.user.main.UserMainActivity

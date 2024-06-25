@@ -17,6 +17,7 @@ import com.valdoang.kateringconnect.R
 import com.valdoang.kateringconnect.adapter.RoomChatAdapter
 import com.valdoang.kateringconnect.databinding.ActivityRoomChatBinding
 import com.valdoang.kateringconnect.model.RoomChat
+import com.valdoang.kateringconnect.utils.Cons
 
 class RoomChatActivity : AppCompatActivity() {
     private lateinit var binding: ActivityRoomChatBinding
@@ -43,7 +44,7 @@ class RoomChatActivity : AppCompatActivity() {
         roomChatList = arrayListOf()
 
         ourId = firebaseAuth.currentUser!!.uid
-        otherId = intent.getStringExtra(EXTRA_ID)
+        otherId = intent.getStringExtra(Cons.EXTRA_ID)
 
         ivUser = binding.ivUserPhoto
         tvNama = binding.tvUserName
@@ -90,7 +91,7 @@ class RoomChatActivity : AppCompatActivity() {
 
     private fun setupAction() {
         binding.ibBack.setOnClickListener {
-            onBackPressed()
+            finish()
         }
     }
 
@@ -168,9 +169,5 @@ class RoomChatActivity : AppCompatActivity() {
                 }
             }
         }
-    }
-
-    companion object {
-        const val EXTRA_ID = "extra_id"
     }
 }

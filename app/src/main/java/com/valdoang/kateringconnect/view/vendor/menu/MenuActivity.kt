@@ -39,7 +39,7 @@ class MenuActivity : AppCompatActivity() {
 
     private fun setupAction() {
         binding.ibBack.setOnClickListener {
-            onBackPressed()
+            finish()
         }
     }
 

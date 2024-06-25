@@ -172,7 +172,8 @@
     <string name="tv_harga_wajib">Harga *</string>
     <string name="tv_nama_hidangan">Nama Hidangan</string>
     <string name="tv_harga">Harga</string>
-    <string name="tv_nama_kategori">Nama Kategori *</string>
+    <string name="tv_nama_kategori_wajib">Nama Kategori *</string>
+    <string name="tv_nama_kategori">Nama Kategori</string>
     <string name="title_tambah_kategori">Tambah Kategori Baru</string>
     <string name="buat_kategori">Buat Kategori</string>
     <string name="title_buat_grup_opsi">Buat Grup Opsi</string>
@@ -193,6 +194,7 @@
     <string name="tv_pilih_hidangan">Pilih Hidangan</string>
     <string name="tv_desc_pilih_hidangan">Pilih hidangan dari menu Anda yang bisa disesuaikan dengan grup opsi %1$s</string>
     <string name="jumlah_hidangan_tersambung">%1$s hidangan tersambung</string>
+    <string name="jumlah_hidangan">%1$s hidangan</string>
     <string name="tv_pilih_grup_opsi">Pilih Grup Opsi</string>
     <string name="title_tambah_grup_opsi">Buat Grup Opsi</string>
     <string name="selesai">Selesai</string>
@@ -202,4 +204,11 @@
     <string name="edit_hidangan">Edit Hidangan</string>
     <string name="gagal_mengubah">Gagal Mengubah</string>
     <string name="delete_menu_alert">Apakah Anda yakin ingin menghapus menu?</string>
+    <string name="delete_kategori_alert">Apakah Anda yakin ingin menghapus kategori dan semua hidangan di dalamnya?</string>
+    <string name="title_edit_kategori">Edit Kategori</string>
+    <string name="hapus_kategori">Hapus Kategori</string>
+    <string name="success_delete_menu">Berhasil Menghapus Menu</string>
+    <string name="fail_delete_menu">Gagal Menghapus Menu</string>
+    <string name="success_delete_kategori">Berhasil Menghapus Kategori</string>
+    <string name="fail_delete_kategori">Gagal Menghapus Kategori</string>
 </resources>

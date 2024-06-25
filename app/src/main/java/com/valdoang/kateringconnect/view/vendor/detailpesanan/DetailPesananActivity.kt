@@ -137,7 +137,7 @@ class DetailPesananActivity : AppCompatActivity() {
 
     private fun setupAction() {
         binding.ibBack.setOnClickListener {
-            onBackPressed()
+            finish()
         }
         btnSelesaikan.setOnClickListener {
             val updateStatus = mapOf(

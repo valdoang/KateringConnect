@@ -45,7 +45,7 @@ class AddGaleriActivity : AppCompatActivity() {
 
     private fun setupAction() {
         binding.ibBack.setOnClickListener {
-            onBackPressed()
+            finish()
         }
 
         binding.ibSave.setOnClickListener {
@@ -97,7 +97,7 @@ class AddGaleriActivity : AppCompatActivity() {
                             )
                             db.collection("gallery").document().set(mapGallery)
                                 .addOnSuccessListener {
-                                    onBackPressed()
+                                    finish()
                                     Toast.makeText(this, R.string.success_upload_gallery, Toast.LENGTH_SHORT).show()
                                 }
                                 .addOnFailureListener{

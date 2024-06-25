@@ -1,4 +1,4 @@
-package com.valdoang.kateringconnect.view.vendor.menu
+package com.valdoang.kateringconnect.view.vendor.menu.kategori
 
 import android.os.Bundle
 import android.widget.Button
@@ -7,8 +7,6 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
-import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.firestore.firestore
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.valdoang.kateringconnect.databinding.ActivityAddKategoriBinding
@@ -49,7 +47,7 @@ class AddKategoriActivity : AppCompatActivity() {
 
             val ref = db.collection("user").document(userId).collection("kategoriMenu").document()
             ref.set(kategoriMap).addOnSuccessListener {
-                onBackPressed()
+                finish()
             }.addOnFailureListener {
                 Toast.makeText(this, "Gagal Menambahkan", Toast.LENGTH_SHORT).show()
             }
@@ -58,7 +56,7 @@ class AddKategoriActivity : AppCompatActivity() {
 
     private fun setupAction() {
         binding.ibBack.setOnClickListener {
-            onBackPressed()
+            finish()
         }
     }
 }

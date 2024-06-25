@@ -13,6 +13,7 @@ import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.valdoang.kateringconnect.R
 import com.valdoang.kateringconnect.databinding.ActivityDetailPesananRiwayatBinding
+import com.valdoang.kateringconnect.utils.Cons
 import com.valdoang.kateringconnect.utils.withNumberingFormat
 import com.valdoang.kateringconnect.utils.withTimestamptoDateFormat
 import com.valdoang.kateringconnect.utils.withTimestamptoTimeFormat
@@ -57,7 +58,7 @@ class DetailRiwayatPemesananActivity : AppCompatActivity() {
 
         firebaseAuth =Firebase.auth
         
-        pesananId = intent.getStringExtra(EXTRA_ID)
+        pesananId = intent.getStringExtra(Cons.EXTRA_ID)
 
         tvVendorNama = binding.tvVendorName
         tvMenuNama = binding.tvMenuName
@@ -158,7 +159,7 @@ class DetailRiwayatPemesananActivity : AppCompatActivity() {
 
     private fun setupAction() {
         binding.ibBack.setOnClickListener {
-            onBackPressed()
+            finish()
         }
         btnBeriNilai.setOnClickListener {
             val args = Bundle()
@@ -169,7 +170,7 @@ class DetailRiwayatPemesananActivity : AppCompatActivity() {
         }
         btnPesanLagi.setOnClickListener {
             val intent = Intent(this, PemesananActivity::class.java)
-            intent.putExtra(PemesananActivity.EXTRA_ID, menuId)
+            intent.putExtra(Cons.EXTRA_ID, menuId)
             startActivity(intent)
         }
         tvTambahJumlahPorsi.setOnClickListener {
@@ -189,9 +190,5 @@ class DetailRiwayatPemesananActivity : AppCompatActivity() {
     private fun editUI() {
         binding.titlePesanan.text = resources.getString(R.string.rincian_pesananmu)
         binding.tvRincianPesanan.text = resources.getString(R.string.rincian_pesananmu)
-    }
-
-    companion object {
-        const val EXTRA_ID = "extra_id"
     }
 }

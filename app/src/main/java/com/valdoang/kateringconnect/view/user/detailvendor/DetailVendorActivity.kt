@@ -17,6 +17,7 @@ import com.valdoang.kateringconnect.adapter.GalleryAdapter
 import com.valdoang.kateringconnect.databinding.FragmentVendorAkunBinding
 import com.valdoang.kateringconnect.model.Gallery
 import com.valdoang.kateringconnect.model.Star
+import com.valdoang.kateringconnect.utils.Cons
 import com.valdoang.kateringconnect.utils.roundOffDecimal
 import com.valdoang.kateringconnect.utils.withNumberingFormat
 import com.valdoang.kateringconnect.view.both.chat.RoomChatActivity
@@ -47,7 +48,7 @@ class DetailVendorActivity : AppCompatActivity() {
         setContentView(binding.root)
         supportActionBar?.hide()
 
-        vendorId = intent.getStringExtra(EXTRA_ID)
+        vendorId = intent.getStringExtra(Cons.EXTRA_ID)
 
         firebaseAuth = Firebase.auth
         starList = arrayListOf()
@@ -161,22 +162,18 @@ class DetailVendorActivity : AppCompatActivity() {
 
     private fun setupAction() {
         binding.ibBack.setOnClickListener {
-            onBackPressed()
+            finish()
         }
 
         binding.cvStar.setOnClickListener {
             val intent = Intent(this, NilaiActivity::class.java)
-            intent.putExtra(NilaiActivity.EXTRA_ID, vendorId)
+            intent.putExtra(Cons.EXTRA_ID, vendorId)
             startActivity(intent)
         }
         binding.ibChat.setOnClickListener {
             val intent = Intent(this, RoomChatActivity::class.java)
-            intent.putExtra(RoomChatActivity.EXTRA_ID, vendorId)
+            intent.putExtra(Cons.EXTRA_ID, vendorId)
             startActivity(intent)
         }
-    }
-
-    companion object {
-        const val EXTRA_ID = "extra_id"
     }
 }

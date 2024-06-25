@@ -26,6 +26,7 @@ import com.valdoang.kateringconnect.databinding.ActivityAddMenuBinding
 import com.valdoang.kateringconnect.model.AcKategori
 import com.valdoang.kateringconnect.model.GrupOpsi
 import com.valdoang.kateringconnect.utils.getImageUri
+import com.valdoang.kateringconnect.view.vendor.menu.kategori.AddKategoriActivity
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -108,6 +109,10 @@ class AddMenuActivity : AppCompatActivity() {
                         }
                     }
 
+                    acKategoriList.sortBy { kategori ->
+                        kategori.nama
+                    }
+
                     acKategoriAdapter.setItems(acKategoriList)
                     acKategoriAdapter.setOnItemClickCallback(object :
                         AcKategoriAdapter.OnItemClickCallback {
@@ -188,7 +193,7 @@ class AddMenuActivity : AppCompatActivity() {
 
     private fun setupAction() {
         binding.ibBack.setOnClickListener {
-            onBackPressed()
+            finish()
         }
 
         binding.tvAddPhoto.setOnClickListener {
@@ -251,6 +256,7 @@ class AddMenuActivity : AppCompatActivity() {
                                             "nama" to sName,
                                             "keterangan" to sDesc,
                                             "harga" to sPrice,
+                                            "aktif" to true,
                                             "storageKeys" to filename,
                                             "grupOpsiId" to arrayGrupOpsiId
                                         )
@@ -290,7 +296,7 @@ class AddMenuActivity : AppCompatActivity() {
                                                         }
                                                 }
 
-                                                onBackPressed()
+                                                finish()
                                                 Toast.makeText(
                                                     this,
                                                     R.string.success_upload_menu,

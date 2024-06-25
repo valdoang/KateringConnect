@@ -1,13 +1,10 @@
 package com.valdoang.kateringconnect.view.vendor.menu
 
-import android.content.ContentValues
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -19,9 +16,9 @@ import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.valdoang.kateringconnect.R
 import com.valdoang.kateringconnect.adapter.KategoriMenuAdapter
-import com.valdoang.kateringconnect.adapter.VendorBerandaRiwayatAdapter
 import com.valdoang.kateringconnect.databinding.FragmentMenuBinding
 import com.valdoang.kateringconnect.model.KategoriMenu
+import com.valdoang.kateringconnect.view.vendor.menu.kategori.AddKategoriActivity
 
 class MenuFragment : Fragment() {
 
@@ -95,6 +92,9 @@ class MenuFragment : Fragment() {
                         kategoriMenu.id = data.id
                         kategoriMenuList.add(kategoriMenu)
                     }
+                }
+                kategoriMenuList.sortBy { kategori ->
+                    kategori.nama
                 }
                 kategoriMenuAdapter.setItems(kategoriMenuList)
             }

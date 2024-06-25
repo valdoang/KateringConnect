@@ -14,6 +14,7 @@ import com.google.firebase.ktx.Firebase
 import com.valdoang.kateringconnect.adapter.ChatAdapter
 import com.valdoang.kateringconnect.databinding.ActivityChatBinding
 import com.valdoang.kateringconnect.model.Chat
+import com.valdoang.kateringconnect.utils.Cons
 
 class ChatActivity : AppCompatActivity() {
     private lateinit var binding: ActivityChatBinding
@@ -60,7 +61,7 @@ class ChatActivity : AppCompatActivity() {
                     ChatAdapter.OnItemClickCallback {
                     override fun onItemClicked(data: Chat) {
                         val intent = Intent(applicationContext, RoomChatActivity::class.java)
-                        intent.putExtra(RoomChatActivity.EXTRA_ID, data.otherId)
+                        intent.putExtra(Cons.EXTRA_ID, data.otherId)
                         startActivity(intent)
                     }
                 })
@@ -91,7 +92,7 @@ class ChatActivity : AppCompatActivity() {
 
     private fun setupAction() {
         binding.ibBack.setOnClickListener {
-            onBackPressed()
+            finish()
         }
     }
 }

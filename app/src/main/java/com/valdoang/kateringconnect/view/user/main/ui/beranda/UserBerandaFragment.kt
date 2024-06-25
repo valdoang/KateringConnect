@@ -21,6 +21,7 @@ import com.valdoang.kateringconnect.R
 import com.valdoang.kateringconnect.adapter.UserBerandaAdapter
 import com.valdoang.kateringconnect.databinding.FragmentUserBerandaBinding
 import com.valdoang.kateringconnect.model.Vendor
+import com.valdoang.kateringconnect.utils.Cons
 import com.valdoang.kateringconnect.view.both.chat.ChatActivity
 import com.valdoang.kateringconnect.view.user.detailvendor.DetailVendorActivity
 
@@ -84,7 +85,7 @@ class UserBerandaFragment : Fragment() {
                                 UserBerandaAdapter.OnItemClickCallback {
                                 override fun onItemClicked(data: Vendor) {
                                     val intent = Intent(requireContext(), DetailVendorActivity::class.java)
-                                    intent.putExtra(DetailVendorActivity.EXTRA_ID, data.id)
+                                    intent.putExtra(Cons.EXTRA_ID, data.id)
                                     startActivity(intent)
                                 }
                             })

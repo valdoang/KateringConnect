@@ -19,10 +19,7 @@ import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.valdoang.kateringconnect.R
 import com.valdoang.kateringconnect.databinding.ActivityPemesananBinding
-import com.valdoang.kateringconnect.utils.TimePickerFragment
-import com.valdoang.kateringconnect.utils.textChangedListener
-import com.valdoang.kateringconnect.utils.withDateFormat
-import com.valdoang.kateringconnect.utils.withNumberingFormat
+import com.valdoang.kateringconnect.utils.*
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.math.roundToLong
@@ -75,7 +72,7 @@ class PemesananActivity : AppCompatActivity(), TimePickerFragment.DialogTimeList
 
         firebaseAuth = Firebase.auth
 
-        menuId = intent.getStringExtra(EXTRA_ID)
+        menuId = intent.getStringExtra(Cons.EXTRA_ID)
 
         tvVendorName = binding.tvVendorName
         tvMenuName = binding.tvMenuName
@@ -307,11 +304,7 @@ class PemesananActivity : AppCompatActivity(), TimePickerFragment.DialogTimeList
 
     private fun setupAction() {
         binding.ibBack.setOnClickListener {
-            onBackPressed()
+            finish()
         }
-    }
-
-    companion object {
-        const val EXTRA_ID = "extra_id"
     }
 }

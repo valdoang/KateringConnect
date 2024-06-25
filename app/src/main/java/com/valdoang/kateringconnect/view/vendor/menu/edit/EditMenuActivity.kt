@@ -5,7 +5,10 @@ import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import android.view.View
-import android.widget.*
+import android.widget.ImageView
+import android.widget.ProgressBar
+import android.widget.TextView
+import android.widget.Toast
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
@@ -24,7 +27,6 @@ import com.valdoang.kateringconnect.databinding.ActivityEditMenuBinding
 import com.valdoang.kateringconnect.model.GrupOpsi
 import com.valdoang.kateringconnect.utils.Cons
 import com.valdoang.kateringconnect.utils.getImageUri
-import com.valdoang.kateringconnect.utils.withCurrencyFormat
 
 
 class EditMenuActivity : AppCompatActivity() {

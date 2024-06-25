@@ -1,4 +1,4 @@
-package com.valdoang.kateringconnect.view.vendor.menu.edit
+package com.valdoang.kateringconnect.view.vendor.menu.kategori
 
 import android.content.Intent
 import android.graphics.Color
@@ -17,10 +17,11 @@ import com.google.firebase.storage.ktx.storage
 import com.valdoang.kateringconnect.R
 import com.valdoang.kateringconnect.databinding.FragmentAlertDialogBinding
 import com.valdoang.kateringconnect.model.GrupOpsi
+import com.valdoang.kateringconnect.model.Menu
 import com.valdoang.kateringconnect.view.vendor.menu.MenuActivity
 
 
-class DeleteMenuFragment : DialogFragment() {
+class DeleteKategoriFragment : DialogFragment() {
 
     private var _binding: FragmentAlertDialogBinding? = null
 
@@ -30,11 +31,10 @@ class DeleteMenuFragment : DialogFragment() {
     private lateinit var firebaseAuth: FirebaseAuth
     private var db = Firebase.firestore
     private var storageRef = Firebase.storage
-    private lateinit var acGrupOpsiList: ArrayList<GrupOpsi>
     private var userId = ""
     private var kategoriMenuId: String? = null
-    private var menuId: String? = null
-    private var storageKeys: String? = null
+    private lateinit var acGrupOpsiList: ArrayList<GrupOpsi>
+    private lateinit var menuList: ArrayList<Menu>
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -46,13 +46,12 @@ class DeleteMenuFragment : DialogFragment() {
         val root: View = binding.root
 
         firebaseAuth = FirebaseAuth.getInstance()
-        acGrupOpsiList = arrayListOf()
         userId = firebaseAuth.currentUser!!.uid
+        acGrupOpsiList = arrayListOf()
+        menuList = arrayListOf()
 
         val mArgs = arguments
         kategoriMenuId = mArgs!!.getString("kategoriMenuId")
-        menuId = mArgs.getString("menuId")
-        storageKeys = mArgs.getString("storageKeys")
 
         if (dialog != null && dialog?.window != null) {
             dialog!!.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
@@ -61,13 +60,13 @@ class DeleteMenuFragment : DialogFragment() {
 
         setTvText()
         closeDialog()
-        deleteMenu()
+        deleteKategori()
 
         return root
     }
 
     private fun setTvText() {
-        binding.tvAlert.text = resources.getString(R.string.delete_menu_alert)
+        binding.tvAlert.text = resources.getString(R.string.delete_kategori_alert)
     }
 
     private fun closeDialog() {
@@ -76,12 +75,26 @@ class DeleteMenuFragment : DialogFragment() {
         }
     }
 
-    private fun deleteMenu() {
-        val ref = db.collection("user").document(userId).collection("grupOpsi")
-        ref.get().addOnSuccessListener { snapshot ->
-            if (snapshot != null) {
+    private fun deleteKategori() {
+        val menuRef = db.collection("user").document(userId).collection("kategoriMenu").document(kategoriMenuId!!).collection("menu")
+        menuRef.get().addOnSuccessListener {  menuSnapshot ->
+            if (menuSnapshot != null) {
+                menuList.clear()
+                for (data in menuSnapshot.documents) {
+                    val menu: Menu? = data?.toObject(Menu::class.java)
+                    if (menu != null) {
+                        menu.id = data.id
+                        menuList.add(menu)
+                    }
+                }
+            }
+        }
+
+        val grupOpsiRef = db.collection("user").document(userId).collection("grupOpsi")
+        grupOpsiRef.get().addOnSuccessListener { grupOpsiSnapshot ->
+            if (grupOpsiSnapshot != null) {
                 acGrupOpsiList.clear()
-                for (data in snapshot.documents) {
+                for (data in grupOpsiSnapshot.documents) {
                     val acGrupOpsi: GrupOpsi? = data.toObject(GrupOpsi::class.java)
                     if (acGrupOpsi != null) {
                         acGrupOpsi.id = data.id
@@ -91,32 +104,35 @@ class DeleteMenuFragment : DialogFragment() {
             }
         }
 
-        binding.btnYes.setOnClickListener{
+        binding.btnYes.setOnClickListener {
             Intent(activity, MenuActivity::class.java).also { intent ->
                 intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
                 activity?.startActivity(intent)
             }
             //Delete Grup Opsi
-            for (i in acGrupOpsiList) {
-                val updateArrayMenuId = arrayListOf<String>()
-                if (i.menuId != null) {
-                    i.menuId!!.filterTo(updateArrayMenuId) { it != menuId }
-                    val updateMap = mapOf(
-                        "menuId" to updateArrayMenuId
-                    )
-                    db.collection("user").document(userId).collection("grupOpsi").document(i.id!!).update(updateMap)
+            for (i in menuList) {
+                for (j in acGrupOpsiList) {
+                    val updateArrayMenuId = arrayListOf<String>()
+                    if (j.menuId != null) {
+                        j.menuId!!.filterTo(updateArrayMenuId) { it != i.id }
+                        j.menuId = updateArrayMenuId
+                        val updateMap = mapOf(
+                            "menuId" to updateArrayMenuId
+                        )
+                        db.collection("user").document(userId).collection("grupOpsi").document(j.id!!).update(updateMap)
+                    }
                 }
+
+                //Delete Image
+                storageRef.getReference("menuImages").child(userId).child(kategoriMenuId!!).child(i.storageKeys!!).delete()
             }
 
-            //Delete Image
-            storageRef.getReference("menuImages").child(userId).child(kategoriMenuId!!).child(storageKeys!!).delete()
-
-            //Delete Menu
-            val menuRef = db.collection("user").document(userId).collection("kategoriMenu").document(kategoriMenuId!!).collection("menu").document(menuId!!)
-            menuRef.delete().addOnSuccessListener {
-                Toast.makeText(activity, R.string.success_delete_menu, Toast.LENGTH_SHORT).show()
+            //Delete Kategori
+            val kategoriRef = db.collection("user").document(userId).collection("kategoriMenu").document(kategoriMenuId!!)
+            kategoriRef.delete().addOnSuccessListener {
+                Toast.makeText(activity, R.string.success_delete_kategori, Toast.LENGTH_SHORT).show()
             } .addOnFailureListener {
-                Toast.makeText(activity, R.string.fail_delete_menu, Toast.LENGTH_SHORT).show()
+                Toast.makeText(activity, R.string.fail_delete_kategori, Toast.LENGTH_SHORT).show()
             }
         }
     }

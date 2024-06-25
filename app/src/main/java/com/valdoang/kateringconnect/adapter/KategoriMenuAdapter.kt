@@ -3,7 +3,6 @@ package com.valdoang.kateringconnect.adapter
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
-import android.os.Build.VERSION_CODES.M
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -14,9 +13,10 @@ import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.valdoang.kateringconnect.R
 import com.valdoang.kateringconnect.databinding.ItemKategoriMenuBinding
-import com.valdoang.kateringconnect.model.AcKategori
 import com.valdoang.kateringconnect.model.KategoriMenu
 import com.valdoang.kateringconnect.model.Menu
+import com.valdoang.kateringconnect.utils.Cons
+import com.valdoang.kateringconnect.view.vendor.menu.kategori.EditKategoriActivity
 
 class KategoriMenuAdapter(
     private val context: Context
@@ -76,12 +76,16 @@ class KategoriMenuAdapter(
                             menu.nama
                         }
 
+                        tvJumlahHidangan.text = context.getString(R.string.jumlah_hidangan, menuList.size.toString())
+
                         menuAdapter.setItems(menuList)
                     }
                 }
 
                 tvEditKategori.setOnClickListener {
-                    //Intent ke EditKategoriActivity
+                    val intent = Intent(context, EditKategoriActivity::class.java)
+                    intent.putExtra(Cons.EXTRA_ID, kategoriMenu.id)
+                    context.startActivity(intent)
                 }
             }
         }
