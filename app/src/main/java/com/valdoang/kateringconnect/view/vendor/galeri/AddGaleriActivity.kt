@@ -4,6 +4,7 @@ import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import android.widget.ImageButton
 import android.widget.ProgressBar
 import android.widget.Toast
 import androidx.activity.result.PickVisualMediaRequest
@@ -29,6 +30,7 @@ class AddGaleriActivity : AppCompatActivity() {
     private var storageRef = Firebase.storage
     private var currentImageUri: Uri? = null
     private lateinit var progressBar: ProgressBar
+    private lateinit var ibSave: ImageButton
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -39,6 +41,7 @@ class AddGaleriActivity : AppCompatActivity() {
         firebaseAuth = Firebase.auth
         storageRef = FirebaseStorage.getInstance()
         progressBar = binding.progressBar
+        ibSave = binding.ibSave
 
         setupAction()
     }
@@ -48,7 +51,7 @@ class AddGaleriActivity : AppCompatActivity() {
             finish()
         }
 
-        binding.ibSave.setOnClickListener {
+        ibSave.setOnClickListener {
             if(currentImageUri == null) {
                 Toast.makeText(this, R.string.add_photo_alert, Toast.LENGTH_SHORT).show()
             }
@@ -82,20 +85,20 @@ class AddGaleriActivity : AppCompatActivity() {
 
     private fun uploadPhoto() {
         progressBar.visibility = View.VISIBLE
+        ibSave.visibility = View.GONE
         val userId = firebaseAuth.currentUser!!.uid
         val filename = UUID.randomUUID().toString()
         currentImageUri?.let {
-            storageRef.getReference("vendorGallery").child(filename)
+            storageRef.getReference("vendorGallery").child(userId).child(filename)
                 .putFile(it)
                 .addOnSuccessListener { task ->
                     task.metadata!!.reference!!.downloadUrl
                         .addOnSuccessListener {uri ->
                             val mapGallery = mapOf(
                                 "foto" to uri.toString(),
-                                "storageKeys" to filename,
-                                "userId" to userId
+                                "storageKeys" to filename
                             )
-                            db.collection("gallery").document().set(mapGallery)
+                            db.collection("user").document(userId).collection("galeri").document().set(mapGallery)
                                 .addOnSuccessListener {
                                     finish()
                                     Toast.makeText(this, R.string.success_upload_gallery, Toast.LENGTH_SHORT).show()

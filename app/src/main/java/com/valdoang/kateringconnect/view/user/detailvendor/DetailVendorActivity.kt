@@ -44,6 +44,7 @@ class DetailVendorActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        //BIKIN XML BARU DETAILVENDORACTIVITY.XML
         binding = FragmentVendorAkunBinding.inflate(layoutInflater)
         setContentView(binding.root)
         supportActionBar?.hide()

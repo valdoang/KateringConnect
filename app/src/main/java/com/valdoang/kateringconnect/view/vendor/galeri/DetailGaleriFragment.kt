@@ -3,7 +3,6 @@ package com.valdoang.kateringconnect.view.vendor.galeri
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -21,7 +20,6 @@ import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.ktx.storage
 import com.valdoang.kateringconnect.R
 import com.valdoang.kateringconnect.databinding.FragmentDetailGaleriBinding
-import com.valdoang.kateringconnect.view.both.alertdialog.DeleteGalleryFragment
 
 class DetailGaleriFragment : DialogFragment() {
     private var _binding: FragmentDetailGaleriBinding? = null
@@ -36,6 +34,7 @@ class DetailGaleriFragment : DialogFragment() {
     private lateinit var btnDeletePhoto: Button
     private var storageKeys = ""
     private var userJenis = ""
+    private var userId = ""
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -53,12 +52,13 @@ class DetailGaleriFragment : DialogFragment() {
 
         firebaseAuth = Firebase.auth
         storageRef = FirebaseStorage.getInstance()
+        userId = firebaseAuth.currentUser!!.uid
 
         ivFoto = binding.ivFoto
         btnDeletePhoto = binding.btnDeletePhoto
 
         val mArgs = arguments
-        val galleryId = mArgs!!.getString("id")
+        val galleryId = mArgs!!.getString("galleryId")
 
         setCv()
         setData(galleryId!!)
@@ -69,7 +69,6 @@ class DetailGaleriFragment : DialogFragment() {
     }
 
     private fun setCv() {
-        val userId = firebaseAuth.currentUser!!.uid
         db.collection("user").document(userId).get()
             .addOnSuccessListener { document ->
                 if (document != null) {
@@ -82,25 +81,24 @@ class DetailGaleriFragment : DialogFragment() {
     }
 
     private fun setData(galleryId: String) {
-        Log.d("KODE GALLERY ID", galleryId)
-        db.collection("gallery").document(galleryId).get()
-            .addOnSuccessListener {document ->
-                if (document != null) {
-                    val foto = document.data?.get("foto").toString()
-                    storageKeys = document.data?.get("storageKeys").toString()
-                    Glide.with(activity!!).load(foto).error(R.drawable.gallery).into(ivFoto)
-                }
+        val galeriRef = db.collection("user").document(userId).collection("galeri").document(galleryId)
+        galeriRef.get().addOnSuccessListener {document ->
+            if (document != null) {
+                val foto = document.data?.get("foto").toString()
+                storageKeys = document.data?.get("storageKeys").toString()
+                Glide.with(activity!!).load(foto).error(R.drawable.gallery).into(ivFoto)
             }
-            .addOnFailureListener {
-                Toast.makeText(requireContext(), "Gagal!", Toast.LENGTH_SHORT).show()
-            }
+        }
+        .addOnFailureListener {
+            Toast.makeText(requireContext(), "Gagal!", Toast.LENGTH_SHORT).show()
+        }
     }
 
     private fun deleteData(galleryId: String) {
         btnDeletePhoto.setOnClickListener {
             val args = Bundle()
             args.putString("id", galleryId)
-            val newFragment: DialogFragment = DeleteGalleryFragment()
+            val newFragment: DialogFragment = DeleteGaleriFragment()
             newFragment.arguments = args
             newFragment.show(parentFragmentManager, "TAG")
             dismiss()

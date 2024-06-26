@@ -21,7 +21,6 @@ import com.valdoang.kateringconnect.model.KategoriMenu
 import com.valdoang.kateringconnect.model.Opsi
 import com.valdoang.kateringconnect.utils.Cons
 import com.valdoang.kateringconnect.utils.beforeChangedListener
-import com.valdoang.kateringconnect.view.vendor.menu.OpsiChooseMenuActivity
 import java.util.*
 
 class AddGrupOpsiActivity : AppCompatActivity() {

@@ -8,13 +8,11 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.fragment.app.Fragment
-import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.valdoang.kateringconnect.R
-import com.valdoang.kateringconnect.adapter.GalleryAdapter
 import com.valdoang.kateringconnect.databinding.FragmentVendorAkunBinding
 import com.valdoang.kateringconnect.model.Gallery
 import com.valdoang.kateringconnect.model.Star
@@ -25,7 +23,7 @@ import com.valdoang.kateringconnect.view.both.akun.EditAkunActivity
 import com.valdoang.kateringconnect.view.both.alertdialog.LogoutFragment
 import com.valdoang.kateringconnect.view.both.chat.ChatActivity
 import com.valdoang.kateringconnect.view.both.nilai.NilaiActivity
-import com.valdoang.kateringconnect.view.vendor.galeri.AddGaleriActivity
+import com.valdoang.kateringconnect.view.vendor.galeri.GaleriActivity
 import com.valdoang.kateringconnect.view.vendor.menu.MenuActivity
 
 class VendorAkunFragment : Fragment() {
@@ -40,10 +38,8 @@ class VendorAkunFragment : Fragment() {
     private lateinit var tvAddress: TextView
     private lateinit var tvNoPhone: TextView
     private lateinit var ivVendorAkun: ImageView
-    private lateinit var recyclerView: RecyclerView
     private lateinit var starList: ArrayList<Star>
     private lateinit var galleryList: ArrayList<Gallery>
-    private lateinit var galleryAdapter: GalleryAdapter
     private var foto: String? = null
     private var nama: String? = null
     private var vendorId = ""
@@ -70,7 +66,6 @@ class VendorAkunFragment : Fragment() {
         galleryList = arrayListOf()
 
         setupAccount()
-        //setupView()
         setupAction()
         hideUI()
         return root
@@ -125,42 +120,7 @@ class VendorAkunFragment : Fragment() {
                 tvNoPhone.text = telepon
             }
         }
-
-        /*val galleryRef = db.collection("gallery").whereEqualTo("userId", vendorId)
-        galleryRef.addSnapshotListener{ snapshot,_ ->
-            if (snapshot != null) {
-                galleryList.clear()
-                for (data in snapshot.documents) {
-                    val gallery: Gallery? = data.toObject(Gallery::class.java)
-                    if (gallery != null) {
-                        gallery.id = data.id
-                        galleryList.add(gallery)
-                    }
-                }
-
-                galleryAdapter.setItems(galleryList)
-                galleryAdapter.setOnItemClickCallback(object :
-                    GalleryAdapter.OnItemClickCallback {
-                    override fun onItemClicked(data: Gallery) {
-                        val args = Bundle()
-                        args.putString("id", data.id)
-                        val newFragment: DialogFragment = DetailGaleriFragment()
-                        newFragment.arguments = args
-                        newFragment.show(parentFragmentManager, "TAG")
-                    }
-                })
-            }
-        }*/
     }
-
-    /*private fun setupView() {
-        recyclerView = binding.rvVendorGaleri
-        recyclerView.layoutManager = GridLayoutManager(requireContext(),2)
-
-        galleryAdapter = GalleryAdapter(requireContext())
-        recyclerView.adapter = galleryAdapter
-        galleryAdapter.setItems(galleryList)
-    }*/
 
     private fun setupAction() {
         binding.cvStar.setOnClickListener {
@@ -173,7 +133,7 @@ class VendorAkunFragment : Fragment() {
             startActivity(intent)
         }
         binding.cvGaleri.setOnClickListener {
-            val intent = Intent(requireContext(), AddGaleriActivity::class.java)
+            val intent = Intent(requireContext(), GaleriActivity::class.java)
             startActivity(intent)
         }
         binding.cvEditProfile.setOnClickListener {

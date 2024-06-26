@@ -1,4 +1,4 @@
-package com.valdoang.kateringconnect.view.vendor.menu
+package com.valdoang.kateringconnect.view.vendor.menu.grupopsi
 
 import android.os.Bundle
 import android.view.View
@@ -43,7 +43,6 @@ class OpsiChooseMenuActivity : AppCompatActivity() {
 
         setupData()
         setupTv()
-        getMenuIdData()
         setupView()
         saveData()
         setupAction()
@@ -83,25 +82,10 @@ class OpsiChooseMenuActivity : AppCompatActivity() {
         binding.tvDescPilihHidangan.text = getString(R.string.tv_desc_pilih_hidangan, namaGrupOpsi)
     }
 
-    private fun getMenuIdData() {
-        val ref = db.collection("user").document(userId).collection("grupOpsi").document(grupOpsiId!!)
-        ref.get().addOnSuccessListener {  grupOpsi ->
-            if (grupOpsi != null) {
-                val menuId = grupOpsi.data?.get("menuId") as? ArrayList<String>
-                if (menuId != null) {
-                    arrayMenuId = menuId
-                }
-
-                setupView()
-                }
-            }
-        }
-
     private fun saveData() {
         btnSimpan.setOnClickListener {
             val grupOpsiRef = db.collection("user").document(userId).collection("grupOpsi").document(grupOpsiId!!)
             grupOpsiRef.update("menuId", arrayMenuId)
-            finish()
 
             for (i in arrayMenu) {
                 val menuRef = db.collection("user").document(userId).collection("kategoriMenu").document(i.kategoriMenuId!!).collection("menu").document(i.id!!)
@@ -127,6 +111,7 @@ class OpsiChooseMenuActivity : AppCompatActivity() {
                     }
                 }
             }
+            finish()
         }
     }
 

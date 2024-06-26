@@ -207,6 +207,7 @@
     <string name="gagal_mengubah">Gagal Mengubah</string>
     <string name="delete_menu_alert">Apakah Anda yakin ingin menghapus menu?</string>
     <string name="delete_kategori_alert">Apakah Anda yakin ingin menghapus kategori dan semua hidangan di dalamnya?</string>
+    <string name="delete_grup_opsi_alert">Apakah Anda yakin ingin menghapus grup opsi ini?</string>
     <string name="title_edit_kategori">Edit Kategori</string>
     <string name="hapus_kategori">Hapus Kategori</string>
     <string name="success_delete_menu">Berhasil Menghapus Menu</string>
@@ -215,4 +216,5 @@
     <string name="fail_delete_kategori">Gagal Menghapus Kategori</string>
     <string name="title_edit_grup_opsi">Edit Grup Opsi</string>
     <string name="hapus_opsi">Hapus Opsi</string>
+    <string name="hapus_grup_opsi">Hapus Grup Opsi</string>
 </resources>

@@ -16,6 +16,7 @@ import com.google.firebase.firestore.firestore
 import com.valdoang.kateringconnect.R
 import com.valdoang.kateringconnect.adapter.OpsiAdapter
 import com.valdoang.kateringconnect.databinding.ActivityEditGrupOpsiBinding
+import com.valdoang.kateringconnect.model.KategoriMenu
 import com.valdoang.kateringconnect.model.Opsi
 import com.valdoang.kateringconnect.utils.Cons
 import com.valdoang.kateringconnect.utils.beforeChangedListener
@@ -29,10 +30,13 @@ class EditGrupOpsiActivity : AppCompatActivity() {
     private var db = Firebase.firestore
     private var userId = ""
     private lateinit var opsiList: ArrayList<Opsi>
+    private lateinit var opsiListTemp: ArrayList<Opsi>
     private lateinit var recyclerView: RecyclerView
     private lateinit var opsiAdapter: OpsiAdapter
     private lateinit var btnAddOpsi: Button
     private lateinit var btnSimpan: Button
+    private lateinit var tvHapus: TextView
+    private lateinit var kategoriMenuList: ArrayList<KategoriMenu>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -43,10 +47,13 @@ class EditGrupOpsiActivity : AppCompatActivity() {
         firebaseAuth = Firebase.auth
         userId = firebaseAuth.currentUser!!.uid
         opsiList = arrayListOf()
+        opsiListTemp = arrayListOf()
 
         etNama = binding.edAddNamaGrupOpsi
         btnAddOpsi = binding.btnTambahkanOpsi
         btnSimpan = binding.btnSimpan
+        tvHapus = binding.tvHapus
+        kategoriMenuList = arrayListOf()
 
         grupOpsiId = intent.getStringExtra(Cons.EXTRA_ID)
 
@@ -55,6 +62,7 @@ class EditGrupOpsiActivity : AppCompatActivity() {
         addOpsi()
         editOpsi()
         updateGrupOpsi()
+        deleteGrupOpsi()
         setupAction()
     }
 
@@ -82,9 +90,14 @@ class EditGrupOpsiActivity : AppCompatActivity() {
                     if (opsi != null) {
                         opsi.id = data.id
                         opsiList.add(opsi)
+                        opsiListTemp.add(opsi)
                     }
 
                     opsiList.sortBy {
+                        it.nama
+                    }
+
+                    opsiListTemp.sortBy {
                         it.nama
                     }
 
@@ -201,7 +214,39 @@ class EditGrupOpsiActivity : AppCompatActivity() {
     private fun updateGrupOpsi() {
         etNama.beforeChangedListener(btnSimpan)
         btnSimpan.setOnClickListener {
-            //Nah kerjain ini
+            val sNama = etNama.text.toString().trim()
+            val updateMap = mapOf(
+                "nama" to sNama
+            )
+            val grupOpsiRef = db.collection("user").document(userId).collection("grupOpsi").document(grupOpsiId!!)
+            grupOpsiRef.update(updateMap).addOnSuccessListener {
+                val opsiRef = grupOpsiRef.collection("opsi")
+                for (i in opsiListTemp) {
+                    opsiRef.document(i.id!!).delete()
+                }
+
+                for (i in opsiList) {
+                    val opsiMap = mapOf(
+                        "nama" to i.nama,
+                        "harga" to i.harga,
+                        "aktif" to i.aktif
+                    )
+
+                    val newOpsi = db.collection("user").document(userId).collection("grupOpsi").document(grupOpsiId!!).collection("opsi").document()
+                    newOpsi.set(opsiMap)
+                }
+                finish()
+            }
+        }
+    }
+
+    private fun deleteGrupOpsi() {
+        tvHapus.setOnClickListener {
+            val args = Bundle()
+            args.putString("grupOpsiId", grupOpsiId)
+            val dialog = DeleteGrupOpsiFragment()
+            dialog.arguments = args
+            dialog.show(supportFragmentManager, "deleteGrupOpsiDialog")
         }
     }
 

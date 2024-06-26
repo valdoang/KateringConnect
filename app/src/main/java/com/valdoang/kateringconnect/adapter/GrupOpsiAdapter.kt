@@ -17,6 +17,7 @@ import com.valdoang.kateringconnect.model.GrupOpsi
 import com.valdoang.kateringconnect.model.Opsi
 import com.valdoang.kateringconnect.utils.Cons
 import com.valdoang.kateringconnect.view.vendor.menu.grupopsi.EditGrupOpsiActivity
+import com.valdoang.kateringconnect.view.vendor.menu.grupopsi.OpsiConnectMenuActivity
 
 class GrupOpsiAdapter(
     private val context: Context
@@ -86,9 +87,15 @@ class GrupOpsiAdapter(
                 }
 
                 tvEditGrupOpsi.setOnClickListener {
-                    //Intent ke EditGrupOpsiActivity
                     val intent = Intent(context, EditGrupOpsiActivity::class.java)
                     intent.putExtra(Cons.EXTRA_ID, grupOpsi.id)
+                    context.startActivity(intent)
+                }
+
+                tvJumlahTersambung.setOnClickListener {
+                    val intent = Intent(context, OpsiConnectMenuActivity::class.java)
+                    intent.putExtra(Cons.EXTRA_ID, grupOpsi.id)
+                    intent.putExtra(Cons.EXTRA_NAMA, grupOpsi.nama)
                     context.startActivity(intent)
                 }
             }
