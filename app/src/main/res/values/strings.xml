@@ -46,7 +46,7 @@
     <string name="tambah">Tambah</string>
     <string name="title_edit_menu">Edit Menu</string>
     <string name="hapus">Hapus</string>
-    <string name="title_tambah_galeri">Tambah Galeri</string>
+    <string name="title_tambah_galeri">Tambah Galeri Dapur</string>
     <string name="edit_foto">Ubah foto</string>
     <string name="put_foto">Pasang foto</string>
     <string name="add_photo">Tambahkan foto</string>
@@ -217,4 +217,6 @@
     <string name="title_edit_grup_opsi">Edit Grup Opsi</string>
     <string name="hapus_opsi">Hapus Opsi</string>
     <string name="hapus_grup_opsi">Hapus Grup Opsi</string>
+    <string name="galeri_dapur">Galeri Dapur</string>
+    <string name="tv_vendor_galeri">Galeri dapur</string>
 </resources>

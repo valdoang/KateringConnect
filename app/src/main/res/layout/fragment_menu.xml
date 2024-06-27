@@ -14,7 +14,7 @@
         android:layout_marginBottom="92dp"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
-        tools:listitem="@layout/item_kategori_menu"/>
+        tools:listitem="@layout/item_kategori_vendor_menu"/>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"

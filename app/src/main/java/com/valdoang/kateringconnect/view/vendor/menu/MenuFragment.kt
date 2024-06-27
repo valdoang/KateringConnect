@@ -15,7 +15,7 @@ import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.valdoang.kateringconnect.R
-import com.valdoang.kateringconnect.adapter.KategoriMenuAdapter
+import com.valdoang.kateringconnect.adapter.KategoriVendorMenuAdapter
 import com.valdoang.kateringconnect.databinding.FragmentMenuBinding
 import com.valdoang.kateringconnect.model.KategoriMenu
 import com.valdoang.kateringconnect.view.vendor.menu.kategori.AddKategoriActivity
@@ -28,7 +28,7 @@ class MenuFragment : Fragment() {
     private var db = Firebase.firestore
     private lateinit var recyclerView: RecyclerView
     private lateinit var kategoriMenuList: ArrayList<KategoriMenu>
-    private lateinit var kategoriMenuAdapter: KategoriMenuAdapter
+    private lateinit var kategoriVendorMenuAdapter: KategoriVendorMenuAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -75,9 +75,9 @@ class MenuFragment : Fragment() {
         recyclerView = binding.rvMenu
         recyclerView.layoutManager = LinearLayoutManager(requireContext())
 
-        kategoriMenuAdapter = KategoriMenuAdapter(requireContext())
-        recyclerView.adapter = kategoriMenuAdapter
-        kategoriMenuAdapter.setItems(kategoriMenuList)
+        kategoriVendorMenuAdapter = KategoriVendorMenuAdapter(requireContext())
+        recyclerView.adapter = kategoriVendorMenuAdapter
+        kategoriVendorMenuAdapter.setItems(kategoriMenuList)
     }
 
     private fun setupData() {
@@ -96,7 +96,7 @@ class MenuFragment : Fragment() {
                 kategoriMenuList.sortBy { kategori ->
                     kategori.nama
                 }
-                kategoriMenuAdapter.setItems(kategoriMenuList)
+                kategoriVendorMenuAdapter.setItems(kategoriMenuList)
             }
 
         }

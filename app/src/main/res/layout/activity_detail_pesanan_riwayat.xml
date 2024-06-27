@@ -140,36 +140,13 @@
                     app:layout_constraintStart_toEndOf="@id/iv_user_name"/>
 
                 <ImageView
-                    android:id="@+id/iv_city"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp"
-                    android:src="@drawable/ic_baseline_location_city_24"
-                    android:layout_marginStart="16dp"
-                    app:layout_constraintTop_toBottomOf="@id/tv_user_name"
-                    app:layout_constraintStart_toStartOf="parent"/>
-
-                <TextView
-                    android:id="@+id/tv_city"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="16dp"
-                    android:layout_marginTop="3dp"
-                    tools:text="Surabaya"
-                    android:textSize="14sp"
-                    android:fontFamily="@font/poppins"
-                    android:textColor="@color/black"
-                    app:layout_constraintTop_toTopOf="@id/iv_city"
-                    app:layout_constraintStart_toEndOf="@id/iv_city"/>
-
-                <ImageView
                     android:id="@+id/iv_address"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
                     android:src="@drawable/ic_baseline_location_on_24"
                     android:layout_marginStart="16dp"
-                    app:layout_constraintTop_toBottomOf="@id/iv_city"
+                    app:layout_constraintTop_toBottomOf="@id/iv_user_name"
                     app:layout_constraintStart_toStartOf="parent"/>
 
                 <TextView
@@ -178,7 +155,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="16dp"
                     android:layout_marginTop="3dp"
-                    tools:text="Jl. Menganti"
+                    tools:text="Jl. Menganti, Surabaya"
                     android:textSize="14sp"
                     android:fontFamily="@font/poppins"
                     android:textColor="@color/black"

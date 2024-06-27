@@ -19,6 +19,9 @@
             android:name=".view.vendor.galeri.GaleriActivity"
             android:exported="false" />
         <activity
+            android:name=".view.user.detailvendor.GaleriVendorActivity"
+            android:exported="false" />
+        <activity
             android:name=".view.vendor.menu.kategori.EditKategoriActivity"
             android:exported="false" />
         <activity

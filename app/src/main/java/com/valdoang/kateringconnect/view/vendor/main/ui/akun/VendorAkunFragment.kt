@@ -34,7 +34,6 @@ class VendorAkunFragment : Fragment() {
     private val binding get() = _binding!!
     private lateinit var tvVendorStar: TextView
     private lateinit var tvName: TextView
-    private lateinit var tvCity: TextView
     private lateinit var tvAddress: TextView
     private lateinit var tvNoPhone: TextView
     private lateinit var ivVendorAkun: ImageView
@@ -57,7 +56,6 @@ class VendorAkunFragment : Fragment() {
 
         tvVendorStar = binding.tvVendorStar
         tvName = binding.tvVendorAkunName
-        tvCity = binding.tvCity
         tvAddress = binding.tvAddress
         tvNoPhone = binding.tvNoPhone
         ivVendorAkun = binding.ivVendorAkun
@@ -115,15 +113,14 @@ class VendorAkunFragment : Fragment() {
 
                 Glide.with(this).load(foto).error(R.drawable.default_vendor_profile).into(ivVendorAkun)
                 tvName.text = nama
-                tvCity.text = kota
-                tvAddress.text = alamat
+                tvAddress.text = getString(R.string.tv_address_city, alamat, kota)
                 tvNoPhone.text = telepon
             }
         }
     }
 
     private fun setupAction() {
-        binding.cvStar.setOnClickListener {
+        binding.clStar.setOnClickListener {
             val intent = Intent(requireContext(), NilaiActivity::class.java)
             intent.putExtra(Cons.EXTRA_ID, vendorId)
             startActivity(intent)

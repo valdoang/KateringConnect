@@ -2,10 +2,10 @@ package com.valdoang.kateringconnect.view.user.detailvendor
 
 import android.content.Intent
 import android.os.Bundle
-import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.google.firebase.auth.FirebaseAuth
@@ -13,9 +13,10 @@ import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.valdoang.kateringconnect.R
-import com.valdoang.kateringconnect.adapter.GalleryAdapter
-import com.valdoang.kateringconnect.databinding.FragmentVendorAkunBinding
-import com.valdoang.kateringconnect.model.Gallery
+import com.valdoang.kateringconnect.adapter.KategoriMenuAdapter
+import com.valdoang.kateringconnect.databinding.ActivityDetailVendorBinding
+import com.valdoang.kateringconnect.model.KategoriMenu
+import com.valdoang.kateringconnect.model.Menu
 import com.valdoang.kateringconnect.model.Star
 import com.valdoang.kateringconnect.utils.Cons
 import com.valdoang.kateringconnect.utils.roundOffDecimal
@@ -24,28 +25,26 @@ import com.valdoang.kateringconnect.view.both.chat.RoomChatActivity
 import com.valdoang.kateringconnect.view.both.nilai.NilaiActivity
 
 class DetailVendorActivity : AppCompatActivity() {
-    private lateinit var binding: FragmentVendorAkunBinding
+    private lateinit var binding: ActivityDetailVendorBinding
     private lateinit var firebaseAuth: FirebaseAuth
     private var db = Firebase.firestore
     private lateinit var tvVendorStar: TextView
     private lateinit var tvName: TextView
-    private lateinit var tvCity: TextView
     private lateinit var tvAddress: TextView
     private lateinit var tvNoPhone: TextView
     private lateinit var ivVendorAkun: ImageView
-    private lateinit var recyclerView: RecyclerView
     private lateinit var starList: ArrayList<Star>
-    private lateinit var galleryList: ArrayList<Gallery>
-    private lateinit var galleryAdapter: GalleryAdapter
     private var foto: String? = null
     private var nama: String? = null
     private var vendorId: String? = null
     private var totalNilai = 0.0
+    private lateinit var recyclerView: RecyclerView
+    private var kategoriMenuList: ArrayList<KategoriMenu> = ArrayList()
+    private lateinit var kategoriMenuAdapter: KategoriMenuAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        //BIKIN XML BARU DETAILVENDORACTIVITY.XML
-        binding = FragmentVendorAkunBinding.inflate(layoutInflater)
+        binding = ActivityDetailVendorBinding.inflate(layoutInflater)
         setContentView(binding.root)
         supportActionBar?.hide()
 
@@ -53,27 +52,17 @@ class DetailVendorActivity : AppCompatActivity() {
 
         firebaseAuth = Firebase.auth
         starList = arrayListOf()
-        galleryList = arrayListOf()
 
         tvVendorStar = binding.tvVendorStar
         tvName = binding.tvVendorAkunName
-        tvCity = binding.tvCity
         tvAddress = binding.tvAddress
         tvNoPhone = binding.tvNoPhone
         ivVendorAkun = binding.ivVendorAkun
 
         setupAccount()
-        //setupView()
+        setupView()
+        setupMenu()
         setupAction()
-        hideUI()
-    }
-
-    private fun hideUI() {
-        binding.titleVendorAkun.visibility = View.GONE
-        binding.cvMenu.visibility = View.GONE
-        binding.cvGaleri.visibility = View.GONE
-        binding.cvEditProfile.visibility = View.GONE
-        binding.cvLogout.visibility = View.GONE
     }
 
     private fun setupAccount() {
@@ -119,54 +108,53 @@ class DetailVendorActivity : AppCompatActivity() {
 
                 Glide.with(applicationContext).load(foto).error(R.drawable.default_vendor_profile).into(ivVendorAkun)
                 tvName.text = nama
-                tvCity.text = kota
-                tvAddress.text = alamat
+                tvAddress.text = getString(R.string.tv_address_city, alamat, kota)
                 tvNoPhone.text = telepon
             }
         }
-
-        /*val galleryRef = db.collection("gallery").whereEqualTo("userId", vendorId)
-        galleryRef.addSnapshotListener{ snapshot,_ ->
-            if (snapshot != null) {
-                galleryList.clear()
-                for (data in snapshot.documents) {
-                    val gallery: Gallery? = data.toObject(Gallery::class.java)
-                    if (gallery != null) {
-                        gallery.id = data.id
-                        galleryList.add(gallery)
-                    }
-                }
-
-                galleryAdapter.setItems(galleryList)
-                galleryAdapter.setOnItemClickCallback(object :
-                    GalleryAdapter.OnItemClickCallback {
-                    override fun onItemClicked(data: Gallery) {
-                        val args = Bundle()
-                        args.putString("id", data.id)
-                        val newFragment: DialogFragment = DetailGaleriFragment()
-                        newFragment.arguments = args
-                        newFragment.show(supportFragmentManager, "TAG")
-                    }
-                })
-            }
-        }*/
     }
 
-    /*private fun setupView() {
-        recyclerView = binding.rvVendorGaleri
-        recyclerView.layoutManager = GridLayoutManager(this,2)
+    private fun setupMenu() {
+        val kategoriMenuRef = db.collection("user").document(vendorId!!).collection("kategoriMenu")
+        kategoriMenuRef.get().addOnSuccessListener { snapshot ->
+            if (snapshot != null) {
+                kategoriMenuList.clear()
+                for (data in snapshot.documents) {
+                    val kategoriMenu: KategoriMenu? = data.toObject(KategoriMenu::class.java)
+                    if (kategoriMenu != null) {
+                        val menuRef = kategoriMenuRef.document(data.id).collection("menu")
+                        menuRef.get().addOnSuccessListener {
+                            val menuSize = it.size()
+                            if (menuSize > 0) {
+                                kategoriMenu.id = data.id
+                                kategoriMenuList.add(kategoriMenu)
+                                kategoriMenuAdapter.setItems(kategoriMenuList)
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
 
-        galleryAdapter = GalleryAdapter(this)
-        recyclerView.adapter = galleryAdapter
-        galleryAdapter.setItems(galleryList)
-    }*/
-
+    private fun setupView() {
+        recyclerView = binding.rvMenu
+        recyclerView.layoutManager = LinearLayoutManager(this)
+        kategoriMenuAdapter = KategoriMenuAdapter(this, vendorId!!)
+        recyclerView.adapter = kategoriMenuAdapter
+    }
     private fun setupAction() {
         binding.ibBack.setOnClickListener {
             finish()
         }
 
-        binding.cvStar.setOnClickListener {
+        binding.clGaleri.setOnClickListener {
+            val intent = Intent(this, GaleriVendorActivity::class.java)
+            intent.putExtra(Cons.EXTRA_ID, vendorId)
+            startActivity(intent)
+        }
+
+        binding.clStar.setOnClickListener {
             val intent = Intent(this, NilaiActivity::class.java)
             intent.putExtra(Cons.EXTRA_ID, vendorId)
             startActivity(intent)

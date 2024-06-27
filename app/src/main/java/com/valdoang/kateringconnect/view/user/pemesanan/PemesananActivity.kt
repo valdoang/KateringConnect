@@ -34,7 +34,6 @@ class PemesananActivity : AppCompatActivity(), TimePickerFragment.DialogTimeList
     private lateinit var tvMenuDesc: TextView
     private lateinit var tvMenuPrice: TextView
     private lateinit var tvUserName: TextView
-    private lateinit var tvUserCity: TextView
     private lateinit var tvUserAddress: TextView
     private lateinit var tvUserNoPhone: TextView
     private lateinit var tvDate: TextView
@@ -51,6 +50,7 @@ class PemesananActivity : AppCompatActivity(), TimePickerFragment.DialogTimeList
     private var menuDesc = ""
     private var fotoUser = ""
     private var fotoVendor = ""
+    private var kotaUser = ""
     private var alamatUser = ""
     private var alamatVendor = ""
     private val dateFormat = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
@@ -79,7 +79,6 @@ class PemesananActivity : AppCompatActivity(), TimePickerFragment.DialogTimeList
         tvMenuDesc = binding.tvMenuDesc
         tvMenuPrice = binding.tvMenuPrice
         tvUserName = binding.tvUserName
-        tvUserCity = binding.tvCity
         tvUserAddress = binding.tvAddress
         tvUserNoPhone = binding.tvNoPhone
         tvDate = binding.tvDate
@@ -124,13 +123,12 @@ class PemesananActivity : AppCompatActivity(), TimePickerFragment.DialogTimeList
                             userRef.get().addOnSuccessListener { document1 ->
                                 if (document1 != null) {
                                     val nama = document1.data?.get("nama").toString()
-                                    val kota = document1.data?.get("kota").toString()
+                                    kotaUser = document1.data?.get("kota").toString()
                                     alamatUser = document1.data?.get("alamat").toString()
                                     val telepon = document1.data?.get("telepon").toString()
                                     fotoUser = document1.data?.get("foto").toString()
                                     tvUserName.text = nama
-                                    tvUserCity.text = kota
-                                    tvUserAddress.text = alamatUser
+                                    tvUserAddress.text = getString(R.string.tv_address_city, alamatUser, kotaUser)
                                     tvUserNoPhone.text = telepon
 
                                     //Hitung Ongkos Kirim
@@ -200,7 +198,7 @@ class PemesananActivity : AppCompatActivity(), TimePickerFragment.DialogTimeList
         binding.btnPesan.setOnClickListener {
             val userId = firebaseAuth.currentUser!!.uid
             val userNama = tvUserName.text
-            val userKota = tvUserCity.text
+            val userKota = kotaUser
             val userAlamat = tvUserAddress.text
             val userTelepon = tvUserNoPhone.text
 

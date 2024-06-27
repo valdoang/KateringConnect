@@ -2,24 +2,18 @@ package com.valdoang.kateringconnect.adapter
 
 import android.annotation.SuppressLint
 import android.content.Context
-import android.content.Intent
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
-import com.valdoang.kateringconnect.R
 import com.valdoang.kateringconnect.databinding.ItemKategoriMenuBinding
 import com.valdoang.kateringconnect.model.KategoriMenu
 import com.valdoang.kateringconnect.model.Menu
-import com.valdoang.kateringconnect.utils.Cons
-import com.valdoang.kateringconnect.view.vendor.menu.kategori.EditKategoriActivity
 
 class KategoriMenuAdapter(
-    private val context: Context
+    private val context: Context, private val vendorId: String
 ): RecyclerView.Adapter<KategoriMenuAdapter.MyViewHolder>() {
 
     private val kategoriMenuList = ArrayList<KategoriMenu>()
@@ -37,30 +31,17 @@ class KategoriMenuAdapter(
         RecyclerView.ViewHolder(binding.root) {
         fun bind(kategoriMenu: KategoriMenu) {
             binding.apply {
-                tvNamaKategori.text = kategoriMenu.nama
-
-                ivExpandMore.setOnClickListener {
-                    rvMenu.visibility = View.VISIBLE
-                    ivExpandMore.visibility = View.GONE
-                    ivExpandLess.visibility = View.VISIBLE
-                }
-
-                ivExpandLess.setOnClickListener {
-                    rvMenu.visibility = View.GONE
-                    ivExpandMore.visibility = View.VISIBLE
-                    ivExpandLess.visibility = View.GONE
-                }
+                kategoriName.text = kategoriMenu.nama
 
                 //Setup View
                 val recyclerView: RecyclerView = rvMenu
-                val menuAdapter = MenuAdapter(context, kategoriMenu.id!!)
+                val menuAdapter = MenuAdapter(context)
                 recyclerView.layoutManager = LinearLayoutManager(context)
                 recyclerView.adapter = menuAdapter
                 menuAdapter.setItems(menuList)
 
                 //Setup Data
-                val userId = FirebaseAuth.getInstance().currentUser!!.uid
-                val ref = db.collection("user").document(userId).collection("kategoriMenu").document(kategoriMenu.id!!).collection("menu")
+                val ref = db.collection("user").document(vendorId).collection("kategoriMenu").document(kategoriMenu.id!!).collection("menu")
                 ref.addSnapshotListener { snapshot, _ ->
                     if (snapshot != null) {
                         menuList.clear()
@@ -76,16 +57,8 @@ class KategoriMenuAdapter(
                             menu.nama
                         }
 
-                        tvJumlahHidangan.text = context.getString(R.string.jumlah_hidangan, menuList.size.toString())
-
                         menuAdapter.setItems(menuList)
                     }
-                }
-
-                tvEditKategori.setOnClickListener {
-                    val intent = Intent(context, EditKategoriActivity::class.java)
-                    intent.putExtra(Cons.EXTRA_ID, kategoriMenu.id)
-                    context.startActivity(intent)
                 }
             }
         }

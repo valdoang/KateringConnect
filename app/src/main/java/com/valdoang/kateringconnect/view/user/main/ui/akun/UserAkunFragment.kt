@@ -25,7 +25,6 @@ class UserAkunFragment : Fragment() {
     private var db = Firebase.firestore
     private val binding get() = _binding!!
     private lateinit var tvName: TextView
-    private lateinit var tvCity: TextView
     private lateinit var tvAddress: TextView
     private lateinit var tvNoPhone: TextView
     private lateinit var ivUserAkun: ImageView
@@ -41,7 +40,6 @@ class UserAkunFragment : Fragment() {
         firebaseAuth = FirebaseAuth.getInstance()
 
         tvName = binding.tvUserAkunName
-        tvCity = binding.tvCity
         tvAddress = binding.tvAddress
         tvNoPhone = binding.tvNoPhone
         ivUserAkun= binding.ivUserAkun
@@ -65,8 +63,7 @@ class UserAkunFragment : Fragment() {
 
                 Glide.with(this).load(foto).error(R.drawable.default_profile).into(ivUserAkun)
                 tvName.text = nama
-                tvCity.text = kota
-                tvAddress.text = alamat
+                tvAddress.text = getString(R.string.tv_address_city, alamat, kota)
                 tvNoPhone.text = telepon
             }
         }

@@ -28,7 +28,6 @@ class DetailPesananActivity : AppCompatActivity() {
     private lateinit var tvMenuHarga: TextView
     private lateinit var tvMenuDesc: TextView
     private lateinit var tvUserNama: TextView
-    private lateinit var tvUserKota: TextView
     private lateinit var tvUserAlamat: TextView
     private lateinit var tvUserTelepon: TextView
     private lateinit var tvPesananId: TextView
@@ -59,7 +58,6 @@ class DetailPesananActivity : AppCompatActivity() {
         tvMenuHarga = binding.tvMenuPrice
         tvMenuDesc = binding.tvMenuDesc
         tvUserNama = binding.tvUserName
-        tvUserKota = binding.tvCity
         tvUserAlamat = binding.tvAddress
         tvUserTelepon = binding.tvNoPhone
         tvPesananId = binding.tvIdValue
@@ -109,8 +107,7 @@ class DetailPesananActivity : AppCompatActivity() {
                     tvMenuDesc.text = menuDesc
 
                     tvUserNama.text = userNama
-                    tvUserKota.text = userKota
-                    tvUserAlamat.text = userAlamat
+                    tvUserAlamat.text = getString(R.string.tv_address_city, userAlamat, userKota)
                     tvUserTelepon.text = userTelepon
 
                     tvVendorNama.text = vendorNama
