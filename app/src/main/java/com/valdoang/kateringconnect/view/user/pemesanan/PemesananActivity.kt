@@ -63,6 +63,7 @@ class PemesananActivity : AppCompatActivity(), TimePickerFragment.DialogTimeList
     private var ongkir = 0L
     private var subtotal = 0L
     private var totalPembayaran = 0L
+    //TODO: 4. MENERIMA NILAI DARI CUSTOM MENU ACTIVITY
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

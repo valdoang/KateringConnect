@@ -16,6 +16,9 @@
         android:theme="@style/Theme.KateringConnect"
         tools:targetApi="31">
         <activity
+            android:name=".view.user.detailvendor.CustomMenuActivity"
+            android:exported="false" />
+        <activity
             android:name=".view.vendor.galeri.GaleriActivity"
             android:exported="false" />
         <activity

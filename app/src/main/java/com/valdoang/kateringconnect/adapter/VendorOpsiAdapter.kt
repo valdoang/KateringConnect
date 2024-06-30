@@ -5,58 +5,59 @@ import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
-import com.valdoang.kateringconnect.databinding.ItemMenuBinding
-import com.valdoang.kateringconnect.model.Menu
+import com.valdoang.kateringconnect.R
+import com.valdoang.kateringconnect.databinding.ItemVendorOpsiBinding
+import com.valdoang.kateringconnect.model.Opsi
 import com.valdoang.kateringconnect.utils.withCurrencyFormat
 
-class MenuAdapter(
+class VendorOpsiAdapter(
     private val context: Context
-) : RecyclerView.Adapter<MenuAdapter.MyViewHolder>() {
+)    : RecyclerView.Adapter<VendorOpsiAdapter.MyViewHolder>() {
 
-    private val menuList = ArrayList<Menu>()
+    private val opsiList = ArrayList<Opsi>()
     private var onItemClickCallback: OnItemClickCallback? = null
 
     @SuppressLint("NotifyDataSetChanged")
-    fun setItems(itemList: List<Menu>) {
-        menuList.clear()
-        menuList.addAll(itemList)
+    fun setItems(itemList: List<Opsi>) {
+        opsiList.clear()
+        opsiList.addAll(itemList)
         notifyDataSetChanged()
     }
+
 
     fun setOnItemClickCallback(onItemClickCallback: OnItemClickCallback) {
         this.onItemClickCallback = onItemClickCallback
     }
 
-    inner class MyViewHolder(private val binding: ItemMenuBinding) :
+    inner class MyViewHolder(private val binding: ItemVendorOpsiBinding) :
         RecyclerView.ViewHolder(binding.root) {
-        fun bind(menu: Menu) {
+        fun bind(opsi: Opsi) {
             binding.root.setOnClickListener {
-                onItemClickCallback?.onItemClicked(menu)
+                onItemClickCallback?.onItemClicked(opsi)
             }
+
             binding.apply {
-                Glide.with(context).load(menu.foto).into(ivMenu)
-                tvMenuName.text = menu.nama
-                tvMenuDesc.text = menu.keterangan
-                tvMenuPrice.text = menu.harga?.withCurrencyFormat()
+                tvNamaOpsi.text = opsi.nama
+                tvHargaOpsi.text = context.getString(R.string.harga_opsi, opsi.harga?.withCurrencyFormat())
             }
         }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
-        val itemView = ItemMenuBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        val itemView =
+            ItemVendorOpsiBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return MyViewHolder(itemView)
     }
 
     override fun getItemCount(): Int {
-        return menuList.size
+        return opsiList.size
     }
 
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
-        holder.bind(menuList[position])
+        holder.bind(opsiList[position])
     }
 
     interface OnItemClickCallback {
-        fun onItemClicked(data: Menu)
+        fun onItemClicked(data: Opsi)
     }
 }

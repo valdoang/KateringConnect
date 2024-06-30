@@ -219,4 +219,6 @@
     <string name="hapus_grup_opsi">Hapus Grup Opsi</string>
     <string name="galeri_dapur">Galeri Dapur</string>
     <string name="tv_vendor_galeri">Galeri dapur</string>
+    <string name="opsi_price">+%1$s </string>
+    <string name="btn_pesan_menu">Pesan - %1$s </string>
 </resources>

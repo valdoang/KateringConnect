@@ -2,25 +2,22 @@ package com.valdoang.kateringconnect.adapter
 
 import android.annotation.SuppressLint
 import android.content.Context
-import android.content.Intent
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
+import android.widget.EditText
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
-import com.valdoang.kateringconnect.R
 import com.valdoang.kateringconnect.databinding.ItemGrupOpsiBinding
 import com.valdoang.kateringconnect.model.GrupOpsi
 import com.valdoang.kateringconnect.model.Opsi
-import com.valdoang.kateringconnect.utils.Cons
-import com.valdoang.kateringconnect.view.vendor.menu.grupopsi.EditGrupOpsiActivity
-import com.valdoang.kateringconnect.view.vendor.menu.grupopsi.OpsiConnectMenuActivity
 
 class GrupOpsiAdapter(
-    private val context: Context
+    private val context: Context, private val vendorId: String, private val opsiListCheck: ArrayList<Opsi>,
+    private val btnPesan: Button, private val grupOpsiId: ArrayList<String>,
+    private var menuPrice: String, private var totalJumlah: EditText
 ) : RecyclerView.Adapter<GrupOpsiAdapter.MyViewHolder>() {
 
     private val grupOpsiList = ArrayList<GrupOpsi>()
@@ -38,36 +35,19 @@ class GrupOpsiAdapter(
         RecyclerView.ViewHolder(binding.root) {
         fun bind(grupOpsi: GrupOpsi) {
             binding.apply {
-                tvNamaGrupOpsi.text = grupOpsi.nama
-                tvJumlahTersambung.text = context.getString(
-                    R.string.jumlah_hidangan_tersambung,
-                    grupOpsi.menuId?.size ?: "0"
-                )
-
-                ivExpandMore.setOnClickListener {
-                    rvOpsiAktif.visibility = View.VISIBLE
-                    ivExpandMore.visibility = View.GONE
-                    ivExpandLess.visibility = View.VISIBLE
-                }
-
-                ivExpandLess.setOnClickListener {
-                    rvOpsiAktif.visibility = View.GONE
-                    ivExpandMore.visibility = View.VISIBLE
-                    ivExpandLess.visibility = View.GONE
-                }
+                grupOpsiName.text = grupOpsi.nama
 
                 //Setup View
-                val recyclerView: RecyclerView = rvOpsiAktif
-                val opsiAktifAdapter = OpsiAktifAdapter(grupOpsi.id!!)
+                val recyclerView: RecyclerView = rvOpsi
+                val opsiAdapter = OpsiAdapter(context, opsiListCheck, btnPesan, grupOpsiId, menuPrice, totalJumlah)
                 recyclerView.layoutManager = LinearLayoutManager(context)
-                recyclerView.adapter = opsiAktifAdapter
-                opsiAktifAdapter.setItems(opsiList)
+                recyclerView.adapter = opsiAdapter
+                opsiAdapter.setItems(opsiList)
 
                 //Setup Data
-                val userId = FirebaseAuth.getInstance().currentUser!!.uid
-                val ref = db.collection("user").document(userId).collection("grupOpsi")
+                val ref = db.collection("user").document(vendorId).collection("grupOpsi")
                     .document(grupOpsi.id!!).collection("opsi")
-                ref.addSnapshotListener { snapshot, _ ->
+                ref.get().addOnSuccessListener { snapshot ->
                     if (snapshot != null) {
                         opsiList.clear()
                         for (data in snapshot.documents) {
@@ -82,21 +62,8 @@ class GrupOpsiAdapter(
                             opsi.harga
                         }
 
-                        opsiAktifAdapter.setItems(opsiList)
+                        opsiAdapter.setItems(opsiList)
                     }
-                }
-
-                tvEditGrupOpsi.setOnClickListener {
-                    val intent = Intent(context, EditGrupOpsiActivity::class.java)
-                    intent.putExtra(Cons.EXTRA_ID, grupOpsi.id)
-                    context.startActivity(intent)
-                }
-
-                tvJumlahTersambung.setOnClickListener {
-                    val intent = Intent(context, OpsiConnectMenuActivity::class.java)
-                    intent.putExtra(Cons.EXTRA_ID, grupOpsi.id)
-                    intent.putExtra(Cons.EXTRA_NAMA, grupOpsi.nama)
-                    context.startActivity(intent)
                 }
             }
         }

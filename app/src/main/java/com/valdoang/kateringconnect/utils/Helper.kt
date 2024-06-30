@@ -78,6 +78,21 @@ fun EditText.textChangedListener(onTextChanged: (String) -> Unit) {
     })
 }
 
+fun EditText.allChangedListener(onTextChanged: (String) -> Unit) {
+    this.addTextChangedListener(object : TextWatcher {
+        override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+            onTextChanged.invoke(s.toString())
+        }
+
+        override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+            onTextChanged.invoke(s.toString())
+        }
+
+        override fun afterTextChanged(editable: Editable?) {
+        }
+    })
+}
+
 fun EditText.beforeChangedListener(button: Button) {
     this.addTextChangedListener(object : TextWatcher {
         override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {

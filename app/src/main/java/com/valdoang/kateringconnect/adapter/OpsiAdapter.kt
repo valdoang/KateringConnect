@@ -3,19 +3,30 @@ package com.valdoang.kateringconnect.adapter
 import android.annotation.SuppressLint
 import android.content.Context
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
+import android.widget.CompoundButton
+import android.widget.EditText
 import androidx.recyclerview.widget.RecyclerView
 import com.valdoang.kateringconnect.R
 import com.valdoang.kateringconnect.databinding.ItemOpsiBinding
 import com.valdoang.kateringconnect.model.Opsi
-import com.valdoang.kateringconnect.utils.withCurrencyFormat
+import com.valdoang.kateringconnect.utils.allChangedListener
+import com.valdoang.kateringconnect.utils.withNumberingFormat
 
 class OpsiAdapter(
-    private val context: Context
-)    : RecyclerView.Adapter<OpsiAdapter.MyViewHolder>() {
+    private val context: Context, private val opsiListCheck: ArrayList<Opsi>,
+    private val btnPesan: Button, private val grupOpsiId: ArrayList<String>,
+    private val menuPrice: String, private val etJumlah: EditText
+) : RecyclerView.Adapter<OpsiAdapter.MyViewHolder>() {
 
     private val opsiList = ArrayList<Opsi>()
-    private var onItemClickCallback: OnItemClickCallback? = null
+    private var selectedPosition = -1
+    private var subtotal = menuPrice.toLong()
+    private var total = 0L
+    private var jumlahTotal = etJumlah.text.toString().toLong()
+    //TODO: 1. ERROR KONDISI EDIT TEXT KETIKA BERNILAI ""
 
     @SuppressLint("NotifyDataSetChanged")
     fun setItems(itemList: List<Opsi>) {
@@ -24,21 +35,66 @@ class OpsiAdapter(
         notifyDataSetChanged()
     }
 
-
-    fun setOnItemClickCallback(onItemClickCallback: OnItemClickCallback) {
-        this.onItemClickCallback = onItemClickCallback
-    }
-
     inner class MyViewHolder(private val binding: ItemOpsiBinding) :
         RecyclerView.ViewHolder(binding.root) {
+        @SuppressLint("NotifyDataSetChanged")
         fun bind(opsi: Opsi) {
-            binding.root.setOnClickListener {
-                onItemClickCallback?.onItemClicked(opsi)
-            }
-
             binding.apply {
-                tvNamaOpsi.text = opsi.nama
-                tvHargaOpsi.text = context.getString(R.string.harga_opsi, opsi.harga?.withCurrencyFormat())
+                //TODO: 2. TAMBAHKAN LOGO CENTANG HIJAU / BERHASIL KONDISI KETIKA SELURUH OPSI TELAH TERPENUHI
+                rbNamaGrupOpsi.text = opsi.nama
+
+                val basicPrice = menuPrice.toLong() * jumlahTotal
+                btnPesan.text = context.getString(R.string.btn_pesan_menu, basicPrice.withNumberingFormat())
+
+                if (opsi.harga == "0") {
+                    tvPrice.visibility = View.GONE
+                } else {
+                    tvPrice.text = context.getString(R.string.opsi_price, opsi.harga?.withNumberingFormat())
+                }
+
+                if (position != selectedPosition) {
+                    rbNamaGrupOpsi.isChecked = false
+                    opsiListCheck.remove(opsi)
+                    subtotal = menuPrice.toLong()
+                } else {
+                    rbNamaGrupOpsi.isChecked = true
+                    opsiListCheck.add(opsi)
+                    subtotal = menuPrice.toLong()
+                }
+
+                for (i in opsiListCheck) {
+                    subtotal += i.harga!!.toLong()
+                    total = subtotal * jumlahTotal
+                    btnPesan.text = context.getString(R.string.btn_pesan_menu, total.withNumberingFormat())
+                }
+
+                etJumlah.allChangedListener {
+                    jumlahTotal = it.toLong()
+                    subtotal = menuPrice.toLong()
+                    btnPesan.text = context.getString(R.string.btn_pesan_menu, total.withNumberingFormat())
+                    if (opsiListCheck.size <= 0) {
+                        total = subtotal * jumlahTotal
+                        btnPesan.text = context.getString(R.string.btn_pesan_menu, total.withNumberingFormat())
+                    } else {
+                        for (i in opsiListCheck) {
+                            subtotal += i.harga!!.toLong()
+                            total = subtotal * jumlahTotal
+                            btnPesan.text = context.getString(R.string.btn_pesan_menu, total.withNumberingFormat())
+                        }
+                    }
+                }
+
+                btnPesan.isEnabled = grupOpsiId.size == opsiListCheck.size
+
+                val checkListener =
+                    CompoundButton.OnCheckedChangeListener { _, isChecked ->
+                       if (isChecked) {
+                           selectedPosition = adapterPosition
+                           notifyDataSetChanged()
+                       }
+                    }
+
+                rbNamaGrupOpsi.setOnCheckedChangeListener(checkListener)
             }
         }
     }
@@ -55,9 +111,5 @@ class OpsiAdapter(
 
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
         holder.bind(opsiList[position])
-    }
-
-    interface OnItemClickCallback {
-        fun onItemClicked(data: Opsi)
     }
 }

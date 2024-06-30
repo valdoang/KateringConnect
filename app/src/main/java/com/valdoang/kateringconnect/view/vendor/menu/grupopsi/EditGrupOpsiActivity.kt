@@ -14,7 +14,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.auth
 import com.google.firebase.firestore.firestore
 import com.valdoang.kateringconnect.R
-import com.valdoang.kateringconnect.adapter.OpsiAdapter
+import com.valdoang.kateringconnect.adapter.VendorOpsiAdapter
 import com.valdoang.kateringconnect.databinding.ActivityEditGrupOpsiBinding
 import com.valdoang.kateringconnect.model.KategoriMenu
 import com.valdoang.kateringconnect.model.Opsi
@@ -32,7 +32,7 @@ class EditGrupOpsiActivity : AppCompatActivity() {
     private lateinit var opsiList: ArrayList<Opsi>
     private lateinit var opsiListTemp: ArrayList<Opsi>
     private lateinit var recyclerView: RecyclerView
-    private lateinit var opsiAdapter: OpsiAdapter
+    private lateinit var vendorOpsiAdapter: VendorOpsiAdapter
     private lateinit var btnAddOpsi: Button
     private lateinit var btnSimpan: Button
     private lateinit var tvHapus: TextView
@@ -69,8 +69,8 @@ class EditGrupOpsiActivity : AppCompatActivity() {
     private fun setupView() {
         recyclerView = binding.rvOpsi
         recyclerView.layoutManager = LinearLayoutManager(this)
-        opsiAdapter = OpsiAdapter(this)
-        recyclerView.adapter = opsiAdapter
+        vendorOpsiAdapter = VendorOpsiAdapter(this)
+        recyclerView.adapter = vendorOpsiAdapter
     }
 
     private fun setupData() {
@@ -101,7 +101,7 @@ class EditGrupOpsiActivity : AppCompatActivity() {
                         it.nama
                     }
 
-                    opsiAdapter.setItems(opsiList)
+                    vendorOpsiAdapter.setItems(opsiList)
                 }
             }
         }
@@ -135,7 +135,7 @@ class EditGrupOpsiActivity : AppCompatActivity() {
                 opsi.nama = sNama
                 opsi.harga = sHarga
                 opsiList.add(opsi)
-                opsiAdapter.setItems(opsiList)
+                vendorOpsiAdapter.setItems(opsiList)
                 dialog.dismiss()
             }
 
@@ -149,8 +149,8 @@ class EditGrupOpsiActivity : AppCompatActivity() {
     }
 
     private fun editOpsi() {
-        opsiAdapter.setOnItemClickCallback(object :
-            OpsiAdapter.OnItemClickCallback {
+        vendorOpsiAdapter.setOnItemClickCallback(object :
+            VendorOpsiAdapter.OnItemClickCallback {
             override fun onItemClicked(data: Opsi) {
                 val dialog = BottomSheetDialog(this@EditGrupOpsiActivity)
                 val view = layoutInflater.inflate(R.layout.bottom_sheet_add_opsi, null)
@@ -176,7 +176,7 @@ class EditGrupOpsiActivity : AppCompatActivity() {
                     }
 
                     opsiList.remove(opsiList[listPosition])
-                    opsiAdapter.setItems(opsiList)
+                    vendorOpsiAdapter.setItems(opsiList)
                     dialog.dismiss()
                 }
 
@@ -196,7 +196,7 @@ class EditGrupOpsiActivity : AppCompatActivity() {
                         harga = sHarga
                     }
                     opsiList[listPosition] = updatedList
-                    opsiAdapter.setItems(opsiList)
+                    vendorOpsiAdapter.setItems(opsiList)
                     dialog.dismiss()
 
                 }

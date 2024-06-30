@@ -12,7 +12,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
-import com.valdoang.kateringconnect.adapter.GrupOpsiAdapter
+import com.valdoang.kateringconnect.adapter.VendorGrupOpsiAdapter
 import com.valdoang.kateringconnect.databinding.FragmentGrupOpsiBinding
 import com.valdoang.kateringconnect.model.GrupOpsi
 import com.valdoang.kateringconnect.view.vendor.menu.grupopsi.AddGrupOpsiActivity
@@ -24,7 +24,7 @@ class GrupOpsiFragment : Fragment() {
     private lateinit var firebaseAuth: FirebaseAuth
     private var db = Firebase.firestore
     private lateinit var recyclerView: RecyclerView
-    private lateinit var grupOpsiAdapter: GrupOpsiAdapter
+    private lateinit var vendorGrupOpsiAdapter: VendorGrupOpsiAdapter
     private lateinit var grupOpsiList: ArrayList<GrupOpsi>
 
     override fun onCreateView(
@@ -48,9 +48,9 @@ class GrupOpsiFragment : Fragment() {
         recyclerView = binding.rvGrupOpsi
         recyclerView.layoutManager = LinearLayoutManager(requireContext())
 
-        grupOpsiAdapter = GrupOpsiAdapter(requireContext())
-        recyclerView.adapter = grupOpsiAdapter
-        grupOpsiAdapter.setItems(grupOpsiList)
+        vendorGrupOpsiAdapter = VendorGrupOpsiAdapter(requireContext())
+        recyclerView.adapter = vendorGrupOpsiAdapter
+        vendorGrupOpsiAdapter.setItems(grupOpsiList)
     }
 
     private fun setupData() {
@@ -67,7 +67,7 @@ class GrupOpsiFragment : Fragment() {
                     }
                 }
 
-                grupOpsiAdapter.setItems(grupOpsiList)
+                vendorGrupOpsiAdapter.setItems(grupOpsiList)
             }
         }
     }
