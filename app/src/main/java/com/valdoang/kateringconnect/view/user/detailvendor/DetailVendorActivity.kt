@@ -13,10 +13,8 @@ import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.valdoang.kateringconnect.R
-import com.valdoang.kateringconnect.adapter.ChatAdapter
 import com.valdoang.kateringconnect.adapter.KategoriMenuAdapter
 import com.valdoang.kateringconnect.databinding.ActivityDetailVendorBinding
-import com.valdoang.kateringconnect.model.Chat
 import com.valdoang.kateringconnect.model.KategoriMenu
 import com.valdoang.kateringconnect.model.Star
 import com.valdoang.kateringconnect.utils.Cons

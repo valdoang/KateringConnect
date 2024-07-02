@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:fitsSystemWindows="true">
 
-    <ScrollView
+    <androidx.core.widget.NestedScrollView
         android:id="@+id/scroll_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -16,7 +16,7 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            tools:context=".view.user.detailvendor.CustomMenuActivity">
+            tools:context=".view.user.custommenu.CustomMenuActivity">
 
             <ImageButton
                 android:id="@+id/ib_back"
@@ -48,8 +48,8 @@
                     android:id="@+id/tv_menu_name"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:maxWidth="190dp"
-                    tools:text="Paket 1 aaaaaaaaaaaaaaaaaaaaaaaaa"
+                    android:maxWidth="250dp"
+                    tools:text="Paket 1 aaaaaaaaaa"
                     android:textSize="18sp"
                     android:fontFamily="@font/poppins_bold"
                     android:textColor="@color/black"
@@ -62,12 +62,10 @@
                     android:id="@+id/tv_menu_desc"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:maxWidth="350dp"
+                    android:maxWidth="250dp"
                     tools:text="Paling enak aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
                     android:textSize="16sp"
                     android:fontFamily="@font/poppins"
-                    android:textColor="@color/grey_200"
-                    android:layout_marginTop="16dp"
                     android:layout_marginStart="16dp"
                     android:layout_marginBottom="24dp"
                     app:layout_constraintTop_toBottomOf="@id/tv_menu_name"
@@ -79,7 +77,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:maxWidth="150dp"
-                    tools:text="15.000"
+                    tools:text="150.000"
                     android:textSize="18sp"
                     android:fontFamily="@font/poppins_bold"
                     android:textColor="@color/black"
@@ -93,8 +91,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:maxWidth="160dp"
-                    android:text="Harga dasar"
-                    android:textSize="12sp"
+                    android:text="@string/harga_dasar"
+                    android:textSize="11sp"
                     android:fontFamily="@font/poppins"
                     android:textColor="@color/black"
                     android:layout_marginEnd="16dp"
@@ -121,6 +119,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="16dp"
                     android:layout_marginBottom="16dp"
+                    android:overScrollMode="never"
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintBottom_toBottomOf="parent"
                     tools:listitem="@layout/item_grup_opsi"/>
@@ -143,7 +142,7 @@
                     android:id="@+id/tv_catatan"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Catatan untuk vendor"
+                    android:text="@string/catatan_untuk_vendor"
                     android:textSize="14sp"
                     android:fontFamily="@font/poppins_bold"
                     android:textColor="@color/black"
@@ -151,6 +150,19 @@
                     android:layout_marginStart="16dp"
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintStart_toStartOf="parent"/>
+
+                <TextView
+                    android:id="@+id/tv_tidak_wajib"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/tidak_wajib"
+                    android:textSize="11sp"
+                    android:fontFamily="@font/poppins"
+                    android:textColor="@color/black"
+                    android:layout_marginTop="19dp"
+                    android:layout_marginStart="10dp"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintStart_toEndOf="@id/tv_catatan"/>
 
                 <View
                     android:id="@+id/view_catatan_1"
@@ -166,12 +178,16 @@
                     android:layout_height="wrap_content"
                     android:textSize="12sp"
                     android:fontFamily="@font/poppins"
-                    android:hint="Permintaan anda akan disesuaikan dengan kebijakan vendor"
+                    android:hint="@string/catatan_default"
                     android:background="@android:color/transparent"
+                    android:textColor="@color/black"
+                    android:clickable="true"
+                    android:cursorVisible="false"
+                    android:focusable="false"
+                    android:inputType="none"
                     android:layout_marginTop="16dp"
                     android:layout_marginStart="16dp"
                     android:layout_marginEnd="16dp"
-                    android:inputType="text"
                     app:layout_constraintTop_toBottomOf="@id/view_catatan_1"/>
 
                 <View
@@ -190,6 +206,7 @@
                     android:background="@drawable/border_image_button"
                     android:layout_marginEnd="16dp"
                     android:layout_marginBottom="6dp"
+                    android:visibility="gone"
                     app:tint="@color/orange"
                     app:layout_constraintTop_toBottomOf="@id/view_catatan_2"
                     app:layout_constraintBottom_toBottomOf="parent"
@@ -201,13 +218,17 @@
                     android:layout_height="wrap_content"
                     android:textSize="20sp"
                     android:fontFamily="@font/poppins_bold"
-                    android:text="10"
+                    android:text="@string/min_jumlah"
                     android:background="@android:color/transparent"
+                    android:textColor="@color/black"
+                    android:clickable="true"
+                    android:cursorVisible="false"
+                    android:focusable="false"
+                    android:inputType="none"
                     android:layout_marginTop="48dp"
                     android:layout_marginBottom="48dp"
                     android:layout_marginStart="16dp"
                     android:layout_marginEnd="16dp"
-                    android:inputType="number"
                     app:layout_constraintTop_toBottomOf="@id/view_catatan_2"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -229,7 +250,7 @@
             </androidx.constraintlayout.widget.ConstraintLayout>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
-    </ScrollView>
+    </androidx.core.widget.NestedScrollView>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/cl_button"

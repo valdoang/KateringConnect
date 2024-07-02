@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.CompoundButton
 import android.widget.EditText
+import android.widget.ImageView
 import androidx.recyclerview.widget.RecyclerView
 import com.valdoang.kateringconnect.R
 import com.valdoang.kateringconnect.databinding.ItemOpsiBinding
@@ -18,7 +19,7 @@ import com.valdoang.kateringconnect.utils.withNumberingFormat
 class OpsiAdapter(
     private val context: Context, private val opsiListCheck: ArrayList<Opsi>,
     private val btnPesan: Button, private val grupOpsiId: ArrayList<String>,
-    private val menuPrice: String, private val etJumlah: EditText
+    private val menuPrice: String, private val etJumlah: EditText, private val ivSuccess: ImageView
 ) : RecyclerView.Adapter<OpsiAdapter.MyViewHolder>() {
 
     private val opsiList = ArrayList<Opsi>()
@@ -26,7 +27,6 @@ class OpsiAdapter(
     private var subtotal = menuPrice.toLong()
     private var total = 0L
     private var jumlahTotal = etJumlah.text.toString().toLong()
-    //TODO: 1. ERROR KONDISI EDIT TEXT KETIKA BERNILAI ""
 
     @SuppressLint("NotifyDataSetChanged")
     fun setItems(itemList: List<Opsi>) {
@@ -40,7 +40,6 @@ class OpsiAdapter(
         @SuppressLint("NotifyDataSetChanged")
         fun bind(opsi: Opsi) {
             binding.apply {
-                //TODO: 2. TAMBAHKAN LOGO CENTANG HIJAU / BERHASIL KONDISI KETIKA SELURUH OPSI TELAH TERPENUHI
                 rbNamaGrupOpsi.text = opsi.nama
 
                 val basicPrice = menuPrice.toLong() * jumlahTotal
@@ -89,12 +88,17 @@ class OpsiAdapter(
                 val checkListener =
                     CompoundButton.OnCheckedChangeListener { _, isChecked ->
                        if (isChecked) {
+                           ivSuccess.visibility = View.VISIBLE
                            selectedPosition = adapterPosition
                            notifyDataSetChanged()
                        }
                     }
 
                 rbNamaGrupOpsi.setOnCheckedChangeListener(checkListener)
+
+                if(position == opsiList.size -1){
+                    view.visibility = View.GONE
+                }
             }
         }
     }

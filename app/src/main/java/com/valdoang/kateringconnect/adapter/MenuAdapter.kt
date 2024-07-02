@@ -2,13 +2,18 @@ package com.valdoang.kateringconnect.adapter
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.graphics.ColorMatrix
+import android.graphics.ColorMatrixColorFilter
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.valdoang.kateringconnect.R
 import com.valdoang.kateringconnect.databinding.ItemMenuBinding
 import com.valdoang.kateringconnect.model.Menu
-import com.valdoang.kateringconnect.utils.withCurrencyFormat
+import com.valdoang.kateringconnect.utils.withNumberingFormat
+
 
 class MenuAdapter(
     private val context: Context
@@ -35,10 +40,23 @@ class MenuAdapter(
                 onItemClickCallback?.onItemClicked(menu)
             }
             binding.apply {
+                if (menu.aktif == false) {
+                    val matrix = ColorMatrix()
+                    matrix.setSaturation(0f)
+                    ivMenu.colorFilter = ColorMatrixColorFilter(matrix)
+                    tvTidakTersedia.visibility = View.VISIBLE
+                    tvMenuName.setTextColor(context.resources.getColor(R.color.grey))
+                    tvMenuDesc.visibility =View.GONE
+                    tvMenuPrice.setTextColor(context.resources.getColor(R.color.grey))
+                }
                 Glide.with(context).load(menu.foto).into(ivMenu)
                 tvMenuName.text = menu.nama
                 tvMenuDesc.text = menu.keterangan
-                tvMenuPrice.text = menu.harga?.withCurrencyFormat()
+                tvMenuPrice.text = menu.harga?.withNumberingFormat()
+
+                if(position == menuList.size -1){
+                    view.visibility = View.GONE
+                }
             }
         }
     }

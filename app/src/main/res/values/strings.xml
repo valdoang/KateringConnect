@@ -221,4 +221,14 @@
     <string name="tv_vendor_galeri">Galeri dapur</string>
     <string name="opsi_price">+%1$s </string>
     <string name="btn_pesan_menu">Pesan - %1$s </string>
+    <string name="pilih_1">Pilih 1</string>
+    <string name="harga_dasar">Harga dasar</string>
+    <string name="catatan_untuk_vendor">Catatan untuk vendor</string>
+    <string name="catatan_default">Permintaan anda akan disesuaikan dengan kebijakan vendor</string>
+    <string name="min_jumlah">10</string>
+    <string name="konfirmasi">Konfirmasi</string>
+    <string name="tidak_wajib">Tidak Wajib</string>
+    <string name="jumlah_pesanan">Jumlah Pesanan</string>
+    <string name="min_pesanan">Minimal jumlah pesanan 10 porsi</string>
+    <string name="tidak_tersedia">Tidak tersedia</string>
 </resources>

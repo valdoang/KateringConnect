@@ -3,8 +3,10 @@ package com.valdoang.kateringconnect.adapter
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
+import android.os.Build
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.annotation.RequiresApi
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.firestore.ktx.firestore
@@ -13,7 +15,7 @@ import com.valdoang.kateringconnect.databinding.ItemKategoriMenuBinding
 import com.valdoang.kateringconnect.model.KategoriMenu
 import com.valdoang.kateringconnect.model.Menu
 import com.valdoang.kateringconnect.utils.Cons
-import com.valdoang.kateringconnect.view.user.detailvendor.CustomMenuActivity
+import com.valdoang.kateringconnect.view.user.custommenu.CustomMenuActivity
 
 class KategoriMenuAdapter(
     private val context: Context, private val vendorId: String
@@ -63,12 +65,15 @@ class KategoriMenuAdapter(
                         menuAdapter.setItems(menuList)
                         menuAdapter.setOnItemClickCallback(object :
                             MenuAdapter.OnItemClickCallback {
+                            @RequiresApi(Build.VERSION_CODES.N)
                             override fun onItemClicked(data: Menu) {
-                                val intent = Intent(context, CustomMenuActivity::class.java)
-                                intent.putExtra(Cons.EXTRA_ID, vendorId)
-                                intent.putExtra(Cons.EXTRA_SEC_ID, kategoriMenu.id)
-                                intent.putExtra(Cons.EXTRA_THIRD_ID, data.id)
-                                context.startActivity(intent)
+                                if (data.aktif == true) {
+                                    val intent = Intent(context, CustomMenuActivity::class.java)
+                                    intent.putExtra(Cons.EXTRA_ID, vendorId)
+                                    intent.putExtra(Cons.EXTRA_SEC_ID, kategoriMenu.id)
+                                    intent.putExtra(Cons.EXTRA_THIRD_ID, data.id)
+                                    context.startActivity(intent)
+                                }
                             }
                         })
                     }

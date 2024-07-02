@@ -2,10 +2,12 @@ package com.valdoang.kateringconnect.adapter
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.os.Build
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
+import androidx.annotation.RequiresApi
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.firestore.ktx.firestore
@@ -33,16 +35,16 @@ class GrupOpsiAdapter(
 
     inner class MyViewHolder(private val binding: ItemGrupOpsiBinding) :
         RecyclerView.ViewHolder(binding.root) {
+        @RequiresApi(Build.VERSION_CODES.N)
         fun bind(grupOpsi: GrupOpsi) {
             binding.apply {
                 grupOpsiName.text = grupOpsi.nama
 
                 //Setup View
                 val recyclerView: RecyclerView = rvOpsi
-                val opsiAdapter = OpsiAdapter(context, opsiListCheck, btnPesan, grupOpsiId, menuPrice, totalJumlah)
+                val opsiAdapter = OpsiAdapter(context, opsiListCheck, btnPesan, grupOpsiId, menuPrice, totalJumlah, ivSuccess)
                 recyclerView.layoutManager = LinearLayoutManager(context)
                 recyclerView.adapter = opsiAdapter
-                opsiAdapter.setItems(opsiList)
 
                 //Setup Data
                 val ref = db.collection("user").document(vendorId).collection("grupOpsi")
@@ -62,6 +64,10 @@ class GrupOpsiAdapter(
                             opsi.harga
                         }
 
+                        opsiList.removeIf { opsi ->
+                            opsi.aktif == false
+                        }
+
                         opsiAdapter.setItems(opsiList)
                     }
                 }
@@ -79,6 +85,7 @@ class GrupOpsiAdapter(
         return grupOpsiList.size
     }
 
+    @RequiresApi(Build.VERSION_CODES.N)
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
         holder.bind(grupOpsiList[position])
     }

@@ -1,10 +1,13 @@
-package com.valdoang.kateringconnect.view.user.detailvendor
+package com.valdoang.kateringconnect.view.user.custommenu
 
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.widget.*
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.DialogFragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
@@ -18,9 +21,12 @@ import com.valdoang.kateringconnect.databinding.ActivityCustomMenuBinding
 import com.valdoang.kateringconnect.model.GrupOpsi
 import com.valdoang.kateringconnect.model.Opsi
 import com.valdoang.kateringconnect.utils.Cons
+import com.valdoang.kateringconnect.utils.allChangedListener
 import com.valdoang.kateringconnect.utils.withNumberingFormat
 
-class CustomMenuActivity : AppCompatActivity() {
+@RequiresApi(Build.VERSION_CODES.N)
+class CustomMenuActivity : AppCompatActivity(), EditTextCatatanFragment.GetCatatan,
+    EditTextJumlahFragment.GetJumlah {
     private lateinit var binding: ActivityCustomMenuBinding
     private lateinit var firebaseAuth: FirebaseAuth
     private var db = Firebase.firestore
@@ -33,6 +39,7 @@ class CustomMenuActivity : AppCompatActivity() {
     private lateinit var ibLess: ImageButton
     private lateinit var ibMore: ImageButton
     private lateinit var etJumlah: EditText
+    private lateinit var etCatatan: EditText
     private var vendorId: String? = null
     private var kategoriId: String? = null
     private var menuId: String? = null
@@ -41,6 +48,7 @@ class CustomMenuActivity : AppCompatActivity() {
     private var grupOpsiId: ArrayList<String>? = ArrayList()
     private var menuPrice = ""
     private var grupOpsiList: ArrayList<GrupOpsi> = ArrayList()
+    private var opsiList: ArrayList<Opsi> = ArrayList()
     private var opsiListCheck: ArrayList<Opsi> = ArrayList()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -48,8 +56,6 @@ class CustomMenuActivity : AppCompatActivity() {
         binding = ActivityCustomMenuBinding.inflate(layoutInflater)
         setContentView(binding.root)
         supportActionBar?.hide()
-
-        //TODO: OPSIONAL UI. MENUMPUK IV MENU BERADA PADA STATUS BAR
 
         firebaseAuth = Firebase.auth
 
@@ -66,6 +72,7 @@ class CustomMenuActivity : AppCompatActivity() {
         ibLess = binding.ibLess
         ibMore = binding.ibMore
         etJumlah = binding.etJumlah
+        etCatatan = binding.etCatatan
 
         setupAction()
         setupView()
@@ -89,22 +96,52 @@ class CustomMenuActivity : AppCompatActivity() {
                 tvMenuName.text = menuName
                 tvMenuDesc.text = menuDesc
                 tvMenuPrice.text = menuPrice.withNumberingFormat()
-                if (grupOpsiId == null) {
-                    binding.clGrupOpsi.visibility = View.GONE
-                } else {
-                    for (i in grupOpsiId!!) {
-                        val grupOpsiRef = db.collection("user").document(vendorId!!).collection("grupOpsi").document(i)
-                        grupOpsiRef.get().addOnSuccessListener { snapshot ->
-                            if (snapshot != null) {
-                                val grupOpsiModel = GrupOpsi()
-                                grupOpsiModel.id = i
-                                grupOpsiModel.nama = snapshot.data?.get("nama").toString()
-                                grupOpsiList.add(grupOpsiModel)
+                setupGrupOpsi()
+                hitungTotal()
+            }
+        }
+    }
 
-                                grupOpsiList.sortBy {
-                                    it.nama
+    private fun setupGrupOpsi() {
+        if (grupOpsiId.isNullOrEmpty()) {
+            binding.clGrupOpsi.visibility = View.GONE
+            tvHargaDasar.visibility = View.GONE
+        } else {
+            for (i in grupOpsiId!!) {
+                val grupOpsiRef = db.collection("user").document(vendorId!!).collection("grupOpsi").document(i)
+                grupOpsiRef.get().addOnSuccessListener { snapshot ->
+                    if (snapshot != null) {
+                        val grupOpsiModel = GrupOpsi()
+                        grupOpsiModel.id = i
+                        grupOpsiModel.nama = snapshot.data?.get("nama").toString()
+                        grupOpsiList.add(grupOpsiModel)
+                        Log.d("add", grupOpsiList.toString())
+
+                        grupOpsiList.sortBy {
+                            it.nama
+                        }
+
+                        val opsiRef = grupOpsiRef.collection("opsi")
+                        opsiRef.get().addOnSuccessListener { opsiSnapshot ->
+                            if (opsiSnapshot != null) {
+                                opsiList.clear()
+                                for (data in opsiSnapshot.documents) {
+                                    val opsi: Opsi? = data.toObject(Opsi::class.java)
+                                    if (opsi != null) {
+                                        opsi.id = data.id
+                                        opsiList.add(opsi)
+                                    }
                                 }
 
+                                opsiList.removeIf { opsi ->
+                                    opsi.aktif == false
+                                }
+
+                                if (opsiList.isEmpty()) {
+                                    grupOpsiId!!.remove(i)
+                                    grupOpsiList.remove(grupOpsiModel)
+                                    Log.d("remove", grupOpsiList.toString())
+                                }
                                 grupOpsiAdapter.setItems(grupOpsiList)
                             }
                         }
@@ -122,6 +159,14 @@ class CustomMenuActivity : AppCompatActivity() {
     }
 
     private fun editJumlah() {
+        etJumlah.allChangedListener { jumlah ->
+            if (jumlah.toInt() > 10) {
+                ibLess.visibility = View.VISIBLE
+            } else {
+                ibLess.visibility = View.GONE
+            }
+        }
+
         ibLess.setOnClickListener {
             val jumlah = etJumlah.text.toString().toInt()
             val less = jumlah - 1
@@ -132,6 +177,32 @@ class CustomMenuActivity : AppCompatActivity() {
             val more = jumlah + 1
             etJumlah.setText(more.toString())
         }
+    }
+
+    private fun hitungTotal() {
+        var subtotal = menuPrice.toLong()
+        var total: Long
+        var jumlahTotal = etJumlah.text.toString().toLong()
+
+        total = subtotal * jumlahTotal
+        btnPesan.text = getString(R.string.btn_pesan_menu, total.withNumberingFormat())
+
+        etJumlah.allChangedListener {
+            jumlahTotal = it.toLong()
+            subtotal = menuPrice.toLong()
+            if (opsiListCheck.size <= 0) {
+                total = subtotal * jumlahTotal
+                btnPesan.text = getString(R.string.btn_pesan_menu, total.withNumberingFormat())
+            } else {
+                for (i in opsiListCheck) {
+                    subtotal += i.harga!!.toLong()
+                    total = subtotal * jumlahTotal
+                    btnPesan.text = getString(R.string.btn_pesan_menu, total.withNumberingFormat())
+                }
+            }
+        }
+
+        btnPesan.isEnabled = grupOpsiId?.size == opsiListCheck.size
     }
 
     private fun pesan() {
@@ -145,5 +216,29 @@ class CustomMenuActivity : AppCompatActivity() {
         binding.ibBack.setOnClickListener {
             finish()
         }
+        etCatatan.setOnClickListener {
+            val args = Bundle()
+            val sCatatan = etCatatan.text.toString().trim()
+            args.putString("catatan", sCatatan)
+            val dialog: DialogFragment = EditTextCatatanFragment()
+            dialog.arguments = args
+            dialog.show(this.supportFragmentManager, "ediTextCatatanDialog")
+        }
+        etJumlah.setOnClickListener {
+            val args = Bundle()
+            val sJumlah = etJumlah.text.toString().trim()
+            args.putString("jumlah", sJumlah)
+            val dialog: DialogFragment = EditTextJumlahFragment()
+            dialog.arguments = args
+            dialog.show(this.supportFragmentManager, "ediTextJumlahDialog")
+        }
+    }
+
+    override fun getCatatan(catatan: String) {
+        etCatatan.setText(catatan)
+    }
+
+    override fun getJumlah(jumlah: String) {
+        etJumlah.setText(jumlah)
     }
 }
