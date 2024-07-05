@@ -22,6 +22,8 @@ import com.valdoang.kateringconnect.view.user.pemesanan.PemesananActivity
 import com.valdoang.kateringconnect.view.user.tambahpesanan.TambahPesananFragment
 
 class DetailRiwayatPemesananActivity : AppCompatActivity() {
+    //TODO: 6. Menampilkan Detail Riwayat Pemesanan
+
     private lateinit var binding: ActivityDetailPesananRiwayatBinding
     private lateinit var firebaseAuth: FirebaseAuth
     private var db = Firebase.firestore

@@ -22,6 +22,7 @@ import com.valdoang.kateringconnect.view.both.chat.ChatActivity
 import com.valdoang.kateringconnect.view.vendor.detailpesanan.DetailPesananActivity
 
 class VendorBerandaFragment : Fragment() {
+    //TODO: 1. Menampilkan Pesanan
 
     private var _binding: FragmentVendorBerandaBinding? = null
 

@@ -4,7 +4,7 @@ data class Pesanan(
     var id: String? = null,
     var menuId: String? = null,
     var menuNama: String? = null,
-    var menuHarga: String? = null,
+    var namaOpsi: String? = null,
     var menuKeterangan: String? = null,
     var userId: String? = null,
     var userNama: String? = null,
@@ -20,7 +20,7 @@ data class Pesanan(
     var catatan: String? = null,
     var jadwal: String? = null,
     var metodePembayaran: String? = null,
-    var totalPembayaran: String? = null,
+    var totalHarga: String? = null,
     var subtotal: String? = null,
     var ongkir: String? = null,
     var nilai: Boolean? = null

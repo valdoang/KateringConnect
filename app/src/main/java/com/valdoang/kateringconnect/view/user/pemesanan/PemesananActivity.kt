@@ -7,10 +7,12 @@ import android.content.ContentValues.TAG
 import android.location.Address
 import android.location.Geocoder
 import android.location.Location
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.widget.*
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.DialogFragment
 import com.google.firebase.auth.FirebaseAuth
@@ -22,49 +24,48 @@ import com.valdoang.kateringconnect.databinding.ActivityPemesananBinding
 import com.valdoang.kateringconnect.utils.*
 import java.text.SimpleDateFormat
 import java.util.*
+import java.util.stream.Collectors
 import kotlin.math.roundToLong
 
 class PemesananActivity : AppCompatActivity(), TimePickerFragment.DialogTimeListener {
     private lateinit var binding: ActivityPemesananBinding
     private lateinit var firebaseAuth: FirebaseAuth
     private var db = Firebase.firestore
-    private var menuId: String? = null
-    private lateinit var tvVendorName: TextView
-    private lateinit var tvMenuName: TextView
-    private lateinit var tvMenuDesc: TextView
-    private lateinit var tvMenuPrice: TextView
-    private lateinit var tvUserName: TextView
-    private lateinit var tvUserAddress: TextView
-    private lateinit var tvUserNoPhone: TextView
-    private lateinit var tvDate: TextView
-    private lateinit var tvTime: TextView
-    private lateinit var rgMetodePembayaran: RadioGroup
-    private lateinit var tvTotalPembayaran: TextView
-    private lateinit var etJumlah: EditText
-    private lateinit var etCatatan: EditText
-    private lateinit var progressBar: ProgressBar
     private val calendar = Calendar.getInstance()
-    private var vendorId = ""
-    private var menuNama = ""
-    private var menuHarga = ""
-    private var menuDesc = ""
-    private var fotoUser = ""
-    private var fotoVendor = ""
-    private var kotaUser = ""
+    private var namaUser = ""
     private var alamatUser = ""
+    private var kotaUser = ""
+    private var nomorUser = ""
+    private var fotoUser = ""
+    private var namaVendor = ""
     private var alamatVendor = ""
+    private var fotoVendor = ""
     private val dateFormat = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
     private val timeFormat = SimpleDateFormat("HH:mm", Locale.getDefault())
     private lateinit var userAddress: List<Address>
     private lateinit var vendorAddress: List<Address>
-    private lateinit var tvSubtotal: TextView
-    private lateinit var tvOngkir: TextView
     private var jarak = 0f
     private var ongkir = 0L
-    private var subtotal = 0L
-    private var totalPembayaran = 0L
-    //TODO: 4. MENERIMA NILAI DARI CUSTOM MENU ACTIVITY
+    private var totalHarga = 0L
+    private var userId = ""
+    private var vendorId: String? = null
+    private var kategoriId: String? = null
+    private var menuId: String? = null
+    private var namaMenu: String? = null
+    private var deskMenu: String? = null
+    private var jumlahPesanan: String? = null
+    private var namaOpsi: ArrayList<String>? = null
+    private var sNamaOpsi = ""
+    private var catatan: String? = null
+    private var subtotal: String? = null
+    private lateinit var tvTanggal: TextView
+    private lateinit var tvJam: TextView
+    private lateinit var btnPesan: Button
+    private lateinit var ivTanggalError: ImageView
+    private lateinit var tvTanggalError: TextView
+    private lateinit var progressBar: ProgressBar
 
+    @RequiresApi(Build.VERSION_CODES.N)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityPemesananBinding.inflate(layoutInflater)
@@ -72,200 +73,157 @@ class PemesananActivity : AppCompatActivity(), TimePickerFragment.DialogTimeList
         supportActionBar?.hide()
 
         firebaseAuth = Firebase.auth
+        userId = firebaseAuth.currentUser!!.uid
 
-        menuId = intent.getStringExtra(Cons.EXTRA_ID)
+        vendorId = intent.getStringExtra(Cons.EXTRA_ID)
+        kategoriId = intent.getStringExtra(Cons.EXTRA_SEC_ID)
+        menuId = intent.getStringExtra(Cons.EXTRA_THIRD_ID)
+        namaMenu = intent.getStringExtra(Cons.EXTRA_NAMA)
+        deskMenu = intent.getStringExtra(Cons.EXTRA_DESC)
+        jumlahPesanan = intent.getStringExtra(Cons.EXTRA_JUMLAH_PESANAN)
+        namaOpsi = intent.getStringArrayListExtra(Cons.EXTRA_NAMA_OPSI)
+        catatan = intent.getStringExtra(Cons.EXTRA_CATATAN)
+        subtotal = intent.getStringExtra(Cons.EXTRA_SUBTOTAL)
 
-        tvVendorName = binding.tvVendorName
-        tvMenuName = binding.tvMenuName
-        tvMenuDesc = binding.tvMenuDesc
-        tvMenuPrice = binding.tvMenuPrice
-        tvUserName = binding.tvUserName
-        tvUserAddress = binding.tvAddress
-        tvUserNoPhone = binding.tvNoPhone
-        tvDate = binding.tvDate
-        tvTime = binding.tvTime
-        rgMetodePembayaran = binding.rgMetodePembayaran
-        tvTotalPembayaran = binding.tvTotalPembayaran
-        etJumlah = binding.edJumlah
-        etCatatan = binding.edCatatan
+        tvTanggal = binding.tvTanggal
+        tvJam = binding.tvJam
+        btnPesan = binding.btnPesan
+        ivTanggalError = binding.ivTanggalError
+        tvTanggalError = binding.tvTanggalError
         progressBar = binding.progressBar
-        tvSubtotal = binding.tvSubtotalValue
-        tvOngkir = binding.tvOngkirValue
 
-        setupPemesanan(menuId!!)
+        setupPemesanan()
+        setupRangkumanPesanan()
         datePicker()
-        timePicker()
         pemesanan()
         setupAction()
     }
 
-    private fun setupPemesanan(menuId: String) {
-        val ref = db.collection("menu").document(menuId)
-        ref.get().addOnSuccessListener { document ->
-            if (document != null) {
-                menuNama = document.data?.get("nama").toString()
-                menuDesc = document.data?.get("keterangan").toString()
-                menuHarga = document.data?.get("harga").toString()
-                vendorId = document.data?.get("userId").toString()
-                tvMenuName.text = menuNama
-                tvMenuDesc.text = menuDesc
-                tvMenuPrice.text = menuHarga.withNumberingFormat()
+    @RequiresApi(Build.VERSION_CODES.N)
+    private fun setupRangkumanPesanan() {
+        binding.tvJumlahPesanan.text = getString(R.string.tv_jumlah_pesanan, jumlahPesanan)
+        binding.tvNamaMenu.text = namaMenu
+        sNamaOpsi = namaOpsi?.stream()?.collect(
+            Collectors.joining(", ")
+        )!!
 
-                db.collection("user").document(vendorId)
-                    .get().addOnSuccessListener {
-                        if (it != null) {
-                            val namaVendor = it.data?.get("nama").toString()
-                            fotoVendor = it.data?.get("foto").toString()
-                            alamatVendor = it.data?.get("alamat").toString()
-                            tvVendorName.text = namaVendor
+        if (namaOpsi.isNullOrEmpty()) {
+            binding.tvNamaOpsi.visibility = View.GONE
+        } else {
+            binding.tvNamaOpsi.text = sNamaOpsi
+        }
 
-                            val userId = firebaseAuth.currentUser!!.uid
-                            val userRef = db.collection("user").document(userId)
-                            userRef.get().addOnSuccessListener { document1 ->
-                                if (document1 != null) {
-                                    val nama = document1.data?.get("nama").toString()
-                                    kotaUser = document1.data?.get("kota").toString()
-                                    alamatUser = document1.data?.get("alamat").toString()
-                                    val telepon = document1.data?.get("telepon").toString()
-                                    fotoUser = document1.data?.get("foto").toString()
-                                    tvUserName.text = nama
-                                    tvUserAddress.text = getString(R.string.tv_address_city, alamatUser, kotaUser)
-                                    tvUserNoPhone.text = telepon
+        if (catatan == "") {
+            binding.tvCatatan.visibility = View.GONE
+        } else {
+            binding.tvCatatan.text = catatan
+        }
 
-                                    //Hitung Ongkos Kirim
-                                    val coder = Geocoder(this)
-                                    try {
-                                        userAddress = coder.getFromLocationName(alamatUser,5)!!
-                                        val userLocation = userAddress[0]
-                                        val userLat = userLocation.latitude
-                                        val userLon = userLocation.longitude
+        binding.tvSubtotal.text = subtotal?.withNumberingFormat()
+    }
 
-                                        vendorAddress = coder.getFromLocationName(alamatVendor,5)!!
-                                        val vendorLocation = vendorAddress[0]
-                                        val vendorLat = vendorLocation.latitude
-                                        val vendorLon = vendorLocation.longitude
+    private fun setupPemesanan() {
+        val vendorRef = db.collection("user").document(vendorId!!)
+        vendorRef.get().addOnSuccessListener {vendorSnapshot ->
+            if (vendorSnapshot != null) {
+                namaVendor = vendorSnapshot.data?.get("nama").toString()
+                alamatVendor = vendorSnapshot.data?.get("alamat").toString()
+                fotoVendor = vendorSnapshot.data?.get("foto").toString()
+                binding.tvVendorName.text = namaVendor
 
-                                        val userPoint = Location("locationA")
-                                        userPoint.latitude = userLat
-                                        userPoint.longitude = userLon
+                val userRef = db.collection("user").document(userId)
+                userRef.get().addOnSuccessListener { userSnapshot ->
+                    if (userSnapshot != null) {
+                        namaUser = userSnapshot.data?.get("nama").toString()
+                        kotaUser = userSnapshot.data?.get("kota").toString()
+                        alamatUser = userSnapshot.data?.get("alamat").toString()
+                        nomorUser = userSnapshot.data?.get("telepon").toString()
+                        fotoUser = userSnapshot.data?.get("foto").toString()
+                        
+                        binding.tvUserName.text = namaUser
+                        binding.tvAddress.text = getString(R.string.tv_address_city, alamatUser, kotaUser)
+                        binding.tvNoPhone.text = nomorUser
 
-                                        val vendorPoint = Location("locationB")
-                                        vendorPoint.latitude = vendorLat
-                                        vendorPoint.longitude = vendorLon
+                        //Hitung Ongkos Kirim
+                        val coder = Geocoder(this)
+                        try {
+                            userAddress = coder.getFromLocationName(alamatUser,5)!!
+                            val userLocation = userAddress[0]
+                            val userLat = userLocation.latitude
+                            val userLon = userLocation.longitude
 
-                                        jarak = userPoint.distanceTo(vendorPoint) / 1000
+                            vendorAddress = coder.getFromLocationName(alamatVendor,5)!!
+                            val vendorLocation = vendorAddress[0]
+                            val vendorLat = vendorLocation.latitude
+                            val vendorLon = vendorLocation.longitude
 
-                                        ongkir = jarak.roundToLong() * 3000
-                                        tvOngkir.text = ongkir.withNumberingFormat()
+                            val userPoint = Location("locationA")
+                            userPoint.latitude = userLat
+                            userPoint.longitude = userLon
 
-                                        etJumlah.textChangedListener { jumlah ->
-                                            if (jumlah == ""){
-                                                tvTotalPembayaran.text = ongkir.withNumberingFormat()
-                                                tvSubtotal.text = ""
-                                            } else if (jumlah.toLong() < 10) {
-                                                etJumlah.error = getString(R.string.minimum_jumlah)
-                                            } else {
-                                                subtotal = jumlah.toLong() * menuHarga.toLong()
-                                                tvSubtotal.text = subtotal.withNumberingFormat()
+                            val vendorPoint = Location("locationB")
+                            vendorPoint.latitude = vendorLat
+                            vendorPoint.longitude = vendorLon
 
-                                                totalPembayaran = ongkir + subtotal
-                                                tvTotalPembayaran.text = totalPembayaran.withNumberingFormat()
-                                            }
-                                        }
+                            jarak = userPoint.distanceTo(vendorPoint) / 1000
 
-                                    } catch (e: Exception) {
-                                        Log.d(TAG, e.localizedMessage as String)
-                                    }
-                                }
-                            }
+                            ongkir = jarak.roundToLong() * 3000
+                            binding.tvOngkirValue.text = ongkir.withNumberingFormat()
+
+                            totalHarga = ongkir + subtotal!!.toLong()
+                            binding.totalHarga.text = totalHarga.withNumberingFormat()
+
+                        } catch (e: Exception) {
+                            Log.d(TAG, e.localizedMessage as String)
                         }
+
                     }
+                }
             }
         }
     }
 
     private fun pemesanan() {
-        var sMetodePembayaran = ""
-
-        rgMetodePembayaran.setOnCheckedChangeListener { _, checkedId ->
-            val rbMetodePembayaran: RadioButton = findViewById(checkedId)
-            when (rbMetodePembayaran.text) {
-                getString(R.string.tunai) -> sMetodePembayaran = getString(R.string.tunai)
-                getString(R.string.bank_bca) -> sMetodePembayaran = getString(R.string.bank_bca)
-                getString(R.string.bank_bri) -> sMetodePembayaran = getString(R.string.bank_bri)
-            }
-        }
-
-        binding.btnPesan.setOnClickListener {
-            val userId = firebaseAuth.currentUser!!.uid
-            val userNama = tvUserName.text
-            val userKota = kotaUser
-            val userAlamat = tvUserAddress.text
-            val userTelepon = tvUserNoPhone.text
-
+        btnPesan.setOnClickListener {
             val sStatus = getString(R.string.status_proses)
-            val sVendorNama = tvVendorName.text
-            val sJumlah = etJumlah.text.toString().trim()
-            val sCatatan = etCatatan.text.toString().trim()
             val sDate = calendar.timeInMillis.toString()
+            val sMetodePembayaran = getString(R.string.tunai)
 
             val pemesananMap = hashMapOf(
                 "menuId" to menuId,
-                "menuNama" to menuNama,
-                "menuHarga" to menuHarga,
-                "menuKeterangan" to menuDesc,
+                "menuNama" to namaMenu,
+                "namaOpsi" to sNamaOpsi,
+                "menuKeterangan" to deskMenu,
                 "userId" to userId,
-                "userNama" to userNama,
-                "userKota" to userKota,
-                "userAlamat" to userAlamat,
-                "userTelepon" to userTelepon,
+                "userNama" to namaUser,
+                "userKota" to kotaUser,
+                "userAlamat" to alamatUser,
+                "userTelepon" to nomorUser,
                 "userFoto" to fotoUser,
                 "vendorFoto" to fotoVendor,
                 "vendorId" to vendorId,
-                "vendorNama" to sVendorNama,
+                "vendorNama" to namaVendor,
                 "vendorAlamat" to alamatVendor,
                 "status" to sStatus,
-                "jumlah" to sJumlah,
-                "catatan" to sCatatan,
+                "jumlah" to jumlahPesanan,
+                "catatan" to catatan,
                 "jadwal" to sDate,
                 "ongkir" to ongkir.toString(),
-                "subtotal" to subtotal.toString(),
+                "subtotal" to subtotal,
                 "metodePembayaran" to sMetodePembayaran,
-                "totalPembayaran" to totalPembayaran.toString()
+                "totalHarga" to totalHarga.toString()
             )
 
-            when {
-                sJumlah.isEmpty() -> {
-                    etJumlah.error = getString(R.string.entry_jumlah)
+            progressBar.visibility = View.VISIBLE
+            db.collection("tespesanan").document()
+                .set(pemesananMap).addOnSuccessListener {
+                    val newFragment: DialogFragment = PemesananBerhasilFragment()
+                    newFragment.show(supportFragmentManager, "TAG")
                 }
-                sJumlah.toLong() < 10 -> {
-                    etJumlah.error = getString(R.string.minimum_jumlah)
+                .addOnFailureListener {
+                    progressBar.visibility = View.GONE
+                    Toast.makeText(this, R.string.fail_pemesanan, Toast.LENGTH_SHORT).show()
                 }
-                tvDate.text == getString(R.string.pilih_tanggal) -> {
-                    Toast.makeText(this, R.string.entry_tanggal, Toast.LENGTH_SHORT).show()
-                }
-                tvTime.text == getString(R.string.pilih_waktu) -> {
-                    Toast.makeText(this, R.string.entry_waktu, Toast.LENGTH_SHORT).show()
-                }
-                sMetodePembayaran.isEmpty() -> {
-                    Toast.makeText(this, R.string.entry_metode_pembayaran, Toast.LENGTH_SHORT).show()
-                }
-                calendar.timeInMillis <= System.currentTimeMillis() -> {
-                    Toast.makeText(this, R.string.minimum_date, Toast.LENGTH_SHORT).show()
-                }
-                else -> {
-                    progressBar.visibility = View.VISIBLE
-                    db.collection("pesanan").document()
-                        .set(pemesananMap).addOnSuccessListener {
-                            val newFragment: DialogFragment = PemesananBerhasilFragment()
-                            newFragment.show(supportFragmentManager, "TAG")
-                        }
-                        .addOnFailureListener {
-                            progressBar.visibility = View.GONE
-                            Toast.makeText(this, R.string.fail_pemesanan, Toast.LENGTH_SHORT).show()
-                        }
-                }
-            }
         }
     }
 
@@ -274,10 +232,29 @@ class PemesananActivity : AppCompatActivity(), TimePickerFragment.DialogTimeList
             calendar.set(Calendar.YEAR, year)
             calendar.set(Calendar.MONTH, month)
             calendar.set(Calendar.DAY_OF_MONTH, dayOfMonth)
-            tvDate.text = dateFormat.format(calendar.time).withDateFormat()
+            val today = dateFormat.format(System.currentTimeMillis()).withDateFormat()
+            val datePicked = dateFormat.format(calendar.time).withDateFormat()
+            tvTanggal.text = datePicked
+            tvTanggal.setTextColor(resources.getColor(R.color.black))
+            if (calendar.timeInMillis <= System.currentTimeMillis()) {
+                ivTanggalError.visibility = View.VISIBLE
+                tvTanggalError.visibility = View.VISIBLE
+                btnPesan.isEnabled = false
+            } else if(today == datePicked) {
+                ivTanggalError.visibility = View.VISIBLE
+                tvTanggalError.visibility = View.VISIBLE
+                btnPesan.isEnabled = false
+            } else {
+                ivTanggalError.visibility = View.GONE
+                tvTanggalError.visibility = View.GONE
+                if (tvJam.currentTextColor == resources.getColor(R.color.black)) {
+                    btnPesan.isEnabled = true
+                }
+                timePicker()
+            }
         }
 
-        binding.ibDate.setOnClickListener {
+        binding.clPilihTanggal.setOnClickListener {
             DatePickerDialog(
                 this,
                 datePicker,
@@ -289,7 +266,7 @@ class PemesananActivity : AppCompatActivity(), TimePickerFragment.DialogTimeList
     }
 
     private fun timePicker() {
-        binding.ibTime.setOnClickListener{
+        binding.clPilihJam.setOnClickListener{
             val dialogFragment = TimePickerFragment()
             dialogFragment.show(supportFragmentManager, "timePicker")
         }
@@ -298,7 +275,23 @@ class PemesananActivity : AppCompatActivity(), TimePickerFragment.DialogTimeList
     override fun onDialogTimeSet(tag: String?, hourOfDay: Int, minute: Int) {
         calendar.set(Calendar.HOUR_OF_DAY, hourOfDay)
         calendar.set(Calendar.MINUTE, minute)
-        tvTime.text = timeFormat.format(calendar.time)
+        tvJam.text = timeFormat.format(calendar.time)
+        tvJam.setTextColor(resources.getColor(R.color.black))
+        val today = dateFormat.format(System.currentTimeMillis()).withDateFormat()
+        val datePicked = dateFormat.format(calendar.time).withDateFormat()
+        if (calendar.timeInMillis <= System.currentTimeMillis()) {
+            ivTanggalError.visibility = View.VISIBLE
+            tvTanggalError.visibility = View.VISIBLE
+            btnPesan.isEnabled = false
+        } else if(today == datePicked) {
+            ivTanggalError.visibility = View.VISIBLE
+            tvTanggalError.visibility = View.VISIBLE
+            btnPesan.isEnabled = false
+        } else {
+            ivTanggalError.visibility = View.GONE
+            tvTanggalError.visibility = View.GONE
+            btnPesan.isEnabled = true
+        }
     }
 
     private fun setupAction() {

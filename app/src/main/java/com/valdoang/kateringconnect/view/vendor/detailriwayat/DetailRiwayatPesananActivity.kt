@@ -16,6 +16,8 @@ import com.valdoang.kateringconnect.utils.withTimestamptoDateFormat
 import com.valdoang.kateringconnect.utils.withTimestamptoTimeFormat
 
 class DetailRiwayatPesananActivity : AppCompatActivity() {
+    //TODO: 4. Menampilkan Detail Riwayat Pesanan
+
     private lateinit var binding: ActivityDetailPesananRiwayatBinding
     private lateinit var firebaseAuth: FirebaseAuth
     private var db = Firebase.firestore

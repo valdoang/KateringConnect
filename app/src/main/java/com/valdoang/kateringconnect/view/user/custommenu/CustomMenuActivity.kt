@@ -1,5 +1,6 @@
 package com.valdoang.kateringconnect.view.user.custommenu
 
+import android.content.Intent
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
@@ -23,6 +24,7 @@ import com.valdoang.kateringconnect.model.Opsi
 import com.valdoang.kateringconnect.utils.Cons
 import com.valdoang.kateringconnect.utils.allChangedListener
 import com.valdoang.kateringconnect.utils.withNumberingFormat
+import com.valdoang.kateringconnect.view.user.pemesanan.PemesananActivity
 
 @RequiresApi(Build.VERSION_CODES.N)
 class CustomMenuActivity : AppCompatActivity(), EditTextCatatanFragment.GetCatatan,
@@ -47,9 +49,13 @@ class CustomMenuActivity : AppCompatActivity(), EditTextCatatanFragment.GetCatat
     private lateinit var grupOpsiAdapter: GrupOpsiAdapter
     private var grupOpsiId: ArrayList<String>? = ArrayList()
     private var menuPrice = ""
+    private var menuName = ""
+    private var menuDesc = ""
     private var grupOpsiList: ArrayList<GrupOpsi> = ArrayList()
     private var opsiList: ArrayList<Opsi> = ArrayList()
     private var opsiListCheck: ArrayList<Opsi> = ArrayList()
+    private var total = 0L
+    private var totalHarga = 0L
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -86,8 +92,8 @@ class CustomMenuActivity : AppCompatActivity(), EditTextCatatanFragment.GetCatat
         menuRef.get().addOnSuccessListener {  menuSnapshot ->
             if (menuSnapshot != null) {
                 val menuImage = menuSnapshot.data?.get("foto").toString()
-                val menuName = menuSnapshot.data?.get("nama").toString()
-                val menuDesc = menuSnapshot.data?.get("keterangan").toString()
+                menuName = menuSnapshot.data?.get("nama").toString()
+                menuDesc = menuSnapshot.data?.get("keterangan").toString()
                 menuPrice = menuSnapshot.data?.get("harga").toString()
                 grupOpsiId = menuSnapshot.data?.get("grupOpsiId") as? ArrayList<String>
                 setupView()
@@ -115,7 +121,6 @@ class CustomMenuActivity : AppCompatActivity(), EditTextCatatanFragment.GetCatat
                         grupOpsiModel.id = i
                         grupOpsiModel.nama = snapshot.data?.get("nama").toString()
                         grupOpsiList.add(grupOpsiModel)
-                        Log.d("add", grupOpsiList.toString())
 
                         grupOpsiList.sortBy {
                             it.nama
@@ -140,7 +145,6 @@ class CustomMenuActivity : AppCompatActivity(), EditTextCatatanFragment.GetCatat
                                 if (opsiList.isEmpty()) {
                                     grupOpsiId!!.remove(i)
                                     grupOpsiList.remove(grupOpsiModel)
-                                    Log.d("remove", grupOpsiList.toString())
                                 }
                                 grupOpsiAdapter.setItems(grupOpsiList)
                             }
@@ -181,7 +185,6 @@ class CustomMenuActivity : AppCompatActivity(), EditTextCatatanFragment.GetCatat
 
     private fun hitungTotal() {
         var subtotal = menuPrice.toLong()
-        var total: Long
         var jumlahTotal = etJumlah.text.toString().toLong()
 
         total = subtotal * jumlahTotal
@@ -190,6 +193,7 @@ class CustomMenuActivity : AppCompatActivity(), EditTextCatatanFragment.GetCatat
         etJumlah.allChangedListener {
             jumlahTotal = it.toLong()
             subtotal = menuPrice.toLong()
+            btnPesan.text = getString(R.string.btn_pesan_menu, total.withNumberingFormat())
             if (opsiListCheck.size <= 0) {
                 total = subtotal * jumlahTotal
                 btnPesan.text = getString(R.string.btn_pesan_menu, total.withNumberingFormat())
@@ -207,8 +211,35 @@ class CustomMenuActivity : AppCompatActivity(), EditTextCatatanFragment.GetCatat
 
     private fun pesan() {
         btnPesan.setOnClickListener{
-            Log.d("opsiList", opsiListCheck.toString())
-            //TODO: 3. KIRIM NILAI KE PEMESANAN ACTIVITY
+            val sJumlah = etJumlah.text.toString().trim()
+            val sCatatan = etCatatan.text.toString().trim()
+            val sNamaOpsi: ArrayList<String> = ArrayList()
+            for (i in opsiListCheck) {
+                sNamaOpsi.add(i.nama!!)
+            }
+
+            val jumlahTotal = sJumlah.toLong()
+            var subtotal = menuPrice.toLong()
+            if (opsiListCheck.size <= 0) {
+                totalHarga = subtotal * jumlahTotal
+            } else {
+                for (i in opsiListCheck) {
+                    subtotal += i.harga!!.toLong()
+                    totalHarga = subtotal * jumlahTotal
+                }
+            }
+
+            val intent = Intent(this, PemesananActivity::class.java)
+            intent.putExtra(Cons.EXTRA_ID, vendorId)
+            intent.putExtra(Cons.EXTRA_SEC_ID, kategoriId)
+            intent.putExtra(Cons.EXTRA_THIRD_ID, menuId)
+            intent.putExtra(Cons.EXTRA_NAMA, menuName)
+            intent.putExtra(Cons.EXTRA_DESC, menuDesc)
+            intent.putExtra(Cons.EXTRA_JUMLAH_PESANAN, sJumlah)
+            intent.putStringArrayListExtra(Cons.EXTRA_NAMA_OPSI, sNamaOpsi)
+            intent.putExtra(Cons.EXTRA_CATATAN, sCatatan)
+            intent.putExtra(Cons.EXTRA_SUBTOTAL, totalHarga.toString())
+            startActivity(intent)
         }
     }
 

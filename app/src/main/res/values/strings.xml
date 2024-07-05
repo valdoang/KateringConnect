@@ -137,7 +137,7 @@
     <string name="data_kosong">Data Kosong</string>
     <string name="tv_status">Status</string>
     <string name="tv_address_city">%1$s, %2$s</string>
-    <string name="minimum_date">Hanya bisa memilih tanggal setelah hari ini</string>
+    <string name="minimum_date">Hanya bisa memilih tanggal setelah hari ini. Pilih tanggal yang lain ya.</string>
     <string name="batalkan">Batalkan</string>
     <string name="no_one_change">Anda belum mengubah apapun</string>
     <string name="ok">OK</string>
@@ -231,4 +231,8 @@
     <string name="jumlah_pesanan">Jumlah Pesanan</string>
     <string name="min_pesanan">Minimal jumlah pesanan 10 porsi</string>
     <string name="tidak_tersedia">Tidak tersedia</string>
+    <string name="total_harga">Total Harga</string>
+    <string name="waktu_pengantaran">Waktu Pengantaran</string>
+    <string name="rangkuman_pesanan">Rangkuman Pesanan</string>
+    <string name="tv_jumlah_pesanan">%1$sx</string>
 </resources>

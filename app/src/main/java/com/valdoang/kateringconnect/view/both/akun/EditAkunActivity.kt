@@ -24,6 +24,8 @@ import java.util.*
 
 
 class EditAkunActivity : AppCompatActivity() {
+    //TODO: 7. Mengubah Desain UI dan cara Update Data
+
     private lateinit var binding: ActivityEditAkunBinding
     private lateinit var firebaseAuth: FirebaseAuth
     private var db = Firebase.firestore
