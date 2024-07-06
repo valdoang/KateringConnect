@@ -17,8 +17,6 @@ import com.valdoang.kateringconnect.utils.withTimestamptoDateFormat
 import com.valdoang.kateringconnect.utils.withTimestamptoTimeFormat
 
 class DetailPesananActivity : AppCompatActivity() {
-    //TODO: 3. Menampilkan Detail Pesanan
-
     private lateinit var binding: ActivityDetailPesananRiwayatBinding
     private lateinit var firebaseAuth: FirebaseAuth
     private var db = Firebase.firestore
@@ -27,7 +25,6 @@ class DetailPesananActivity : AppCompatActivity() {
     private var vendorId = ""
     private lateinit var tvVendorNama: TextView
     private lateinit var tvMenuNama: TextView
-    private lateinit var tvMenuHarga: TextView
     private lateinit var tvMenuDesc: TextView
     private lateinit var tvUserNama: TextView
     private lateinit var tvUserAlamat: TextView
@@ -39,6 +36,7 @@ class DetailPesananActivity : AppCompatActivity() {
     private lateinit var tvPesananSubtotal: TextView
     private lateinit var tvPesananOngkir: TextView
     private lateinit var tvPesananMetodePembayaran: TextView
+    private lateinit var tvPesananPilihanOpsi: TextView
     private lateinit var tvPesananCatatan: TextView
     private lateinit var tvPesananTanggal: TextView
     private lateinit var tvPesananJam: TextView
@@ -57,7 +55,6 @@ class DetailPesananActivity : AppCompatActivity() {
 
         tvVendorNama = binding.tvVendorName
         tvMenuNama = binding.tvMenuName
-        tvMenuHarga = binding.tvMenuPrice
         tvMenuDesc = binding.tvMenuDesc
         tvUserNama = binding.tvUserName
         tvUserAlamat = binding.tvAddress
@@ -69,6 +66,7 @@ class DetailPesananActivity : AppCompatActivity() {
         tvPesananSubtotal = binding.tvSubtotalValue
         tvPesananOngkir = binding.tvOngkirValue
         tvPesananMetodePembayaran = binding.tvPembayaranValue
+        tvPesananPilihanOpsi = binding.tvPilihanOpsiValue
         tvPesananCatatan = binding.tvCatatanValue
         tvPesananTanggal = binding.tvTanggalValue
         tvPesananJam = binding.tvJamValue
@@ -92,20 +90,18 @@ class DetailPesananActivity : AppCompatActivity() {
                     val status = pesanan.data?.get("status").toString()
                     val jumlah = pesanan.data?.get("jumlah").toString()
                     val catatan = pesanan.data?.get("catatan").toString()
+                    val pilihanOpsi = pesanan.data?.get("namaOpsi").toString()
                     val jadwal = pesanan.data?.get("jadwal").toString()
                     val metodePembayaran = pesanan.data?.get("metodePembayaran").toString()
-                    val totalPembayaran = pesanan.data?.get("totalPembayaran").toString()
+                    val totalPembayaran = pesanan.data?.get("totalHarga").toString()
                     val subtotal = pesanan.data?.get("subtotal").toString()
                     val ongkir = pesanan.data?.get("ongkir").toString()
-                    val menuHarga = pesanan.data?.get("menuHarga").toString()
                     val menuDesc = pesanan.data?.get("menuKeterangan").toString()
                     val userNama = pesanan.data?.get("userNama").toString()
                     val userKota = pesanan.data?.get("userKota").toString()
                     val userAlamat = pesanan.data?.get("userAlamat").toString()
                     val userTelepon = pesanan.data?.get("userTelepon").toString()
 
-
-                    tvMenuHarga.text = menuHarga.withNumberingFormat()
                     tvMenuDesc.text = menuDesc
 
                     tvUserNama.text = userNama
@@ -125,6 +121,12 @@ class DetailPesananActivity : AppCompatActivity() {
                         tvPesananCatatan.text = getString(R.string.tidak_ada)
                     } else {
                         tvPesananCatatan.text = catatan
+                    }
+
+                    if (pilihanOpsi == "") {
+                        tvPesananPilihanOpsi.text = getString(R.string.tidak_ada)
+                    } else {
+                        tvPesananPilihanOpsi.text = pilihanOpsi
                     }
                     tvPesananTanggal.text = jadwal.withTimestamptoDateFormat()
                     tvPesananJam.text = jadwal.withTimestamptoTimeFormat()
@@ -146,6 +148,7 @@ class DetailPesananActivity : AppCompatActivity() {
 
             it.visibility = View.GONE
             btnBatalkan.visibility = View.GONE
+            finish()
         }
         btnBatalkan.setOnClickListener {
             val updateStatus = mapOf(
@@ -155,6 +158,7 @@ class DetailPesananActivity : AppCompatActivity() {
 
             btnSelesaikan.visibility = View.GONE
             it.visibility = View.GONE
+            finish()
         }
     }
 

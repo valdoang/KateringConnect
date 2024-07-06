@@ -1,13 +1,18 @@
-package com.valdoang.kateringconnect.view.both.akun
+package com.valdoang.kateringconnect.view.both.editakun
 
+import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import android.view.View
-import android.widget.*
+import android.widget.ImageView
+import android.widget.ProgressBar
+import android.widget.TextView
+import android.widget.Toast
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
+import androidx.cardview.widget.CardView
 import androidx.constraintlayout.widget.ConstraintLayout
 import com.bumptech.glide.Glide
 import com.google.android.material.bottomsheet.BottomSheetDialog
@@ -19,28 +24,31 @@ import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.ktx.storage
 import com.valdoang.kateringconnect.R
 import com.valdoang.kateringconnect.databinding.ActivityEditAkunBinding
+import com.valdoang.kateringconnect.utils.Cons
 import com.valdoang.kateringconnect.utils.getImageUri
 import java.util.*
 
 
 class EditAkunActivity : AppCompatActivity() {
-    //TODO: 7. Mengubah Desain UI dan cara Update Data
-
     private lateinit var binding: ActivityEditAkunBinding
     private lateinit var firebaseAuth: FirebaseAuth
     private var db = Firebase.firestore
     private var storageRef = Firebase.storage
     private lateinit var progressBar: ProgressBar
-    private lateinit var etName: EditText
-    private lateinit var acCity: AutoCompleteTextView
-    private lateinit var etAddress: EditText
-    private lateinit var etNoPhone: EditText
     private lateinit var ivEditPhoto: ImageView
     private var currentImageUri: Uri? = null
     private var nama = ""
     private var kota = ""
     private var alamat = ""
     private var telepon = ""
+    private lateinit var tvNama: TextView
+    private lateinit var tvKota: TextView
+    private lateinit var tvAlamat: TextView
+    private lateinit var tvTelepon: TextView
+    private lateinit var cvNama: CardView
+    private lateinit var cvKota: CardView
+    private lateinit var cvAlamat: CardView
+    private lateinit var cvTelepon: CardView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -52,16 +60,19 @@ class EditAkunActivity : AppCompatActivity() {
         storageRef = FirebaseStorage.getInstance()
 
         progressBar = binding.progressBar
-        etName = binding.edEditName
-        acCity = binding.acEditCity
-        etAddress = binding.edEditAddress
-        etNoPhone = binding.edEditNoPhone
         ivEditPhoto = binding.ivEditPhoto
+        tvNama = binding.tvNama
+        tvKota = binding.tvKota
+        tvAlamat = binding.tvAlamat
+        tvTelepon = binding.tvTelepon
+        cvNama = binding.cvNama
+        cvKota = binding.cvKota
+        cvAlamat = binding.cvAlamat
+        cvTelepon = binding.cvTelepon
 
-        setupAcCity()
         setupAccount()
+        editEach()
         setupAction()
-        updateData()
     }
 
     private fun setupAccount() {
@@ -70,59 +81,41 @@ class EditAkunActivity : AppCompatActivity() {
         ref.addSnapshotListener { document,_ ->
             if (document != null) {
                 val foto = document.data?.get("foto").toString()
-                Glide.with(applicationContext).load(foto).error(R.drawable.default_profile).into(ivEditPhoto)
-
-            }
-        }
-
-        ref.get().addOnSuccessListener { document ->
-            if (document != null) {
                 nama = document.data?.get("nama").toString()
                 kota = document.data?.get("kota").toString()
                 alamat = document.data?.get("alamat").toString()
                 telepon = document.data?.get("telepon").toString()
 
-                etName.setText(nama)
-                acCity.setText(kota,false)
-                etAddress.setText(alamat)
-                etNoPhone.setText(telepon)
+                tvNama.text = nama
+                tvKota.text = kota
+                tvAlamat.text = alamat
+                tvTelepon.text = telepon
+                Glide.with(applicationContext).load(foto).error(R.drawable.default_profile).into(ivEditPhoto)
+
             }
         }
     }
 
-    private fun setupAcCity() {
-        val cities = resources.getStringArray(R.array.Cities)
-        val dropdownAdapter = ArrayAdapter(this, R.layout.dropdown_item, cities)
-        acCity.setAdapter(dropdownAdapter)
-    }
-
-    private fun updateData() {
-        binding.ibSave.setOnClickListener {
-            val sName = etName.text.toString().trim()
-            val sNoPhone = etNoPhone.text.toString().trim()
-            val sAddress = etAddress.text.toString().trim()
-            val sKota = acCity.text.toString().trim()
-
-            val userId = firebaseAuth.currentUser!!.uid
-
-            val updateMap = mapOf(
-                "nama" to sName,
-                "kota" to sKota,
-                "alamat" to sAddress,
-                "telepon" to sNoPhone
-            )
-            if (sName == nama && sNoPhone == telepon && sAddress == alamat && sKota == kota) {
-                finish()
-            }
-            else {
-                db.collection("user").document(userId).update(updateMap)
-                    .addOnSuccessListener {
-                        finish()
-                    }
-                    .addOnFailureListener {
-                        Toast.makeText(this, R.string.fail_update_data, Toast.LENGTH_SHORT).show()
-                    }
-            }
+    private fun editEach() {
+        cvNama.setOnClickListener {
+            val intent = Intent(this, EditNamaAkunActivity::class.java)
+            intent.putExtra(Cons.EXTRA_NAMA, nama)
+            startActivity(intent)
+        }
+        cvKota.setOnClickListener {
+            val intent = Intent(this, EditKotaAkunActivity::class.java)
+            intent.putExtra(Cons.EXTRA_NAMA, kota)
+            startActivity(intent)
+        }
+        cvAlamat.setOnClickListener {
+            val intent = Intent(this, EditAlamatAkunActivity::class.java)
+            intent.putExtra(Cons.EXTRA_NAMA, alamat)
+            startActivity(intent)
+        }
+        cvTelepon.setOnClickListener {
+            val intent = Intent(this, EditTeleponAkunActivity::class.java)
+            intent.putExtra(Cons.EXTRA_NAMA, telepon)
+            startActivity(intent)
         }
     }
 

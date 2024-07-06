@@ -22,8 +22,6 @@ import com.valdoang.kateringconnect.view.both.chat.ChatActivity
 import com.valdoang.kateringconnect.view.vendor.detailriwayat.DetailRiwayatPesananActivity
 
 class VendorRiwayatFragment : Fragment() {
-    //TODO: 2. Menampilkan Riwayat Pesanan
-
     private var _binding: FragmentVendorRiwayatBinding? = null
 
     // This property is only valid between onCreateView and

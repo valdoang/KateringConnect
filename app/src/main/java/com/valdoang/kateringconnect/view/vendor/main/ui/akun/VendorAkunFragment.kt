@@ -19,7 +19,7 @@ import com.valdoang.kateringconnect.model.Star
 import com.valdoang.kateringconnect.utils.Cons
 import com.valdoang.kateringconnect.utils.roundOffDecimal
 import com.valdoang.kateringconnect.utils.withNumberingFormat
-import com.valdoang.kateringconnect.view.both.akun.EditAkunActivity
+import com.valdoang.kateringconnect.view.both.editakun.EditAkunActivity
 import com.valdoang.kateringconnect.view.both.alertdialog.LogoutFragment
 import com.valdoang.kateringconnect.view.both.chat.ChatActivity
 import com.valdoang.kateringconnect.view.both.nilai.NilaiActivity

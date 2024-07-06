@@ -14,7 +14,7 @@ import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.valdoang.kateringconnect.R
 import com.valdoang.kateringconnect.databinding.FragmentUserAkunBinding
-import com.valdoang.kateringconnect.view.both.akun.EditAkunActivity
+import com.valdoang.kateringconnect.view.both.editakun.EditAkunActivity
 import com.valdoang.kateringconnect.view.both.alertdialog.LogoutFragment
 import com.valdoang.kateringconnect.view.both.chat.ChatActivity
 

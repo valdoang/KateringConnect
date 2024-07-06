@@ -25,6 +25,94 @@
     <string-array name="Cities">
         <item>Surabaya</item>
         <item>Malang</item>
+        <item>Medan</item>
+        <item>Makassar</item>
+        <item>Palembang</item>
+        <item>Bandar Lampung</item>
+        <item>Bekasi</item>
+        <item>Depok</item>
+        <item>Tangerang</item>
+        <item>Semarang</item>
+        <item>Batam</item>
+        <item>Bogor</item>
+        <item>Pekanbaru</item>
+        <item>Samarinda</item>
+        <item>Tasikmalaya</item>
+        <item>Serang</item>
+        <item>Pontianak</item>
+        <item>Banjarmasin</item>
+        <item>Denpasar</item>
+        <item>Jambi</item>
+        <item>Surakarta</item>
+        <item>Cimahi</item>
+        <item>Cilegon</item>
+        <item>Manado</item>
+        <item>Mataram</item>
+        <item>Kupang</item>
+        <item>Jayapura</item>
+        <item>Bengkulu</item>
+        <item>Palu</item>
+        <item>Sukabumi</item>
+        <item>Ambon</item>
+        <item>Cirebon</item>
+        <item>Kendari</item>
+        <item>Dumai</item>
+        <item>Pekalongan</item>
+        <item>Binjai</item>
+        <item>Palangkaraya</item>
+        <item>Kediri</item>
+        <item>Tegal</item>
+        <item>Sorong</item>
+        <item>Pematangsiantar</item>
+        <item>Banjarbaru</item>
+        <item>Banda Aceh</item>
+        <item>Tarakan</item>
+        <item>Singkawang</item>
+        <item>Probolinggo</item>
+        <item>Lubuklinggau</item>
+        <item>Pangkalpinang</item>
+        <item>Tanjungpinang</item>
+        <item>Padang Sidempuan</item>
+        <item>Batu</item>
+        <item>Bitung</item>
+        <item>Pasuruan</item>
+        <item>Prabumulih</item>
+        <item>Banjar</item>
+        <item>Ternate</item>
+        <item>Gorontalo</item>
+        <item>Madiun</item>
+        <item>Salatiga</item>
+        <item>Lhokseumawe</item>
+        <item>Bontang</item>
+        <item>Tanjungbalai</item>
+        <item>Langsa</item>
+        <item>Tebing Tinggi</item>
+        <item>Metro</item>
+        <item>Palopo</item>
+        <item>Bima</item>
+        <item>Baubau</item>
+        <item>Parepare</item>
+        <item>Blitar</item>
+        <item>Pagar Alam</item>
+        <item>Semarang</item>
+        <item>Payukumbuh</item>
+        <item>Mojokerto</item>
+        <item>Bukit Tinggi</item>
+        <item>Gunungsitoli</item>
+        <item>Magelang</item>
+        <item>Kotamobagu</item>
+        <item>Kepulauan Tidore</item>
+        <item>Subulussalam</item>
+        <item>Tomohon</item>
+        <item>Pariaman</item>
+        <item>Sungaipenuh</item>
+        <item>Sibolga</item>
+        <item>Tual</item>
+        <item>Solok</item>
+        <item>Sawahlunto</item>
+        <item>Padang Panjang</item>
+        <item>Sabang</item>
+        <item>Padang</item>
         <item>Jakarta</item>
         <item>Bandung</item>
         <item>Yogyakarta</item>
@@ -235,4 +323,5 @@
     <string name="waktu_pengantaran">Waktu Pengantaran</string>
     <string name="rangkuman_pesanan">Rangkuman Pesanan</string>
     <string name="tv_jumlah_pesanan">%1$sx</string>
+    <string name="tv_pilihan_opsi">Pilihan Opsi</string>
 </resources>

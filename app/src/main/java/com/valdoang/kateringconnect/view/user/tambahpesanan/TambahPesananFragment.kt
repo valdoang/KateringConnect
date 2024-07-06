@@ -17,6 +17,7 @@ import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.valdoang.kateringconnect.R
 import com.valdoang.kateringconnect.databinding.FragmentTambahPesananBinding
+import com.valdoang.kateringconnect.utils.allChangedListener
 import com.valdoang.kateringconnect.utils.textChangedListener
 import com.valdoang.kateringconnect.utils.withNumberingFormat
 
@@ -70,16 +71,16 @@ class TambahPesananFragment : DialogFragment() {
         val ref = db.collection("pesanan").document(pesananId)
         ref.get().addOnSuccessListener { document ->
                 if (document != null) {
-                    val menuHarga = document.data?.get("menuHarga").toString()
                     jumlah = document.data?.get("jumlah").toString()
                     subtotal = document.data?.get("subtotal").toString()
-                    totalPembayaran = document.data?.get("totalPembayaran").toString()
+                    totalPembayaran = document.data?.get("totalHarga").toString()
+                    val hargaPerPorsi = document.data?.get("hargaPerPorsi").toString()
 
-                    etJumlah.textChangedListener { etjumlah ->
+                    etJumlah.allChangedListener { etjumlah ->
                         if (etjumlah == "") {
-                            tvTotalPembayaran.text = ""
+                            tvTotalPembayaran.text = "0"
                         } else {
-                            total = etjumlah.toLong() * menuHarga.toLong()
+                            total = etjumlah.toLong() * hargaPerPorsi.toLong()
                             tvTotalPembayaran.text = total.withNumberingFormat()
 
                             //untuk updateMap
@@ -97,7 +98,7 @@ class TambahPesananFragment : DialogFragment() {
             val updateMap = mapOf(
                 "jumlah" to sJumlah.toString(),
                 "subtotal" to sSubtotal.toString(),
-                "totalPembayaran" to sTotalPembayaran.toString()
+                "totalHarga" to sTotalPembayaran.toString()
             )
 
             when {

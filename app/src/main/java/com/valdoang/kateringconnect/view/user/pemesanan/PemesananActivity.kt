@@ -58,6 +58,7 @@ class PemesananActivity : AppCompatActivity(), TimePickerFragment.DialogTimeList
     private var sNamaOpsi = ""
     private var catatan: String? = null
     private var subtotal: String? = null
+    private var hargaPerPorsi: String? = null
     private lateinit var tvTanggal: TextView
     private lateinit var tvJam: TextView
     private lateinit var btnPesan: Button
@@ -83,7 +84,8 @@ class PemesananActivity : AppCompatActivity(), TimePickerFragment.DialogTimeList
         jumlahPesanan = intent.getStringExtra(Cons.EXTRA_JUMLAH_PESANAN)
         namaOpsi = intent.getStringArrayListExtra(Cons.EXTRA_NAMA_OPSI)
         catatan = intent.getStringExtra(Cons.EXTRA_CATATAN)
-        subtotal = intent.getStringExtra(Cons.EXTRA_SUBTOTAL)
+        hargaPerPorsi = intent.getStringExtra(Cons.EXTRA_SUBTOTAL)
+        subtotal = intent.getStringExtra(Cons.EXTRA_TOTAL)
 
         tvTanggal = binding.tvTanggal
         tvJam = binding.tvJam
@@ -190,6 +192,7 @@ class PemesananActivity : AppCompatActivity(), TimePickerFragment.DialogTimeList
             val sMetodePembayaran = getString(R.string.tunai)
 
             val pemesananMap = hashMapOf(
+                "kategoriId" to kategoriId,
                 "menuId" to menuId,
                 "menuNama" to namaMenu,
                 "namaOpsi" to sNamaOpsi,
@@ -210,12 +213,13 @@ class PemesananActivity : AppCompatActivity(), TimePickerFragment.DialogTimeList
                 "jadwal" to sDate,
                 "ongkir" to ongkir.toString(),
                 "subtotal" to subtotal,
+                "hargaPerPorsi" to hargaPerPorsi,
                 "metodePembayaran" to sMetodePembayaran,
                 "totalHarga" to totalHarga.toString()
             )
 
             progressBar.visibility = View.VISIBLE
-            db.collection("tespesanan").document()
+            db.collection("pesanan").document()
                 .set(pemesananMap).addOnSuccessListener {
                     val newFragment: DialogFragment = PemesananBerhasilFragment()
                     newFragment.show(supportFragmentManager, "TAG")

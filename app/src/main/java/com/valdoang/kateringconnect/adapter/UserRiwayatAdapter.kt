@@ -3,9 +3,11 @@ package com.valdoang.kateringconnect.adapter
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
+import android.os.Build
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.annotation.RequiresApi
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.valdoang.kateringconnect.R
@@ -14,7 +16,7 @@ import com.valdoang.kateringconnect.model.Pesanan
 import com.valdoang.kateringconnect.utils.Cons
 import com.valdoang.kateringconnect.utils.withNumberingFormat
 import com.valdoang.kateringconnect.utils.withTimestampToDateTimeFormat
-import com.valdoang.kateringconnect.view.user.pemesanan.PemesananActivity
+import com.valdoang.kateringconnect.view.user.custommenu.CustomMenuActivity
 
 class UserRiwayatAdapter(
     private val context: Context
@@ -37,6 +39,7 @@ class UserRiwayatAdapter(
 
     inner class MyViewHolder(private val binding: ItemUserRiwayatBinding) :
         RecyclerView.ViewHolder(binding.root) {
+        @RequiresApi(Build.VERSION_CODES.N)
         fun bind(pesanan: Pesanan) {
             binding.root.setOnClickListener {
                 onItemClickCallback?.onItemClicked(pesanan)
@@ -67,8 +70,10 @@ class UserRiwayatAdapter(
                 }
 
                 btnPesanLagi.setOnClickListener {
-                    val intent = Intent(context, PemesananActivity::class.java)
-                    intent.putExtra(Cons.EXTRA_ID, pesanan.menuId)
+                    val intent = Intent(context, CustomMenuActivity::class.java)
+                    intent.putExtra(Cons.EXTRA_ID, pesanan.vendorId)
+                    intent.putExtra(Cons.EXTRA_SEC_ID, pesanan.kategoriId)
+                    intent.putExtra(Cons.EXTRA_THIRD_ID, pesanan.menuId)
                     context.startActivity(intent)
                 }
             }
@@ -85,6 +90,7 @@ class UserRiwayatAdapter(
         return pesananList.size
     }
 
+    @RequiresApi(Build.VERSION_CODES.N)
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
         holder.bind(pesananList[position])
     }

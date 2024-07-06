@@ -238,7 +238,8 @@ class CustomMenuActivity : AppCompatActivity(), EditTextCatatanFragment.GetCatat
             intent.putExtra(Cons.EXTRA_JUMLAH_PESANAN, sJumlah)
             intent.putStringArrayListExtra(Cons.EXTRA_NAMA_OPSI, sNamaOpsi)
             intent.putExtra(Cons.EXTRA_CATATAN, sCatatan)
-            intent.putExtra(Cons.EXTRA_SUBTOTAL, totalHarga.toString())
+            intent.putExtra(Cons.EXTRA_TOTAL, totalHarga.toString())
+            intent.putExtra(Cons.EXTRA_SUBTOTAL, subtotal.toString())
             startActivity(intent)
         }
     }

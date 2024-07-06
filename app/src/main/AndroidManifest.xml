@@ -102,7 +102,19 @@
             android:name=".view.vendor.galeri.AddGaleriActivity"
             android:exported="false" />
         <activity
-            android:name=".view.both.akun.EditAkunActivity"
+            android:name=".view.both.editakun.EditAkunActivity"
+            android:exported="false" />
+        <activity
+            android:name=".view.both.editakun.EditNamaAkunActivity"
+            android:exported="false" />
+        <activity
+            android:name=".view.both.editakun.EditKotaAkunActivity"
+            android:exported="false" />
+        <activity
+            android:name=".view.both.editakun.EditAlamatAkunActivity"
+            android:exported="false" />
+        <activity
+            android:name=".view.both.editakun.EditTeleponAkunActivity"
             android:exported="false" />
         <activity
             android:name=".view.vendor.main.VendorMainActivity"

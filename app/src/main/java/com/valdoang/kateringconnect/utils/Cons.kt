@@ -9,6 +9,7 @@ object Cons {
     const val EXTRA_JUMLAH_PESANAN = "extra_jumlah_pesanan"
     const val EXTRA_CATATAN = "extra_catatan"
     const val EXTRA_NAMA_OPSI = "extra_nama_opsi"
+    const val EXTRA_TOTAL = "extra_total"
     const val EXTRA_SUBTOTAL = "extra_subtotal"
     const val EXTRA_DESC = "extra_desc"
 }
