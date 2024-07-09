@@ -78,6 +78,9 @@ class OpsiShowMenuAdapter(
                                 menuList.add(menu)
                             }
                         }
+                        menuList.sortBy {
+                            it.nama
+                        }
 
                         opsiChooseMenuAdapter.setItems(menuList)
                     }

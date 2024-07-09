@@ -41,6 +41,9 @@
             android:name=".view.vendor.menu.edit.EditHargaMenuActivity"
             android:exported="false" />
         <activity
+            android:name=".view.vendor.menu.edit.EditMinOrderMenuActivity"
+            android:exported="false" />
+        <activity
             android:name=".view.vendor.menu.edit.EditGrupOpsiMenuActivity"
             android:exported="false" />
         <activity

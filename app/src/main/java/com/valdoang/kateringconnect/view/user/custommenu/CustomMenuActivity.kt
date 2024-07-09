@@ -51,6 +51,7 @@ class CustomMenuActivity : AppCompatActivity(), EditTextCatatanFragment.GetCatat
     private var menuPrice = ""
     private var menuName = ""
     private var menuDesc = ""
+    private var minOrder = ""
     private var grupOpsiList: ArrayList<GrupOpsi> = ArrayList()
     private var opsiList: ArrayList<Opsi> = ArrayList()
     private var opsiListCheck: ArrayList<Opsi> = ArrayList()
@@ -83,7 +84,6 @@ class CustomMenuActivity : AppCompatActivity(), EditTextCatatanFragment.GetCatat
         setupAction()
         setupView()
         setupData()
-        editJumlah()
         pesan()
     }
 
@@ -96,14 +96,18 @@ class CustomMenuActivity : AppCompatActivity(), EditTextCatatanFragment.GetCatat
                 menuDesc = menuSnapshot.data?.get("keterangan").toString()
                 menuPrice = menuSnapshot.data?.get("harga").toString()
                 grupOpsiId = menuSnapshot.data?.get("grupOpsiId") as? ArrayList<String>
+                minOrder = menuSnapshot.data?.get("minOrder").toString()
+
                 setupView()
 
                 Glide.with(this).load(menuImage).error(R.drawable.default_menu).into(ivMenu)
                 tvMenuName.text = menuName
                 tvMenuDesc.text = menuDesc
                 tvMenuPrice.text = menuPrice.withNumberingFormat()
+                etJumlah.setText(minOrder)
                 setupGrupOpsi()
                 hitungTotal()
+                editJumlah()
             }
         }
     }
@@ -164,7 +168,7 @@ class CustomMenuActivity : AppCompatActivity(), EditTextCatatanFragment.GetCatat
 
     private fun editJumlah() {
         etJumlah.allChangedListener { jumlah ->
-            if (jumlah.toInt() > 10) {
+            if (jumlah.toInt() > minOrder.toInt()) {
                 ibLess.visibility = View.VISIBLE
             } else {
                 ibLess.visibility = View.GONE
@@ -260,6 +264,7 @@ class CustomMenuActivity : AppCompatActivity(), EditTextCatatanFragment.GetCatat
             val args = Bundle()
             val sJumlah = etJumlah.text.toString().trim()
             args.putString("jumlah", sJumlah)
+            args.putString("minOrder", minOrder)
             val dialog: DialogFragment = EditTextJumlahFragment()
             dialog.arguments = args
             dialog.show(this.supportFragmentManager, "ediTextJumlahDialog")

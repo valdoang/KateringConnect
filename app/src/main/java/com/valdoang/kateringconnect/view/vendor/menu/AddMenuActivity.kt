@@ -37,6 +37,7 @@ class AddMenuActivity : AppCompatActivity() {
     private lateinit var etName: EditText
     private lateinit var etDesc: EditText
     private lateinit var etPrice: EditText
+    private lateinit var etMinOrder: EditText
     private lateinit var acKategori: AutoCompleteTextView
     private lateinit var acGrupOpsi: AutoCompleteTextView
     private lateinit var progressBar: ProgressBar
@@ -68,6 +69,7 @@ class AddMenuActivity : AppCompatActivity() {
         etName = binding.edAddName
         etDesc = binding.edAddDesc
         etPrice = binding.edAddPrice
+        etMinOrder = binding.edAddMinOrder
         acKategori = binding.acAddKategori
         acGrupOpsi = binding.acAddGrupOpsi
         progressBar = binding.progressBar
@@ -225,6 +227,7 @@ class AddMenuActivity : AppCompatActivity() {
             val sName = etName.text.toString().trim()
             val sDesc = etDesc.text.toString().trim()
             val sPrice = etPrice.text.toString().trim()
+            var sMinOrder = etMinOrder.text.toString().trim()
 
             val filename = UUID.randomUUID().toString()
 
@@ -252,11 +255,17 @@ class AddMenuActivity : AppCompatActivity() {
                             .addOnSuccessListener { task ->
                                 task.metadata!!.reference!!.downloadUrl
                                     .addOnSuccessListener { uri ->
+
+                                        if (sMinOrder.isEmpty()) {
+                                            sMinOrder = "1"
+                                        }
+
                                         val mapMenu = mapOf(
                                             "foto" to uri.toString(),
                                             "nama" to sName,
                                             "keterangan" to sDesc,
                                             "harga" to sPrice,
+                                            "minOrder" to sMinOrder,
                                             "aktif" to true,
                                             "storageKeys" to filename,
                                             "grupOpsiId" to arrayGrupOpsiId

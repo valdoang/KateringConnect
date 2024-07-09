@@ -203,6 +203,43 @@
         </com.google.android.material.textfield.TextInputLayout>
 
         <TextView
+            android:id="@+id/tv_min_order"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="32dp"
+            android:layout_marginTop="8dp"
+            android:text="@string/minimal_pemesanan"
+            android:fontFamily="@font/poppins_light"
+            android:textSize="14sp"
+            android:textColor="@color/black"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/priceEditTextLayout" />
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/minOrderEditTextLayout"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            app:boxCornerRadiusBottomStart="10dp"
+            app:boxCornerRadiusTopEnd="10dp"
+            app:boxCornerRadiusBottomEnd="10dp"
+            app:boxCornerRadiusTopStart="10dp"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="32dp"
+            android:layout_marginEnd="32dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tv_min_order">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/ed_add_min_order"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:inputType="number"
+                tools:ignore="SpeakableTextPresentCheck"/>
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <TextView
             android:id="@+id/tv_kategori"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -213,7 +250,7 @@
             android:textSize="14sp"
             android:textColor="@color/black"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/priceEditTextLayout" />
+            app:layout_constraintTop_toBottomOf="@id/minOrderEditTextLayout" />
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/kategoriEditTextLayout"

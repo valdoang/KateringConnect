@@ -26,6 +26,7 @@ class EditTextJumlahFragment : DialogFragment() {
     private lateinit var etJumlah: EditText
     private lateinit var btnKonfirmasi: Button
     private var mCallback: GetJumlah? = null
+    private var minOrder: String? = null
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -46,6 +47,7 @@ class EditTextJumlahFragment : DialogFragment() {
 
         val mArgs = arguments
         val jumlah = mArgs!!.getString("jumlah")
+        minOrder = mArgs.getString("minOrder")
         etJumlah.setText(jumlah)
 
         setCatatan()
@@ -58,7 +60,7 @@ class EditTextJumlahFragment : DialogFragment() {
             if (jumlah == "") {
                 btnKonfirmasi.isEnabled = false
             } else {
-                btnKonfirmasi.isEnabled = jumlah.toLong() >= 10
+                btnKonfirmasi.isEnabled = jumlah.toLong() >= minOrder!!.toLong()
             }
         }
         btnKonfirmasi.setOnClickListener {

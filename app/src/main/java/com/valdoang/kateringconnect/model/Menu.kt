@@ -6,6 +6,7 @@ data class Menu(
     val nama: String? = null,
     val keterangan: String? = null,
     val harga: String? = null,
+    val minOrder: String? = null,
     var aktif: Boolean? = true,
     val storageKeys: String? = null,
     val grupOpsiId: ArrayList<String>? = null,

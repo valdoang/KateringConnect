@@ -38,16 +38,19 @@ class EditMenuActivity : AppCompatActivity() {
     private lateinit var tvNama: TextView
     private lateinit var tvDeskripsi: TextView
     private lateinit var tvHarga: TextView
+    private lateinit var tvMinOrder: TextView
     private lateinit var tvGrupOpsi: TextView
     private lateinit var tvHapus: TextView
     private lateinit var cvNama: CardView
     private lateinit var cvDeskripsi: CardView
     private lateinit var cvHarga: CardView
+    private lateinit var cvMinOrder: CardView
     private lateinit var cvGrupOpsi: CardView
     private var storageKeys = ""
     private var nama = ""
     private var desc = ""
     private var price = ""
+    private var minOrder = ""
     private var kategoriMenuId: String? = null
     private var menuId: String? = null
     private var currentImageUri: Uri? = null
@@ -74,6 +77,7 @@ class EditMenuActivity : AppCompatActivity() {
         tvNama = binding.tvNamaHidangan
         tvDeskripsi = binding.tvDeskripsi
         tvHarga = binding.tvHarga
+        tvMinOrder = binding.tvMinOrder
         tvGrupOpsi = binding.tvGrupOpsi
         tvHapus = binding.tvHapus
         tvTitle = binding.titleTambahMenu
@@ -81,6 +85,7 @@ class EditMenuActivity : AppCompatActivity() {
         cvNama = binding.cvNamaHidangan
         cvDeskripsi = binding.cvDeskripsi
         cvHarga = binding.cvHarga
+        cvMinOrder = binding.cvMinOrder
         cvGrupOpsi = binding.cvGrupOpsi
 
         kategoriMenuId = intent.getStringExtra(Cons.EXTRA_ID)
@@ -101,6 +106,7 @@ class EditMenuActivity : AppCompatActivity() {
                     nama = menuDoc.data?.get("nama").toString()
                     desc = menuDoc.data?.get("keterangan").toString()
                     price = menuDoc.data?.get("harga").toString()
+                    minOrder = menuDoc.data?.get("minOrder").toString()
                     storageKeys = menuDoc.data?.get("storageKeys").toString()
                     val grupOpsiId = menuDoc.data?.get("grupOpsiId") as? ArrayList<String>
 
@@ -112,6 +118,7 @@ class EditMenuActivity : AppCompatActivity() {
                     tvNama.text = nama
                     tvDeskripsi.text = desc
                     tvHarga.text = price
+                    tvMinOrder.text = minOrder
                     tvGrupOpsi.text = getString(R.string.jumlah_grup_opsi_terpilih, arrayGrupOpsiId.size.toString())
                 }
             }
@@ -135,6 +142,13 @@ class EditMenuActivity : AppCompatActivity() {
         cvHarga.setOnClickListener {
             val intent = Intent(this, EditHargaMenuActivity::class.java)
             intent.putExtra(Cons.EXTRA_NAMA, price)
+            intent.putExtra(Cons.EXTRA_ID, kategoriMenuId)
+            intent.putExtra(Cons.EXTRA_SEC_ID, menuId)
+            startActivity(intent)
+        }
+        cvMinOrder.setOnClickListener {
+            val intent = Intent(this, EditMinOrderMenuActivity::class.java)
+            intent.putExtra(Cons.EXTRA_NAMA, minOrder)
             intent.putExtra(Cons.EXTRA_ID, kategoriMenuId)
             intent.putExtra(Cons.EXTRA_SEC_ID, menuId)
             startActivity(intent)

@@ -218,7 +218,7 @@
                     android:layout_height="wrap_content"
                     android:textSize="20sp"
                     android:fontFamily="@font/poppins_bold"
-                    android:text="@string/min_jumlah"
+                    tools:text="@string/min_jumlah"
                     android:background="@android:color/transparent"
                     android:textColor="@color/black"
                     android:clickable="true"
