@@ -117,6 +117,17 @@
         <item>Bandung</item>
         <item>Yogyakarta</item>
         <item>Balikpapan</item>
+        <item>Sidoarjo</item>
+        <item>Gresik</item>
+        <item>Bojonegoro</item>
+        <item>Jember</item>
+        <item>Nganjuk</item>
+        <item>Trenggalek</item>
+        <item>Tuban</item>
+        <item>Ponorogo</item>
+        <item>Banyuwangi</item>
+        <item>Lumajang</item>
+        <item>Lamongan</item>
     </string-array>
 
     <string name="title_activity_vendor_main">VendorMainActivity</string>
@@ -324,4 +335,5 @@
     <string name="rangkuman_pesanan">Rangkuman Pesanan</string>
     <string name="tv_jumlah_pesanan">%1$sx</string>
     <string name="tv_pilihan_opsi">Pilihan Opsi</string>
+    <string name="jarak_max_error">Jarak pengantaran melebihi 60 km</string>
 </resources>

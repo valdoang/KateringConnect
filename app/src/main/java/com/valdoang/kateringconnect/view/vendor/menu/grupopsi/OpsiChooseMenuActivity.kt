@@ -73,6 +73,16 @@ class OpsiChooseMenuActivity : AppCompatActivity() {
                     it.nama
                 }
                 opsiShowMenuAdapter.setItems(kategoriMenuList)
+
+                if (kategoriMenuList.isEmpty()) {
+                    binding.noDataAnimation.visibility = View.VISIBLE
+                    binding.tvNoData.visibility = View.VISIBLE
+
+                }
+                else {
+                    binding.noDataAnimation.visibility = View.GONE
+                    binding.tvNoData.visibility = View.GONE
+                }
             }
 
         }

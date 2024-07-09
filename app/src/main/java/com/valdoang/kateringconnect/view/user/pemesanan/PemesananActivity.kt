@@ -15,6 +15,7 @@ import android.widget.*
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.DialogFragment
+import com.google.android.material.datepicker.MaterialDatePicker.Builder.datePicker
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.ktx.firestore
@@ -168,6 +169,12 @@ class PemesananActivity : AppCompatActivity(), TimePickerFragment.DialogTimeList
                             vendorPoint.longitude = vendorLon
 
                             jarak = userPoint.distanceTo(vendorPoint) / 1000
+
+                            if (jarak > 60) {
+                                binding.tvJarakError.visibility = View.VISIBLE
+                            } else {
+                                binding.tvJarakError.visibility = View.GONE
+                            }
 
                             ongkir = jarak.roundToLong() * 3000
                             binding.tvOngkirValue.text = ongkir.withNumberingFormat()

@@ -26,6 +26,8 @@ import com.valdoang.kateringconnect.R
 import com.valdoang.kateringconnect.databinding.ActivityEditAkunBinding
 import com.valdoang.kateringconnect.utils.Cons
 import com.valdoang.kateringconnect.utils.getImageUri
+import com.valdoang.kateringconnect.view.user.main.UserMainActivity
+import com.valdoang.kateringconnect.view.vendor.main.VendorMainActivity
 import java.util.*
 
 
@@ -37,10 +39,12 @@ class EditAkunActivity : AppCompatActivity() {
     private lateinit var progressBar: ProgressBar
     private lateinit var ivEditPhoto: ImageView
     private var currentImageUri: Uri? = null
+    private var foto = ""
     private var nama = ""
     private var kota = ""
     private var alamat = ""
     private var telepon = ""
+    private var jenis = ""
     private lateinit var tvNama: TextView
     private lateinit var tvKota: TextView
     private lateinit var tvAlamat: TextView
@@ -85,13 +89,20 @@ class EditAkunActivity : AppCompatActivity() {
                 kota = document.data?.get("kota").toString()
                 alamat = document.data?.get("alamat").toString()
                 telepon = document.data?.get("telepon").toString()
+                jenis = document.data?.get("jenis").toString()
 
                 tvNama.text = nama
                 tvKota.text = kota
                 tvAlamat.text = alamat
                 tvTelepon.text = telepon
-                Glide.with(applicationContext).load(foto).error(R.drawable.default_profile).into(ivEditPhoto)
-
+                when(jenis) {
+                    getString(R.string.pembeli) -> {
+                        Glide.with(applicationContext).load(foto).error(R.drawable.default_profile).into(ivEditPhoto)
+                    }
+                    getString(R.string.vendor) -> {
+                        Glide.with(applicationContext).load(foto).error(R.drawable.default_vendor_profile).into(ivEditPhoto)
+                    }
+                }
             }
         }
     }

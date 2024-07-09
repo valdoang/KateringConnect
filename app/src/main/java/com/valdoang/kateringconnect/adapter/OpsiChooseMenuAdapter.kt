@@ -99,4 +99,12 @@ class OpsiChooseMenuAdapter(
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
         holder.bind(menuList[position])
     }
+
+    override fun getItemId(position: Int): Long {
+        return position.toLong()
+    }
+
+    override fun getItemViewType(position: Int): Int {
+        return position
+    }
 }

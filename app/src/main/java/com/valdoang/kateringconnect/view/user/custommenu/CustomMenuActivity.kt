@@ -3,7 +3,6 @@ package com.valdoang.kateringconnect.view.user.custommenu
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import android.widget.*
 import androidx.annotation.RequiresApi
@@ -25,6 +24,7 @@ import com.valdoang.kateringconnect.utils.Cons
 import com.valdoang.kateringconnect.utils.allChangedListener
 import com.valdoang.kateringconnect.utils.withNumberingFormat
 import com.valdoang.kateringconnect.view.user.pemesanan.PemesananActivity
+
 
 @RequiresApi(Build.VERSION_CODES.N)
 class CustomMenuActivity : AppCompatActivity(), EditTextCatatanFragment.GetCatatan,

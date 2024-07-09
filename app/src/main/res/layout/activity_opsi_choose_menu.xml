@@ -52,6 +52,33 @@
         android:layout_marginBottom="130dp"
         tools:listitem="@layout/item_opsi_show_menu"/>
 
+    <com.airbnb.lottie.LottieAnimationView
+        android:id="@+id/no_data_animation"
+        android:layout_width="300dp"
+        android:layout_height="300dp"
+        android:layout_marginTop="220dp"
+        android:visibility="gone"
+        app:lottie_autoPlay="true"
+        app:lottie_fileName="nodata.json"
+        app:lottie_loop="true"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <TextView
+        android:id="@+id/tv_no_data"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/data_kosong"
+        android:textSize="16sp"
+        android:visibility="gone"
+        android:layout_marginTop="250dp"
+        android:fontFamily="@font/poppins"
+        android:textColor="@color/black"
+        app:layout_constraintTop_toTopOf="@id/no_data_animation"
+        app:layout_constraintStart_toStartOf="@id/no_data_animation"
+        app:layout_constraintEnd_toEndOf="@id/no_data_animation"/>
+
     <com.google.android.material.button.MaterialButton
         android:id="@+id/btn_simpan"
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"

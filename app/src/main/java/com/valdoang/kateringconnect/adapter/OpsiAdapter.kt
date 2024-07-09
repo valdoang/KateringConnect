@@ -5,16 +5,14 @@ import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
-import android.widget.CompoundButton
-import android.widget.EditText
-import android.widget.ImageView
+import android.widget.*
 import androidx.recyclerview.widget.RecyclerView
 import com.valdoang.kateringconnect.R
 import com.valdoang.kateringconnect.databinding.ItemOpsiBinding
 import com.valdoang.kateringconnect.model.Opsi
 import com.valdoang.kateringconnect.utils.allChangedListener
 import com.valdoang.kateringconnect.utils.withNumberingFormat
+
 
 class OpsiAdapter(
     private val context: Context, private val opsiListCheck: ArrayList<Opsi>,
@@ -115,5 +113,13 @@ class OpsiAdapter(
 
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
         holder.bind(opsiList[position])
+    }
+
+    override fun getItemId(position: Int): Long {
+        return position.toLong()
+    }
+
+    override fun getItemViewType(position: Int): Int {
+        return position
     }
 }
