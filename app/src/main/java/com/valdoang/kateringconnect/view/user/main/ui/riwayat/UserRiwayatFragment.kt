@@ -111,9 +111,4 @@ class UserRiwayatFragment : Fragment() {
             startActivity(intent)
         }
     }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
-    }
 }
