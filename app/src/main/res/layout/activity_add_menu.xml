@@ -300,10 +300,13 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="32dp"
             android:layout_marginEnd="32dp"
+            android:layout_marginBottom="64dp"
             app:hintEnabled="false"
+            app:layout_constraintVertical_bias="0.0"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tv_grup_opsi">
+            app:layout_constraintTop_toBottomOf="@+id/tv_grup_opsi"
+            app:layout_constraintBottom_toBottomOf="parent">
 
             <AutoCompleteTextView
                 android:id="@+id/ac_add_grup_opsi"

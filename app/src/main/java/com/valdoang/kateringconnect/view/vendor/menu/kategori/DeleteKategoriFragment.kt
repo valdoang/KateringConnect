@@ -129,11 +129,7 @@ class DeleteKategoriFragment : DialogFragment() {
 
             //Delete Kategori
             val kategoriRef = db.collection("user").document(userId).collection("kategoriMenu").document(kategoriMenuId!!)
-            kategoriRef.delete().addOnSuccessListener {
-                Toast.makeText(activity, R.string.success_delete_kategori, Toast.LENGTH_SHORT).show()
-            } .addOnFailureListener {
-                Toast.makeText(activity, R.string.fail_delete_kategori, Toast.LENGTH_SHORT).show()
-            }
+            kategoriRef.delete()
         }
     }
 
