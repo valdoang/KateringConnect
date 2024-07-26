@@ -2,13 +2,12 @@ package com.valdoang.kateringconnect.view.user.main.ui.beranda
 
 import android.content.Intent
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ArrayAdapter
-import android.widget.AutoCompleteTextView
-import android.widget.ProgressBar
-import android.widget.TextView
+import android.widget.*
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -35,11 +34,13 @@ class UserBerandaFragment : Fragment() {
     private lateinit var firebaseAuth: FirebaseAuth
     private var db = Firebase.firestore
     private var userKota = ""
+    private var userAlamat = ""
     private var addKota = ""
     private lateinit var recyclerView: RecyclerView
     private lateinit var vendorList: ArrayList<Vendor>
     private lateinit var userBerandaAdapter: UserBerandaAdapter
     private lateinit var progressBar: ProgressBar
+    private lateinit var searchView: SearchView
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -52,12 +53,34 @@ class UserBerandaFragment : Fragment() {
         firebaseAuth = Firebase.auth
         vendorList = arrayListOf()
         progressBar = binding.progressBar
+        searchView = binding.searchBar
 
         setupAction()
         setupView()
         setupData()
+        searchView()
 
         return root
+    }
+
+    private fun searchView() {
+        searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(query: String?): Boolean {
+                val filteredVendor = vendorList.filter {
+                    it.nama!!.contains(query!!, ignoreCase = true) || it.alamat!!.contains(query!!, ignoreCase = true)
+                }
+                Handler(Looper.getMainLooper()).postDelayed({
+                    userBerandaAdapter.setItems(filteredVendor)
+                }, 500)
+                return false
+            }
+
+            override fun onQueryTextChange(newText: String?): Boolean {
+                return false
+            }
+
+            //TODO: CLOSE E ERROR
+        })
     }
 
     private fun setupData() {
@@ -68,6 +91,9 @@ class UserBerandaFragment : Fragment() {
                 progressBar.visibility = View.GONE
                 if (document != null) {
                     userKota = document.data?.get("kota").toString()
+                    userAlamat = document.data?.get("alamat").toString()
+                    binding.tvAlamatUser.text = userAlamat
+                    setupView()
                     val vendorRef = db.collection("user").whereEqualTo("jenis", "Vendor").whereIn("kota", listOf(userKota, addKota) )
                     vendorRef.addSnapshotListener{ snapshot,_ ->
                         if (snapshot != null) {
@@ -109,7 +135,7 @@ class UserBerandaFragment : Fragment() {
         recyclerView = binding.rvUserBeranda
         recyclerView.layoutManager = LinearLayoutManager(requireContext())
 
-        userBerandaAdapter = UserBerandaAdapter(requireContext())
+        userBerandaAdapter = UserBerandaAdapter(requireContext(), userAlamat)
         recyclerView.adapter = userBerandaAdapter
         userBerandaAdapter.setItems(vendorList)
     }

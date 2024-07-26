@@ -337,4 +337,6 @@
     <string name="tv_pilihan_opsi">Pilihan Opsi</string>
     <string name="jarak_max_error">Jarak pengantaran melebihi 60 km</string>
     <string name="minimal_pemesanan">Minimal Pemesanan</string>
+    <string name="rupiah_text">Rp%1$s</string>
+    <string name="antar_ke">ANTAR KE</string>
 </resources>
