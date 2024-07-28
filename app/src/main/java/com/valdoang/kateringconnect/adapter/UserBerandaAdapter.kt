@@ -92,7 +92,7 @@ class UserBerandaAdapter(
                 }
 
                 val nilaiRef = db.collection("nilai").whereEqualTo("vendorId", vendor.id)
-                nilaiRef.get().addOnSuccessListener { snapshot ->
+                nilaiRef.addSnapshotListener { snapshot,_ ->
                     if (snapshot != null) {
                         starList.clear()
                         totalNilai = 0.0
@@ -116,42 +116,24 @@ class UserBerandaAdapter(
                         if (sizeNilai == 0) {
                             ivKateringStar.visibility = View.GONE
                             tvKateringStar.visibility = View.GONE
-
                         }
                         else {
+                            ivKateringStar.visibility = View.VISIBLE
+                            tvKateringStar.visibility = View.VISIBLE
                             tvKateringStar.text = context.getString(R.string.vendor_star, nilaiStar.roundOffDecimal(), sizeNilai.toString().withNumberingFormat())
                         }
 
                     }
                 }
 
-                val kategoriMenuRef = db.collection("user").document(vendor.id!!).collection("kategoriMenu")
-                kategoriMenuRef.get().addOnSuccessListener { snapshot ->
-                    if (snapshot != null) {
-                        kategoriMenuList.clear()
-                        for (data in snapshot.documents) {
-                            val kategoriMenu: String = data.get("nama").toString()
-                            kategoriMenuList.add(kategoriMenu)
-                        }
-                        kategoriMenuList.sortBy{ kategori ->
-                            kategori
-                        }
-
-                        val sKategori = kategoriMenuList.stream().collect(
-                            Collectors.joining(", ")
-                        )
-
-                        if (kategoriMenuList.isEmpty()) {
-                            ivKateringKategori.visibility = View.GONE
-                            tvKateringKategori.visibility = View.GONE
-                        } else {
-                            ivKateringKategori.visibility = View.VISIBLE
-                            tvKateringKategori.visibility = View.VISIBLE
-                            tvKateringKategori.text = sKategori
-                        }
-                    }
+                if (vendor.kategoriMenu?.isEmpty() == true) {
+                    ivKateringKategori.visibility = View.GONE
+                    tvKateringKategori.visibility = View.GONE
+                } else {
+                    ivKateringKategori.visibility = View.VISIBLE
+                    tvKateringKategori.visibility = View.VISIBLE
+                    tvKateringKategori.text = vendor.kategoriMenu
                 }
-
             }
         }
     }

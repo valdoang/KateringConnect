@@ -76,6 +76,7 @@ class VendorAkunFragment : Fragment() {
         nilaiRef.addSnapshotListener { snapshot,_ ->
             if (snapshot != null) {
                 starList.clear()
+                totalNilai = 0.0
                 for (data in snapshot.documents) {
                     val star: Star? = data.toObject(Star::class.java)
                     if (star != null) {

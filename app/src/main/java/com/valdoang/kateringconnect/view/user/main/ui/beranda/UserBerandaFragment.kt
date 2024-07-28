@@ -1,17 +1,21 @@
 package com.valdoang.kateringconnect.view.user.main.ui.beranda
 
 import android.content.Intent
+import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
+import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.bottomsheet.BottomSheetDialog
+import com.google.android.play.integrity.internal.i
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.ktx.firestore
@@ -19,10 +23,12 @@ import com.google.firebase.ktx.Firebase
 import com.valdoang.kateringconnect.R
 import com.valdoang.kateringconnect.adapter.UserBerandaAdapter
 import com.valdoang.kateringconnect.databinding.FragmentUserBerandaBinding
+import com.valdoang.kateringconnect.model.KategoriMenu
 import com.valdoang.kateringconnect.model.Vendor
 import com.valdoang.kateringconnect.utils.Cons
 import com.valdoang.kateringconnect.view.both.chat.ChatActivity
 import com.valdoang.kateringconnect.view.user.detailvendor.DetailVendorActivity
+import java.util.stream.Collectors
 
 class UserBerandaFragment : Fragment() {
 
@@ -41,7 +47,11 @@ class UserBerandaFragment : Fragment() {
     private lateinit var userBerandaAdapter: UserBerandaAdapter
     private lateinit var progressBar: ProgressBar
     private lateinit var searchView: SearchView
+    private lateinit var kategoriMenuList: ArrayList<String>
 
+    //TODO: MENAMBAHKAN ALAMAT TAMBAHAN
+
+    @RequiresApi(Build.VERSION_CODES.N)
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -52,6 +62,7 @@ class UserBerandaFragment : Fragment() {
 
         firebaseAuth = Firebase.auth
         vendorList = arrayListOf()
+        kategoriMenuList = arrayListOf()
         progressBar = binding.progressBar
         searchView = binding.searchBar
 
@@ -66,29 +77,37 @@ class UserBerandaFragment : Fragment() {
     private fun searchView() {
         searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {
+                progressBar.visibility = View.VISIBLE
+                Log.d("VendorList", vendorList.toString())
                 val filteredVendor = vendorList.filter {
-                    it.nama!!.contains(query!!, ignoreCase = true) || it.alamat!!.contains(query!!, ignoreCase = true)
+                    it.nama!!.contains(query!!, ignoreCase = true) || it.kategoriMenu!!.contains(query, ignoreCase = true)
                 }
                 Handler(Looper.getMainLooper()).postDelayed({
+                    progressBar.visibility = View.GONE
                     userBerandaAdapter.setItems(filteredVendor)
                 }, 500)
                 return false
             }
 
             override fun onQueryTextChange(newText: String?): Boolean {
+                if (newText == "") {
+                    progressBar.visibility = View.VISIBLE
+                    Handler(Looper.getMainLooper()).postDelayed({
+                        progressBar.visibility = View.GONE
+                        userBerandaAdapter.setItems(vendorList)
+                    }, 500)
+                }
                 return false
             }
-
-            //TODO: CLOSE E ERROR
         })
     }
 
+    @RequiresApi(Build.VERSION_CODES.N)
     private fun setupData() {
         progressBar.visibility = View.VISIBLE
         val userId = firebaseAuth.currentUser!!.uid
         db.collection("user").document(userId)
             .addSnapshotListener{ document,_ ->
-                progressBar.visibility = View.GONE
                 if (document != null) {
                     userKota = document.data?.get("kota").toString()
                     userAlamat = document.data?.get("alamat").toString()
@@ -106,7 +125,29 @@ class UserBerandaFragment : Fragment() {
                                 }
                             }
 
-                            userBerandaAdapter.setItems(vendorList)
+                            for (i in vendorList) {
+                                val kategoriMenuRef = db.collection("user").document(i.id!!).collection("kategoriMenu")
+                                kategoriMenuRef.addSnapshotListener { kategoriSnapshot,_ ->
+                                    if (kategoriSnapshot != null) {
+                                        kategoriMenuList.clear()
+                                        for (data in kategoriSnapshot.documents) {
+                                            val kategoriMenu: String = data.get("nama").toString()
+                                            kategoriMenuList.add(kategoriMenu)
+                                        }
+                                        kategoriMenuList.sortBy{ kategori ->
+                                            kategori
+                                        }
+                                        val sKategori = kategoriMenuList.stream().collect(
+                                            Collectors.joining(", ")
+                                        )
+                                        i.kategoriMenu = sKategori
+                                    }
+                                }
+                            }
+                            Handler(Looper.getMainLooper()).postDelayed({
+                                progressBar.visibility = View.GONE
+                                userBerandaAdapter.setItems(vendorList)
+                            }, 500)
                             userBerandaAdapter.setOnItemClickCallback(object :
                                 UserBerandaAdapter.OnItemClickCallback {
                                 override fun onItemClicked(data: Vendor) {
@@ -140,6 +181,7 @@ class UserBerandaFragment : Fragment() {
         userBerandaAdapter.setItems(vendorList)
     }
 
+    @RequiresApi(Build.VERSION_CODES.N)
     private fun setupAction() {
         binding.ibCity.setOnClickListener {
             val dialog = BottomSheetDialog(requireContext())

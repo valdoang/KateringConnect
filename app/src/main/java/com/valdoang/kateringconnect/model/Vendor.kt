@@ -8,5 +8,6 @@ data class Vendor(
     val email: String? = null,
     val jenis: String? = null,
     val kota: String? = null,
-    val telepon: String? = null
+    val telepon: String? = null,
+    var kategoriMenu: String? = null
 )
