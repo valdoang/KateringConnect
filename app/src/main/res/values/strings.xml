@@ -339,4 +339,8 @@
     <string name="minimal_pemesanan">Minimal Pemesanan</string>
     <string name="rupiah_text">Rp%1$s</string>
     <string name="antar_ke">ANTAR KE</string>
+    <string name="antar_kemana">Antar kemana?</string>
+    <string name="tambah_alamat_baru">Tambah Alamat Baru</string>
+    <string name="nama_kontak">Nama Kontak</string>
+    <string name="nomor_kontak">Nomor Kontak</string>
 </resources>

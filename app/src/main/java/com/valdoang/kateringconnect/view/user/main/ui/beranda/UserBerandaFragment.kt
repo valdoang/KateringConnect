@@ -15,7 +15,6 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.bottomsheet.BottomSheetDialog
-import com.google.android.play.integrity.internal.i
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.ktx.firestore
@@ -23,10 +22,10 @@ import com.google.firebase.ktx.Firebase
 import com.valdoang.kateringconnect.R
 import com.valdoang.kateringconnect.adapter.UserBerandaAdapter
 import com.valdoang.kateringconnect.databinding.FragmentUserBerandaBinding
-import com.valdoang.kateringconnect.model.KategoriMenu
 import com.valdoang.kateringconnect.model.Vendor
 import com.valdoang.kateringconnect.utils.Cons
 import com.valdoang.kateringconnect.view.both.chat.ChatActivity
+import com.valdoang.kateringconnect.view.user.alamat.AlamatActivity
 import com.valdoang.kateringconnect.view.user.detailvendor.DetailVendorActivity
 import java.util.stream.Collectors
 
@@ -220,6 +219,11 @@ class UserBerandaFragment : Fragment() {
 
             dialog.setContentView(view)
             dialog.show()
+        }
+
+        binding.clAntarKe.setOnClickListener {
+            val intent = Intent(requireContext(), AlamatActivity::class.java)
+            startActivity(intent)
         }
 
         binding.ibChat.setOnClickListener {

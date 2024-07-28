@@ -16,6 +16,12 @@
         android:theme="@style/Theme.KateringConnect"
         tools:targetApi="31">
         <activity
+            android:name=".view.user.alamat.AddAlamatActivity"
+            android:exported="false" />
+        <activity
+            android:name=".view.user.alamat.AlamatActivity"
+            android:exported="false" />
+        <activity
             android:name=".view.user.custommenu.CustomMenuActivity"
             android:exported="false" />
         <activity
