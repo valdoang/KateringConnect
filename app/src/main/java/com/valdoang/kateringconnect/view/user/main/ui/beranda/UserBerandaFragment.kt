@@ -1,6 +1,11 @@
 package com.valdoang.kateringconnect.view.user.main.ui.beranda
 
+import android.app.Activity
+import android.content.ContentValues
 import android.content.Intent
+import android.location.Address
+import android.location.Geocoder
+import android.location.Location
 import android.os.Build
 import android.os.Bundle
 import android.os.Handler
@@ -28,6 +33,7 @@ import com.valdoang.kateringconnect.view.both.chat.ChatActivity
 import com.valdoang.kateringconnect.view.user.alamat.AlamatActivity
 import com.valdoang.kateringconnect.view.user.detailvendor.DetailVendorActivity
 import java.util.stream.Collectors
+import kotlin.math.roundToLong
 
 class UserBerandaFragment : Fragment() {
 
@@ -48,8 +54,6 @@ class UserBerandaFragment : Fragment() {
     private lateinit var searchView: SearchView
     private lateinit var kategoriMenuList: ArrayList<String>
 
-    //TODO: MENAMBAHKAN ALAMAT TAMBAHAN
-
     @RequiresApi(Build.VERSION_CODES.N)
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -65,9 +69,10 @@ class UserBerandaFragment : Fragment() {
         progressBar = binding.progressBar
         searchView = binding.searchBar
 
+        setupTv()
         setupAction()
         setupView()
-        setupData()
+        setupDataUser()
         searchView()
 
         return root
@@ -102,82 +107,125 @@ class UserBerandaFragment : Fragment() {
     }
 
     @RequiresApi(Build.VERSION_CODES.N)
-    private fun setupData() {
-        progressBar.visibility = View.VISIBLE
+    private fun setupDataUser() {
         val userId = firebaseAuth.currentUser!!.uid
         db.collection("user").document(userId)
             .addSnapshotListener{ document,_ ->
                 if (document != null) {
                     userKota = document.data?.get("kota").toString()
                     userAlamat = document.data?.get("alamat").toString()
-                    binding.tvAlamatUser.text = userAlamat
-                    setupView()
-                    val vendorRef = db.collection("user").whereEqualTo("jenis", "Vendor").whereIn("kota", listOf(userKota, addKota) )
-                    vendorRef.addSnapshotListener{ snapshot,_ ->
-                        if (snapshot != null) {
-                            vendorList.clear()
-                            for (data in snapshot.documents) {
-                                val vendor: Vendor? = data.toObject(Vendor::class.java)
-                                if (vendor != null) {
-                                    vendor.id = data.id
-                                    vendorList.add(vendor)
-                                }
-                            }
-
-                            for (i in vendorList) {
-                                val kategoriMenuRef = db.collection("user").document(i.id!!).collection("kategoriMenu")
-                                kategoriMenuRef.addSnapshotListener { kategoriSnapshot,_ ->
-                                    if (kategoriSnapshot != null) {
-                                        kategoriMenuList.clear()
-                                        for (data in kategoriSnapshot.documents) {
-                                            val kategoriMenu: String = data.get("nama").toString()
-                                            kategoriMenuList.add(kategoriMenu)
-                                        }
-                                        kategoriMenuList.sortBy{ kategori ->
-                                            kategori
-                                        }
-                                        val sKategori = kategoriMenuList.stream().collect(
-                                            Collectors.joining(", ")
-                                        )
-                                        i.kategoriMenu = sKategori
-                                    }
-                                }
-                            }
-                            Handler(Looper.getMainLooper()).postDelayed({
-                                progressBar.visibility = View.GONE
-                                userBerandaAdapter.setItems(vendorList)
-                            }, 500)
-                            userBerandaAdapter.setOnItemClickCallback(object :
-                                UserBerandaAdapter.OnItemClickCallback {
-                                override fun onItemClicked(data: Vendor) {
-                                    val intent = Intent(requireContext(), DetailVendorActivity::class.java)
-                                    intent.putExtra(Cons.EXTRA_ID, data.id)
-                                    startActivity(intent)
-                                }
-                            })
-
-                            if (vendorList.isEmpty()) {
-                                binding.noDataAnimation.visibility = View.VISIBLE
-                                binding.tvNoData.visibility = View.VISIBLE
-
-                            }
-                            else {
-                                binding.noDataAnimation.visibility = View.GONE
-                                binding.tvNoData.visibility = View.GONE
-                            }
-                        }
-                    }
+                    setupDataVendor()
                 }
             }
+    }
+
+    @RequiresApi(Build.VERSION_CODES.N)
+    private fun setupDataVendor() {
+        progressBar.visibility = View.VISIBLE
+        val vendorRef = db.collection("user").whereEqualTo("jenis", "Vendor").whereIn("kota", listOf(userKota, addKota) )
+        vendorRef.addSnapshotListener{ snapshot,_ ->
+            if (snapshot != null) {
+                vendorList.clear()
+                for (data in snapshot.documents) {
+                    val vendor: Vendor? = data.toObject(Vendor::class.java)
+                    if (vendor != null) {
+                        vendor.id = data.id
+                        vendorList.add(vendor)
+                    }
+                }
+
+                for (i in vendorList) {
+                    val kategoriMenuRef = db.collection("user").document(i.id!!).collection("kategoriMenu")
+                    kategoriMenuRef.addSnapshotListener { kategoriSnapshot,_ ->
+                        if (kategoriSnapshot != null) {
+                            kategoriMenuList.clear()
+                            for (data in kategoriSnapshot.documents) {
+                                val kategoriMenu: String = data.get("nama").toString()
+                                kategoriMenuList.add(kategoriMenu)
+                            }
+                            kategoriMenuList.sortBy{ kategori ->
+                                kategori
+                            }
+                            val sKategori = kategoriMenuList.stream().collect(
+                                Collectors.joining(", ")
+                            )
+                            i.kategoriMenu = sKategori
+                        }
+                    }
+
+                    //Hitung Ongkos Kirim
+                    val coder = Geocoder(requireContext())
+                    try {
+                        val userAddress : List<Address> = coder.getFromLocationName(userAlamat,5)!!
+                        val userLocation = userAddress[0]
+                        val userLat = userLocation.latitude
+                        val userLon = userLocation.longitude
+
+                        val vendorAddress : List<Address> = coder.getFromLocationName(i.alamat!!,5)!!
+                        val vendorLocation = vendorAddress[0]
+                        val vendorLat = vendorLocation.latitude
+                        val vendorLon = vendorLocation.longitude
+
+                        val userPoint = Location("locationA")
+                        userPoint.latitude = userLat
+                        userPoint.longitude = userLon
+
+                        val vendorPoint = Location("locationB")
+                        vendorPoint.latitude = vendorLat
+                        vendorPoint.longitude = vendorLon
+
+                        val jarak = userPoint.distanceTo(vendorPoint) / 1000
+
+                        val ongkir = jarak.roundToLong() * 3000
+
+                        i.ongkir = ongkir
+
+                    } catch (e: Exception) {
+                        Log.d(ContentValues.TAG, e.localizedMessage as String)
+                    }
+                }
+
+                vendorList.sortBy { vendor ->
+                    vendor.ongkir
+                }
+
+                Handler(Looper.getMainLooper()).postDelayed({
+                    progressBar.visibility = View.GONE
+                    userBerandaAdapter.setItems(vendorList)
+                }, 1000)
+                userBerandaAdapter.setOnItemClickCallback(object :
+                    UserBerandaAdapter.OnItemClickCallback {
+                    override fun onItemClicked(data: Vendor) {
+                        val intent = Intent(requireContext(), DetailVendorActivity::class.java)
+                        intent.putExtra(Cons.EXTRA_ID, data.id)
+                        startActivity(intent)
+                    }
+                })
+
+                if (vendorList.isEmpty()) {
+                    binding.noDataAnimation.visibility = View.VISIBLE
+                    binding.tvNoData.visibility = View.VISIBLE
+
+                }
+                else {
+                    binding.noDataAnimation.visibility = View.GONE
+                    binding.tvNoData.visibility = View.GONE
+                }
+            }
+        }
     }
 
     private fun setupView() {
         recyclerView = binding.rvUserBeranda
         recyclerView.layoutManager = LinearLayoutManager(requireContext())
 
-        userBerandaAdapter = UserBerandaAdapter(requireContext(), userAlamat)
+        userBerandaAdapter = UserBerandaAdapter(requireContext())
         recyclerView.adapter = userBerandaAdapter
         userBerandaAdapter.setItems(vendorList)
+    }
+
+    private fun setupTv() {
+        binding.tvAlamatUser.text = getString(R.string.rumah)
     }
 
     @RequiresApi(Build.VERSION_CODES.N)
@@ -206,14 +254,14 @@ class UserBerandaFragment : Fragment() {
 
             tvTampilkan.setOnClickListener {
                 addKota = acCity.text.toString().trim()
-                setupData()
+                setupDataVendor()
                 dialog.dismiss()
             }
 
             tvBatalkan.setOnClickListener {
                 acCity.setText(null, false)
                 addKota = acCity.text.toString().trim()
-                setupData()
+                setupDataVendor()
                 dialog.dismiss()
             }
 
@@ -223,12 +271,27 @@ class UserBerandaFragment : Fragment() {
 
         binding.clAntarKe.setOnClickListener {
             val intent = Intent(requireContext(), AlamatActivity::class.java)
-            startActivity(intent)
+            startActivityForResult(intent, Cons.EXTRA_INT)
         }
 
         binding.ibChat.setOnClickListener {
             val intent = Intent(requireContext(), ChatActivity::class.java)
             startActivity(intent)
+        }
+    }
+
+    @RequiresApi(Build.VERSION_CODES.N)
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == Cons.EXTRA_INT && resultCode == Activity.RESULT_OK) {
+            val id = data?.getStringExtra(Cons.EXTRA_ID)
+            val nama = data?.getStringExtra(Cons.EXTRA_NAMA)
+            val kota = data?.getStringExtra(Cons.EXTRA_KOTA)
+            val alamat = data?.getStringExtra(Cons.EXTRA_ALAMAT)
+            userKota = kota!!
+            userAlamat = alamat!!
+            setupDataVendor()
+            binding.tvAlamatUser.text = nama
         }
     }
 

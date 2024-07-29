@@ -1,21 +1,27 @@
-package com.valdoang.kateringconnect.view.both.editakun
+package com.valdoang.kateringconnect.view.user.alamat.edit
 
 import android.os.Bundle
+import android.text.InputType
 import android.view.View
-import android.widget.*
+import android.widget.EditText
+import android.widget.ImageButton
+import android.widget.ProgressBar
+import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.valdoang.kateringconnect.R
-import com.valdoang.kateringconnect.databinding.ActivityEditAcBinding
+import com.valdoang.kateringconnect.databinding.ActivityEditTextBinding
 import com.valdoang.kateringconnect.utils.Cons
 
-class EditKotaAkunActivity : AppCompatActivity() {
-    private lateinit var binding: ActivityEditAcBinding
-    private var kotaAkun: String? = null
-    private lateinit var acKota:AutoCompleteTextView
+class EditNamaKontakAlamatActivity : AppCompatActivity() {
+    private lateinit var binding: ActivityEditTextBinding
+    private var namaKontak: String? = null
+    private var alamatId: String? = null
+    private lateinit var etNamaKontak: EditText
     private lateinit var firebaseAuth: FirebaseAuth
     private var db = Firebase.firestore
     private lateinit var ibSave: ImageButton
@@ -25,49 +31,45 @@ class EditKotaAkunActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivityEditAcBinding.inflate(layoutInflater)
+        binding = ActivityEditTextBinding.inflate(layoutInflater)
         setContentView(binding.root)
         supportActionBar?.hide()
 
         firebaseAuth = Firebase.auth
 
-        kotaAkun = intent.getStringExtra(Cons.EXTRA_NAMA)
+        namaKontak = intent.getStringExtra(Cons.EXTRA_NAMA)
+        alamatId = intent.getStringExtra(Cons.EXTRA_ID)
 
         ibSave = binding.ibSave
         progressBar = binding.progressBar
-        acKota = binding.edAddName
-        tvTitle = binding.titleEditAc
+        etNamaKontak = binding.edAddName
+        tvTitle = binding.titleEditText
         tvName = binding.tvName
 
-        setupAcCity()
+
         setupView()
-        updateKota()
+        updateNamaKontak()
         closeActivity()
     }
 
-    private fun setupAcCity() {
-        val cities = resources.getStringArray(R.array.Cities)
-        val dropdownAdapter = ArrayAdapter(this, R.layout.dropdown_item, cities)
-        acKota.setAdapter(dropdownAdapter)
-    }
-
     private fun setupView() {
-        tvTitle.text = getString(R.string.tv_city)
-        tvName.text = getString(R.string.tv_city)
-        acKota.setText(kotaAkun)
+        tvTitle.text = getString(R.string.nama_kontak)
+        tvName.text = getString(R.string.nama_kontak)
+        etNamaKontak.setText(namaKontak)
+        etNamaKontak.inputType = InputType.TYPE_CLASS_TEXT
     }
 
-    private fun updateKota() {
+    private fun updateNamaKontak() {
         ibSave.setOnClickListener {
             ibSave.visibility = View.GONE
             progressBar.visibility = View.VISIBLE
 
             val userId = firebaseAuth.currentUser!!.uid
-            val sKota = acKota.text.toString().trim()
+            val sNamaKontak = etNamaKontak.text.toString().trim()
             val updateMap = mapOf(
-                "kota" to sKota
+                "namaKontak" to sNamaKontak
             )
-            val ref = db.collection("user").document(userId)
+            val ref = db.collection("user").document(userId).collection("alamatTersimpan").document(alamatId!!)
             ref.update(updateMap).addOnSuccessListener {
                 finish()
             } .addOnFailureListener {

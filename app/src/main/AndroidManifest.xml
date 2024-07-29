@@ -16,6 +16,24 @@
         android:theme="@style/Theme.KateringConnect"
         tools:targetApi="31">
         <activity
+            android:name=".view.user.alamat.edit.EditAlamatActivity"
+            android:exported="false" />
+        <activity
+            android:name=".view.user.alamat.edit.EditNamaAlamatActivity"
+            android:exported="false" />
+        <activity
+            android:name=".view.user.alamat.edit.EditAlamatAlamatActivity"
+            android:exported="false" />
+        <activity
+            android:name=".view.user.alamat.edit.EditKotaAlamatActivity"
+            android:exported="false" />
+        <activity
+            android:name=".view.user.alamat.edit.EditNamaKontakAlamatActivity"
+            android:exported="false" />
+        <activity
+            android:name=".view.user.alamat.edit.EditNomorKontakAlamatActivity"
+            android:exported="false" />
+        <activity
             android:name=".view.user.alamat.AddAlamatActivity"
             android:exported="false" />
         <activity

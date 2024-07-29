@@ -1,20 +1,14 @@
 package com.valdoang.kateringconnect.adapter
 
 import android.annotation.SuppressLint
-import android.content.ContentValues
 import android.content.Context
-import android.location.Address
-import android.location.Geocoder
-import android.location.Location
 import android.os.Build
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.RequiresApi
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.valdoang.kateringconnect.R
@@ -23,17 +17,14 @@ import com.valdoang.kateringconnect.model.Star
 import com.valdoang.kateringconnect.model.Vendor
 import com.valdoang.kateringconnect.utils.roundOffDecimal
 import com.valdoang.kateringconnect.utils.withNumberingFormat
-import java.util.stream.Collectors
-import kotlin.math.roundToLong
 
 class UserBerandaAdapter(
-    private val context: Context, private val alamatUser: String
+    private val context: Context
 ) : RecyclerView.Adapter<UserBerandaAdapter.MyViewHolder>() {
 
     private val vendorList = ArrayList<Vendor>()
     private var onItemClickCallback: OnItemClickCallback? = null
     private var starList: ArrayList<Star> = ArrayList()
-    private var kategoriMenuList: ArrayList<String> = ArrayList()
     private var totalNilai = 0.0
     private var db = Firebase.firestore
 
@@ -60,36 +51,7 @@ class UserBerandaAdapter(
             binding.apply {
                 Glide.with(context).load(vendor.foto).error(R.drawable.default_vendor_profile).into(ivKatering)
                 tvKateringName.text = vendor.nama
-
-                //Hitung Ongkos Kirim
-                val coder = Geocoder(context)
-                try {
-                    val userAddress : List<Address> = coder.getFromLocationName(alamatUser,5)!!
-                    val userLocation = userAddress[0]
-                    val userLat = userLocation.latitude
-                    val userLon = userLocation.longitude
-
-                    val vendorAddress : List<Address> = coder.getFromLocationName(vendor.alamat!!,5)!!
-                    val vendorLocation = vendorAddress[0]
-                    val vendorLat = vendorLocation.latitude
-                    val vendorLon = vendorLocation.longitude
-
-                    val userPoint = Location("locationA")
-                    userPoint.latitude = userLat
-                    userPoint.longitude = userLon
-
-                    val vendorPoint = Location("locationB")
-                    vendorPoint.latitude = vendorLat
-                    vendorPoint.longitude = vendorLon
-
-                    val jarak = userPoint.distanceTo(vendorPoint) / 1000
-
-                    val ongkir = jarak.roundToLong() * 3000
-                    tvKateringOngkir.text = context.getString(R.string.rupiah_text, ongkir.withNumberingFormat())
-
-                } catch (e: Exception) {
-                    Log.d(ContentValues.TAG, e.localizedMessage as String)
-                }
+                tvKateringOngkir.text = context.getString(R.string.rupiah_text, vendor.ongkir?.withNumberingFormat())
 
                 val nilaiRef = db.collection("nilai").whereEqualTo("vendorId", vendor.id)
                 nilaiRef.addSnapshotListener { snapshot,_ ->

@@ -1,4 +1,4 @@
-package com.valdoang.kateringconnect.view.both.editakun
+package com.valdoang.kateringconnect.view.user.alamat.edit
 
 import android.os.Bundle
 import android.view.View
@@ -12,9 +12,10 @@ import com.valdoang.kateringconnect.R
 import com.valdoang.kateringconnect.databinding.ActivityEditAcBinding
 import com.valdoang.kateringconnect.utils.Cons
 
-class EditKotaAkunActivity : AppCompatActivity() {
+class EditKotaAlamatActivity : AppCompatActivity() {
     private lateinit var binding: ActivityEditAcBinding
-    private var kotaAkun: String? = null
+    private var kotaAlamat: String? = null
+    private var alamatId: String? = null
     private lateinit var acKota:AutoCompleteTextView
     private lateinit var firebaseAuth: FirebaseAuth
     private var db = Firebase.firestore
@@ -31,7 +32,8 @@ class EditKotaAkunActivity : AppCompatActivity() {
 
         firebaseAuth = Firebase.auth
 
-        kotaAkun = intent.getStringExtra(Cons.EXTRA_NAMA)
+        kotaAlamat = intent.getStringExtra(Cons.EXTRA_NAMA)
+        alamatId = intent.getStringExtra(Cons.EXTRA_ID)
 
         ibSave = binding.ibSave
         progressBar = binding.progressBar
@@ -54,7 +56,7 @@ class EditKotaAkunActivity : AppCompatActivity() {
     private fun setupView() {
         tvTitle.text = getString(R.string.tv_city)
         tvName.text = getString(R.string.tv_city)
-        acKota.setText(kotaAkun)
+        acKota.setText(kotaAlamat)
     }
 
     private fun updateKota() {
@@ -67,7 +69,7 @@ class EditKotaAkunActivity : AppCompatActivity() {
             val updateMap = mapOf(
                 "kota" to sKota
             )
-            val ref = db.collection("user").document(userId)
+            val ref = db.collection("user").document(userId).collection("alamatTersimpan").document(alamatId!!)
             ref.update(updateMap).addOnSuccessListener {
                 finish()
             } .addOnFailureListener {

@@ -343,4 +343,14 @@
     <string name="tambah_alamat_baru">Tambah Alamat Baru</string>
     <string name="nama_kontak">Nama Kontak</string>
     <string name="nomor_kontak">Nomor Kontak</string>
+    <string name="tambahkan_alamat_baru">Tambahkan alamat baru</string>
+    <string name="nama_nomor_kontak">%1$s - %2$s</string>
+    <string name="rumah">Rumah</string>
+    <string name="entry_nama_kontak">Masukkan Nama Kontak</string>
+    <string name="entry_nomor_kontak">Masukkan Nomor Kontak</string>
+    <string name="succesfully_add_alamat">Alamat berhasil ditambahkan</string>
+    <string name="failed_add_alamat">Gagal menambahkan alamat</string>
+    <string name="title_edit_alamat">Edit Alamat</string>
+    <string name="hapus_alamat">Hapus Alamat</string>
+    <string name="delete_alamat_alert">Apakah Anda yakin ingin menghapus alamat ini?</string>
 </resources>

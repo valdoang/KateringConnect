@@ -9,5 +9,6 @@ data class Vendor(
     val jenis: String? = null,
     val kota: String? = null,
     val telepon: String? = null,
-    var kategoriMenu: String? = null
+    var kategoriMenu: String? = null,
+    var ongkir: Long? = 0L
 )

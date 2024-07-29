@@ -12,4 +12,7 @@ object Cons {
     const val EXTRA_TOTAL = "extra_total"
     const val EXTRA_SUBTOTAL = "extra_subtotal"
     const val EXTRA_DESC = "extra_desc"
+    const val EXTRA_INT = 0
+    const val EXTRA_ALAMAT = "extra_alamat"
+    const val EXTRA_KOTA = "extra_kota"
 }
