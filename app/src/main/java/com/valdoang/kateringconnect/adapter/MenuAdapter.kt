@@ -7,25 +7,36 @@ import android.graphics.ColorMatrixColorFilter
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.ktx.Firebase
 import com.valdoang.kateringconnect.R
 import com.valdoang.kateringconnect.databinding.ItemMenuBinding
+import com.valdoang.kateringconnect.model.Keranjang
 import com.valdoang.kateringconnect.model.Menu
 import com.valdoang.kateringconnect.utils.withNumberingFormat
 
 
 class MenuAdapter(
-    private val context: Context
+    private val context: Context, private val btnCheckout: Button,
+    private val vendorId: String
 ) : RecyclerView.Adapter<MenuAdapter.MyViewHolder>() {
 
     private val menuList = ArrayList<Menu>()
+    private var db = Firebase.firestore
+    private var userId = FirebaseAuth.getInstance().currentUser!!.uid
+    private var keranjangList: ArrayList<Keranjang> = ArrayList()
     private var onItemClickCallback: OnItemClickCallback? = null
+    private var jumlahPesanan = 0
+    private var total = 0L
 
     @SuppressLint("NotifyDataSetChanged")
-    fun setItems(itemList: List<Menu>) {
+    fun setItems(menu: List<Menu>) {
         menuList.clear()
-        menuList.addAll(itemList)
+        menuList.addAll(menu)
         notifyDataSetChanged()
     }
 
@@ -53,6 +64,40 @@ class MenuAdapter(
                 tvMenuName.text = menu.nama
                 tvMenuDesc.text = menu.keterangan
                 tvMenuPrice.text = menu.harga?.withNumberingFormat()
+
+                val keranjangRef = db.collection("user").document(userId).collection("keranjang").document(vendorId).collection("pesanan").whereEqualTo("menuId", menu.id)
+                keranjangRef.addSnapshotListener { keranjangSnapshot, _ ->
+                    if (keranjangSnapshot != null) {
+                        keranjangList.clear()
+                        for (data in keranjangSnapshot.documents) {
+                            val keranjang: Keranjang? = data.toObject(Keranjang::class.java)
+                            if (keranjang != null) {
+                                keranjang.id = data.id
+                                keranjangList.add(keranjang)
+                            }
+                        }
+
+                        var totalJumlah = 0
+                        var subtotal = 0L
+
+                        for (i in keranjangList) {
+                            totalJumlah += i.jumlah!!.toInt()
+                            subtotal += i.subtotal!!.toLong()
+                        }
+
+                        jumlahPesanan += totalJumlah
+                        total += subtotal
+
+                        if (keranjangList.isNotEmpty()) {
+                            cvJumlah.visibility = View.VISIBLE
+                            tvJumlah.text = totalJumlah.toString()
+                        } else {
+                            cvJumlah.visibility = View.GONE
+                        }
+
+                        btnCheckout.text = context.getString(R.string.btn_checkout_keranjang, jumlahPesanan.toString(), total.withNumberingFormat())
+                    }
+                }
 
                 if(position == menuList.size -1){
                     view.visibility = View.GONE

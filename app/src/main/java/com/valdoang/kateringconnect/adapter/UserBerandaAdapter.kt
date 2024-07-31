@@ -24,8 +24,6 @@ class UserBerandaAdapter(
 
     private val vendorList = ArrayList<Vendor>()
     private var onItemClickCallback: OnItemClickCallback? = null
-    private var starList: ArrayList<Star> = ArrayList()
-    private var totalNilai = 0.0
     private var db = Firebase.firestore
 
     @SuppressLint("NotifyDataSetChanged")
@@ -53,39 +51,14 @@ class UserBerandaAdapter(
                 tvKateringName.text = vendor.nama
                 tvKateringOngkir.text = context.getString(R.string.rupiah_text, vendor.ongkir?.withNumberingFormat())
 
-                val nilaiRef = db.collection("nilai").whereEqualTo("vendorId", vendor.id)
-                nilaiRef.addSnapshotListener { snapshot,_ ->
-                    if (snapshot != null) {
-                        starList.clear()
-                        totalNilai = 0.0
-                        for (data in snapshot.documents) {
-                            val star: Star? = data.toObject(Star::class.java)
-                            if (star != null) {
-                                starList.add(star)
-                            }
-                        }
-
-                        for (i in starList) {
-                            val nilai = i.nilai?.toDouble()
-                            if (nilai != null) {
-                                totalNilai += nilai
-                            }
-                        }
-
-                        val sizeNilai = starList.size
-                        val nilaiStar = totalNilai/sizeNilai
-
-                        if (sizeNilai == 0) {
-                            ivKateringStar.visibility = View.GONE
-                            tvKateringStar.visibility = View.GONE
-                        }
-                        else {
-                            ivKateringStar.visibility = View.VISIBLE
-                            tvKateringStar.visibility = View.VISIBLE
-                            tvKateringStar.text = context.getString(R.string.vendor_star, nilaiStar.roundOffDecimal(), sizeNilai.toString().withNumberingFormat())
-                        }
-
-                    }
+                if (vendor.sizeNilai == 0) {
+                    ivKateringStar.visibility = View.GONE
+                    tvKateringStar.visibility = View.GONE
+                }
+                else {
+                    ivKateringStar.visibility = View.VISIBLE
+                    tvKateringStar.visibility = View.VISIBLE
+                    tvKateringStar.text = context.getString(R.string.vendor_star, vendor.nilai?.roundOffDecimal(), vendor.sizeNilai.toString())
                 }
 
                 if (vendor.kategoriMenu?.isEmpty() == true) {

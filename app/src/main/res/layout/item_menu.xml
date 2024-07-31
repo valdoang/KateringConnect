@@ -80,6 +80,38 @@
         app:layout_constraintStart_toStartOf="@id/tv_menu_desc"
         app:layout_constraintBottom_toBottomOf="parent"/>
 
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/cv_jumlah"
+        android:layout_width="25dp"
+        android:layout_height="25dp"
+        app:cardCornerRadius="16dp"
+        android:visibility="gone"
+        android:backgroundTint="@color/green_200"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:id="@+id/tv_jumlah"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                tools:text="2"
+                android:fontFamily="@font/poppins_bold"
+                android:textSize="12sp"
+                android:textColor="@color/white"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"/>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.cardview.widget.CardView>
+
     <View
         android:id="@+id/view"
         android:layout_width="match_parent"

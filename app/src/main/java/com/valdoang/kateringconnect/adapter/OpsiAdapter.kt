@@ -16,7 +16,7 @@ import com.valdoang.kateringconnect.utils.withNumberingFormat
 
 class OpsiAdapter(
     private val context: Context, private val opsiListCheck: ArrayList<Opsi>,
-    private val btnPesan: Button, private val grupOpsiId: ArrayList<String>,
+    private val btnAddKeranjang: Button, private val grupOpsiId: ArrayList<String>,
     private val menuPrice: String, private val etJumlah: EditText, private val ivSuccess: ImageView
 ) : RecyclerView.Adapter<OpsiAdapter.MyViewHolder>() {
 
@@ -41,7 +41,7 @@ class OpsiAdapter(
                 rbNamaGrupOpsi.text = opsi.nama
 
                 val basicPrice = menuPrice.toLong() * jumlahTotal
-                btnPesan.text = context.getString(R.string.btn_pesan_menu, basicPrice.withNumberingFormat())
+                btnAddKeranjang.text = context.getString(R.string.btn_add_keranjang, basicPrice.withNumberingFormat())
 
                 if (opsi.harga == "0") {
                     tvPrice.visibility = View.GONE
@@ -62,26 +62,26 @@ class OpsiAdapter(
                 for (i in opsiListCheck) {
                     subtotal += i.harga!!.toLong()
                     total = subtotal * jumlahTotal
-                    btnPesan.text = context.getString(R.string.btn_pesan_menu, total.withNumberingFormat())
+                    btnAddKeranjang.text = context.getString(R.string.btn_add_keranjang, total.withNumberingFormat())
                 }
 
                 etJumlah.allChangedListener {
                     jumlahTotal = it.toLong()
                     subtotal = menuPrice.toLong()
-                    btnPesan.text = context.getString(R.string.btn_pesan_menu, total.withNumberingFormat())
+                    btnAddKeranjang.text = context.getString(R.string.btn_add_keranjang, total.withNumberingFormat())
                     if (opsiListCheck.size <= 0) {
                         total = subtotal * jumlahTotal
-                        btnPesan.text = context.getString(R.string.btn_pesan_menu, total.withNumberingFormat())
+                        btnAddKeranjang.text = context.getString(R.string.btn_add_keranjang, total.withNumberingFormat())
                     } else {
                         for (i in opsiListCheck) {
                             subtotal += i.harga!!.toLong()
                             total = subtotal * jumlahTotal
-                            btnPesan.text = context.getString(R.string.btn_pesan_menu, total.withNumberingFormat())
+                            btnAddKeranjang.text = context.getString(R.string.btn_add_keranjang, total.withNumberingFormat())
                         }
                     }
                 }
 
-                btnPesan.isEnabled = grupOpsiId.size == opsiListCheck.size
+                btnAddKeranjang.isEnabled = grupOpsiId.size == opsiListCheck.size
 
                 val checkListener =
                     CompoundButton.OnCheckedChangeListener { _, isChecked ->

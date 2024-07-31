@@ -265,7 +265,7 @@
             app:layout_constraintTop_toTopOf="parent"/>
 
         <com.google.android.material.button.MaterialButton
-            android:id="@+id/btn_pesan"
+            android:id="@+id/btn_add_keranjang"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="0dp"
             android:layout_height="60dp"
@@ -274,7 +274,7 @@
             android:layout_marginTop="16dp"
             android:layout_marginBottom="16dp"
             android:fontFamily="@font/poppins_bold"
-            tools:text="@string/btn_pesan_menu"
+            tools:text="@string/btn_add_keranjang"
             android:enabled="false"
             app:cornerRadius="10dp"
             android:textSize="16sp"

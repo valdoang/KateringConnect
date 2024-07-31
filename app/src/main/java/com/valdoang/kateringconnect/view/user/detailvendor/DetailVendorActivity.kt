@@ -2,20 +2,27 @@ package com.valdoang.kateringconnect.view.user.detailvendor
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
+import android.view.View
+import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.constraintlayout.widget.ConstraintSet.Constraint
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.firestore.toObject
 import com.google.firebase.ktx.Firebase
 import com.valdoang.kateringconnect.R
 import com.valdoang.kateringconnect.adapter.KategoriMenuAdapter
 import com.valdoang.kateringconnect.databinding.ActivityDetailVendorBinding
 import com.valdoang.kateringconnect.model.KategoriMenu
+import com.valdoang.kateringconnect.model.Keranjang
 import com.valdoang.kateringconnect.model.Star
 import com.valdoang.kateringconnect.utils.Cons
 import com.valdoang.kateringconnect.utils.roundOffDecimal
@@ -26,6 +33,7 @@ import com.valdoang.kateringconnect.view.both.nilai.NilaiActivity
 class DetailVendorActivity : AppCompatActivity() {
     private lateinit var binding: ActivityDetailVendorBinding
     private lateinit var firebaseAuth: FirebaseAuth
+    private var userId = ""
     private var db = Firebase.firestore
     private lateinit var tvVendorStar: TextView
     private lateinit var tvName: TextView
@@ -36,10 +44,15 @@ class DetailVendorActivity : AppCompatActivity() {
     private var foto: String? = null
     private var nama: String? = null
     private var vendorId: String? = null
+    private var alamatId: String? = null
+    private var ongkir: String? = null
     private var totalNilai = 0.0
     private lateinit var recyclerView: RecyclerView
     private var kategoriMenuList: ArrayList<KategoriMenu> = ArrayList()
     private lateinit var kategoriMenuAdapter: KategoriMenuAdapter
+    private var keranjangList: ArrayList<Keranjang> = ArrayList()
+    private lateinit var clButton: ConstraintLayout
+    private lateinit var btnCheckout: Button
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -48,8 +61,11 @@ class DetailVendorActivity : AppCompatActivity() {
         supportActionBar?.hide()
 
         vendorId = intent.getStringExtra(Cons.EXTRA_ID)
+        alamatId = intent.getStringExtra(Cons.EXTRA_SEC_ID)
+        ongkir = intent.getStringExtra(Cons.EXTRA_ONGKIR)
 
         firebaseAuth = Firebase.auth
+        userId = firebaseAuth.currentUser!!.uid
         starList = arrayListOf()
 
         tvVendorStar = binding.tvVendorStar
@@ -57,10 +73,13 @@ class DetailVendorActivity : AppCompatActivity() {
         tvAddress = binding.tvAddress
         tvNoPhone = binding.tvNoPhone
         ivVendorAkun = binding.ivVendorAkun
+        clButton = binding.clButton
+        btnCheckout = binding.btnCheckout
 
         setupAccount()
         setupView()
         setupMenu()
+        setupKeranjang()
         setupAction()
     }
 
@@ -139,10 +158,23 @@ class DetailVendorActivity : AppCompatActivity() {
         }
     }
 
+    private fun setupKeranjang() {
+        val keranjangRef = db.collection("user").document(userId).collection("keranjang").document(vendorId!!).collection("pesanan")
+        keranjangRef.addSnapshotListener { keranjangSnapshot, _ ->
+            if (keranjangSnapshot != null) {
+                if (keranjangSnapshot.documents.size == 0) {
+                    clButton.visibility = View.GONE
+                } else {
+                    clButton.visibility = View.VISIBLE
+                }
+            }
+        }
+    }
+
     private fun setupView() {
         recyclerView = binding.rvMenu
         recyclerView.layoutManager = LinearLayoutManager(this)
-        kategoriMenuAdapter = KategoriMenuAdapter(this, vendorId!!)
+        kategoriMenuAdapter = KategoriMenuAdapter(this, vendorId!!, alamatId!!, ongkir!!, btnCheckout)
         recyclerView.adapter = kategoriMenuAdapter
     }
     private fun setupAction() {

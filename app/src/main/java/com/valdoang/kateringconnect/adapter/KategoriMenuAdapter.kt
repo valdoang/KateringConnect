@@ -6,6 +6,7 @@ import android.content.Intent
 import android.os.Build
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import android.widget.Button
 import androidx.annotation.RequiresApi
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -18,7 +19,9 @@ import com.valdoang.kateringconnect.utils.Cons
 import com.valdoang.kateringconnect.view.user.custommenu.CustomMenuActivity
 
 class KategoriMenuAdapter(
-    private val context: Context, private val vendorId: String
+    private val context: Context, private val vendorId: String,
+    private val alamatId: String, private val ongkir: String,
+    private val btnCheckout: Button
 ): RecyclerView.Adapter<KategoriMenuAdapter.MyViewHolder>() {
 
     private val kategoriMenuList = ArrayList<KategoriMenu>()
@@ -26,9 +29,9 @@ class KategoriMenuAdapter(
     private var db = Firebase.firestore
 
     @SuppressLint("NotifyDataSetChanged")
-    fun setItems(itemList: List<KategoriMenu>) {
+    fun setItems(kategoriMenu: List<KategoriMenu>) {
         kategoriMenuList.clear()
-        kategoriMenuList.addAll(itemList)
+        kategoriMenuList.addAll(kategoriMenu)
         notifyDataSetChanged()
     }
 
@@ -40,7 +43,7 @@ class KategoriMenuAdapter(
 
                 //Setup View
                 val recyclerView: RecyclerView = rvMenu
-                val menuAdapter = MenuAdapter(context)
+                val menuAdapter = MenuAdapter(context, btnCheckout, vendorId)
                 recyclerView.layoutManager = LinearLayoutManager(context)
                 recyclerView.adapter = menuAdapter
                 menuAdapter.setItems(menuList)
@@ -72,6 +75,8 @@ class KategoriMenuAdapter(
                                     intent.putExtra(Cons.EXTRA_ID, vendorId)
                                     intent.putExtra(Cons.EXTRA_SEC_ID, kategoriMenu.id)
                                     intent.putExtra(Cons.EXTRA_THIRD_ID, data.id)
+                                    intent.putExtra(Cons.EXTRA_FOURTH_ID, alamatId)
+                                    intent.putExtra(Cons.EXTRA_ONGKIR, ongkir)
                                     context.startActivity(intent)
                                 }
                             }

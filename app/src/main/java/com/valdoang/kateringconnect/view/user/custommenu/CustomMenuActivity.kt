@@ -1,6 +1,5 @@
 package com.valdoang.kateringconnect.view.user.custommenu
 
-import android.content.Intent
 import android.os.Build
 import android.os.Bundle
 import android.view.View
@@ -23,7 +22,7 @@ import com.valdoang.kateringconnect.model.Opsi
 import com.valdoang.kateringconnect.utils.Cons
 import com.valdoang.kateringconnect.utils.allChangedListener
 import com.valdoang.kateringconnect.utils.withNumberingFormat
-import com.valdoang.kateringconnect.view.user.pemesanan.PemesananActivity
+import java.util.stream.Collectors
 
 
 @RequiresApi(Build.VERSION_CODES.N)
@@ -31,13 +30,14 @@ class CustomMenuActivity : AppCompatActivity(), EditTextCatatanFragment.GetCatat
     EditTextJumlahFragment.GetJumlah {
     private lateinit var binding: ActivityCustomMenuBinding
     private lateinit var firebaseAuth: FirebaseAuth
+    private var userId = ""
     private var db = Firebase.firestore
     private lateinit var ivMenu: ImageView
     private lateinit var tvMenuName: TextView
     private lateinit var tvMenuDesc: TextView
     private lateinit var tvMenuPrice: TextView
     private lateinit var tvHargaDasar: TextView
-    private lateinit var btnPesan: Button
+    private lateinit var btnAddKeranjang: Button
     private lateinit var ibLess: ImageButton
     private lateinit var ibMore: ImageButton
     private lateinit var etJumlah: EditText
@@ -45,6 +45,8 @@ class CustomMenuActivity : AppCompatActivity(), EditTextCatatanFragment.GetCatat
     private var vendorId: String? = null
     private var kategoriId: String? = null
     private var menuId: String? = null
+    private var alamatId: String? = null
+    private var ongkir: String? = null
     private lateinit var recyclerView: RecyclerView
     private lateinit var grupOpsiAdapter: GrupOpsiAdapter
     private var grupOpsiId: ArrayList<String>? = ArrayList()
@@ -65,17 +67,20 @@ class CustomMenuActivity : AppCompatActivity(), EditTextCatatanFragment.GetCatat
         supportActionBar?.hide()
 
         firebaseAuth = Firebase.auth
+        userId = firebaseAuth.currentUser!!.uid
 
         vendorId = intent.getStringExtra(Cons.EXTRA_ID)
         kategoriId = intent.getStringExtra(Cons.EXTRA_SEC_ID)
         menuId = intent.getStringExtra(Cons.EXTRA_THIRD_ID)
+        alamatId = intent.getStringExtra(Cons.EXTRA_FOURTH_ID)
+        ongkir = intent.getStringExtra(Cons.EXTRA_ONGKIR)
 
         ivMenu = binding.ivMenu
         tvMenuName = binding.tvMenuName
         tvMenuDesc = binding.tvMenuDesc
         tvMenuPrice = binding.tvMenuPrice
         tvHargaDasar = binding.tvHargaDasar
-        btnPesan = binding.btnPesan
+        btnAddKeranjang = binding.btnAddKeranjang
         ibLess = binding.ibLess
         ibMore = binding.ibMore
         etJumlah = binding.etJumlah
@@ -162,7 +167,7 @@ class CustomMenuActivity : AppCompatActivity(), EditTextCatatanFragment.GetCatat
     private fun setupView() {
         recyclerView = binding.rvGrupOpsi
         recyclerView.layoutManager = LinearLayoutManager(this)
-        grupOpsiAdapter = GrupOpsiAdapter(this, vendorId!!, opsiListCheck, btnPesan, grupOpsiId!!, menuPrice, etJumlah)
+        grupOpsiAdapter = GrupOpsiAdapter(this, vendorId!!, opsiListCheck, btnAddKeranjang, grupOpsiId!!, menuPrice, etJumlah)
         recyclerView.adapter = grupOpsiAdapter
     }
 
@@ -192,35 +197,38 @@ class CustomMenuActivity : AppCompatActivity(), EditTextCatatanFragment.GetCatat
         var jumlahTotal = etJumlah.text.toString().toLong()
 
         total = subtotal * jumlahTotal
-        btnPesan.text = getString(R.string.btn_pesan_menu, total.withNumberingFormat())
+        btnAddKeranjang.text = getString(R.string.btn_add_keranjang, total.withNumberingFormat())
 
         etJumlah.allChangedListener {
             jumlahTotal = it.toLong()
             subtotal = menuPrice.toLong()
-            btnPesan.text = getString(R.string.btn_pesan_menu, total.withNumberingFormat())
+            btnAddKeranjang.text = getString(R.string.btn_add_keranjang, total.withNumberingFormat())
             if (opsiListCheck.size <= 0) {
                 total = subtotal * jumlahTotal
-                btnPesan.text = getString(R.string.btn_pesan_menu, total.withNumberingFormat())
+                btnAddKeranjang.text = getString(R.string.btn_add_keranjang, total.withNumberingFormat())
             } else {
                 for (i in opsiListCheck) {
                     subtotal += i.harga!!.toLong()
                     total = subtotal * jumlahTotal
-                    btnPesan.text = getString(R.string.btn_pesan_menu, total.withNumberingFormat())
+                    btnAddKeranjang.text = getString(R.string.btn_add_keranjang, total.withNumberingFormat())
                 }
             }
         }
 
-        btnPesan.isEnabled = grupOpsiId?.size == opsiListCheck.size
+        btnAddKeranjang.isEnabled = grupOpsiId?.size == opsiListCheck.size
     }
 
     private fun pesan() {
-        btnPesan.setOnClickListener{
+        btnAddKeranjang.setOnClickListener{
             val sJumlah = etJumlah.text.toString().trim()
             val sCatatan = etCatatan.text.toString().trim()
-            val sNamaOpsi: ArrayList<String> = ArrayList()
+            val namaOpsiList: ArrayList<String> = ArrayList()
             for (i in opsiListCheck) {
-                sNamaOpsi.add(i.nama!!)
+                namaOpsiList.add(i.nama!!)
             }
+            val sNamaOpsi = namaOpsiList.stream().collect(
+                Collectors.joining(", ")
+            )!!
 
             val jumlahTotal = sJumlah.toLong()
             var subtotal = menuPrice.toLong()
@@ -233,10 +241,28 @@ class CustomMenuActivity : AppCompatActivity(), EditTextCatatanFragment.GetCatat
                 }
             }
 
-            val intent = Intent(this, PemesananActivity::class.java)
+            val keranjangMap = mapOf(
+                "kategoriMenuId" to kategoriId,
+                "menuId" to menuId,
+                "jumlah" to sJumlah,
+                "namaOpsi" to sNamaOpsi,
+                "catatan" to sCatatan,
+                "hargaPerPorsi" to subtotal.toString(),
+                "subtotal" to totalHarga.toString()
+            )
+            val keranjangRef = db.collection("user").document(userId).collection("keranjang").document(vendorId!!).collection("pesanan").document()
+            keranjangRef.set(keranjangMap).addOnSuccessListener {
+                finish()
+            } .addOnFailureListener {
+                Toast.makeText(this, R.string.failed_add_keranjang, Toast.LENGTH_SHORT).show()
+            }
+
+            /*val intent = Intent(this, PemesananActivity::class.java)
             intent.putExtra(Cons.EXTRA_ID, vendorId)
             intent.putExtra(Cons.EXTRA_SEC_ID, kategoriId)
             intent.putExtra(Cons.EXTRA_THIRD_ID, menuId)
+            intent.putExtra(Cons.EXTRA_FOURTH_ID, alamatId)
+            intent.putExtra(Cons.EXTRA_ONGKIR, ongkir)
             intent.putExtra(Cons.EXTRA_NAMA, menuName)
             intent.putExtra(Cons.EXTRA_DESC, menuDesc)
             intent.putExtra(Cons.EXTRA_JUMLAH_PESANAN, sJumlah)
@@ -244,7 +270,7 @@ class CustomMenuActivity : AppCompatActivity(), EditTextCatatanFragment.GetCatat
             intent.putExtra(Cons.EXTRA_CATATAN, sCatatan)
             intent.putExtra(Cons.EXTRA_TOTAL, totalHarga.toString())
             intent.putExtra(Cons.EXTRA_SUBTOTAL, subtotal.toString())
-            startActivity(intent)
+            startActivity(intent)*/
         }
     }
 

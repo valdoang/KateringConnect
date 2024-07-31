@@ -319,7 +319,7 @@
     <string name="galeri_dapur">Galeri Dapur</string>
     <string name="tv_vendor_galeri">Galeri dapur</string>
     <string name="opsi_price">+%1$s </string>
-    <string name="btn_pesan_menu">Pesan - %1$s </string>
+    <string name="btn_add_keranjang">Tambah ke Keranjang - Rp%1$s </string>
     <string name="pilih_1">Pilih 1</string>
     <string name="harga_dasar">Harga dasar</string>
     <string name="catatan_untuk_vendor">Catatan untuk vendor</string>
@@ -353,4 +353,6 @@
     <string name="title_edit_alamat">Edit Alamat</string>
     <string name="hapus_alamat">Hapus Alamat</string>
     <string name="delete_alamat_alert">Apakah Anda yakin ingin menghapus alamat ini?</string>
+    <string name="btn_checkout_keranjang">Keranjang - %1$s pesanan - Rp%2$s</string>
+    <string name="failed_add_keranjang">Gagal menambahkan keranjang</string>
 </resources>

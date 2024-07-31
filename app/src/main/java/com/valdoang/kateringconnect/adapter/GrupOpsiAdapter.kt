@@ -18,7 +18,7 @@ import com.valdoang.kateringconnect.model.Opsi
 
 class GrupOpsiAdapter(
     private val context: Context, private val vendorId: String, private val opsiListCheck: ArrayList<Opsi>,
-    private val btnPesan: Button, private val grupOpsiId: ArrayList<String>,
+    private val btnAddKeranjang: Button, private val grupOpsiId: ArrayList<String>,
     private var menuPrice: String, private var totalJumlah: EditText
 ) : RecyclerView.Adapter<GrupOpsiAdapter.MyViewHolder>() {
 
@@ -42,7 +42,7 @@ class GrupOpsiAdapter(
 
                 //Setup View
                 val recyclerView: RecyclerView = rvOpsi
-                val opsiAdapter = OpsiAdapter(context, opsiListCheck, btnPesan, grupOpsiId, menuPrice, totalJumlah, ivSuccess)
+                val opsiAdapter = OpsiAdapter(context, opsiListCheck, btnAddKeranjang, grupOpsiId, menuPrice, totalJumlah, ivSuccess)
                 recyclerView.layoutManager = LinearLayoutManager(context)
                 recyclerView.adapter = opsiAdapter
 

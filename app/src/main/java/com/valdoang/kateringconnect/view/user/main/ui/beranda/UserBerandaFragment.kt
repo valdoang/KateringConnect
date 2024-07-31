@@ -27,6 +27,7 @@ import com.google.firebase.ktx.Firebase
 import com.valdoang.kateringconnect.R
 import com.valdoang.kateringconnect.adapter.UserBerandaAdapter
 import com.valdoang.kateringconnect.databinding.FragmentUserBerandaBinding
+import com.valdoang.kateringconnect.model.Star
 import com.valdoang.kateringconnect.model.Vendor
 import com.valdoang.kateringconnect.utils.Cons
 import com.valdoang.kateringconnect.view.both.chat.ChatActivity
@@ -53,6 +54,9 @@ class UserBerandaFragment : Fragment() {
     private lateinit var progressBar: ProgressBar
     private lateinit var searchView: SearchView
     private lateinit var kategoriMenuList: ArrayList<String>
+    private var starList: ArrayList<Star> = ArrayList()
+    private var totalNilai = 0.0
+    private var alamatId: String? = null
 
     @RequiresApi(Build.VERSION_CODES.N)
     override fun onCreateView(
@@ -82,7 +86,6 @@ class UserBerandaFragment : Fragment() {
         searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {
                 progressBar.visibility = View.VISIBLE
-                Log.d("VendorList", vendorList.toString())
                 val filteredVendor = vendorList.filter {
                     it.nama!!.contains(query!!, ignoreCase = true) || it.kategoriMenu!!.contains(query, ignoreCase = true)
                 }
@@ -125,6 +128,7 @@ class UserBerandaFragment : Fragment() {
         val vendorRef = db.collection("user").whereEqualTo("jenis", "Vendor").whereIn("kota", listOf(userKota, addKota) )
         vendorRef.addSnapshotListener{ snapshot,_ ->
             if (snapshot != null) {
+                progressBar.visibility = View.GONE
                 vendorList.clear()
                 for (data in snapshot.documents) {
                     val vendor: Vendor? = data.toObject(Vendor::class.java)
@@ -183,34 +187,62 @@ class UserBerandaFragment : Fragment() {
                     } catch (e: Exception) {
                         Log.d(ContentValues.TAG, e.localizedMessage as String)
                     }
-                }
 
-                vendorList.sortBy { vendor ->
-                    vendor.ongkir
-                }
+                    val nilaiRef = db.collection("nilai").whereEqualTo("vendorId", i.id)
+                    nilaiRef.addSnapshotListener { nilaiSnapshot,_ ->
+                        if (nilaiSnapshot != null) {
+                            starList.clear()
+                            totalNilai = 0.0
+                            for (data in nilaiSnapshot.documents) {
+                                val star: Star? = data.toObject(Star::class.java)
+                                if (star != null) {
+                                    starList.add(star)
+                                }
+                            }
 
-                Handler(Looper.getMainLooper()).postDelayed({
-                    progressBar.visibility = View.GONE
-                    userBerandaAdapter.setItems(vendorList)
-                }, 1000)
-                userBerandaAdapter.setOnItemClickCallback(object :
-                    UserBerandaAdapter.OnItemClickCallback {
-                    override fun onItemClicked(data: Vendor) {
-                        val intent = Intent(requireContext(), DetailVendorActivity::class.java)
-                        intent.putExtra(Cons.EXTRA_ID, data.id)
-                        startActivity(intent)
+                            for (j in starList) {
+                                val nilai = j.nilai?.toDouble()
+                                if (nilai != null) {
+                                    totalNilai += nilai
+                                }
+                            }
+
+                            val sizeNilai = starList.size
+                            val nilaiStar = totalNilai/sizeNilai
+
+                            i.sizeNilai = sizeNilai
+                            i.nilai = nilaiStar
+
+                            vendorList.sortBy { vendor ->
+                                vendor.ongkir
+                            }
+
+                            userBerandaAdapter.setItems(vendorList)
+
+                            userBerandaAdapter.setOnItemClickCallback(object :
+                                UserBerandaAdapter.OnItemClickCallback {
+                                override fun onItemClicked(data: Vendor) {
+                                    val intent = Intent(requireContext(), DetailVendorActivity::class.java)
+                                    intent.putExtra(Cons.EXTRA_ID, data.id)
+                                    intent.putExtra(Cons.EXTRA_SEC_ID, alamatId.toString())
+                                    intent.putExtra(Cons.EXTRA_ONGKIR, data.ongkir.toString())
+                                    startActivity(intent)
+                                }
+                            })
+
+                            if (vendorList.isEmpty()) {
+                                binding.noDataAnimation.visibility = View.VISIBLE
+                                binding.tvNoData.visibility = View.VISIBLE
+
+                            }
+                            else {
+                                binding.noDataAnimation.visibility = View.GONE
+                                binding.tvNoData.visibility = View.GONE
+                            }
+                        }
                     }
-                })
-
-                if (vendorList.isEmpty()) {
-                    binding.noDataAnimation.visibility = View.VISIBLE
-                    binding.tvNoData.visibility = View.VISIBLE
-
                 }
-                else {
-                    binding.noDataAnimation.visibility = View.GONE
-                    binding.tvNoData.visibility = View.GONE
-                }
+
             }
         }
     }
@@ -278,13 +310,18 @@ class UserBerandaFragment : Fragment() {
             val intent = Intent(requireContext(), ChatActivity::class.java)
             startActivity(intent)
         }
+
+        binding.cvKeranjang.setOnClickListener {
+            val intent = Intent(requireContext(), ChatActivity::class.java)
+            startActivity(intent)
+        }
     }
 
     @RequiresApi(Build.VERSION_CODES.N)
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == Cons.EXTRA_INT && resultCode == Activity.RESULT_OK) {
-            val id = data?.getStringExtra(Cons.EXTRA_ID)
+            alamatId = data?.getStringExtra(Cons.EXTRA_ID)
             val nama = data?.getStringExtra(Cons.EXTRA_NAMA)
             val kota = data?.getStringExtra(Cons.EXTRA_KOTA)
             val alamat = data?.getStringExtra(Cons.EXTRA_ALAMAT)
