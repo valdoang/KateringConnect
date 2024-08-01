@@ -50,6 +50,7 @@ class CustomMenuActivity : AppCompatActivity(), EditTextCatatanFragment.GetCatat
     private lateinit var recyclerView: RecyclerView
     private lateinit var grupOpsiAdapter: GrupOpsiAdapter
     private var grupOpsiId: ArrayList<String>? = ArrayList()
+    private var menuImage = ""
     private var menuPrice = ""
     private var menuName = ""
     private var menuDesc = ""
@@ -59,6 +60,8 @@ class CustomMenuActivity : AppCompatActivity(), EditTextCatatanFragment.GetCatat
     private var opsiListCheck: ArrayList<Opsi> = ArrayList()
     private var total = 0L
     private var totalHarga = 0L
+    //TODO: BUAT KONDISI KETIKA IDKERANJANG NYA KOSONG, PESAN DIGUNAKAN UNTUK SET KERANJANG BARU
+    //TODO: DAN KETIKA IDKERANJANG NYA ADA, UBAH KUSTOMIASI MENU SESUAI ISI KERANJANGNYA
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -96,7 +99,7 @@ class CustomMenuActivity : AppCompatActivity(), EditTextCatatanFragment.GetCatat
         val menuRef = db.collection("user").document(vendorId!!).collection("kategoriMenu").document(kategoriId!!).collection("menu").document(menuId!!)
         menuRef.get().addOnSuccessListener {  menuSnapshot ->
             if (menuSnapshot != null) {
-                val menuImage = menuSnapshot.data?.get("foto").toString()
+                menuImage = menuSnapshot.data?.get("foto").toString()
                 menuName = menuSnapshot.data?.get("nama").toString()
                 menuDesc = menuSnapshot.data?.get("keterangan").toString()
                 menuPrice = menuSnapshot.data?.get("harga").toString()
@@ -244,6 +247,8 @@ class CustomMenuActivity : AppCompatActivity(), EditTextCatatanFragment.GetCatat
             val keranjangMap = mapOf(
                 "kategoriMenuId" to kategoriId,
                 "menuId" to menuId,
+                "namaMenu" to menuName,
+                "foto" to menuImage,
                 "jumlah" to sJumlah,
                 "namaOpsi" to sNamaOpsi,
                 "catatan" to sCatatan,

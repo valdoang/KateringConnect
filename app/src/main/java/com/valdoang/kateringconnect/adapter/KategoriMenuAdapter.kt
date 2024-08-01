@@ -5,17 +5,24 @@ import android.content.Context
 import android.content.Intent
 import android.os.Build
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.TextView
 import androidx.annotation.RequiresApi
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.bottomsheet.BottomSheetDialog
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
+import com.valdoang.kateringconnect.R
 import com.valdoang.kateringconnect.databinding.ItemKategoriMenuBinding
 import com.valdoang.kateringconnect.model.KategoriMenu
+import com.valdoang.kateringconnect.model.Keranjang
 import com.valdoang.kateringconnect.model.Menu
 import com.valdoang.kateringconnect.utils.Cons
+import com.valdoang.kateringconnect.utils.withNumberingFormat
 import com.valdoang.kateringconnect.view.user.custommenu.CustomMenuActivity
 
 class KategoriMenuAdapter(
@@ -26,7 +33,9 @@ class KategoriMenuAdapter(
 
     private val kategoriMenuList = ArrayList<KategoriMenu>()
     private var menuList = ArrayList<Menu>()
+    private var keranjangList: ArrayList<Keranjang> = ArrayList()
     private var db = Firebase.firestore
+    private var userId = FirebaseAuth.getInstance().currentUser!!.uid
 
     @SuppressLint("NotifyDataSetChanged")
     fun setItems(kategoriMenu: List<KategoriMenu>) {
@@ -70,14 +79,77 @@ class KategoriMenuAdapter(
                             MenuAdapter.OnItemClickCallback {
                             @RequiresApi(Build.VERSION_CODES.N)
                             override fun onItemClicked(data: Menu) {
-                                if (data.aktif == true) {
-                                    val intent = Intent(context, CustomMenuActivity::class.java)
-                                    intent.putExtra(Cons.EXTRA_ID, vendorId)
-                                    intent.putExtra(Cons.EXTRA_SEC_ID, kategoriMenu.id)
-                                    intent.putExtra(Cons.EXTRA_THIRD_ID, data.id)
-                                    intent.putExtra(Cons.EXTRA_FOURTH_ID, alamatId)
-                                    intent.putExtra(Cons.EXTRA_ONGKIR, ongkir)
-                                    context.startActivity(intent)
+                                val keranjangRef = db.collection("user").document(userId).collection("keranjang").document(vendorId).collection("pesanan").whereEqualTo("menuId", data.id)
+                                keranjangRef.addSnapshotListener { keranjangSnapshot, _ ->
+                                    if (keranjangSnapshot != null) {
+                                        keranjangList.clear()
+                                        for (dataKeranjang in keranjangSnapshot.documents) {
+                                            val keranjang: Keranjang? =
+                                                dataKeranjang.toObject(Keranjang::class.java)
+                                            if (keranjang != null) {
+                                                keranjang.id = data.id
+                                                keranjangList.add(keranjang)
+                                            }
+                                        }
+                                    }
+
+                                    if (data.aktif == true) {
+                                        if (data.grupOpsiId!!.isNotEmpty() && keranjangList.isNotEmpty()) {
+                                            val dialog = BottomSheetDialog(context)
+                                            val view = LayoutInflater.from(context).inflate(R.layout.bottom_sheet_add_or_edit_keranjang, null)
+
+                                            val titleNamaMenu = view.findViewById<TextView>(R.id.title_nama_menu)
+                                            val titleHargaMenu = view.findViewById<TextView>(R.id.title_harga_menu)
+                                            val rvKeranjang = view.findViewById<RecyclerView>(R.id.rv_keranjang)
+                                            val btnSatuLagi = view.findViewById<Button>(R.id.btn_satu_lagi)
+
+                                            titleNamaMenu.text = data.nama
+                                            titleHargaMenu.text = data.harga?.withNumberingFormat()
+                                            btnSatuLagi.setOnClickListener {
+                                                val intent = Intent(context, CustomMenuActivity::class.java)
+                                                intent.putExtra(Cons.EXTRA_ID, vendorId)
+                                                intent.putExtra(Cons.EXTRA_SEC_ID, kategoriMenu.id)
+                                                intent.putExtra(Cons.EXTRA_THIRD_ID, data.id)
+                                                intent.putExtra(Cons.EXTRA_FOURTH_ID, alamatId)
+                                                intent.putExtra(Cons.EXTRA_ONGKIR, ongkir)
+                                                context.startActivity(intent)
+                                            }
+
+                                            //Setup View
+                                            val recyclerViewKeranjang: RecyclerView = rvKeranjang
+                                            val addOrEditKeranjangAdapter = AddOrEditKeranjangAdapter(context, vendorId)
+                                            recyclerViewKeranjang.layoutManager = LinearLayoutManager(context)
+                                            recyclerViewKeranjang.adapter = addOrEditKeranjangAdapter
+                                            addOrEditKeranjangAdapter.setItems(keranjangList)
+
+                                            //Setup Data
+                                            addOrEditKeranjangAdapter.setItems(keranjangList)
+                                            addOrEditKeranjangAdapter.setOnItemClickCallback(object :
+                                                AddOrEditKeranjangAdapter.OnItemClickCallback {
+                                                override fun onItemClicked(data: Keranjang) {
+                                                    //TODO: KIRIM ID KERANJANG UNTUK DIUPDATE DI CUSTOM MENU
+                                                    val intent = Intent(context, CustomMenuActivity::class.java)
+                                                    intent.putExtra(Cons.EXTRA_ID, vendorId)
+                                                    intent.putExtra(Cons.EXTRA_SEC_ID, kategoriMenu.id)
+                                                    intent.putExtra(Cons.EXTRA_THIRD_ID, data.id)
+                                                    intent.putExtra(Cons.EXTRA_FOURTH_ID, alamatId)
+                                                    intent.putExtra(Cons.EXTRA_ONGKIR, ongkir)
+                                                    context.startActivity(intent)
+                                                }
+                                            })
+
+                                            dialog.setContentView(view)
+                                            dialog.show()
+                                        } else {
+                                            val intent = Intent(context, CustomMenuActivity::class.java)
+                                            intent.putExtra(Cons.EXTRA_ID, vendorId)
+                                            intent.putExtra(Cons.EXTRA_SEC_ID, kategoriMenu.id)
+                                            intent.putExtra(Cons.EXTRA_THIRD_ID, data.id)
+                                            intent.putExtra(Cons.EXTRA_FOURTH_ID, alamatId)
+                                            intent.putExtra(Cons.EXTRA_ONGKIR, ongkir)
+                                            context.startActivity(intent)
+                                        }
+                                    }
                                 }
                             }
                         })

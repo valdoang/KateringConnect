@@ -67,6 +67,8 @@ class MenuAdapter(
 
                 val keranjangRef = db.collection("user").document(userId).collection("keranjang").document(vendorId).collection("pesanan").whereEqualTo("menuId", menu.id)
                 keranjangRef.addSnapshotListener { keranjangSnapshot, _ ->
+                    jumlahPesanan = 0
+                    total = 0L
                     if (keranjangSnapshot != null) {
                         keranjangList.clear()
                         for (data in keranjangSnapshot.documents) {
@@ -85,17 +87,28 @@ class MenuAdapter(
                             subtotal += i.subtotal!!.toLong()
                         }
 
+                        //TODO: KEMUNGKINAN KETIKA ADA KERANJANG BARU JUMLAH PESANAN DAN TOTAL AKAN ERROR, KARENA TIDAK MULAI DARI 0
                         jumlahPesanan += totalJumlah
                         total += subtotal
 
                         if (keranjangList.isNotEmpty()) {
                             cvJumlah.visibility = View.VISIBLE
                             tvJumlah.text = totalJumlah.toString()
+                            btnCheckout.text = context.getString(
+                                R.string.btn_checkout_keranjang,
+                                jumlahPesanan.toString(),
+                                total.withNumberingFormat()
+                            )
                         } else {
                             cvJumlah.visibility = View.GONE
+                            btnCheckout.text = context.getString(
+                                R.string.btn_checkout_keranjang,
+                                jumlahPesanan.toString(),
+                                total.withNumberingFormat()
+                            )
                         }
 
-                        btnCheckout.text = context.getString(R.string.btn_checkout_keranjang, jumlahPesanan.toString(), total.withNumberingFormat())
+
                     }
                 }
 

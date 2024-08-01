@@ -355,4 +355,5 @@
     <string name="delete_alamat_alert">Apakah Anda yakin ingin menghapus alamat ini?</string>
     <string name="btn_checkout_keranjang">Keranjang - %1$s pesanan - Rp%2$s</string>
     <string name="failed_add_keranjang">Gagal menambahkan keranjang</string>
+    <string name="satu_lagi">Satu Lagi</string>
 </resources>

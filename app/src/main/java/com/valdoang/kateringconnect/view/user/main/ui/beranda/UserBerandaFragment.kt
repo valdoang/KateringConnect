@@ -312,6 +312,7 @@ class UserBerandaFragment : Fragment() {
         }
 
         binding.cvKeranjang.setOnClickListener {
+            //TODO:BUATKAN HALAMAN KERANJANG DAN UBAH INTENT KE HALAMAN TSB
             val intent = Intent(requireContext(), ChatActivity::class.java)
             startActivity(intent)
         }
