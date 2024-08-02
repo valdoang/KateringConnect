@@ -6,16 +6,13 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.firestore.ktx.firestore
-import com.google.firebase.ktx.Firebase
 import com.valdoang.kateringconnect.databinding.ItemAddOrEditKeranjangBinding
 import com.valdoang.kateringconnect.model.Keranjang
 import com.valdoang.kateringconnect.utils.withNumberingFormat
 
 
 class AddOrEditKeranjangAdapter(
-    private val context: Context, private val vendorId: String
+    private val context: Context
 ) : RecyclerView.Adapter<AddOrEditKeranjangAdapter.MyViewHolder>() {
 
     private var keranjangList: ArrayList<Keranjang> = ArrayList()
@@ -62,6 +59,6 @@ class AddOrEditKeranjangAdapter(
     }
 
     interface OnItemClickCallback {
-        fun onItemClicked(data: Keranjang)
+        fun onItemClicked(keranjang: Keranjang)
     }
 }

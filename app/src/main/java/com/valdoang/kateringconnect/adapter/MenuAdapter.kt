@@ -67,8 +67,6 @@ class MenuAdapter(
 
                 val keranjangRef = db.collection("user").document(userId).collection("keranjang").document(vendorId).collection("pesanan").whereEqualTo("menuId", menu.id)
                 keranjangRef.addSnapshotListener { keranjangSnapshot, _ ->
-                    jumlahPesanan = 0
-                    total = 0L
                     if (keranjangSnapshot != null) {
                         keranjangList.clear()
                         for (data in keranjangSnapshot.documents) {

@@ -21,7 +21,8 @@ class OpsiAdapter(
 ) : RecyclerView.Adapter<OpsiAdapter.MyViewHolder>() {
 
     private val opsiList = ArrayList<Opsi>()
-    private var selectedPosition = -1
+    private var selectedPosition = ""
+    private var temp = ""
     private var subtotal = menuPrice.toLong()
     private var total = 0L
     private var jumlahTotal = etJumlah.text.toString().toLong()
@@ -40,6 +41,26 @@ class OpsiAdapter(
             binding.apply {
                 rbNamaGrupOpsi.text = opsi.nama
 
+                if (opsi.isChecked == true) {
+                    if (temp == "") {
+                        temp = opsi.id!!
+                    } else {
+                        temp = "null"
+                    }
+                }
+
+                opsi.isChecked = selectedPosition == opsi.id || temp == opsi.id
+
+                if (opsi.isChecked == true) {
+                    rbNamaGrupOpsi.isChecked = true
+                    opsiListCheck.add(opsi)
+                    subtotal = menuPrice.toLong()
+                } else {
+                    rbNamaGrupOpsi.isChecked = false
+                    opsiListCheck.remove(opsi)
+                    subtotal = menuPrice.toLong()
+                }
+
                 val basicPrice = menuPrice.toLong() * jumlahTotal
                 btnAddKeranjang.text = context.getString(R.string.btn_add_keranjang, basicPrice.withNumberingFormat())
 
@@ -49,15 +70,19 @@ class OpsiAdapter(
                     tvPrice.text = context.getString(R.string.opsi_price, opsi.harga?.withNumberingFormat())
                 }
 
-                if (position != selectedPosition) {
+                /*if (position != selectedPosition) {
+                    opsi.isChecked = false
                     rbNamaGrupOpsi.isChecked = false
                     opsiListCheck.remove(opsi)
                     subtotal = menuPrice.toLong()
+                    Log.d("opsi", opsi.toString())
                 } else {
+                    opsi.isChecked = true
                     rbNamaGrupOpsi.isChecked = true
                     opsiListCheck.add(opsi)
                     subtotal = menuPrice.toLong()
-                }
+                    Log.d("opsiCheck", opsi.toString())
+                }*/
 
                 for (i in opsiListCheck) {
                     subtotal += i.harga!!.toLong()
@@ -87,7 +112,8 @@ class OpsiAdapter(
                     CompoundButton.OnCheckedChangeListener { _, isChecked ->
                        if (isChecked) {
                            ivSuccess.visibility = View.VISIBLE
-                           selectedPosition = adapterPosition
+                           selectedPosition = opsi.id!!
+                           temp = "null"
                            notifyDataSetChanged()
                        }
                     }

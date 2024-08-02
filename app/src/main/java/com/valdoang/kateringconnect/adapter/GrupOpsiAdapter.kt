@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.os.Build
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
@@ -19,7 +20,7 @@ import com.valdoang.kateringconnect.model.Opsi
 class GrupOpsiAdapter(
     private val context: Context, private val vendorId: String, private val opsiListCheck: ArrayList<Opsi>,
     private val btnAddKeranjang: Button, private val grupOpsiId: ArrayList<String>,
-    private var menuPrice: String, private var totalJumlah: EditText
+    private var menuPrice: String, private var totalJumlah: EditText, private var namaOpsi: String
 ) : RecyclerView.Adapter<GrupOpsiAdapter.MyViewHolder>() {
 
     private val grupOpsiList = ArrayList<GrupOpsi>()
@@ -57,6 +58,13 @@ class GrupOpsiAdapter(
                             if (opsi != null) {
                                 opsi.id = data.id
                                 opsiList.add(opsi)
+                            }
+                        }
+
+                        for (i in opsiList) {
+                            if (namaOpsi.contains(i.nama!!)) {
+                                i.isChecked = true
+                                ivSuccess.visibility = View.VISIBLE
                             }
                         }
 

@@ -5,7 +5,6 @@ import android.content.Context
 import android.content.Intent
 import android.os.Build
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.TextView
@@ -87,7 +86,7 @@ class KategoriMenuAdapter(
                                             val keranjang: Keranjang? =
                                                 dataKeranjang.toObject(Keranjang::class.java)
                                             if (keranjang != null) {
-                                                keranjang.id = data.id
+                                                keranjang.id = dataKeranjang.id
                                                 keranjangList.add(keranjang)
                                             }
                                         }
@@ -117,7 +116,7 @@ class KategoriMenuAdapter(
 
                                             //Setup View
                                             val recyclerViewKeranjang: RecyclerView = rvKeranjang
-                                            val addOrEditKeranjangAdapter = AddOrEditKeranjangAdapter(context, vendorId)
+                                            val addOrEditKeranjangAdapter = AddOrEditKeranjangAdapter(context)
                                             recyclerViewKeranjang.layoutManager = LinearLayoutManager(context)
                                             recyclerViewKeranjang.adapter = addOrEditKeranjangAdapter
                                             addOrEditKeranjangAdapter.setItems(keranjangList)
@@ -126,13 +125,13 @@ class KategoriMenuAdapter(
                                             addOrEditKeranjangAdapter.setItems(keranjangList)
                                             addOrEditKeranjangAdapter.setOnItemClickCallback(object :
                                                 AddOrEditKeranjangAdapter.OnItemClickCallback {
-                                                override fun onItemClicked(data: Keranjang) {
-                                                    //TODO: KIRIM ID KERANJANG UNTUK DIUPDATE DI CUSTOM MENU
+                                                override fun onItemClicked(keranjang: Keranjang) {
                                                     val intent = Intent(context, CustomMenuActivity::class.java)
                                                     intent.putExtra(Cons.EXTRA_ID, vendorId)
                                                     intent.putExtra(Cons.EXTRA_SEC_ID, kategoriMenu.id)
                                                     intent.putExtra(Cons.EXTRA_THIRD_ID, data.id)
                                                     intent.putExtra(Cons.EXTRA_FOURTH_ID, alamatId)
+                                                    intent.putExtra(Cons.EXTRA_FIFTH_ID, keranjang.id)
                                                     intent.putExtra(Cons.EXTRA_ONGKIR, ongkir)
                                                     context.startActivity(intent)
                                                 }

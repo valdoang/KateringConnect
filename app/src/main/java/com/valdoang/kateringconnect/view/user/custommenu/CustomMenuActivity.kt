@@ -46,6 +46,7 @@ class CustomMenuActivity : AppCompatActivity(), EditTextCatatanFragment.GetCatat
     private var kategoriId: String? = null
     private var menuId: String? = null
     private var alamatId: String? = null
+    private var keranjangId: String? = null
     private var ongkir: String? = null
     private lateinit var recyclerView: RecyclerView
     private lateinit var grupOpsiAdapter: GrupOpsiAdapter
@@ -60,6 +61,7 @@ class CustomMenuActivity : AppCompatActivity(), EditTextCatatanFragment.GetCatat
     private var opsiListCheck: ArrayList<Opsi> = ArrayList()
     private var total = 0L
     private var totalHarga = 0L
+    private var namaOpsi = ""
     //TODO: BUAT KONDISI KETIKA IDKERANJANG NYA KOSONG, PESAN DIGUNAKAN UNTUK SET KERANJANG BARU
     //TODO: DAN KETIKA IDKERANJANG NYA ADA, UBAH KUSTOMIASI MENU SESUAI ISI KERANJANGNYA
 
@@ -76,6 +78,7 @@ class CustomMenuActivity : AppCompatActivity(), EditTextCatatanFragment.GetCatat
         kategoriId = intent.getStringExtra(Cons.EXTRA_SEC_ID)
         menuId = intent.getStringExtra(Cons.EXTRA_THIRD_ID)
         alamatId = intent.getStringExtra(Cons.EXTRA_FOURTH_ID)
+        keranjangId = intent.getStringExtra(Cons.EXTRA_FIFTH_ID)
         ongkir = intent.getStringExtra(Cons.EXTRA_ONGKIR)
 
         ivMenu = binding.ivMenu
@@ -113,9 +116,26 @@ class CustomMenuActivity : AppCompatActivity(), EditTextCatatanFragment.GetCatat
                 tvMenuDesc.text = menuDesc
                 tvMenuPrice.text = menuPrice.withNumberingFormat()
                 etJumlah.setText(minOrder)
+                setupKeranjang()
                 setupGrupOpsi()
                 hitungTotal()
                 editJumlah()
+            }
+        }
+    }
+
+    private fun setupKeranjang() {
+        if (keranjangId != null) {
+            val keranjangRef = db.collection("user").document(userId).collection("keranjang").document(vendorId!!).collection("pesanan").document(keranjangId!!)
+            keranjangRef.get().addOnSuccessListener { keranjangSnapshot ->
+                if (keranjangSnapshot != null) {
+                    val jumlah = keranjangSnapshot.data?.get("jumlah").toString()
+                    namaOpsi = keranjangSnapshot.data?.get("namaOpsi").toString()
+                    val catatan = keranjangSnapshot.data?.get("catatan").toString()
+                    etJumlah.setText(jumlah)
+                    etCatatan.setText(catatan)
+                    setupView()
+                }
             }
         }
     }
@@ -170,7 +190,7 @@ class CustomMenuActivity : AppCompatActivity(), EditTextCatatanFragment.GetCatat
     private fun setupView() {
         recyclerView = binding.rvGrupOpsi
         recyclerView.layoutManager = LinearLayoutManager(this)
-        grupOpsiAdapter = GrupOpsiAdapter(this, vendorId!!, opsiListCheck, btnAddKeranjang, grupOpsiId!!, menuPrice, etJumlah)
+        grupOpsiAdapter = GrupOpsiAdapter(this, vendorId!!, opsiListCheck, btnAddKeranjang, grupOpsiId!!, menuPrice, etJumlah, namaOpsi)
         recyclerView.adapter = grupOpsiAdapter
     }
 
@@ -289,7 +309,7 @@ class CustomMenuActivity : AppCompatActivity(), EditTextCatatanFragment.GetCatat
             args.putString("catatan", sCatatan)
             val dialog: DialogFragment = EditTextCatatanFragment()
             dialog.arguments = args
-            dialog.show(this.supportFragmentManager, "ediTextCatatanDialog")
+            dialog.show(this.supportFragmentManager, "editTextCatatanDialog")
         }
         etJumlah.setOnClickListener {
             val args = Bundle()
@@ -298,7 +318,7 @@ class CustomMenuActivity : AppCompatActivity(), EditTextCatatanFragment.GetCatat
             args.putString("minOrder", minOrder)
             val dialog: DialogFragment = EditTextJumlahFragment()
             dialog.arguments = args
-            dialog.show(this.supportFragmentManager, "ediTextJumlahDialog")
+            dialog.show(this.supportFragmentManager, "editTextJumlahDialog")
         }
     }
 

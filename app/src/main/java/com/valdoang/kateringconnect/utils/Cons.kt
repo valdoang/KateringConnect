@@ -5,6 +5,7 @@ object Cons {
     const val EXTRA_SEC_ID = "extra_sec_id"
     const val EXTRA_THIRD_ID = "extra_third_id"
     const val EXTRA_FOURTH_ID = "extra_fourth_id"
+    const val EXTRA_FIFTH_ID = "extra_fifth_id"
     const val EXTRA_NAMA = "extra_nama"
     const val EXTRA_SEC_NAMA = "extra_sec_nama"
     const val EXTRA_JUMLAH_PESANAN = "extra_jumlah_pesanan"
