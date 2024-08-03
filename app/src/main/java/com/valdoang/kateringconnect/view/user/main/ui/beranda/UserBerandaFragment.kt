@@ -33,6 +33,7 @@ import com.valdoang.kateringconnect.utils.Cons
 import com.valdoang.kateringconnect.view.both.chat.ChatActivity
 import com.valdoang.kateringconnect.view.user.alamat.AlamatActivity
 import com.valdoang.kateringconnect.view.user.detailvendor.DetailVendorActivity
+import com.valdoang.kateringconnect.view.user.keranjang.AllKeranjangActivity
 import java.util.stream.Collectors
 import kotlin.math.roundToLong
 
@@ -312,8 +313,8 @@ class UserBerandaFragment : Fragment() {
         }
 
         binding.cvKeranjang.setOnClickListener {
-            //TODO:BUATKAN HALAMAN KERANJANG DAN UBAH INTENT KE HALAMAN TSB
-            val intent = Intent(requireContext(), ChatActivity::class.java)
+            val intent = Intent(requireContext(), AllKeranjangActivity::class.java)
+            intent.putExtra(Cons.EXTRA_ID, alamatId.toString())
             startActivity(intent)
         }
     }

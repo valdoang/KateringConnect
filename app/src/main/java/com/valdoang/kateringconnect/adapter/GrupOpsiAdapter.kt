@@ -43,7 +43,7 @@ class GrupOpsiAdapter(
 
                 //Setup View
                 val recyclerView: RecyclerView = rvOpsi
-                val opsiAdapter = OpsiAdapter(context, opsiListCheck, btnAddKeranjang, grupOpsiId, menuPrice, totalJumlah, ivSuccess)
+                val opsiAdapter = OpsiAdapter(context, opsiListCheck, btnAddKeranjang, grupOpsiId, menuPrice, totalJumlah, ivSuccess, namaOpsi)
                 recyclerView.layoutManager = LinearLayoutManager(context)
                 recyclerView.adapter = opsiAdapter
 

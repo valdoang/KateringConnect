@@ -2,6 +2,7 @@ package com.valdoang.kateringconnect.view.user.detailvendor
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.Button
 import android.widget.ImageView
@@ -26,6 +27,7 @@ import com.valdoang.kateringconnect.utils.roundOffDecimal
 import com.valdoang.kateringconnect.utils.withNumberingFormat
 import com.valdoang.kateringconnect.view.both.chat.RoomChatActivity
 import com.valdoang.kateringconnect.view.both.nilai.NilaiActivity
+import com.valdoang.kateringconnect.view.user.pemesanan.PemesananActivity
 
 class DetailVendorActivity : AppCompatActivity() {
     private lateinit var binding: ActivityDetailVendorBinding
@@ -50,6 +52,8 @@ class DetailVendorActivity : AppCompatActivity() {
     private var keranjangList: ArrayList<Keranjang> = ArrayList()
     private lateinit var clButton: ConstraintLayout
     private lateinit var btnCheckout: Button
+    private var jumlahPesanan = 0
+    private var total = 0L
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -77,7 +81,28 @@ class DetailVendorActivity : AppCompatActivity() {
         setupView()
         setupMenu()
         setupKeranjang()
+        checkout()
         setupAction()
+    }
+
+    private fun checkout() {
+        //TODO: SESUAIKAN VALUE YANG INGIN DIKIRIM NANTINYA
+        btnCheckout.setOnClickListener {
+            val intent = Intent(this, PemesananActivity::class.java)
+            intent.putExtra(Cons.EXTRA_ID, vendorId)
+            /*intent.putExtra(Cons.EXTRA_SEC_ID, kategoriId)
+            intent.putExtra(Cons.EXTRA_THIRD_ID, menuId)*/
+            intent.putExtra(Cons.EXTRA_FOURTH_ID, alamatId)
+            intent.putExtra(Cons.EXTRA_ONGKIR, ongkir)
+            /*intent.putExtra(Cons.EXTRA_NAMA, menuName)
+            intent.putExtra(Cons.EXTRA_DESC, menuDesc)
+            intent.putExtra(Cons.EXTRA_JUMLAH_PESANAN, sJumlah)
+            intent.putStringArrayListExtra(Cons.EXTRA_NAMA_OPSI, sNamaOpsi)
+            intent.putExtra(Cons.EXTRA_CATATAN, sCatatan)
+            intent.putExtra(Cons.EXTRA_TOTAL, totalHarga.toString())
+            intent.putExtra(Cons.EXTRA_SUBTOTAL, subtotal.toString())*/
+            startActivity(intent)
+        }
     }
 
     private fun setupAccount() {
@@ -157,13 +182,35 @@ class DetailVendorActivity : AppCompatActivity() {
 
     private fun setupKeranjang() {
         val keranjangRef = db.collection("user").document(userId).collection("keranjang").document(vendorId!!).collection("pesanan")
-        keranjangRef.addSnapshotListener { keranjangSnapshot, _ ->
-            if (keranjangSnapshot != null) {
-                if (keranjangSnapshot.documents.size == 0) {
+        keranjangRef.addSnapshotListener{ snapshot, _ ->
+            if (snapshot != null) {
+                keranjangList.clear()
+                jumlahPesanan = 0
+                total = 0L
+                for (data in snapshot.documents) {
+                    val keranjang: Keranjang? = data.toObject(Keranjang::class.java)
+                    if (keranjang != null) {
+                        keranjang.id = data.id
+                        keranjangList.add(keranjang)
+                    }
+                }
+
+                for (i in keranjangList) {
+                    jumlahPesanan += i.jumlah!!.toInt()
+                    total += i.subtotal!!.toLong()
+                }
+
+                if (keranjangList.isEmpty()) {
                     clButton.visibility = View.GONE
                 } else {
                     clButton.visibility = View.VISIBLE
                 }
+
+                btnCheckout.text = getString(
+                    R.string.btn_checkout_keranjang,
+                    jumlahPesanan.toString(),
+                    total.withNumberingFormat()
+                )
             }
         }
     }
@@ -171,7 +218,7 @@ class DetailVendorActivity : AppCompatActivity() {
     private fun setupView() {
         recyclerView = binding.rvMenu
         recyclerView.layoutManager = LinearLayoutManager(this)
-        kategoriMenuAdapter = KategoriMenuAdapter(this, vendorId!!, alamatId!!, ongkir!!, btnCheckout)
+        kategoriMenuAdapter = KategoriMenuAdapter(this, vendorId!!, alamatId!!, ongkir!!)
         recyclerView.adapter = kategoriMenuAdapter
     }
     private fun setupAction() {

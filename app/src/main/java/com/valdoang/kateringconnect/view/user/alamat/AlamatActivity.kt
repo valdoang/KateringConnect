@@ -30,7 +30,6 @@ class AlamatActivity : AppCompatActivity() {
     private var alamatList: ArrayList<Alamat> = ArrayList()
     private lateinit var progressBar: ProgressBar
     private var alamatRumah = Alamat()
-    //TODO: Setup RecyclerView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

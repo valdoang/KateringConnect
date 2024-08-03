@@ -26,8 +26,7 @@ import com.valdoang.kateringconnect.view.user.custommenu.CustomMenuActivity
 
 class KategoriMenuAdapter(
     private val context: Context, private val vendorId: String,
-    private val alamatId: String, private val ongkir: String,
-    private val btnCheckout: Button
+    private val alamatId: String, private val ongkir: String
 ): RecyclerView.Adapter<KategoriMenuAdapter.MyViewHolder>() {
 
     private val kategoriMenuList = ArrayList<KategoriMenu>()
@@ -51,7 +50,7 @@ class KategoriMenuAdapter(
 
                 //Setup View
                 val recyclerView: RecyclerView = rvMenu
-                val menuAdapter = MenuAdapter(context, btnCheckout, vendorId)
+                val menuAdapter = MenuAdapter(context, vendorId)
                 recyclerView.layoutManager = LinearLayoutManager(context)
                 recyclerView.adapter = menuAdapter
                 menuAdapter.setItems(menuList)
@@ -79,7 +78,7 @@ class KategoriMenuAdapter(
                             @RequiresApi(Build.VERSION_CODES.N)
                             override fun onItemClicked(data: Menu) {
                                 val keranjangRef = db.collection("user").document(userId).collection("keranjang").document(vendorId).collection("pesanan").whereEqualTo("menuId", data.id)
-                                keranjangRef.addSnapshotListener { keranjangSnapshot, _ ->
+                                keranjangRef.get().addOnSuccessListener { keranjangSnapshot ->
                                     if (keranjangSnapshot != null) {
                                         keranjangList.clear()
                                         for (dataKeranjang in keranjangSnapshot.documents) {
@@ -105,6 +104,7 @@ class KategoriMenuAdapter(
                                             titleNamaMenu.text = data.nama
                                             titleHargaMenu.text = data.harga?.withNumberingFormat()
                                             btnSatuLagi.setOnClickListener {
+                                                dialog.dismiss()
                                                 val intent = Intent(context, CustomMenuActivity::class.java)
                                                 intent.putExtra(Cons.EXTRA_ID, vendorId)
                                                 intent.putExtra(Cons.EXTRA_SEC_ID, kategoriMenu.id)
@@ -126,6 +126,7 @@ class KategoriMenuAdapter(
                                             addOrEditKeranjangAdapter.setOnItemClickCallback(object :
                                                 AddOrEditKeranjangAdapter.OnItemClickCallback {
                                                 override fun onItemClicked(keranjang: Keranjang) {
+                                                    dialog.dismiss()
                                                     val intent = Intent(context, CustomMenuActivity::class.java)
                                                     intent.putExtra(Cons.EXTRA_ID, vendorId)
                                                     intent.putExtra(Cons.EXTRA_SEC_ID, kategoriMenu.id)
@@ -136,7 +137,6 @@ class KategoriMenuAdapter(
                                                     context.startActivity(intent)
                                                 }
                                             })
-
                                             dialog.setContentView(view)
                                             dialog.show()
                                         } else {

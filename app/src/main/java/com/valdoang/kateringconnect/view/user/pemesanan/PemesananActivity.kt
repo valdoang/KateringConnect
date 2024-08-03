@@ -61,6 +61,7 @@ class PemesananActivity : AppCompatActivity(), TimePickerFragment.DialogTimeList
     private lateinit var ivTanggalError: ImageView
     private lateinit var tvTanggalError: TextView
     private lateinit var progressBar: ProgressBar
+    //TODO: UBAH PERMINTAAN MENJADI VENDORID SAJA TERUS DICARI KERANJANGNYA
 
     @RequiresApi(Build.VERSION_CODES.N)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -93,7 +94,7 @@ class PemesananActivity : AppCompatActivity(), TimePickerFragment.DialogTimeList
         progressBar = binding.progressBar
 
         setupPemesanan()
-        setupRangkumanPesanan()
+        //setupRangkumanPesanan()
         datePicker()
         pemesanan()
         setupAction()
@@ -101,7 +102,7 @@ class PemesananActivity : AppCompatActivity(), TimePickerFragment.DialogTimeList
 
     @RequiresApi(Build.VERSION_CODES.N)
     private fun setupRangkumanPesanan() {
-        binding.tvJumlahPesanan.text = getString(R.string.tv_jumlah_pesanan, jumlahPesanan)
+       /* binding.tvJumlahPesanan.text = getString(R.string.tv_jumlah_pesanan, jumlahPesanan)
         binding.tvNamaMenu.text = namaMenu
         sNamaOpsi = namaOpsi?.stream()?.collect(
             Collectors.joining(", ")
@@ -119,7 +120,7 @@ class PemesananActivity : AppCompatActivity(), TimePickerFragment.DialogTimeList
             binding.tvCatatan.text = catatan
         }
 
-        binding.tvSubtotal.text = subtotal?.withNumberingFormat()
+        binding.tvSubtotal.text = subtotal?.withNumberingFormat()*/
     }
 
     private fun setupPemesanan() {
@@ -172,8 +173,8 @@ class PemesananActivity : AppCompatActivity(), TimePickerFragment.DialogTimeList
 
         binding.tvOngkirValue.text = ongkir!!.withNumberingFormat()
 
-        totalHarga = ongkir!!.toLong() + subtotal!!.toLong()
-        binding.totalHarga.text = totalHarga.withNumberingFormat()
+        /*totalHarga = ongkir!!.toLong() + subtotal!!.toLong()
+        binding.totalHarga.text = totalHarga.withNumberingFormat()*/
 
     }
 

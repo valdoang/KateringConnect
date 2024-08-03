@@ -62,8 +62,6 @@ class CustomMenuActivity : AppCompatActivity(), EditTextCatatanFragment.GetCatat
     private var total = 0L
     private var totalHarga = 0L
     private var namaOpsi = ""
-    //TODO: BUAT KONDISI KETIKA IDKERANJANG NYA KOSONG, PESAN DIGUNAKAN UNTUK SET KERANJANG BARU
-    //TODO: DAN KETIKA IDKERANJANG NYA ADA, UBAH KUSTOMIASI MENU SESUAI ISI KERANJANGNYA
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -220,20 +218,36 @@ class CustomMenuActivity : AppCompatActivity(), EditTextCatatanFragment.GetCatat
         var jumlahTotal = etJumlah.text.toString().toLong()
 
         total = subtotal * jumlahTotal
-        btnAddKeranjang.text = getString(R.string.btn_add_keranjang, total.withNumberingFormat())
+        if (namaOpsi != "") {
+            btnAddKeranjang.text = getString(R.string.btn_update_keranjang, total.withNumberingFormat())
+        } else {
+            btnAddKeranjang.text = getString(R.string.btn_add_keranjang, total.withNumberingFormat())
+        }
 
         etJumlah.allChangedListener {
             jumlahTotal = it.toLong()
             subtotal = menuPrice.toLong()
-            btnAddKeranjang.text = getString(R.string.btn_add_keranjang, total.withNumberingFormat())
+            if (namaOpsi != "") {
+                btnAddKeranjang.text = getString(R.string.btn_update_keranjang, total.withNumberingFormat())
+            } else {
+                btnAddKeranjang.text = getString(R.string.btn_add_keranjang, total.withNumberingFormat())
+            }
             if (opsiListCheck.size <= 0) {
                 total = subtotal * jumlahTotal
-                btnAddKeranjang.text = getString(R.string.btn_add_keranjang, total.withNumberingFormat())
+                if (namaOpsi != "") {
+                    btnAddKeranjang.text = getString(R.string.btn_update_keranjang, total.withNumberingFormat())
+                } else {
+                    btnAddKeranjang.text = getString(R.string.btn_add_keranjang, total.withNumberingFormat())
+                }
             } else {
                 for (i in opsiListCheck) {
                     subtotal += i.harga!!.toLong()
                     total = subtotal * jumlahTotal
-                    btnAddKeranjang.text = getString(R.string.btn_add_keranjang, total.withNumberingFormat())
+                    if (namaOpsi != "") {
+                        btnAddKeranjang.text = getString(R.string.btn_update_keranjang, total.withNumberingFormat())
+                    } else {
+                        btnAddKeranjang.text = getString(R.string.btn_add_keranjang, total.withNumberingFormat())
+                    }
                 }
             }
         }
@@ -275,11 +289,19 @@ class CustomMenuActivity : AppCompatActivity(), EditTextCatatanFragment.GetCatat
                 "hargaPerPorsi" to subtotal.toString(),
                 "subtotal" to totalHarga.toString()
             )
-            val keranjangRef = db.collection("user").document(userId).collection("keranjang").document(vendorId!!).collection("pesanan").document()
-            keranjangRef.set(keranjangMap).addOnSuccessListener {
-                finish()
-            } .addOnFailureListener {
-                Toast.makeText(this, R.string.failed_add_keranjang, Toast.LENGTH_SHORT).show()
+            val keranjangRef = db.collection("user").document(userId).collection("keranjang").document(vendorId!!).collection("pesanan")
+            if (keranjangId != null) {
+                keranjangRef.document(keranjangId!!).update(keranjangMap).addOnSuccessListener {
+                    finish()
+                } .addOnFailureListener {
+                    Toast.makeText(this, R.string.failed_update_keranjang, Toast.LENGTH_SHORT).show()
+                }
+            } else {
+                keranjangRef.document().set(keranjangMap).addOnSuccessListener {
+                    finish()
+                } .addOnFailureListener {
+                    Toast.makeText(this, R.string.failed_add_keranjang, Toast.LENGTH_SHORT).show()
+                }
             }
 
             /*val intent = Intent(this, PemesananActivity::class.java)

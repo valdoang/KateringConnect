@@ -320,6 +320,7 @@
     <string name="tv_vendor_galeri">Galeri dapur</string>
     <string name="opsi_price">+%1$s </string>
     <string name="btn_add_keranjang">Tambah ke Keranjang - Rp%1$s </string>
+    <string name="btn_update_keranjang">Perbarui Isi Keranjang - Rp%1$s </string>
     <string name="pilih_1">Pilih 1</string>
     <string name="harga_dasar">Harga dasar</string>
     <string name="catatan_untuk_vendor">Catatan untuk vendor</string>
@@ -355,5 +356,11 @@
     <string name="delete_alamat_alert">Apakah Anda yakin ingin menghapus alamat ini?</string>
     <string name="btn_checkout_keranjang">Keranjang - %1$s pesanan - Rp%2$s</string>
     <string name="failed_add_keranjang">Gagal menambahkan keranjang</string>
+    <string name="failed_update_keranjang">Gagal mengubah keranjang</string>
     <string name="satu_lagi">Satu Lagi</string>
+    <string name="daftar_pesanan_saya">Daftar Pesanan Saya</string>
+    <string name="atur">Atur</string>
+    <string name="pilih_semua">Pilih semua</string>
+    <string name="jumlah_keranjang">%1$s Menu</string>
+    <string name="hapus_jumlah_keranjang">Hapus (%1$s)</string>
 </resources>

@@ -17,7 +17,7 @@ import com.valdoang.kateringconnect.utils.withNumberingFormat
 class OpsiAdapter(
     private val context: Context, private val opsiListCheck: ArrayList<Opsi>,
     private val btnAddKeranjang: Button, private val grupOpsiId: ArrayList<String>,
-    private val menuPrice: String, private val etJumlah: EditText, private val ivSuccess: ImageView
+    private val menuPrice: String, private val etJumlah: EditText, private val ivSuccess: ImageView, private val namaOpsi: String
 ) : RecyclerView.Adapter<OpsiAdapter.MyViewHolder>() {
 
     private val opsiList = ArrayList<Opsi>()
@@ -62,7 +62,11 @@ class OpsiAdapter(
                 }
 
                 val basicPrice = menuPrice.toLong() * jumlahTotal
-                btnAddKeranjang.text = context.getString(R.string.btn_add_keranjang, basicPrice.withNumberingFormat())
+                if (namaOpsi != "") {
+                    btnAddKeranjang.text = context.getString(R.string.btn_update_keranjang, basicPrice.withNumberingFormat())
+                } else {
+                    btnAddKeranjang.text = context.getString(R.string.btn_add_keranjang, basicPrice.withNumberingFormat())
+                }
 
                 if (opsi.harga == "0") {
                     tvPrice.visibility = View.GONE
@@ -70,38 +74,40 @@ class OpsiAdapter(
                     tvPrice.text = context.getString(R.string.opsi_price, opsi.harga?.withNumberingFormat())
                 }
 
-                /*if (position != selectedPosition) {
-                    opsi.isChecked = false
-                    rbNamaGrupOpsi.isChecked = false
-                    opsiListCheck.remove(opsi)
-                    subtotal = menuPrice.toLong()
-                    Log.d("opsi", opsi.toString())
-                } else {
-                    opsi.isChecked = true
-                    rbNamaGrupOpsi.isChecked = true
-                    opsiListCheck.add(opsi)
-                    subtotal = menuPrice.toLong()
-                    Log.d("opsiCheck", opsi.toString())
-                }*/
-
                 for (i in opsiListCheck) {
                     subtotal += i.harga!!.toLong()
                     total = subtotal * jumlahTotal
-                    btnAddKeranjang.text = context.getString(R.string.btn_add_keranjang, total.withNumberingFormat())
+                    if (namaOpsi != "") {
+                        btnAddKeranjang.text = context.getString(R.string.btn_update_keranjang, total.withNumberingFormat())
+                    } else {
+                        btnAddKeranjang.text = context.getString(R.string.btn_add_keranjang, total.withNumberingFormat())
+                    }
                 }
 
                 etJumlah.allChangedListener {
                     jumlahTotal = it.toLong()
                     subtotal = menuPrice.toLong()
-                    btnAddKeranjang.text = context.getString(R.string.btn_add_keranjang, total.withNumberingFormat())
+                    if (namaOpsi != "") {
+                        btnAddKeranjang.text = context.getString(R.string.btn_update_keranjang, total.withNumberingFormat())
+                    } else {
+                        btnAddKeranjang.text = context.getString(R.string.btn_add_keranjang, total.withNumberingFormat())
+                    }
                     if (opsiListCheck.size <= 0) {
                         total = subtotal * jumlahTotal
-                        btnAddKeranjang.text = context.getString(R.string.btn_add_keranjang, total.withNumberingFormat())
+                        if (namaOpsi != "") {
+                            btnAddKeranjang.text = context.getString(R.string.btn_update_keranjang, total.withNumberingFormat())
+                        } else {
+                            btnAddKeranjang.text = context.getString(R.string.btn_add_keranjang, total.withNumberingFormat())
+                        }
                     } else {
                         for (i in opsiListCheck) {
                             subtotal += i.harga!!.toLong()
                             total = subtotal * jumlahTotal
-                            btnAddKeranjang.text = context.getString(R.string.btn_add_keranjang, total.withNumberingFormat())
+                            if (namaOpsi != "") {
+                                btnAddKeranjang.text = context.getString(R.string.btn_update_keranjang, total.withNumberingFormat())
+                            } else {
+                                btnAddKeranjang.text = context.getString(R.string.btn_add_keranjang, total.withNumberingFormat())
+                            }
                         }
                     }
                 }
