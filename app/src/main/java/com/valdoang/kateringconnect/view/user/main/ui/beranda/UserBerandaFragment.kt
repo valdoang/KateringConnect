@@ -129,7 +129,6 @@ class UserBerandaFragment : Fragment() {
         val vendorRef = db.collection("user").whereEqualTo("jenis", "Vendor").whereIn("kota", listOf(userKota, addKota) )
         vendorRef.addSnapshotListener{ snapshot,_ ->
             if (snapshot != null) {
-                progressBar.visibility = View.GONE
                 vendorList.clear()
                 for (data in snapshot.documents) {
                     val vendor: Vendor? = data.toObject(Vendor::class.java)
@@ -217,6 +216,9 @@ class UserBerandaFragment : Fragment() {
                             vendorList.sortBy { vendor ->
                                 vendor.ongkir
                             }
+
+                            progressBar.visibility = View.GONE
+                            binding.cvKeranjang.visibility = View.VISIBLE
 
                             userBerandaAdapter.setItems(vendorList)
 

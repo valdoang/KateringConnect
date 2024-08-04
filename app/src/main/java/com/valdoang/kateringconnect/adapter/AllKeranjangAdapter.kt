@@ -6,6 +6,8 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
+import android.widget.CheckBox
 import android.widget.CompoundButton
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
@@ -19,7 +21,9 @@ import com.valdoang.kateringconnect.model.Keranjang
 
 
 class AllKeranjangAdapter(
-    private val context: Context, private val edit: Boolean, private val pilihSemua: Boolean
+    private val context: Context, private val edit: Boolean,
+    private val arrayVendorId: ArrayList<String>,
+    private val btnHapus: Button, private val cbPilihSemua: CheckBox
 ) : RecyclerView.Adapter<AllKeranjangAdapter.MyViewHolder>() {
 
     private val allKeranjangList = ArrayList<AllKeranjang>()
@@ -46,7 +50,8 @@ class AllKeranjangAdapter(
                 onItemClickCallback?.onItemClicked(allKeranjang)
             }
             binding.apply {
-                val vendorRef = db.collection("user").document(allKeranjang.vendorId!!)
+                val vendorId = allKeranjang.vendorId
+                val vendorRef = db.collection("user").document(vendorId!!)
                 vendorRef.get().addOnSuccessListener { vendorSnapshot ->
                     if (vendorSnapshot != null) {
                         val namaVendor = vendorSnapshot.data?.get("nama").toString()
@@ -54,7 +59,7 @@ class AllKeranjangAdapter(
                     }
                 }
 
-                val keranjangRef = db.collection("user").document(userId).collection("keranjang").document(allKeranjang.vendorId!!).collection("pesanan")
+                val keranjangRef = db.collection("user").document(userId).collection("keranjang").document(vendorId).collection("pesanan")
                 keranjangRef.get().addOnSuccessListener { keranjangSnapshot ->
                     if (keranjangSnapshot != null) {
                         keranjangList.clear()
@@ -67,7 +72,11 @@ class AllKeranjangAdapter(
                         }
                         val lastMenuFoto = keranjangList[keranjangList.size.minus(1)].foto
                         Glide.with(context).load(lastMenuFoto).into(ivMenu)
-                        tvKeterangan.text = context.getString(R.string.jumlah_keranjang, keranjangList.size.toString())
+                        var jumlahPesanan = 0
+                        for (i in keranjangList) {
+                            jumlahPesanan += i.jumlah!!.toInt()
+                        }
+                        tvKeterangan.text = context.getString(R.string.jumlah_keranjang, jumlahPesanan.toString(), allKeranjang.jarak)
                     }
                 }
 
@@ -75,9 +84,37 @@ class AllKeranjangAdapter(
                     cbKeranjang.visibility = View.VISIBLE
                 } else {
                     cbKeranjang.visibility = View.GONE
+                    arrayVendorId.clear()
+                    cbPilihSemua.isChecked = false
+                    btnHapus.text = context.getString(R.string.hapus)
                 }
 
-                cbKeranjang.isChecked = pilihSemua
+                cbKeranjang.isChecked = arrayVendorId.contains(vendorId)
+
+                val checkListener =
+                    CompoundButton.OnCheckedChangeListener { _, isChecked ->
+                        if (isChecked) {
+                            if (!arrayVendorId.contains(vendorId)){
+                                arrayVendorId.add(vendorId)
+                            }
+                        } else {
+                            if (arrayVendorId.contains(vendorId)){
+                                arrayVendorId.remove(vendorId)
+                            }
+                        }
+
+                        if (arrayVendorId.size == 0) {
+                            btnHapus.text = context.getString(R.string.hapus)
+                            btnHapus.isEnabled = false
+                        } else {
+                            btnHapus.text = context.getString(R.string.hapus_jumlah_keranjang, arrayVendorId.size.toString())
+                            btnHapus.isEnabled = true
+                        }
+
+                        cbPilihSemua.isChecked = allKeranjangList.size == arrayVendorId.size
+                    }
+
+                cbKeranjang.setOnCheckedChangeListener(checkListener)
             }
         }
     }

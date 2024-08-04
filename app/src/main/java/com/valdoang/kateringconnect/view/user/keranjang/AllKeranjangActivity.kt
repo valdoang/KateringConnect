@@ -1,13 +1,14 @@
 package com.valdoang.kateringconnect.view.user.keranjang
 
+import android.content.ContentValues
 import android.content.Intent
+import android.location.Address
+import android.location.Geocoder
+import android.location.Location
 import android.os.Bundle
 import android.util.Log
 import android.view.View
-import android.widget.Button
-import android.widget.CompoundButton
-import android.widget.ProgressBar
-import android.widget.TextView
+import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -20,9 +21,10 @@ import com.valdoang.kateringconnect.R
 import com.valdoang.kateringconnect.adapter.AllKeranjangAdapter
 import com.valdoang.kateringconnect.databinding.ActivityAllKeranjangBinding
 import com.valdoang.kateringconnect.model.AllKeranjang
-import com.valdoang.kateringconnect.model.Keranjang
 import com.valdoang.kateringconnect.utils.Cons
+import com.valdoang.kateringconnect.utils.roundOffDecimal
 import com.valdoang.kateringconnect.view.user.pemesanan.PemesananActivity
+import kotlin.math.roundToLong
 
 class AllKeranjangActivity : AppCompatActivity() {
     private lateinit var binding: ActivityAllKeranjangBinding
@@ -37,6 +39,10 @@ class AllKeranjangActivity : AppCompatActivity() {
     private lateinit var clEdit: ConstraintLayout
     private lateinit var progressBar: ProgressBar
     private lateinit var btnHapus: Button
+    private lateinit var cbPilihSemua: CheckBox
+    private var arrayVendorId: ArrayList<String> = ArrayList()
+    private var alamatUser = ""
+    private var alamatVendor = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -52,9 +58,10 @@ class AllKeranjangActivity : AppCompatActivity() {
         clEdit = binding.clEdit
         progressBar = binding.progressBar
         btnHapus = binding.btnHapus
+        cbPilihSemua = binding.cbPilihSemua
 
         setupAction()
-        setupView(false, pilihSemua = false)
+        setupView(false)
         setupAllKeranjang()
         setupEditKeranjang()
         deleteKeranjang()
@@ -64,28 +71,127 @@ class AllKeranjangActivity : AppCompatActivity() {
         progressBar.visibility = View.VISIBLE
         val allKeranjangRef = db.collection("user").document(userId).collection("keranjang")
         allKeranjangRef.addSnapshotListener { snapshot, _ ->
-            progressBar.visibility = View.GONE
             if (snapshot != null) {
                 allKeranjangList.clear()
                 for (data in snapshot.documents) {
-                    //TODO: NTAR COBA PAKE DATA CLASS VENDOR AJA
                     val allKeranjang: AllKeranjang? = data.toObject(AllKeranjang::class.java)
                     if (allKeranjang != null) {
                         allKeranjang.vendorId = data.id
                         allKeranjangList.add(allKeranjang)
 
-                        allKeranjangAdapter.setItems(allKeranjangList)
-                        allKeranjangAdapter.setOnItemClickCallback(object : AllKeranjangAdapter.OnItemClickCallback{
-                            override fun onItemClicked(data: AllKeranjang) {
-                                val intent = Intent(this@AllKeranjangActivity, PemesananActivity::class.java)
-                                intent.putExtra(Cons.EXTRA_ID, data.vendorId)
-                                intent.putExtra(Cons.EXTRA_FOURTH_ID, alamatId)
-                                //TODO: PIKIRKAN CARA MENENTUKAN ONGKIRNYA
-                                intent.putExtra(Cons.EXTRA_ONGKIR, "18000")
-                                startActivity(intent)
-                            }
+                        if (alamatId != userId && alamatId != "null") {
+                            val alamatRef = db.collection("user").document(userId).collection("alamatTersimpan").document(alamatId!!)
+                            alamatRef.get().addOnSuccessListener { alamatSnapshot ->
+                                if (alamatSnapshot != null) {
+                                    alamatUser = alamatSnapshot.data?.get("alamat").toString()
+                                    val vendorRef = db.collection("user").document(data.id)
+                                    vendorRef.get().addOnSuccessListener {vendorSnapshot ->
+                                        if (vendorSnapshot != null) {
+                                            alamatVendor = vendorSnapshot.data?.get("alamat").toString()
 
-                        })
+                                            //Hitung Ongkos Kirim
+                                            val coder = Geocoder(this)
+                                            try {
+                                                val userAddress : List<Address> = coder.getFromLocationName(alamatUser,5)!!
+                                                val userLocation = userAddress[0]
+                                                val userLat = userLocation.latitude
+                                                val userLon = userLocation.longitude
+
+                                                val vendorAddress : List<Address> = coder.getFromLocationName(alamatVendor,5)!!
+                                                val vendorLocation = vendorAddress[0]
+                                                val vendorLat = vendorLocation.latitude
+                                                val vendorLon = vendorLocation.longitude
+
+                                                val userPoint = Location("locationA")
+                                                userPoint.latitude = userLat
+                                                userPoint.longitude = userLon
+
+                                                val vendorPoint = Location("locationB")
+                                                vendorPoint.latitude = vendorLat
+                                                vendorPoint.longitude = vendorLon
+
+                                                val jarak = userPoint.distanceTo(vendorPoint) / 1000
+
+                                                val ongkir = jarak.roundToLong() * 3000
+                                                allKeranjang.ongkir = ongkir.toString()
+                                                allKeranjang.jarak = jarak.toDouble().roundOffDecimal()
+
+                                                progressBar.visibility = View.GONE
+                                                allKeranjangAdapter.setItems(allKeranjangList)
+                                                allKeranjangAdapter.setOnItemClickCallback(object : AllKeranjangAdapter.OnItemClickCallback{
+                                                    override fun onItemClicked(data: AllKeranjang) {
+                                                        val intent = Intent(this@AllKeranjangActivity, PemesananActivity::class.java)
+                                                        intent.putExtra(Cons.EXTRA_ID, data.vendorId)
+                                                        intent.putExtra(Cons.EXTRA_FOURTH_ID, alamatId)
+                                                        intent.putExtra(Cons.EXTRA_ONGKIR, data.ongkir)
+                                                        startActivity(intent)
+                                                    }
+                                                })
+
+                                            } catch (e: Exception) {
+                                                Log.d(ContentValues.TAG, e.localizedMessage as String)
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        } else {
+                            val userRef = db.collection("user").document(userId)
+                            userRef.get().addOnSuccessListener { userSnapshot ->
+                                if (userSnapshot != null) {
+                                    alamatUser = userSnapshot.data?.get("alamat").toString()
+                                    val vendorRef = db.collection("user").document(data.id)
+                                    vendorRef.get().addOnSuccessListener {vendorSnapshot ->
+                                        if (vendorSnapshot != null) {
+                                            alamatVendor = vendorSnapshot.data?.get("alamat").toString()
+
+                                            //Hitung Ongkos Kirim
+                                            val coder = Geocoder(this)
+                                            try {
+                                                val userAddress : List<Address> = coder.getFromLocationName(alamatUser,5)!!
+                                                val userLocation = userAddress[0]
+                                                val userLat = userLocation.latitude
+                                                val userLon = userLocation.longitude
+
+                                                val vendorAddress : List<Address> = coder.getFromLocationName(alamatVendor,5)!!
+                                                val vendorLocation = vendorAddress[0]
+                                                val vendorLat = vendorLocation.latitude
+                                                val vendorLon = vendorLocation.longitude
+
+                                                val userPoint = Location("locationA")
+                                                userPoint.latitude = userLat
+                                                userPoint.longitude = userLon
+
+                                                val vendorPoint = Location("locationB")
+                                                vendorPoint.latitude = vendorLat
+                                                vendorPoint.longitude = vendorLon
+
+                                                val jarak = userPoint.distanceTo(vendorPoint) / 1000
+
+                                                val ongkir = jarak.roundToLong() * 3000
+                                                allKeranjang.ongkir = ongkir.toString()
+                                                allKeranjang.jarak = jarak.toDouble().roundOffDecimal()
+
+                                                progressBar.visibility = View.GONE
+                                                allKeranjangAdapter.setItems(allKeranjangList)
+                                                allKeranjangAdapter.setOnItemClickCallback(object : AllKeranjangAdapter.OnItemClickCallback{
+                                                    override fun onItemClicked(data: AllKeranjang) {
+                                                        val intent = Intent(this@AllKeranjangActivity, PemesananActivity::class.java)
+                                                        intent.putExtra(Cons.EXTRA_ID, data.vendorId)
+                                                        intent.putExtra(Cons.EXTRA_FOURTH_ID, alamatId)
+                                                        intent.putExtra(Cons.EXTRA_ONGKIR, data.ongkir)
+                                                        startActivity(intent)
+                                                    }
+                                                })
+
+                                            } catch (e: Exception) {
+                                                Log.d(ContentValues.TAG, e.localizedMessage as String)
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
                     }
                 }
             }
@@ -95,26 +201,44 @@ class AllKeranjangActivity : AppCompatActivity() {
     private fun setupEditKeranjang() {
         val checkListener =
             CompoundButton.OnCheckedChangeListener { _, isChecked ->
-                if (isChecked) {
-                    setupView(true, pilihSemua = true)
-                    //TODO: AMBIL JUMLAH CHECK DAN TAMPILKAN PADA BTN HAPUS
-                    btnHapus.text = getString(R.string.hapus_jumlah_keranjang)
-                } else {
-                    setupView(true, pilihSemua = false)
-                    btnHapus.text = getString(R.string.hapus)
+                cbPilihSemua.setOnClickListener {
+                    if (isChecked) {
+                        for (i in allKeranjangList) {
+                            arrayVendorId.add(i.vendorId!!)
+                        }
+                        setupView(true)
+                        btnHapus.text = getString(R.string.hapus_jumlah_keranjang, allKeranjangList.size.toString())
+                        btnHapus.isEnabled = true
+                    } else {
+                        arrayVendorId.clear()
+                        setupView(true)
+                        btnHapus.text = getString(R.string.hapus)
+                        btnHapus.isEnabled = false
+                    }
                 }
             }
-        binding.cbPilihSemua.setOnCheckedChangeListener(checkListener)
+
+        cbPilihSemua.setOnCheckedChangeListener(checkListener)
         tvEdit.setOnClickListener {
             when (tvEdit.text) {
                 getString(R.string.atur) -> {
                     tvEdit.text = getString(R.string.batalkan)
-                    setupView(true, pilihSemua = false)
+                    setupView(true)
                     clEdit.visibility = View.VISIBLE
                 }
                 getString(R.string.batalkan) -> {
                     tvEdit.text = getString(R.string.atur)
-                    setupView(false, pilihSemua = false)
+                    setupView(false)
+                    allKeranjangAdapter.setOnItemClickCallback(object : AllKeranjangAdapter.OnItemClickCallback{
+                        override fun onItemClicked(data: AllKeranjang) {
+                            val intent = Intent(this@AllKeranjangActivity, PemesananActivity::class.java)
+                            intent.putExtra(Cons.EXTRA_ID, data.vendorId)
+                            intent.putExtra(Cons.EXTRA_FOURTH_ID, alamatId)
+                            intent.putExtra(Cons.EXTRA_ONGKIR, data.ongkir)
+                            startActivity(intent)
+                        }
+
+                    })
                     clEdit.visibility = View.GONE
                 }
             }
@@ -128,11 +252,10 @@ class AllKeranjangActivity : AppCompatActivity() {
         }
     }
     
-    private fun setupView(edit: Boolean, pilihSemua: Boolean) {
+    private fun setupView(edit: Boolean) {
         recyclerView = binding.rvKeranjang
         recyclerView.layoutManager = LinearLayoutManager(this)
-        //TODO: KIRIM BTN HAPUS UNTUK DIUBAH TEXTNYA KETIKA CHECK BOX DITEKAN
-        allKeranjangAdapter = AllKeranjangAdapter(this, edit, pilihSemua)
+        allKeranjangAdapter = AllKeranjangAdapter(this, edit, arrayVendorId, btnHapus, cbPilihSemua)
         recyclerView.adapter = allKeranjangAdapter
         allKeranjangAdapter.setItems(allKeranjangList)
     }
