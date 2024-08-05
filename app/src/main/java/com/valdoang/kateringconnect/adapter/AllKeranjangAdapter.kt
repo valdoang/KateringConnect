@@ -2,7 +2,6 @@ package com.valdoang.kateringconnect.adapter
 
 import android.annotation.SuppressLint
 import android.content.Context
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -60,7 +59,7 @@ class AllKeranjangAdapter(
                 }
 
                 val keranjangRef = db.collection("user").document(userId).collection("keranjang").document(vendorId).collection("pesanan")
-                keranjangRef.get().addOnSuccessListener { keranjangSnapshot ->
+                keranjangRef.addSnapshotListener { keranjangSnapshot, _ ->
                     if (keranjangSnapshot != null) {
                         keranjangList.clear()
                         for (keranjangData in keranjangSnapshot.documents) {

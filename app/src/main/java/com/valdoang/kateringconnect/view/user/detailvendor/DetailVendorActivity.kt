@@ -86,21 +86,11 @@ class DetailVendorActivity : AppCompatActivity() {
     }
 
     private fun checkout() {
-        //TODO: SESUAIKAN VALUE YANG INGIN DIKIRIM NANTINYA
         btnCheckout.setOnClickListener {
             val intent = Intent(this, PemesananActivity::class.java)
             intent.putExtra(Cons.EXTRA_ID, vendorId)
-            /*intent.putExtra(Cons.EXTRA_SEC_ID, kategoriId)
-            intent.putExtra(Cons.EXTRA_THIRD_ID, menuId)*/
-            intent.putExtra(Cons.EXTRA_FOURTH_ID, alamatId)
+            intent.putExtra(Cons.EXTRA_SEC_ID, alamatId)
             intent.putExtra(Cons.EXTRA_ONGKIR, ongkir)
-            /*intent.putExtra(Cons.EXTRA_NAMA, menuName)
-            intent.putExtra(Cons.EXTRA_DESC, menuDesc)
-            intent.putExtra(Cons.EXTRA_JUMLAH_PESANAN, sJumlah)
-            intent.putStringArrayListExtra(Cons.EXTRA_NAMA_OPSI, sNamaOpsi)
-            intent.putExtra(Cons.EXTRA_CATATAN, sCatatan)
-            intent.putExtra(Cons.EXTRA_TOTAL, totalHarga.toString())
-            intent.putExtra(Cons.EXTRA_SUBTOTAL, subtotal.toString())*/
             startActivity(intent)
         }
     }

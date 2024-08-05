@@ -289,35 +289,24 @@ class CustomMenuActivity : AppCompatActivity(), EditTextCatatanFragment.GetCatat
                 "hargaPerPorsi" to subtotal.toString(),
                 "subtotal" to totalHarga.toString()
             )
-            val keranjangRef = db.collection("user").document(userId).collection("keranjang").document(vendorId!!).collection("pesanan")
+            val dummyMap: Map<String, Any> = HashMap()
+
+            val keranjangRef = db.collection("user").document(userId).collection("keranjang").document(vendorId!!)
             if (keranjangId != null) {
-                keranjangRef.document(keranjangId!!).update(keranjangMap).addOnSuccessListener {
+                keranjangRef.collection("pesanan").document(keranjangId!!).update(keranjangMap).addOnSuccessListener {
                     finish()
                 } .addOnFailureListener {
                     Toast.makeText(this, R.string.failed_update_keranjang, Toast.LENGTH_SHORT).show()
                 }
             } else {
-                keranjangRef.document().set(keranjangMap).addOnSuccessListener {
-                    finish()
-                } .addOnFailureListener {
-                    Toast.makeText(this, R.string.failed_add_keranjang, Toast.LENGTH_SHORT).show()
+                keranjangRef.set(dummyMap).addOnSuccessListener {
+                    keranjangRef.collection("pesanan").document().set(keranjangMap).addOnSuccessListener {
+                        finish()
+                    } .addOnFailureListener {
+                        Toast.makeText(this, R.string.failed_add_keranjang, Toast.LENGTH_SHORT).show()
+                    }
                 }
             }
-
-            /*val intent = Intent(this, PemesananActivity::class.java)
-            intent.putExtra(Cons.EXTRA_ID, vendorId)
-            intent.putExtra(Cons.EXTRA_SEC_ID, kategoriId)
-            intent.putExtra(Cons.EXTRA_THIRD_ID, menuId)
-            intent.putExtra(Cons.EXTRA_FOURTH_ID, alamatId)
-            intent.putExtra(Cons.EXTRA_ONGKIR, ongkir)
-            intent.putExtra(Cons.EXTRA_NAMA, menuName)
-            intent.putExtra(Cons.EXTRA_DESC, menuDesc)
-            intent.putExtra(Cons.EXTRA_JUMLAH_PESANAN, sJumlah)
-            intent.putStringArrayListExtra(Cons.EXTRA_NAMA_OPSI, sNamaOpsi)
-            intent.putExtra(Cons.EXTRA_CATATAN, sCatatan)
-            intent.putExtra(Cons.EXTRA_TOTAL, totalHarga.toString())
-            intent.putExtra(Cons.EXTRA_SUBTOTAL, subtotal.toString())
-            startActivity(intent)*/
         }
     }
 

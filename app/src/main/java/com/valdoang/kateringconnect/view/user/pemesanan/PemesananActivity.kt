@@ -3,6 +3,7 @@
 package com.valdoang.kateringconnect.view.user.pemesanan
 
 import android.app.DatePickerDialog
+import android.content.Intent
 import android.os.Build
 import android.os.Bundle
 import android.view.View
@@ -10,16 +11,20 @@ import android.widget.*
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.DialogFragment
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.valdoang.kateringconnect.R
+import com.valdoang.kateringconnect.adapter.PesananAdapter
 import com.valdoang.kateringconnect.databinding.ActivityPemesananBinding
+import com.valdoang.kateringconnect.model.Keranjang
 import com.valdoang.kateringconnect.utils.*
+import com.valdoang.kateringconnect.view.user.custommenu.CustomMenuActivity
 import java.text.SimpleDateFormat
 import java.util.*
-import java.util.stream.Collectors
 
 class PemesananActivity : AppCompatActivity(), TimePickerFragment.DialogTimeListener {
     private lateinit var binding: ActivityPemesananBinding
@@ -43,25 +48,18 @@ class PemesananActivity : AppCompatActivity(), TimePickerFragment.DialogTimeList
     private var totalHarga = 0L
     private var userId = ""
     private var vendorId: String? = null
-    private var kategoriId: String? = null
-    private var menuId: String? = null
     private var alamatId: String? = null
     private var ongkir: String? = null
-    private var namaMenu: String? = null
-    private var deskMenu: String? = null
-    private var jumlahPesanan: String? = null
-    private var namaOpsi: ArrayList<String>? = null
-    private var sNamaOpsi = ""
-    private var catatan: String? = null
-    private var subtotal: String? = null
-    private var hargaPerPorsi: String? = null
     private lateinit var tvTanggal: TextView
     private lateinit var tvJam: TextView
     private lateinit var btnPesan: Button
     private lateinit var ivTanggalError: ImageView
     private lateinit var tvTanggalError: TextView
     private lateinit var progressBar: ProgressBar
-    //TODO: UBAH PERMINTAAN MENJADI VENDORID SAJA TERUS DICARI KERANJANGNYA
+    private var pesananList: ArrayList<Keranjang> = ArrayList()
+    private lateinit var recyclerView: RecyclerView
+    private lateinit var pesananAdapter: PesananAdapter
+    private var subtotal = 0L
 
     @RequiresApi(Build.VERSION_CODES.N)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -74,17 +72,8 @@ class PemesananActivity : AppCompatActivity(), TimePickerFragment.DialogTimeList
         userId = firebaseAuth.currentUser!!.uid
 
         vendorId = intent.getStringExtra(Cons.EXTRA_ID)
-        kategoriId = intent.getStringExtra(Cons.EXTRA_SEC_ID)
-        menuId = intent.getStringExtra(Cons.EXTRA_THIRD_ID)
-        alamatId = intent.getStringExtra(Cons.EXTRA_FOURTH_ID)
+        alamatId = intent.getStringExtra(Cons.EXTRA_SEC_ID)
         ongkir = intent.getStringExtra(Cons.EXTRA_ONGKIR)
-        namaMenu = intent.getStringExtra(Cons.EXTRA_NAMA)
-        deskMenu = intent.getStringExtra(Cons.EXTRA_DESC)
-        jumlahPesanan = intent.getStringExtra(Cons.EXTRA_JUMLAH_PESANAN)
-        namaOpsi = intent.getStringArrayListExtra(Cons.EXTRA_NAMA_OPSI)
-        catatan = intent.getStringExtra(Cons.EXTRA_CATATAN)
-        hargaPerPorsi = intent.getStringExtra(Cons.EXTRA_SUBTOTAL)
-        subtotal = intent.getStringExtra(Cons.EXTRA_TOTAL)
 
         tvTanggal = binding.tvTanggal
         tvJam = binding.tvJam
@@ -93,34 +82,58 @@ class PemesananActivity : AppCompatActivity(), TimePickerFragment.DialogTimeList
         tvTanggalError = binding.tvTanggalError
         progressBar = binding.progressBar
 
+        setupAction()
+        setupView()
         setupPemesanan()
-        //setupRangkumanPesanan()
+        setupRangkumanPesanan()
         datePicker()
         pemesanan()
-        setupAction()
     }
 
     @RequiresApi(Build.VERSION_CODES.N)
     private fun setupRangkumanPesanan() {
-       /* binding.tvJumlahPesanan.text = getString(R.string.tv_jumlah_pesanan, jumlahPesanan)
-        binding.tvNamaMenu.text = namaMenu
-        sNamaOpsi = namaOpsi?.stream()?.collect(
-            Collectors.joining(", ")
-        )!!
+        //TODO: CARI CARA UNTUK MENGHAPUS SALAH SATU PESANAN
+        val pesananRef = db.collection("user").document(userId).collection("keranjang").document(vendorId!!).collection("pesanan")
+        pesananRef.addSnapshotListener { pesananSnapshot, _ ->
+            if (pesananSnapshot != null) {
+                pesananList.clear()
+                subtotal = 0L
+                for (data in pesananSnapshot.documents) {
+                    val pesanan: Keranjang? = data.toObject(Keranjang::class.java)
+                    if (pesanan != null) {
+                        pesanan.id = data.id
+                        pesananList.add(pesanan)
+                    }
+                    val subtotalTemp = data.data?.get("subtotal").toString().toLong()
+                    subtotal += subtotalTemp
+                }
 
-        if (namaOpsi.isNullOrEmpty()) {
-            binding.tvNamaOpsi.visibility = View.GONE
-        } else {
-            binding.tvNamaOpsi.text = sNamaOpsi
+                pesananAdapter.setItems(pesananList)
+                pesananAdapter.setOnItemClickCallback(object : PesananAdapter.OnItemClickCallback{
+                    override fun onItemClicked(data: Keranjang) {
+                        val intent = Intent(this@PemesananActivity, CustomMenuActivity::class.java)
+                        intent.putExtra(Cons.EXTRA_ID, vendorId)
+                        intent.putExtra(Cons.EXTRA_SEC_ID, data.kategoriMenuId)
+                        intent.putExtra(Cons.EXTRA_THIRD_ID, data.menuId)
+                        intent.putExtra(Cons.EXTRA_FOURTH_ID, alamatId)
+                        intent.putExtra(Cons.EXTRA_FIFTH_ID, data.id)
+                        intent.putExtra(Cons.EXTRA_ONGKIR, ongkir)
+                        startActivity(intent)
+                    }
+                })
+
+                if (ongkir!!.toLong() > 180000) {
+                    binding.tvJarakError.visibility = View.VISIBLE
+                } else {
+                    binding.tvJarakError.visibility = View.GONE
+                }
+
+                binding.tvOngkirValue.text = ongkir!!.withNumberingFormat()
+
+                totalHarga = ongkir!!.toLong() + subtotal
+                binding.totalHarga.text = totalHarga.withNumberingFormat()
+            }
         }
-
-        if (catatan == "") {
-            binding.tvCatatan.visibility = View.GONE
-        } else {
-            binding.tvCatatan.text = catatan
-        }
-
-        binding.tvSubtotal.text = subtotal?.withNumberingFormat()*/
     }
 
     private fun setupPemesanan() {
@@ -164,18 +177,6 @@ class PemesananActivity : AppCompatActivity(), TimePickerFragment.DialogTimeList
                 }
             }
         }
-
-        if (ongkir!!.toLong() > 180000) {
-            binding.tvJarakError.visibility = View.VISIBLE
-        } else {
-            binding.tvJarakError.visibility = View.GONE
-        }
-
-        binding.tvOngkirValue.text = ongkir!!.withNumberingFormat()
-
-        /*totalHarga = ongkir!!.toLong() + subtotal!!.toLong()
-        binding.totalHarga.text = totalHarga.withNumberingFormat()*/
-
     }
 
     private fun pemesanan() {
@@ -184,7 +185,12 @@ class PemesananActivity : AppCompatActivity(), TimePickerFragment.DialogTimeList
             val sDate = calendar.timeInMillis.toString()
             val sMetodePembayaran = getString(R.string.tunai)
 
-            val pemesananMap = hashMapOf(
+            //TODO: PERBAIKI PEMESANANMAP NYA KIRIM KE DOCUMENT DALAM COLLECTION PESANAN
+            //TODO: UNTUK SAVE DATABASE NYA KIRIM KE COLLECTION PESANAN DAN BUAT COLLECTION BARU DENGAN NAMA SELURUHPESANAN
+            //TODO: PADA SELURUHMAP GUNAKAN PERULANGAN
+            //TODO: TAMBAHKAN METODE PEMBAYARAN MENGGUNAKAN MIDTRANS
+
+            /*val pemesananMap = hashMapOf(
                 "kategoriId" to kategoriId,
                 "menuId" to menuId,
                 "menuNama" to namaMenu,
@@ -220,8 +226,16 @@ class PemesananActivity : AppCompatActivity(), TimePickerFragment.DialogTimeList
                 .addOnFailureListener {
                     progressBar.visibility = View.GONE
                     Toast.makeText(this, R.string.fail_pemesanan, Toast.LENGTH_SHORT).show()
-                }
+                }*/
         }
+    }
+
+    private fun setupView() {
+        recyclerView = binding.rvPesanan
+        recyclerView.layoutManager = LinearLayoutManager(this)
+        pesananAdapter = PesananAdapter(this)
+        recyclerView.adapter = pesananAdapter
+        pesananAdapter.setItems(pesananList)
     }
 
     private fun datePicker() {

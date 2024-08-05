@@ -86,6 +86,7 @@ class AllKeranjangActivity : AppCompatActivity() {
                                     alamatUser = alamatSnapshot.data?.get("alamat").toString()
                                     val vendorRef = db.collection("user").document(data.id)
                                     vendorRef.get().addOnSuccessListener {vendorSnapshot ->
+                                        progressBar.visibility = View.GONE
                                         if (vendorSnapshot != null) {
                                             alamatVendor = vendorSnapshot.data?.get("alamat").toString()
 
@@ -116,13 +117,12 @@ class AllKeranjangActivity : AppCompatActivity() {
                                                 allKeranjang.ongkir = ongkir.toString()
                                                 allKeranjang.jarak = jarak.toDouble().roundOffDecimal()
 
-                                                progressBar.visibility = View.GONE
                                                 allKeranjangAdapter.setItems(allKeranjangList)
                                                 allKeranjangAdapter.setOnItemClickCallback(object : AllKeranjangAdapter.OnItemClickCallback{
                                                     override fun onItemClicked(data: AllKeranjang) {
                                                         val intent = Intent(this@AllKeranjangActivity, PemesananActivity::class.java)
                                                         intent.putExtra(Cons.EXTRA_ID, data.vendorId)
-                                                        intent.putExtra(Cons.EXTRA_FOURTH_ID, alamatId)
+                                                        intent.putExtra(Cons.EXTRA_SEC_ID, alamatId)
                                                         intent.putExtra(Cons.EXTRA_ONGKIR, data.ongkir)
                                                         startActivity(intent)
                                                     }
@@ -142,6 +142,7 @@ class AllKeranjangActivity : AppCompatActivity() {
                                     alamatUser = userSnapshot.data?.get("alamat").toString()
                                     val vendorRef = db.collection("user").document(data.id)
                                     vendorRef.get().addOnSuccessListener {vendorSnapshot ->
+                                        progressBar.visibility = View.GONE
                                         if (vendorSnapshot != null) {
                                             alamatVendor = vendorSnapshot.data?.get("alamat").toString()
 
@@ -172,13 +173,12 @@ class AllKeranjangActivity : AppCompatActivity() {
                                                 allKeranjang.ongkir = ongkir.toString()
                                                 allKeranjang.jarak = jarak.toDouble().roundOffDecimal()
 
-                                                progressBar.visibility = View.GONE
                                                 allKeranjangAdapter.setItems(allKeranjangList)
                                                 allKeranjangAdapter.setOnItemClickCallback(object : AllKeranjangAdapter.OnItemClickCallback{
                                                     override fun onItemClicked(data: AllKeranjang) {
                                                         val intent = Intent(this@AllKeranjangActivity, PemesananActivity::class.java)
                                                         intent.putExtra(Cons.EXTRA_ID, data.vendorId)
-                                                        intent.putExtra(Cons.EXTRA_FOURTH_ID, alamatId)
+                                                        intent.putExtra(Cons.EXTRA_SEC_ID, alamatId)
                                                         intent.putExtra(Cons.EXTRA_ONGKIR, data.ongkir)
                                                         startActivity(intent)
                                                     }
@@ -248,7 +248,12 @@ class AllKeranjangActivity : AppCompatActivity() {
 
     private fun deleteKeranjang() {
         btnHapus.setOnClickListener {
-            //TODO: HAPUS KERANJANG
+            val args = Bundle()
+            args.putStringArrayList("arrayVendorId", arrayVendorId)
+            args.putString("alamatId", alamatId)
+            val dialog = DeleteKeranjangFragment()
+            dialog.arguments = args
+            dialog.show(supportFragmentManager, "deleteKeranjangDialog")
         }
     }
     

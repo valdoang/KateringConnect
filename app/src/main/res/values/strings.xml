@@ -307,6 +307,7 @@
     <string name="delete_menu_alert">Apakah Anda yakin ingin menghapus menu?</string>
     <string name="delete_kategori_alert">Apakah Anda yakin ingin menghapus kategori dan semua hidangan di dalamnya?</string>
     <string name="delete_grup_opsi_alert">Apakah Anda yakin ingin menghapus grup opsi ini?</string>
+    <string name="delete_keranjang_alert">Apakah Anda yakin ingin menghapus pesanan ini dari daftar pesananmu?</string>
     <string name="title_edit_kategori">Edit Kategori</string>
     <string name="hapus_kategori">Hapus Kategori</string>
     <string name="success_delete_menu">Berhasil Menghapus Menu</string>

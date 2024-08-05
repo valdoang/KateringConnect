@@ -56,7 +56,7 @@ class DeleteGrupOpsiFragment : DialogFragment() {
 
         setTvText()
         closeDialog()
-        deleteKategori()
+        deleteGrupOpsi()
 
         return root
     }
@@ -71,7 +71,7 @@ class DeleteGrupOpsiFragment : DialogFragment() {
         }
     }
 
-    private fun deleteKategori() {
+    private fun deleteGrupOpsi() {
         val kategoriMenuRef = db.collection("user").document(userId).collection("kategoriMenu")
         kategoriMenuRef.get().addOnSuccessListener { snapshot->
             if (snapshot != null) {
@@ -125,6 +125,15 @@ class DeleteGrupOpsiFragment : DialogFragment() {
                 intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
                 activity?.startActivity(intent)
             }
+
+            grupOpsiRef.collection("opsi").get().addOnSuccessListener { opsiSnapshot ->
+                if (opsiSnapshot != null) {
+                    for (data in opsiSnapshot.documents) {
+                        grupOpsiRef.collection("opsi").document(data.id).delete()
+                    }
+                }
+            }
+
             grupOpsiRef.delete().addOnSuccessListener {
                 for (i in arrayMenu) {
                     val menuRef = db.collection("user").document(userId).collection("kategoriMenu").document(i.kategoriMenuId!!).collection("menu").document(i.id!!)

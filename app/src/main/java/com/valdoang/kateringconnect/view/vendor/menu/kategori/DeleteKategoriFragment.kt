@@ -125,6 +125,9 @@ class DeleteKategoriFragment : DialogFragment() {
 
                 //Delete Image
                 storageRef.getReference("menuImages").child(userId).child(kategoriMenuId!!).child(i.storageKeys!!).delete()
+
+                //Delete Menu
+                menuRef.document(i.id!!).delete()
             }
 
             //Delete Kategori
