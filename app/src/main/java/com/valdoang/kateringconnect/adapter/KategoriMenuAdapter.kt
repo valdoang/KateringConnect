@@ -139,6 +139,20 @@ class KategoriMenuAdapter(
                                             })
                                             dialog.setContentView(view)
                                             dialog.show()
+                                        } else if (data.grupOpsiId.isEmpty() && keranjangList.isNotEmpty()) {
+                                            if (keranjangList.size == 1) {
+                                                for (i in keranjangList) {
+                                                    val keranjangId = i.id
+                                                    val intent = Intent(context, CustomMenuActivity::class.java)
+                                                    intent.putExtra(Cons.EXTRA_ID, vendorId)
+                                                    intent.putExtra(Cons.EXTRA_SEC_ID, kategoriMenu.id)
+                                                    intent.putExtra(Cons.EXTRA_THIRD_ID, data.id)
+                                                    intent.putExtra(Cons.EXTRA_FOURTH_ID, alamatId)
+                                                    intent.putExtra(Cons.EXTRA_FIFTH_ID, keranjangId)
+                                                    intent.putExtra(Cons.EXTRA_ONGKIR, ongkir)
+                                                    context.startActivity(intent)
+                                                }
+                                            }
                                         } else {
                                             val intent = Intent(context, CustomMenuActivity::class.java)
                                             intent.putExtra(Cons.EXTRA_ID, vendorId)

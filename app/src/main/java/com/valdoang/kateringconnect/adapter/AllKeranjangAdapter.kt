@@ -69,11 +69,11 @@ class AllKeranjangAdapter(
                                 keranjangList.add(keranjang)
                             }
                         }
-                        val lastMenuFoto = keranjangList[keranjangList.size.minus(1)].foto
-                        Glide.with(context).load(lastMenuFoto).into(ivMenu)
                         var jumlahPesanan = 0
                         for (i in keranjangList) {
                             jumlahPesanan += i.jumlah!!.toInt()
+                            val lastMenuFoto = i.foto
+                            Glide.with(context.applicationContext).load(lastMenuFoto).error(R.drawable.menu).into(ivMenu)
                         }
                         tvKeterangan.text = context.getString(R.string.jumlah_keranjang, jumlahPesanan.toString(), allKeranjang.jarak)
                     }

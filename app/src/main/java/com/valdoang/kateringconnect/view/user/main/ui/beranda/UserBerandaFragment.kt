@@ -45,6 +45,7 @@ class UserBerandaFragment : Fragment() {
     // onDestroyView.
     private val binding get() = _binding!!
     private lateinit var firebaseAuth: FirebaseAuth
+    private var userId = ""
     private var db = Firebase.firestore
     private var userKota = ""
     private var userAlamat = ""
@@ -69,6 +70,8 @@ class UserBerandaFragment : Fragment() {
         val root: View = binding.root
 
         firebaseAuth = Firebase.auth
+        userId = firebaseAuth.currentUser!!.uid
+
         vendorList = arrayListOf()
         kategoriMenuList = arrayListOf()
         progressBar = binding.progressBar
@@ -112,7 +115,6 @@ class UserBerandaFragment : Fragment() {
 
     @RequiresApi(Build.VERSION_CODES.N)
     private fun setupDataUser() {
-        val userId = firebaseAuth.currentUser!!.uid
         db.collection("user").document(userId)
             .addSnapshotListener{ document,_ ->
                 if (document != null) {
@@ -218,7 +220,7 @@ class UserBerandaFragment : Fragment() {
                             }
 
                             progressBar.visibility = View.GONE
-                            binding.cvKeranjang.visibility = View.VISIBLE
+                            setupCvKeranjang()
 
                             userBerandaAdapter.setItems(vendorList)
 
@@ -261,6 +263,19 @@ class UserBerandaFragment : Fragment() {
 
     private fun setupTv() {
         binding.tvAlamatUser.text = getString(R.string.rumah)
+    }
+
+    private fun setupCvKeranjang() {
+        val kerajangRef = db.collection("user").document(userId).collection("keranjang")
+        kerajangRef.addSnapshotListener{ keranjangSnapshot, _ ->
+            if (keranjangSnapshot != null) {
+                if (keranjangSnapshot.size() != 0) {
+                    binding.cvKeranjang.visibility = View.VISIBLE
+                } else {
+                    binding.cvKeranjang.visibility = View.GONE
+                }
+            }
+        }
     }
 
     @RequiresApi(Build.VERSION_CODES.N)

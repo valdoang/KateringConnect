@@ -62,6 +62,7 @@ class CustomMenuActivity : AppCompatActivity(), EditTextCatatanFragment.GetCatat
     private var total = 0L
     private var totalHarga = 0L
     private var namaOpsi = ""
+    private lateinit var tvHapus: TextView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -89,6 +90,7 @@ class CustomMenuActivity : AppCompatActivity(), EditTextCatatanFragment.GetCatat
         ibMore = binding.ibMore
         etJumlah = binding.etJumlah
         etCatatan = binding.etCatatan
+        tvHapus = binding.tvHapus
 
         setupAction()
         setupView()
@@ -118,6 +120,7 @@ class CustomMenuActivity : AppCompatActivity(), EditTextCatatanFragment.GetCatat
                 setupGrupOpsi()
                 hitungTotal()
                 editJumlah()
+                hapus()
             }
         }
     }
@@ -132,6 +135,7 @@ class CustomMenuActivity : AppCompatActivity(), EditTextCatatanFragment.GetCatat
                     val catatan = keranjangSnapshot.data?.get("catatan").toString()
                     etJumlah.setText(jumlah)
                     etCatatan.setText(catatan)
+                    tvHapus.visibility = View.VISIBLE
                     setupView()
                 }
             }
@@ -218,7 +222,7 @@ class CustomMenuActivity : AppCompatActivity(), EditTextCatatanFragment.GetCatat
         var jumlahTotal = etJumlah.text.toString().toLong()
 
         total = subtotal * jumlahTotal
-        if (namaOpsi != "") {
+        if (keranjangId != null) {
             btnAddKeranjang.text = getString(R.string.btn_update_keranjang, total.withNumberingFormat())
         } else {
             btnAddKeranjang.text = getString(R.string.btn_add_keranjang, total.withNumberingFormat())
@@ -227,14 +231,14 @@ class CustomMenuActivity : AppCompatActivity(), EditTextCatatanFragment.GetCatat
         etJumlah.allChangedListener {
             jumlahTotal = it.toLong()
             subtotal = menuPrice.toLong()
-            if (namaOpsi != "") {
+            if (keranjangId != null) {
                 btnAddKeranjang.text = getString(R.string.btn_update_keranjang, total.withNumberingFormat())
             } else {
                 btnAddKeranjang.text = getString(R.string.btn_add_keranjang, total.withNumberingFormat())
             }
             if (opsiListCheck.size <= 0) {
                 total = subtotal * jumlahTotal
-                if (namaOpsi != "") {
+                if (keranjangId != null) {
                     btnAddKeranjang.text = getString(R.string.btn_update_keranjang, total.withNumberingFormat())
                 } else {
                     btnAddKeranjang.text = getString(R.string.btn_add_keranjang, total.withNumberingFormat())
@@ -243,7 +247,7 @@ class CustomMenuActivity : AppCompatActivity(), EditTextCatatanFragment.GetCatat
                 for (i in opsiListCheck) {
                     subtotal += i.harga!!.toLong()
                     total = subtotal * jumlahTotal
-                    if (namaOpsi != "") {
+                    if (keranjangId != null) {
                         btnAddKeranjang.text = getString(R.string.btn_update_keranjang, total.withNumberingFormat())
                     } else {
                         btnAddKeranjang.text = getString(R.string.btn_add_keranjang, total.withNumberingFormat())
@@ -307,6 +311,21 @@ class CustomMenuActivity : AppCompatActivity(), EditTextCatatanFragment.GetCatat
                     }
                 }
             }
+        }
+    }
+
+    private fun hapus() {
+        tvHapus.setOnClickListener {
+            val keranjangRef = db.collection("user").document(userId).collection("keranjang").document(vendorId!!)
+            keranjangRef.collection("pesanan").get().addOnSuccessListener {
+                if (it != null) {
+                    if (it.size() == 1) {
+                        keranjangRef.delete()
+                    }
+                }
+            }
+            keranjangRef.collection("pesanan").document(keranjangId!!).delete()
+            finish()
         }
     }
 

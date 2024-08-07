@@ -4,13 +4,16 @@ package com.valdoang.kateringconnect.view.user.pemesanan
 
 import android.app.DatePickerDialog
 import android.content.Intent
+import android.graphics.Canvas
+import android.graphics.Typeface
 import android.os.Build
 import android.os.Bundle
 import android.view.View
 import android.widget.*
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
-import androidx.fragment.app.DialogFragment
+import androidx.core.content.ContextCompat
+import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.auth.FirebaseAuth
@@ -23,8 +26,10 @@ import com.valdoang.kateringconnect.databinding.ActivityPemesananBinding
 import com.valdoang.kateringconnect.model.Keranjang
 import com.valdoang.kateringconnect.utils.*
 import com.valdoang.kateringconnect.view.user.custommenu.CustomMenuActivity
+import it.xabaras.android.recyclerview.swipedecorator.RecyclerViewSwipeDecorator
 import java.text.SimpleDateFormat
 import java.util.*
+
 
 class PemesananActivity : AppCompatActivity(), TimePickerFragment.DialogTimeListener {
     private lateinit var binding: ActivityPemesananBinding
@@ -84,6 +89,7 @@ class PemesananActivity : AppCompatActivity(), TimePickerFragment.DialogTimeList
 
         setupAction()
         setupView()
+        initAction()
         setupPemesanan()
         setupRangkumanPesanan()
         datePicker()
@@ -92,7 +98,6 @@ class PemesananActivity : AppCompatActivity(), TimePickerFragment.DialogTimeList
 
     @RequiresApi(Build.VERSION_CODES.N)
     private fun setupRangkumanPesanan() {
-        //TODO: CARI CARA UNTUK MENGHAPUS SALAH SATU PESANAN
         val pesananRef = db.collection("user").document(userId).collection("keranjang").document(vendorId!!).collection("pesanan")
         pesananRef.addSnapshotListener { pesananSnapshot, _ ->
             if (pesananSnapshot != null) {
@@ -132,6 +137,20 @@ class PemesananActivity : AppCompatActivity(), TimePickerFragment.DialogTimeList
 
                 totalHarga = ongkir!!.toLong() + subtotal
                 binding.totalHarga.text = totalHarga.withNumberingFormat()
+
+                if (pesananList.isEmpty()) {
+                    binding.scrollView.visibility = View.GONE
+                    binding.clPesan.visibility = View.GONE
+                    binding.clCariKatering.visibility = View.VISIBLE
+                    binding.noDataAnimation.visibility = View.VISIBLE
+                    binding.tvNoData.visibility = View.VISIBLE
+                } else {
+                    binding.scrollView.visibility = View.VISIBLE
+                    binding.clPesan.visibility = View.VISIBLE
+                    binding.clCariKatering.visibility = View.GONE
+                    binding.noDataAnimation.visibility = View.GONE
+                    binding.tvNoData.visibility = View.GONE
+                }
             }
         }
     }
@@ -238,6 +257,74 @@ class PemesananActivity : AppCompatActivity(), TimePickerFragment.DialogTimeList
         pesananAdapter.setItems(pesananList)
     }
 
+    private fun initAction() {
+        val itemTouchHelper = ItemTouchHelper(object : ItemTouchHelper.Callback() {
+            override fun getMovementFlags(
+                recyclerView: RecyclerView,
+                viewHolder: RecyclerView.ViewHolder
+            ): Int {
+                return makeMovementFlags(0, ItemTouchHelper.LEFT)
+            }
+
+            override fun onMove(
+                recyclerView: RecyclerView,
+                viewHolder: RecyclerView.ViewHolder,
+                target: RecyclerView.ViewHolder
+            ): Boolean {
+                return false
+            }
+
+            override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
+                pesananAdapter.deleteItem(viewHolder.adapterPosition, vendorId!!)
+            }
+
+            override fun onChildDraw(
+                c: Canvas,
+                recyclerView: RecyclerView,
+                viewHolder: RecyclerView.ViewHolder,
+                dX: Float,
+                dY: Float,
+                actionState: Int,
+                isCurrentlyActive: Boolean
+            ) {
+                RecyclerViewSwipeDecorator.Builder(
+                    c,
+                    recyclerView,
+                    viewHolder,
+                    dX,
+                    dY,
+                    actionState,
+                    isCurrentlyActive
+                )
+                    .addBackgroundColor(
+                        ContextCompat.getColor(
+                            this@PemesananActivity,
+                            R.color.red
+                        )
+                    )
+                    .addSwipeLeftLabel(getString(R.string.hapus))
+                    .setSwipeLeftLabelColor(ContextCompat.getColor(
+                        this@PemesananActivity,
+                        R.color.white
+                    ))
+                    .create()
+                    .decorate()
+
+                super.onChildDraw(
+                    c,
+                    recyclerView,
+                    viewHolder,
+                    dX,
+                    dY,
+                    actionState,
+                    isCurrentlyActive
+                )
+            }
+
+        })
+        itemTouchHelper.attachToRecyclerView(recyclerView)
+    }
+
     private fun datePicker() {
         val datePicker = DatePickerDialog.OnDateSetListener { _, year, month, dayOfMonth ->
             calendar.set(Calendar.YEAR, year)
@@ -307,6 +394,9 @@ class PemesananActivity : AppCompatActivity(), TimePickerFragment.DialogTimeList
 
     private fun setupAction() {
         binding.ibBack.setOnClickListener {
+            finish()
+        }
+        binding.btnCariKatering.setOnClickListener {
             finish()
         }
     }

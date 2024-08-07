@@ -6,6 +6,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.ktx.Firebase
 import com.valdoang.kateringconnect.R
 import com.valdoang.kateringconnect.databinding.ItemPesananBinding
 import com.valdoang.kateringconnect.model.Keranjang
@@ -18,6 +21,8 @@ class PesananAdapter(
 
     private val pesananList = ArrayList<Keranjang>()
     private var onItemClickCallback: OnItemClickCallback? = null
+    private var db = Firebase.firestore
+    private var userId = FirebaseAuth.getInstance().currentUser!!.uid
 
     @SuppressLint("NotifyDataSetChanged")
     fun setItems(itemList: List<Keranjang>) {
@@ -69,6 +74,22 @@ class PesananAdapter(
 
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
         holder.bind(pesananList[position])
+    }
+
+    fun deleteItem(adapterPosition: Int, vendorId: String) {
+        val keranjangId = pesananList[adapterPosition].id
+        val keranjangRef = db.collection("user").document(userId).collection("keranjang").document(vendorId)
+        keranjangRef.collection("pesanan").get().addOnSuccessListener {
+            if (it != null) {
+                if (it.size() == 1) {
+                    keranjangRef.delete()
+                }
+            }
+        }
+        keranjangRef.collection("pesanan").document(keranjangId!!).delete()
+
+        pesananList.removeAt(adapterPosition)
+        notifyItemRemoved(adapterPosition)
     }
 
     interface OnItemClickCallback {

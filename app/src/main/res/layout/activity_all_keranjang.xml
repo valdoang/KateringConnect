@@ -118,6 +118,49 @@
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
+    <com.airbnb.lottie.LottieAnimationView
+        android:id="@+id/no_data_animation"
+        android:layout_width="250dp"
+        android:layout_height="250dp"
+        android:layout_marginTop="220dp"
+        android:visibility="gone"
+        app:lottie_autoPlay="true"
+        app:lottie_fileName="keranjang_empty.json"
+        app:lottie_loop="true"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <TextView
+        android:id="@+id/tv_no_data"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/daftar_pesananmu_kosong"
+        android:textSize="14sp"
+        android:visibility="gone"
+        android:layout_marginTop="250dp"
+        android:maxWidth="300dp"
+        android:gravity="center"
+        android:fontFamily="@font/poppins"
+        android:textColor="@color/black"
+        app:layout_constraintTop_toTopOf="@id/no_data_animation"
+        app:layout_constraintStart_toStartOf="@id/no_data_animation"
+        app:layout_constraintEnd_toEndOf="@id/no_data_animation"/>
+
+    <TextView
+        android:id="@+id/tv_temukan_sekarang"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/temukan_sekarang"
+        android:textSize="14sp"
+        android:visibility="gone"
+        android:layout_marginTop="10dp"
+        android:fontFamily="@font/poppins_bold"
+        android:textColor="@color/green"
+        app:layout_constraintTop_toBottomOf="@id/tv_no_data"
+        app:layout_constraintStart_toStartOf="@id/no_data_animation"
+        app:layout_constraintEnd_toEndOf="@id/no_data_animation"/>
+
     <ProgressBar
         android:id="@+id/progressBar"
         android:layout_width="wrap_content"

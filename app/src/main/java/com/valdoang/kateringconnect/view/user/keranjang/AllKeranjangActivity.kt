@@ -194,6 +194,19 @@ class AllKeranjangActivity : AppCompatActivity() {
                         }
                     }
                 }
+                if (snapshot.size() == 0) {
+                    progressBar.visibility = View.GONE
+                    binding.noDataAnimation.visibility = View.VISIBLE
+                    binding.tvNoData.visibility = View.VISIBLE
+                    tvEdit.visibility = View.GONE
+                    allKeranjangAdapter.setItems(allKeranjangList)
+                    binding.tvTemukanSekarang.visibility = View.VISIBLE
+                }
+                else {
+                    progressBar.visibility = View.GONE
+                    binding.noDataAnimation.visibility = View.GONE
+                    binding.tvNoData.visibility = View.GONE
+                }
             }
         }
     }
@@ -267,6 +280,9 @@ class AllKeranjangActivity : AppCompatActivity() {
 
     private fun setupAction() {
         binding.ibBack.setOnClickListener {
+            finish()
+        }
+        binding.tvTemukanSekarang.setOnClickListener {
             finish()
         }
     }

@@ -364,4 +364,8 @@
     <string name="pilih_semua">Pilih semua</string>
     <string name="jumlah_keranjang">%1$s Pesanan - %2$s km</string>
     <string name="hapus_jumlah_keranjang">Hapus (%1$s)</string>
+    <string name="daftar_pesananmu_kosong">Daftar pesananmu kosong, isi dengan pilihan menu yang kamu inginkan yuk!</string>
+    <string name="pesananmu_kosong">Pesananmu kosong, isi dengan pilihan menu yang kamu inginkan yuk!</string>
+    <string name="cari_katering">Cari Katering</string>
+    <string name="temukan_sekarang">Temukan Sekarang</string>
 </resources>
