@@ -250,7 +250,7 @@
     <string name="tv_subtotal">Subtotal</string>
     <string name="tidak_ada">Tidak Ada</string>
     <string name="tambah_jumlah_porsi">Ingin menambah jumlah porsi?</string>
-    <string name="penambahan_berhasil">PENAMBAHAN BERHASIL</string>
+    <string name="penambahan_porsi_berhasil">PENAMBAHAN PORSI BERHASIL</string>
     <string name="chat">Chat</string>
     <string name="chat_kosong">Chat Kosong</string>
     <string name="ketik_sesuatu">Ketik sesuatu …</string>
@@ -368,4 +368,9 @@
     <string name="pesananmu_kosong">Pesananmu kosong, isi dengan pilihan menu yang kamu inginkan yuk!</string>
     <string name="cari_katering">Cari Katering</string>
     <string name="temukan_sekarang">Temukan Sekarang</string>
+    <string name="tambah_pesanan">Tambah Pesanan</string>
+    <string name="kembali_ke_halaman_beranda">Kembali ke Halaman Beranda</string>
+    <string name="from_tambah_porsi">Dari Tambah Porsi</string>
+    <string name="from_pemesanan">Dari Pemesanan</string>
+    <string name="digital">Digital</string>
 </resources>

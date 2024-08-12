@@ -21,8 +21,7 @@ import com.valdoang.kateringconnect.utils.withTimestamptoDateFormat
 import com.valdoang.kateringconnect.utils.withTimestamptoTimeFormat
 import com.valdoang.kateringconnect.view.user.berinilai.BeriNilaiFragment
 import com.valdoang.kateringconnect.view.user.custommenu.CustomMenuActivity
-import com.valdoang.kateringconnect.view.user.pemesanan.PemesananActivity
-import com.valdoang.kateringconnect.view.user.tambahpesanan.TambahPesananFragment
+import com.valdoang.kateringconnect.view.user.tambahpesanan.TambahPorsiFragment
 
 class DetailRiwayatPemesananActivity : AppCompatActivity() {
     private lateinit var binding: ActivityDetailPesananRiwayatBinding
@@ -52,6 +51,8 @@ class DetailRiwayatPemesananActivity : AppCompatActivity() {
     private lateinit var btnBeriNilai: Button
     private lateinit var btnPesanLagi: Button
     private lateinit var tvTambahJumlahPorsi: TextView
+
+    //TODO: SESUAIKAN FORMAT PEMESANAN YANG TERBARU
 
     @RequiresApi(Build.VERSION_CODES.N)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -187,9 +188,9 @@ class DetailRiwayatPemesananActivity : AppCompatActivity() {
         tvTambahJumlahPorsi.setOnClickListener {
             val args = Bundle()
             args.putString("id", pesananId)
-            val dialog: DialogFragment = TambahPesananFragment()
+            val dialog: DialogFragment = TambahPorsiFragment()
             dialog.arguments = args
-            dialog.show(this.supportFragmentManager, "tambahPesananDialog")
+            dialog.show(this.supportFragmentManager, "tambahPorsiDialog")
         }
     }
 

@@ -8,11 +8,13 @@ import android.graphics.Canvas
 import android.graphics.Typeface
 import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.*
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
+import androidx.fragment.app.DialogFragment
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -20,12 +22,16 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
+import com.midtrans.sdk.uikit.SdkUIFlowBuilder
 import com.valdoang.kateringconnect.R
 import com.valdoang.kateringconnect.adapter.PesananAdapter
 import com.valdoang.kateringconnect.databinding.ActivityPemesananBinding
 import com.valdoang.kateringconnect.model.Keranjang
 import com.valdoang.kateringconnect.utils.*
 import com.valdoang.kateringconnect.view.user.custommenu.CustomMenuActivity
+import com.valdoang.kateringconnect.view.user.detailvendor.DetailVendorActivity
+import com.valdoang.kateringconnect.view.user.main.UserMainActivity
+import com.valdoang.kateringconnect.view.vendor.main.VendorMainActivity
 import it.xabaras.android.recyclerview.swipedecorator.RecyclerViewSwipeDecorator
 import java.text.SimpleDateFormat
 import java.util.*
@@ -65,6 +71,7 @@ class PemesananActivity : AppCompatActivity(), TimePickerFragment.DialogTimeList
     private lateinit var recyclerView: RecyclerView
     private lateinit var pesananAdapter: PesananAdapter
     private var subtotal = 0L
+    private lateinit var rgMetodePembayaran: RadioGroup
 
     @RequiresApi(Build.VERSION_CODES.N)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -86,6 +93,7 @@ class PemesananActivity : AppCompatActivity(), TimePickerFragment.DialogTimeList
         ivTanggalError = binding.ivTanggalError
         tvTanggalError = binding.tvTanggalError
         progressBar = binding.progressBar
+        rgMetodePembayaran = binding.rgMetodePembayaran
 
         setupAction()
         setupView()
@@ -199,22 +207,32 @@ class PemesananActivity : AppCompatActivity(), TimePickerFragment.DialogTimeList
     }
 
     private fun pemesanan() {
+        var sMetodePembayaran = ""
+        rgMetodePembayaran.setOnCheckedChangeListener { _, checkedId ->
+            val rbJenisAkun: RadioButton = findViewById(checkedId)
+            when (rbJenisAkun.text) {
+                getString(R.string.tunai) -> sMetodePembayaran = getString(R.string.tunai)
+                getString(R.string.digital) -> sMetodePembayaran = getString(R.string.digital)
+            }
+        }
+
         btnPesan.setOnClickListener {
+            when(sMetodePembayaran) {
+                getString(R.string.tunai) -> {
+                    val intent = Intent(this, PemesananBerhasilActivity::class.java)
+                    intent.putExtra(Cons.EXTRA_NAMA, getString(R.string.from_pemesanan))
+                    startActivity(intent)
+                }
+                getString(R.string.digital) -> {
+                    val intent = Intent(this, PembayaranDigitalActivity::class.java)
+                    startActivity(intent)
+                }
+            }
+
             val sStatus = getString(R.string.status_proses)
             val sDate = calendar.timeInMillis.toString()
-            val sMetodePembayaran = getString(R.string.tunai)
 
-            //TODO: PERBAIKI PEMESANANMAP NYA KIRIM KE DOCUMENT DALAM COLLECTION PESANAN
-            //TODO: UNTUK SAVE DATABASE NYA KIRIM KE COLLECTION PESANAN DAN BUAT COLLECTION BARU DENGAN NAMA SELURUHPESANAN
-            //TODO: PADA SELURUHMAP GUNAKAN PERULANGAN
-            //TODO: TAMBAHKAN METODE PEMBAYARAN MENGGUNAKAN MIDTRANS
-
-            /*val pemesananMap = hashMapOf(
-                "kategoriId" to kategoriId,
-                "menuId" to menuId,
-                "menuNama" to namaMenu,
-                "namaOpsi" to sNamaOpsi,
-                "menuKeterangan" to deskMenu,
+            val pemesananMap = hashMapOf(
                 "userId" to userId,
                 "userNama" to namaUser,
                 "userKota" to kotaUser,
@@ -226,26 +244,40 @@ class PemesananActivity : AppCompatActivity(), TimePickerFragment.DialogTimeList
                 "vendorNama" to namaVendor,
                 "vendorAlamat" to alamatVendor,
                 "status" to sStatus,
-                "jumlah" to jumlahPesanan,
-                "catatan" to catatan,
                 "jadwal" to sDate,
                 "ongkir" to ongkir.toString(),
-                "subtotal" to subtotal,
-                "hargaPerPorsi" to hargaPerPorsi,
-                "metodePembayaran" to sMetodePembayaran,
-                "totalHarga" to totalHarga.toString()
+                "metodePembayaran" to sMetodePembayaran
             )
 
             progressBar.visibility = View.VISIBLE
-            db.collection("pesanan").document()
-                .set(pemesananMap).addOnSuccessListener {
-                    val newFragment: DialogFragment = PemesananBerhasilFragment()
-                    newFragment.show(supportFragmentManager, "TAG")
+            val newPesanan = db.collection("pesanan").document()
+            newPesanan.set(pemesananMap).addOnSuccessListener {
+                for (i in pesananList) {
+                    val newPesananId = newPesanan.id
+                    val menuPesananRef = db.collection("pesanan").document(newPesananId).collection("menuPesanan").document()
+                    val pesananKeranjangRef = db.collection("user").document(userId).collection("keranjang").document(vendorId!!).collection("pesanan").document(i.id!!)
+
+                    val menuPesananMap = hashMapOf(
+                        "kategoriMenuId" to i.kategoriMenuId,
+                        "menuId" to i.menuId,
+                        "namaMenu" to i.namaMenu,
+                        "namaOpsi" to i.namaOpsi,
+                        "jumlah" to i.jumlah,
+                        "catatan" to i.catatan,
+                        "foto" to i.foto,
+                        "subtotal" to i.subtotal,
+                        "hargaPerPorsi" to i.hargaPerPorsi
+                    )
+                    menuPesananRef.set(menuPesananMap)
+                    pesananKeranjangRef.delete()
                 }
-                .addOnFailureListener {
-                    progressBar.visibility = View.GONE
-                    Toast.makeText(this, R.string.fail_pemesanan, Toast.LENGTH_SHORT).show()
-                }*/
+
+                val keranjangRef = db.collection("user").document(userId).collection("keranjang").document(vendorId!!)
+                keranjangRef.delete()
+            }.addOnFailureListener {
+                progressBar.visibility = View.GONE
+                Toast.makeText(this, getString(R.string.fail_pemesanan), Toast.LENGTH_SHORT).show()
+            }
         }
     }
 
@@ -398,6 +430,13 @@ class PemesananActivity : AppCompatActivity(), TimePickerFragment.DialogTimeList
         }
         binding.btnCariKatering.setOnClickListener {
             finish()
+        }
+        binding.tvTambahPesanan.setOnClickListener {
+            val intent = Intent(this, DetailVendorActivity::class.java)
+            intent.putExtra(Cons.EXTRA_ID, vendorId)
+            intent.putExtra(Cons.EXTRA_SEC_ID, alamatId)
+            intent.putExtra(Cons.EXTRA_ONGKIR, ongkir)
+            startActivity(intent)
         }
     }
 }

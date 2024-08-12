@@ -1,5 +1,6 @@
 package com.valdoang.kateringconnect.view.user.tambahpesanan
 
+import android.content.Intent
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
@@ -16,13 +17,14 @@ import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.valdoang.kateringconnect.R
-import com.valdoang.kateringconnect.databinding.FragmentTambahPesananBinding
+import com.valdoang.kateringconnect.databinding.FragmentTambahPorsiBinding
+import com.valdoang.kateringconnect.utils.Cons
 import com.valdoang.kateringconnect.utils.allChangedListener
-import com.valdoang.kateringconnect.utils.textChangedListener
 import com.valdoang.kateringconnect.utils.withNumberingFormat
+import com.valdoang.kateringconnect.view.user.pemesanan.PemesananBerhasilActivity
 
-class TambahPesananFragment : DialogFragment() {
-    private var _binding: FragmentTambahPesananBinding? = null
+class TambahPorsiFragment : DialogFragment() {
+    private var _binding: FragmentTambahPorsiBinding? = null
 
     // This property is only valid between onCreateView and
     // onDestroyView.
@@ -45,7 +47,7 @@ class TambahPesananFragment : DialogFragment() {
         savedInstanceState: Bundle?
     ): View {
 
-        _binding = FragmentTambahPesananBinding.inflate(inflater, container, false)
+        _binding = FragmentTambahPorsiBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
         if (dialog != null && dialog?.window != null) {
@@ -109,8 +111,9 @@ class TambahPesananFragment : DialogFragment() {
                     db.collection("pesanan").document(pesananId)
                         .update(updateMap).addOnSuccessListener {
                             dismiss()
-                            val newFragment: DialogFragment = PenambahanBerhasilFragment()
-                            newFragment.show(parentFragmentManager, "TAG")
+                            val intent = Intent(requireContext(), PemesananBerhasilActivity::class.java)
+                            intent.putExtra(Cons.EXTRA_NAMA, getString(R.string.from_tambah_porsi))
+                            startActivity(intent)
                         }
                         .addOnFailureListener {
                             Toast.makeText(requireContext(), R.string.fail_penambahan, Toast.LENGTH_SHORT).show()

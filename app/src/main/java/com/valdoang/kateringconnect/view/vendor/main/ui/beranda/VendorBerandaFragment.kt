@@ -24,6 +24,8 @@ import com.valdoang.kateringconnect.view.vendor.detailpesanan.DetailPesananActiv
 class VendorBerandaFragment : Fragment() {
     private var _binding: FragmentVendorBerandaBinding? = null
 
+    //TODO: SESUAIKAN FORMAT PEMESANAN YANG TERBARU
+
     // This property is only valid between onCreateView and
     // onDestroyView.
     private val binding get() = _binding!!

@@ -40,6 +40,8 @@ class DetailRiwayatPesananActivity : AppCompatActivity() {
     private lateinit var tvPesananTanggal: TextView
     private lateinit var tvPesananJam: TextView
 
+    //TODO: SESUAIKAN FORMAT PEMESANAN YANG TERBARU
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityDetailPesananRiwayatBinding.inflate(layoutInflater)

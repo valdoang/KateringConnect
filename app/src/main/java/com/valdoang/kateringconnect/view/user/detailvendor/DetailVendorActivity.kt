@@ -91,6 +91,7 @@ class DetailVendorActivity : AppCompatActivity() {
             intent.putExtra(Cons.EXTRA_ID, vendorId)
             intent.putExtra(Cons.EXTRA_SEC_ID, alamatId)
             intent.putExtra(Cons.EXTRA_ONGKIR, ongkir)
+            intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
             startActivity(intent)
         }
     }

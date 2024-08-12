@@ -43,6 +43,8 @@ class DetailPesananActivity : AppCompatActivity() {
     private lateinit var btnSelesaikan: Button
     private lateinit var btnBatalkan: Button
 
+    //TODO: SESUAIKAN FORMAT PEMESANAN YANG TERBARU
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityDetailPesananRiwayatBinding.inflate(layoutInflater)
