@@ -351,8 +351,8 @@ class UserBerandaFragment : Fragment() {
         }
     }
 
-    override fun onDestroyView() {
+    /*override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
-    }
+    }*/
 }

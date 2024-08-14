@@ -3,9 +3,9 @@
 package com.valdoang.kateringconnect.view.user.pemesanan
 
 import android.app.DatePickerDialog
+import android.content.ContentValues.TAG
 import android.content.Intent
 import android.graphics.Canvas
-import android.graphics.Typeface
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
@@ -14,7 +14,6 @@ import android.widget.*
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
-import androidx.fragment.app.DialogFragment
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -22,6 +21,13 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
+import com.midtrans.sdk.corekit.callback.TransactionFinishedCallback
+import com.midtrans.sdk.corekit.core.MidtransSDK
+import com.midtrans.sdk.corekit.core.TransactionRequest
+import com.midtrans.sdk.corekit.models.BillingAddress
+import com.midtrans.sdk.corekit.models.CustomerDetails
+import com.midtrans.sdk.corekit.models.ItemDetails
+import com.midtrans.sdk.corekit.models.ShippingAddress
 import com.midtrans.sdk.uikit.SdkUIFlowBuilder
 import com.valdoang.kateringconnect.R
 import com.valdoang.kateringconnect.adapter.PesananAdapter
@@ -30,8 +36,6 @@ import com.valdoang.kateringconnect.model.Keranjang
 import com.valdoang.kateringconnect.utils.*
 import com.valdoang.kateringconnect.view.user.custommenu.CustomMenuActivity
 import com.valdoang.kateringconnect.view.user.detailvendor.DetailVendorActivity
-import com.valdoang.kateringconnect.view.user.main.UserMainActivity
-import com.valdoang.kateringconnect.view.vendor.main.VendorMainActivity
 import it.xabaras.android.recyclerview.swipedecorator.RecyclerViewSwipeDecorator
 import java.text.SimpleDateFormat
 import java.util.*
@@ -46,6 +50,7 @@ class PemesananActivity : AppCompatActivity(), TimePickerFragment.DialogTimeList
     private var alamatUser = ""
     private var kotaUser = ""
     private var nomorUser = ""
+    private var emailUser = ""
     private var namaKontakAlamat = ""
     private var nomorKontakAlamat = ""
     private var alamatAlamat = ""
@@ -72,6 +77,8 @@ class PemesananActivity : AppCompatActivity(), TimePickerFragment.DialogTimeList
     private lateinit var pesananAdapter: PesananAdapter
     private var subtotal = 0L
     private lateinit var rgMetodePembayaran: RadioGroup
+    private var newPesananId = ""
+    private var itemDetails: ArrayList<ItemDetails> = ArrayList()
 
     @RequiresApi(Build.VERSION_CODES.N)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -101,6 +108,7 @@ class PemesananActivity : AppCompatActivity(), TimePickerFragment.DialogTimeList
         setupPemesanan()
         setupRangkumanPesanan()
         datePicker()
+        setupMidtrans()
         pemesanan()
     }
 
@@ -182,6 +190,7 @@ class PemesananActivity : AppCompatActivity(), TimePickerFragment.DialogTimeList
                 alamatUser = userSnapshot.data?.get("alamat").toString()
                 nomorUser = userSnapshot.data?.get("telepon").toString()
                 fotoUser = userSnapshot.data?.get("foto").toString()
+                emailUser = userSnapshot.data?.get("email").toString()
 
                 binding.tvUserName.text = namaUser
                 binding.tvAddress.text = getString(R.string.tv_address_city, alamatUser, kotaUser)
@@ -207,6 +216,9 @@ class PemesananActivity : AppCompatActivity(), TimePickerFragment.DialogTimeList
     }
 
     private fun pemesanan() {
+        val newPesanan = db.collection("pesanan").document()
+        newPesananId = newPesanan.id
+
         var sMetodePembayaran = ""
         rgMetodePembayaran.setOnCheckedChangeListener { _, checkedId ->
             val rbJenisAkun: RadioButton = findViewById(checkedId)
@@ -224,8 +236,22 @@ class PemesananActivity : AppCompatActivity(), TimePickerFragment.DialogTimeList
                     startActivity(intent)
                 }
                 getString(R.string.digital) -> {
-                    val intent = Intent(this, PembayaranDigitalActivity::class.java)
-                    startActivity(intent)
+                    for (i in pesananList) {
+                        val detail = ItemDetails(
+                            i.id,
+                            i.subtotal!!.toDouble(),
+                            i.jumlah!!.toInt(),
+                            i.namaMenu
+                        )
+                        itemDetails.add(detail)
+                    }
+                    //TODO: HOSTING BERMASALAH
+                    val transactionReq = TransactionRequest(newPesananId, totalHarga.toDouble())
+
+                    uiKitDetails(transactionReq)
+
+                    MidtransSDK.getInstance().transactionRequest = transactionReq
+                    MidtransSDK.getInstance().startPaymentUiFlow(this)
                 }
             }
 
@@ -250,11 +276,9 @@ class PemesananActivity : AppCompatActivity(), TimePickerFragment.DialogTimeList
             )
 
             progressBar.visibility = View.VISIBLE
-            val newPesanan = db.collection("pesanan").document()
-            newPesanan.set(pemesananMap).addOnSuccessListener {
+           /* newPesanan.set(pemesananMap).addOnSuccessListener {
                 for (i in pesananList) {
-                    val newPesananId = newPesanan.id
-                    val menuPesananRef = db.collection("pesanan").document(newPesananId).collection("menuPesanan").document()
+                    val menuPesananRef = db.collection("pesanan").document(newPesananId).collection("menuPesanan").document(i.id!!)
                     val pesananKeranjangRef = db.collection("user").document(userId).collection("keranjang").document(vendorId!!).collection("pesanan").document(i.id!!)
 
                     val menuPesananMap = hashMapOf(
@@ -277,8 +301,40 @@ class PemesananActivity : AppCompatActivity(), TimePickerFragment.DialogTimeList
             }.addOnFailureListener {
                 progressBar.visibility = View.GONE
                 Toast.makeText(this, getString(R.string.fail_pemesanan), Toast.LENGTH_SHORT).show()
-            }
+            }*/
         }
+    }
+
+    private fun setupMidtrans() {
+        SdkUIFlowBuilder.init()
+            .setClientKey(Cons.MIDTRANS_CLIENT_KEY)
+            .setContext(this)
+            .setTransactionFinishedCallback(TransactionFinishedCallback { result ->
+                Log.w(TAG, result.statusMessage)
+            })
+            .setMerchantBaseUrl(Cons.MIDTRANS_BASE_URL)
+            .enableLog(true)
+            .setLanguage("id")
+            .buildSDK()
+    }
+
+    private fun uiKitDetails(transactionRequest: TransactionRequest) {
+        val customerDetails = CustomerDetails()
+        customerDetails.customerIdentifier = namaUser
+        customerDetails.phone = nomorUser
+        customerDetails.firstName = namaUser
+        customerDetails.email = emailUser
+        val shippingAddress = ShippingAddress()
+        shippingAddress.address = alamatUser
+        shippingAddress.city = kotaUser
+        customerDetails.shippingAddress = shippingAddress
+        val billingAddress = BillingAddress()
+        billingAddress.address = alamatUser
+        billingAddress.city = kotaUser
+        customerDetails.billingAddress = billingAddress
+
+        transactionRequest.customerDetails = customerDetails
+        transactionRequest.itemDetails = itemDetails
     }
 
     private fun setupView() {
