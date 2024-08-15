@@ -19,5 +19,5 @@ object Cons {
     const val EXTRA_KOTA = "extra_kota"
     const val EXTRA_ONGKIR = "extra_ongkir"
     const val MIDTRANS_CLIENT_KEY = "SB-Mid-client-V6BKGaGeogDhYGsP"
-    const val MIDTRANS_BASE_URL = "http://kateringconnect.infinityfreeapp.com/"
+    const val MIDTRANS_BASE_URL = "http://192.168.1.133:5000/"
 }

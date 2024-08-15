@@ -77,5 +77,6 @@ dependencies {
     implementation 'it.xabaras.android:recyclerview-swipedecorator:1.4'
 
     //Midtrans SANDBOX
-    implementation 'com.midtrans:uikit:2.0.0-SANDBOX'
+    implementation 'com.midtrans:uikit:2.3.0-SANDBOX'
+    implementation 'com.midtrans:uikit:1.23.1'
 }

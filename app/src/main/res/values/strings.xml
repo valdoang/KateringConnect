@@ -373,4 +373,6 @@
     <string name="from_tambah_porsi">Dari Tambah Porsi</string>
     <string name="from_pemesanan">Dari Pemesanan</string>
     <string name="digital">Digital</string>
+    <string name="jumlah_porsi_transaksi">- %1$sx %2$s</string>
+    <string name="ongkos_kirim_transaksi">- Ongkos Kirim</string>
 </resources>

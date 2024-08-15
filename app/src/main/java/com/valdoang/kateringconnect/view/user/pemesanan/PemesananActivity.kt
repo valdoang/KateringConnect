@@ -23,6 +23,7 @@ import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.midtrans.sdk.corekit.callback.TransactionFinishedCallback
 import com.midtrans.sdk.corekit.core.MidtransSDK
+import com.midtrans.sdk.corekit.core.PaymentMethod
 import com.midtrans.sdk.corekit.core.TransactionRequest
 import com.midtrans.sdk.corekit.models.BillingAddress
 import com.midtrans.sdk.corekit.models.CustomerDetails
@@ -236,22 +237,28 @@ class PemesananActivity : AppCompatActivity(), TimePickerFragment.DialogTimeList
                     startActivity(intent)
                 }
                 getString(R.string.digital) -> {
+                    itemDetails.clear()
                     for (i in pesananList) {
                         val detail = ItemDetails(
                             i.id,
                             i.subtotal!!.toDouble(),
-                            i.jumlah!!.toInt(),
-                            i.namaMenu
+                            1,
+                            getString(R.string.jumlah_porsi_transaksi, i.jumlah, i.namaMenu)
                         )
                         itemDetails.add(detail)
                     }
-                    //TODO: HOSTING BERMASALAH
+
+                    val ongkirDetail = ItemDetails(System.currentTimeMillis().toString(), ongkir!!.toDouble(), 1, getString(R.string.ongkos_kirim_transaksi))
+                    itemDetails.add(ongkirDetail)
+
                     val transactionReq = TransactionRequest(newPesananId, totalHarga.toDouble())
 
                     uiKitDetails(transactionReq)
+                    transactionReq.itemDetails = itemDetails
 
                     MidtransSDK.getInstance().transactionRequest = transactionReq
                     MidtransSDK.getInstance().startPaymentUiFlow(this)
+                    finish()
                 }
             }
 
@@ -276,7 +283,7 @@ class PemesananActivity : AppCompatActivity(), TimePickerFragment.DialogTimeList
             )
 
             progressBar.visibility = View.VISIBLE
-           /* newPesanan.set(pemesananMap).addOnSuccessListener {
+            newPesanan.set(pemesananMap).addOnSuccessListener {
                 for (i in pesananList) {
                     val menuPesananRef = db.collection("pesanan").document(newPesananId).collection("menuPesanan").document(i.id!!)
                     val pesananKeranjangRef = db.collection("user").document(userId).collection("keranjang").document(vendorId!!).collection("pesanan").document(i.id!!)
@@ -301,11 +308,17 @@ class PemesananActivity : AppCompatActivity(), TimePickerFragment.DialogTimeList
             }.addOnFailureListener {
                 progressBar.visibility = View.GONE
                 Toast.makeText(this, getString(R.string.fail_pemesanan), Toast.LENGTH_SHORT).show()
-            }*/
+            }
         }
     }
 
     private fun setupMidtrans() {
+        /*UiKitApi.Builder()
+            .withMerchantClientKey(Cons.MIDTRANS_CLIENT_KEY)
+            .withContext(this)
+            .withMerchantUrl(Cons.MIDTRANS_BASE_URL)
+            .enableLog(true)
+            .build()*/
         SdkUIFlowBuilder.init()
             .setClientKey(Cons.MIDTRANS_CLIENT_KEY)
             .setContext(this)
@@ -334,7 +347,6 @@ class PemesananActivity : AppCompatActivity(), TimePickerFragment.DialogTimeList
         customerDetails.billingAddress = billingAddress
 
         transactionRequest.customerDetails = customerDetails
-        transactionRequest.itemDetails = itemDetails
     }
 
     private fun setupView() {
