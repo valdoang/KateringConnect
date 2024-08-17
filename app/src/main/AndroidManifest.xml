@@ -18,9 +18,6 @@
         android:theme="@style/Theme.KateringConnect"
         tools:targetApi="31">
         <activity
-            android:name=".view.user.pemesanan.PembayaranDigitalActivity"
-            android:exported="false" />
-        <activity
             android:name=".view.user.pemesanan.PemesananBerhasilActivity"
             android:exported="false" />
         <activity

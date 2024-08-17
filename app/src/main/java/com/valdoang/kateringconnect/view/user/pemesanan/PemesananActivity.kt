@@ -3,12 +3,10 @@
 package com.valdoang.kateringconnect.view.user.pemesanan
 
 import android.app.DatePickerDialog
-import android.content.ContentValues.TAG
 import android.content.Intent
 import android.graphics.Canvas
 import android.os.Build
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import android.widget.*
 import androidx.annotation.RequiresApi
@@ -23,12 +21,12 @@ import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.midtrans.sdk.corekit.callback.TransactionFinishedCallback
 import com.midtrans.sdk.corekit.core.MidtransSDK
-import com.midtrans.sdk.corekit.core.PaymentMethod
 import com.midtrans.sdk.corekit.core.TransactionRequest
 import com.midtrans.sdk.corekit.models.BillingAddress
 import com.midtrans.sdk.corekit.models.CustomerDetails
 import com.midtrans.sdk.corekit.models.ItemDetails
 import com.midtrans.sdk.corekit.models.ShippingAddress
+import com.midtrans.sdk.corekit.models.snap.TransactionResult
 import com.midtrans.sdk.uikit.SdkUIFlowBuilder
 import com.valdoang.kateringconnect.R
 import com.valdoang.kateringconnect.adapter.PesananAdapter
@@ -42,7 +40,8 @@ import java.text.SimpleDateFormat
 import java.util.*
 
 
-class PemesananActivity : AppCompatActivity(), TimePickerFragment.DialogTimeListener {
+class PemesananActivity : AppCompatActivity(), TimePickerFragment.DialogTimeListener,
+    TransactionFinishedCallback {
     private lateinit var binding: ActivityPemesananBinding
     private lateinit var firebaseAuth: FirebaseAuth
     private var db = Firebase.firestore
@@ -78,8 +77,10 @@ class PemesananActivity : AppCompatActivity(), TimePickerFragment.DialogTimeList
     private lateinit var pesananAdapter: PesananAdapter
     private var subtotal = 0L
     private lateinit var rgMetodePembayaran: RadioGroup
-    private var newPesananId = ""
+    private val newPesanan = db.collection("pesanan").document()
+    private var newPesananId = newPesanan.id
     private var itemDetails: ArrayList<ItemDetails> = ArrayList()
+    private var sMetodePembayaran = ""
 
     @RequiresApi(Build.VERSION_CODES.N)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -103,6 +104,16 @@ class PemesananActivity : AppCompatActivity(), TimePickerFragment.DialogTimeList
         progressBar = binding.progressBar
         rgMetodePembayaran = binding.rgMetodePembayaran
 
+        val checkListener =
+            CompoundButton.OnCheckedChangeListener { _, isChecked ->
+                if (isChecked && calendar.timeInMillis > System.currentTimeMillis()) {
+                    btnPesan.isEnabled = true
+                }
+            }
+
+        binding.tunai.setOnCheckedChangeListener(checkListener)
+        binding.digital.setOnCheckedChangeListener(checkListener)
+
         setupAction()
         setupView()
         initAction()
@@ -115,7 +126,9 @@ class PemesananActivity : AppCompatActivity(), TimePickerFragment.DialogTimeList
 
     @RequiresApi(Build.VERSION_CODES.N)
     private fun setupRangkumanPesanan() {
-        val pesananRef = db.collection("user").document(userId).collection("keranjang").document(vendorId!!).collection("pesanan")
+        val pesananRef =
+            db.collection("user").document(userId).collection("keranjang").document(vendorId!!)
+                .collection("pesanan")
         pesananRef.addSnapshotListener { pesananSnapshot, _ ->
             if (pesananSnapshot != null) {
                 pesananList.clear()
@@ -131,7 +144,7 @@ class PemesananActivity : AppCompatActivity(), TimePickerFragment.DialogTimeList
                 }
 
                 pesananAdapter.setItems(pesananList)
-                pesananAdapter.setOnItemClickCallback(object : PesananAdapter.OnItemClickCallback{
+                pesananAdapter.setOnItemClickCallback(object : PesananAdapter.OnItemClickCallback {
                     override fun onItemClicked(data: Keranjang) {
                         val intent = Intent(this@PemesananActivity, CustomMenuActivity::class.java)
                         intent.putExtra(Cons.EXTRA_ID, vendorId)
@@ -174,7 +187,7 @@ class PemesananActivity : AppCompatActivity(), TimePickerFragment.DialogTimeList
 
     private fun setupPemesanan() {
         val vendorRef = db.collection("user").document(vendorId!!)
-        vendorRef.get().addOnSuccessListener {vendorSnapshot ->
+        vendorRef.get().addOnSuccessListener { vendorSnapshot ->
             if (vendorSnapshot != null) {
                 namaVendor = vendorSnapshot.data?.get("nama").toString()
                 alamatVendor = vendorSnapshot.data?.get("alamat").toString()
@@ -200,7 +213,8 @@ class PemesananActivity : AppCompatActivity(), TimePickerFragment.DialogTimeList
         }
 
         if (alamatId != userId && alamatId != "null") {
-            val alamatRef = db.collection("user").document(userId).collection("alamatTersimpan").document(alamatId!!)
+            val alamatRef = db.collection("user").document(userId).collection("alamatTersimpan")
+                .document(alamatId!!)
             alamatRef.get().addOnSuccessListener { alamatSnapshot ->
                 if (alamatSnapshot != null) {
                     namaKontakAlamat = alamatSnapshot.data?.get("namaKontak").toString()
@@ -209,7 +223,8 @@ class PemesananActivity : AppCompatActivity(), TimePickerFragment.DialogTimeList
                     kotaAlamat = alamatSnapshot.data?.get("kota").toString()
 
                     binding.tvUserName.text = namaKontakAlamat
-                    binding.tvAddress.text = getString(R.string.tv_address_city, alamatAlamat, kotaAlamat)
+                    binding.tvAddress.text =
+                        getString(R.string.tv_address_city, alamatAlamat, kotaAlamat)
                     binding.tvNoPhone.text = nomorKontakAlamat
                 }
             }
@@ -217,10 +232,7 @@ class PemesananActivity : AppCompatActivity(), TimePickerFragment.DialogTimeList
     }
 
     private fun pemesanan() {
-        val newPesanan = db.collection("pesanan").document()
-        newPesananId = newPesanan.id
-
-        var sMetodePembayaran = ""
+        sMetodePembayaran = ""
         rgMetodePembayaran.setOnCheckedChangeListener { _, checkedId ->
             val rbJenisAkun: RadioButton = findViewById(checkedId)
             when (rbJenisAkun.text) {
@@ -230,101 +242,110 @@ class PemesananActivity : AppCompatActivity(), TimePickerFragment.DialogTimeList
         }
 
         btnPesan.setOnClickListener {
-            when(sMetodePembayaran) {
+            when (sMetodePembayaran) {
                 getString(R.string.tunai) -> {
-                    val intent = Intent(this, PemesananBerhasilActivity::class.java)
-                    intent.putExtra(Cons.EXTRA_NAMA, getString(R.string.from_pemesanan))
-                    startActivity(intent)
+                    addPesananIntoDatabase()
                 }
                 getString(R.string.digital) -> {
-                    itemDetails.clear()
-                    for (i in pesananList) {
-                        val detail = ItemDetails(
-                            i.id,
-                            i.subtotal!!.toDouble(),
-                            1,
-                            getString(R.string.jumlah_porsi_transaksi, i.jumlah, i.namaMenu)
-                        )
-                        itemDetails.add(detail)
-                    }
-
-                    val ongkirDetail = ItemDetails(System.currentTimeMillis().toString(), ongkir!!.toDouble(), 1, getString(R.string.ongkos_kirim_transaksi))
-                    itemDetails.add(ongkirDetail)
-
-                    val transactionReq = TransactionRequest(newPesananId, totalHarga.toDouble())
-
-                    uiKitDetails(transactionReq)
-                    transactionReq.itemDetails = itemDetails
-
-                    MidtransSDK.getInstance().transactionRequest = transactionReq
-                    MidtransSDK.getInstance().startPaymentUiFlow(this)
-                    finish()
+                    startMidtransPayment()
                 }
-            }
-
-            val sStatus = getString(R.string.status_proses)
-            val sDate = calendar.timeInMillis.toString()
-
-            val pemesananMap = hashMapOf(
-                "userId" to userId,
-                "userNama" to namaUser,
-                "userKota" to kotaUser,
-                "userAlamat" to alamatUser,
-                "userTelepon" to nomorUser,
-                "userFoto" to fotoUser,
-                "vendorFoto" to fotoVendor,
-                "vendorId" to vendorId,
-                "vendorNama" to namaVendor,
-                "vendorAlamat" to alamatVendor,
-                "status" to sStatus,
-                "jadwal" to sDate,
-                "ongkir" to ongkir.toString(),
-                "metodePembayaran" to sMetodePembayaran
-            )
-
-            progressBar.visibility = View.VISIBLE
-            newPesanan.set(pemesananMap).addOnSuccessListener {
-                for (i in pesananList) {
-                    val menuPesananRef = db.collection("pesanan").document(newPesananId).collection("menuPesanan").document(i.id!!)
-                    val pesananKeranjangRef = db.collection("user").document(userId).collection("keranjang").document(vendorId!!).collection("pesanan").document(i.id!!)
-
-                    val menuPesananMap = hashMapOf(
-                        "kategoriMenuId" to i.kategoriMenuId,
-                        "menuId" to i.menuId,
-                        "namaMenu" to i.namaMenu,
-                        "namaOpsi" to i.namaOpsi,
-                        "jumlah" to i.jumlah,
-                        "catatan" to i.catatan,
-                        "foto" to i.foto,
-                        "subtotal" to i.subtotal,
-                        "hargaPerPorsi" to i.hargaPerPorsi
-                    )
-                    menuPesananRef.set(menuPesananMap)
-                    pesananKeranjangRef.delete()
-                }
-
-                val keranjangRef = db.collection("user").document(userId).collection("keranjang").document(vendorId!!)
-                keranjangRef.delete()
-            }.addOnFailureListener {
-                progressBar.visibility = View.GONE
-                Toast.makeText(this, getString(R.string.fail_pemesanan), Toast.LENGTH_SHORT).show()
             }
         }
     }
 
+    private fun addPesananIntoDatabase() {
+        val intent = Intent(this, PemesananBerhasilActivity::class.java)
+        intent.putExtra(Cons.EXTRA_NAMA, getString(R.string.from_pemesanan))
+        startActivity(intent)
+
+        val sStatus = getString(R.string.status_proses)
+        val sDate = calendar.timeInMillis.toString()
+
+        val pemesananMap = hashMapOf(
+            "userId" to userId,
+            "userNama" to namaUser,
+            "userKota" to kotaUser,
+            "userAlamat" to alamatUser,
+            "userTelepon" to nomorUser,
+            "userFoto" to fotoUser,
+            "vendorFoto" to fotoVendor,
+            "vendorId" to vendorId,
+            "vendorNama" to namaVendor,
+            "vendorAlamat" to alamatVendor,
+            "status" to sStatus,
+            "jadwal" to sDate,
+            "ongkir" to ongkir.toString(),
+            "metodePembayaran" to sMetodePembayaran
+        )
+
+        progressBar.visibility = View.VISIBLE
+        newPesanan.set(pemesananMap).addOnSuccessListener {
+            for (i in pesananList) {
+                val menuPesananRef =
+                    db.collection("pesanan").document(newPesananId).collection("menuPesanan")
+                        .document(i.id!!)
+                val pesananKeranjangRef =
+                    db.collection("user").document(userId).collection("keranjang")
+                        .document(vendorId!!).collection("pesanan").document(i.id!!)
+
+                val menuPesananMap = hashMapOf(
+                    "kategoriMenuId" to i.kategoriMenuId,
+                    "menuId" to i.menuId,
+                    "namaMenu" to i.namaMenu,
+                    "namaOpsi" to i.namaOpsi,
+                    "jumlah" to i.jumlah,
+                    "catatan" to i.catatan,
+                    "foto" to i.foto,
+                    "subtotal" to i.subtotal,
+                    "hargaPerPorsi" to i.hargaPerPorsi
+                )
+                menuPesananRef.set(menuPesananMap)
+                pesananKeranjangRef.delete()
+            }
+
+            val keranjangRef =
+                db.collection("user").document(userId).collection("keranjang").document(vendorId!!)
+            keranjangRef.delete()
+        }.addOnFailureListener {
+            progressBar.visibility = View.GONE
+            Toast.makeText(this, getString(R.string.fail_pemesanan), Toast.LENGTH_SHORT).show()
+        }
+    }
+
+    private fun startMidtransPayment() {
+        itemDetails.clear()
+        for (i in pesananList) {
+            val detail = ItemDetails(
+                i.id,
+                i.subtotal!!.toDouble(),
+                1,
+                getString(R.string.jumlah_porsi_transaksi, i.jumlah, i.namaMenu)
+            )
+            itemDetails.add(detail)
+        }
+
+        val ongkirDetail = ItemDetails(
+            System.currentTimeMillis().toString(),
+            ongkir!!.toDouble(),
+            1,
+            getString(R.string.ongkos_kirim_transaksi)
+        )
+        itemDetails.add(ongkirDetail)
+
+        val transactionReq = TransactionRequest(newPesananId, totalHarga.toDouble())
+
+        uiKitDetails(transactionReq)
+        transactionReq.itemDetails = itemDetails
+
+        MidtransSDK.getInstance().transactionRequest = transactionReq
+        MidtransSDK.getInstance().startPaymentUiFlow(this)
+    }
+
     private fun setupMidtrans() {
-        /*UiKitApi.Builder()
-            .withMerchantClientKey(Cons.MIDTRANS_CLIENT_KEY)
-            .withContext(this)
-            .withMerchantUrl(Cons.MIDTRANS_BASE_URL)
-            .enableLog(true)
-            .build()*/
         SdkUIFlowBuilder.init()
             .setClientKey(Cons.MIDTRANS_CLIENT_KEY)
             .setContext(this)
-            .setTransactionFinishedCallback(TransactionFinishedCallback { result ->
-                Log.w(TAG, result.statusMessage)
-            })
+            .setTransactionFinishedCallback(this)
             .setMerchantBaseUrl(Cons.MIDTRANS_BASE_URL)
             .enableLog(true)
             .setLanguage("id")
@@ -347,6 +368,18 @@ class PemesananActivity : AppCompatActivity(), TimePickerFragment.DialogTimeList
         customerDetails.billingAddress = billingAddress
 
         transactionRequest.customerDetails = customerDetails
+    }
+
+    override fun onTransactionFinished(result: TransactionResult?) {
+        if (result != null) {
+            if (result.response != null) {
+                if (result.status == TransactionResult.STATUS_SUCCESS) {
+                    addPesananIntoDatabase()
+                } else if (result.status == TransactionResult.STATUS_PENDING || result.status == TransactionResult.STATUS_FAILED) {
+                    finish()
+                }
+            }
+        }
     }
 
     private fun setupView() {
@@ -403,10 +436,12 @@ class PemesananActivity : AppCompatActivity(), TimePickerFragment.DialogTimeList
                         )
                     )
                     .addSwipeLeftLabel(getString(R.string.hapus))
-                    .setSwipeLeftLabelColor(ContextCompat.getColor(
-                        this@PemesananActivity,
-                        R.color.white
-                    ))
+                    .setSwipeLeftLabelColor(
+                        ContextCompat.getColor(
+                            this@PemesananActivity,
+                            R.color.white
+                        )
+                    )
                     .create()
                     .decorate()
 
@@ -438,14 +473,14 @@ class PemesananActivity : AppCompatActivity(), TimePickerFragment.DialogTimeList
                 ivTanggalError.visibility = View.VISIBLE
                 tvTanggalError.visibility = View.VISIBLE
                 btnPesan.isEnabled = false
-            } else if(today == datePicked) {
+            } else if (today == datePicked) {
                 ivTanggalError.visibility = View.VISIBLE
                 tvTanggalError.visibility = View.VISIBLE
                 btnPesan.isEnabled = false
             } else {
                 ivTanggalError.visibility = View.GONE
                 tvTanggalError.visibility = View.GONE
-                if (tvJam.currentTextColor == resources.getColor(R.color.black)) {
+                if (tvJam.currentTextColor == resources.getColor(R.color.black) && rgMetodePembayaran.checkedRadioButtonId != -1) {
                     btnPesan.isEnabled = true
                 }
                 timePicker()
@@ -464,7 +499,7 @@ class PemesananActivity : AppCompatActivity(), TimePickerFragment.DialogTimeList
     }
 
     private fun timePicker() {
-        binding.clPilihJam.setOnClickListener{
+        binding.clPilihJam.setOnClickListener {
             val dialogFragment = TimePickerFragment()
             dialogFragment.show(supportFragmentManager, "timePicker")
         }
@@ -481,14 +516,16 @@ class PemesananActivity : AppCompatActivity(), TimePickerFragment.DialogTimeList
             ivTanggalError.visibility = View.VISIBLE
             tvTanggalError.visibility = View.VISIBLE
             btnPesan.isEnabled = false
-        } else if(today == datePicked) {
+        } else if (today == datePicked) {
             ivTanggalError.visibility = View.VISIBLE
             tvTanggalError.visibility = View.VISIBLE
             btnPesan.isEnabled = false
         } else {
             ivTanggalError.visibility = View.GONE
             tvTanggalError.visibility = View.GONE
-            btnPesan.isEnabled = true
+            if (rgMetodePembayaran.checkedRadioButtonId != -1) {
+                btnPesan.isEnabled = true
+            }
         }
     }
 

@@ -33,7 +33,12 @@ class PemesananBerhasilActivity : AppCompatActivity() {
     }
 
     private fun setupAction() {
-        binding.btnToBeranda.setOnClickListener {
+        binding.ibBack.setOnClickListener {
+            val intent = Intent(this, UserMainActivity::class.java)
+            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+            startActivity(intent)
+        }
+        binding.tvToBeranda.setOnClickListener {
             val intent = Intent(this, UserMainActivity::class.java)
             intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
             startActivity(intent)

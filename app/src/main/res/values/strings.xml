@@ -228,7 +228,7 @@
     <string name="entry_metode_pembayaran">Pilih Metode Pembayaran</string>
     <string name="fail_pemesanan">Gagal Melakukan Pemesanan</string>
     <string name="fail_penambahan">Gagal Melakukan Penambahan Porsi</string>
-    <string name="pemesanan_berhasil">PEMESANAN BERHASIL</string>
+    <string name="pemesanan_berhasil">Pesanan Berhasil Ditambahkan</string>
     <string name="riwayat_jumlah">%1$sx</string>
     <string name="status_proses">Proses</string>
     <string name="status_selesai">Selesai</string>
@@ -250,7 +250,7 @@
     <string name="tv_subtotal">Subtotal</string>
     <string name="tidak_ada">Tidak Ada</string>
     <string name="tambah_jumlah_porsi">Ingin menambah jumlah porsi?</string>
-    <string name="penambahan_porsi_berhasil">PENAMBAHAN PORSI BERHASIL</string>
+    <string name="penambahan_porsi_berhasil">Penambahan Porsi Berhasil</string>
     <string name="chat">Chat</string>
     <string name="chat_kosong">Chat Kosong</string>
     <string name="ketik_sesuatu">Ketik sesuatu …</string>
@@ -375,4 +375,5 @@
     <string name="digital">Digital</string>
     <string name="jumlah_porsi_transaksi">- %1$sx %2$s</string>
     <string name="ongkos_kirim_transaksi">- Ongkos Kirim</string>
+    <string name="digital_desc">Opsi pembayaran digital akan tampil setelah pesan</string>
 </resources>

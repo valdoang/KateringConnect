@@ -435,7 +435,6 @@
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
                     app:layout_constraintTop_toBottomOf="@id/view_metode_pembayaran_1"
-                    app:layout_constraintBottom_toTopOf="@id/view_metode_pembayaran_2"
                     app:layout_constraintStart_toStartOf="parent">
                     <RadioButton
                         android:id="@+id/tunai"
@@ -468,7 +467,21 @@
                     android:layout_width="match_parent"
                     android:layout_height="2dp"
                     android:background="@color/white_200"
+                    app:layout_constraintTop_toBottomOf="@id/rg_metode_pembayaran" />
+
+                <TextView
+                    android:id="@+id/digital_desc"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/digital_desc"
+                    android:fontFamily="@font/poppins"
+                    android:textColor="@color/grey_200"
+                    android:layout_marginTop="8dp"
                     android:layout_marginBottom="32dp"
+                    android:textSize="12sp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/view_metode_pembayaran_2"
                     app:layout_constraintBottom_toBottomOf="parent"/>
 
             </androidx.constraintlayout.widget.ConstraintLayout>
