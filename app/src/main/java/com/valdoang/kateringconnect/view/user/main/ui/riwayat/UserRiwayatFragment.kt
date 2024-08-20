@@ -23,8 +23,6 @@ import com.valdoang.kateringconnect.view.user.detailriwayat.DetailRiwayatPemesan
 class UserRiwayatFragment : Fragment() {
     private var _binding: FragmentUserRiwayatBinding? = null
 
-    //TODO: SESUAIKAN FORMAT PEMESANAN YANG TERBARU
-
     // This property is only valid between onCreateView and
     // onDestroyView.
     private val binding get() = _binding!!

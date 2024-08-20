@@ -163,7 +163,7 @@
     <string name="rincian_pesanan">Rincian Pesanan</string>
     <string name="rincian_pesananmu">Rincian Pesananmu</string>
     <string name="informasi_pembeli">Informasi Pembeli</string>
-    <string name="tv_id">ID</string>
+    <string name="tv_id">ID Pesanan</string>
     <string name="tv_total">Total</string>
     <string name="tv_pembayaran">Pembayaran</string>
     <string name="tv_tanggal">Tanggal</string>
@@ -376,4 +376,8 @@
     <string name="jumlah_porsi_transaksi">- %1$sx %2$s</string>
     <string name="ongkos_kirim_transaksi">- Ongkos Kirim</string>
     <string name="digital_desc">Opsi pembayaran digital akan tampil setelah pesan</string>
+    <string name="jumlah_nama_menu">%1$sx %2$s</string>
+    <string name="jumlah_alamat">%1$s Pesanan • %2$s</string>
+    <string name="alamat_penerima">Alamat Penerima</string>
+    <string name="tambah_porsi">Tambah Porsi</string>
 </resources>

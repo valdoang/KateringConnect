@@ -53,7 +53,7 @@
             android:layout_height="match_parent"
             android:layout_marginTop="0dp"
             android:layout_marginBottom="57dp"
-            tools:listitem="@layout/item_vendor_beranda_riwayat"/>
+            tools:listitem="@layout/item_riwayat_pesanan"/>
 
     </LinearLayout>
 

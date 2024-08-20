@@ -24,8 +24,6 @@ import com.valdoang.kateringconnect.view.vendor.detailriwayat.DetailRiwayatPesan
 class VendorRiwayatFragment : Fragment() {
     private var _binding: FragmentVendorRiwayatBinding? = null
 
-    //TODO: SESUAIKAN FORMAT PEMESANAN YANG TERBARU
-
     // This property is only valid between onCreateView and
     // onDestroyView.
     private val binding get() = _binding!!

@@ -34,8 +34,11 @@
         android:textColor="@color/black"
         android:layout_marginTop="19dp"
         android:layout_marginStart="8dp"
+        android:layout_marginBottom="18dp"
+        app:layout_constraintVertical_bias="0.0"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toEndOf="@id/tv_jumlah_pesanan"/>
+        app:layout_constraintStart_toEndOf="@id/tv_jumlah_pesanan"
+        app:layout_constraintBottom_toBottomOf="parent"/>
 
     <TextView
         android:id="@+id/tv_nama_opsi"
@@ -47,8 +50,11 @@
         android:fontFamily="@font/poppins"
         android:textColor="@color/black"
         android:layout_marginStart="8dp"
+        android:layout_marginBottom="18dp"
+        app:layout_constraintVertical_bias="0.0"
         app:layout_constraintTop_toBottomOf="@id/tv_nama_menu"
-        app:layout_constraintStart_toEndOf="@id/tv_jumlah_pesanan"/>
+        app:layout_constraintStart_toEndOf="@id/tv_jumlah_pesanan"
+        app:layout_constraintBottom_toBottomOf="parent"/>
 
     <TextView
         android:id="@+id/tv_catatan"
@@ -62,8 +68,10 @@
         android:layout_marginTop="0dp"
         android:layout_marginStart="8dp"
         android:layout_marginBottom="18dp"
+        app:layout_constraintVertical_bias="0.0"
         app:layout_constraintTop_toBottomOf="@id/tv_nama_opsi"
-        app:layout_constraintStart_toEndOf="@id/tv_jumlah_pesanan"/>
+        app:layout_constraintStart_toEndOf="@id/tv_jumlah_pesanan"
+        app:layout_constraintBottom_toBottomOf="parent"/>
 
     <TextView
         android:id="@+id/tv_edit"
