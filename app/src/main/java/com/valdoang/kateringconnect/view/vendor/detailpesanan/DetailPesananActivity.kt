@@ -12,8 +12,8 @@ import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.valdoang.kateringconnect.R
-import com.valdoang.kateringconnect.adapter.DetailPesananAdapter
-import com.valdoang.kateringconnect.databinding.ActivityDetailPesananRiwayatBinding
+import com.valdoang.kateringconnect.adapter.DetailPesananPemesananAdapter
+import com.valdoang.kateringconnect.databinding.ActivityDetailPesananPemesananBinding
 import com.valdoang.kateringconnect.model.Keranjang
 import com.valdoang.kateringconnect.utils.Cons
 import com.valdoang.kateringconnect.utils.withNumberingFormat
@@ -21,11 +21,14 @@ import com.valdoang.kateringconnect.utils.withTimestamptoDateFormat
 import com.valdoang.kateringconnect.utils.withTimestamptoTimeFormat
 
 class DetailPesananActivity : AppCompatActivity() {
-    private lateinit var binding: ActivityDetailPesananRiwayatBinding
+    private lateinit var binding: ActivityDetailPesananPemesananBinding
     private lateinit var firebaseAuth: FirebaseAuth
     private var db = Firebase.firestore
     private var pesananId: String? = null
+    private var fromWhere: String? = null
     private var vendorId = ""
+    private var status = ""
+    private var ongkir = 0L
     private lateinit var tvVendorNama: TextView
     private lateinit var tvUserNama: TextView
     private lateinit var tvUserAlamat: TextView
@@ -40,20 +43,21 @@ class DetailPesananActivity : AppCompatActivity() {
     private lateinit var btnBatalkan: Button
     private var menuPesananList: ArrayList<Keranjang> = ArrayList()
     private lateinit var recyclerView: RecyclerView
-    private lateinit var detailPesananAdapter: DetailPesananAdapter
+    private lateinit var detailPesananPemesananAdapter: DetailPesananPemesananAdapter
     private lateinit var tvPesananTotalPembayaran: TextView
     private lateinit var tvPesananSubtotal: TextView
     private lateinit var tvPesananSubtotalValue: TextView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivityDetailPesananRiwayatBinding.inflate(layoutInflater)
+        binding = ActivityDetailPesananPemesananBinding.inflate(layoutInflater)
         setContentView(binding.root)
         supportActionBar?.hide()
 
         firebaseAuth = Firebase.auth
 
         pesananId = intent.getStringExtra(Cons.EXTRA_ID)
+        fromWhere = intent.getStringExtra(Cons.EXTRA_NAMA)
 
         tvVendorNama = binding.tvNamaVendor
         tvUserNama = binding.tvUserName
@@ -67,8 +71,6 @@ class DetailPesananActivity : AppCompatActivity() {
         tvPesananJam = binding.tvJamValue
         btnSelesaikan = binding.btnSelesaikan
         btnBatalkan = binding.btnBatalkan
-
-        //TODO: KIRIM KE ADAPTER
         tvPesananTotalPembayaran = binding.tvTotalValue
         tvPesananSubtotal = binding.tvSubtotal
         tvPesananSubtotalValue = binding.tvSubtotalValue
@@ -86,11 +88,10 @@ class DetailPesananActivity : AppCompatActivity() {
                 if (pesanan != null) {
                     val pesananId = pesanan.id
                     vendorId = pesanan.data?.get("vendorId").toString()
-                    val vendorNama = pesanan.data?.get("vendorNama").toString()
-                    val status = pesanan.data?.get("status").toString()
+                    status = pesanan.data?.get("status").toString()
                     val jadwal = pesanan.data?.get("jadwal").toString()
                     val metodePembayaran = pesanan.data?.get("metodePembayaran").toString()
-                    val ongkir = pesanan.data?.get("ongkir").toString()
+                    ongkir = pesanan.data?.get("ongkir").toString().toLong()
                     val userNama = pesanan.data?.get("userNama").toString()
                     val userKota = pesanan.data?.get("userKota").toString()
                     val userAlamat = pesanan.data?.get("userAlamat").toString()
@@ -99,7 +100,6 @@ class DetailPesananActivity : AppCompatActivity() {
                     tvUserNama.text = userNama
                     tvUserAlamat.text = getString(R.string.tv_address_city, userAlamat, userKota)
                     tvUserTelepon.text = userTelepon
-                    tvVendorNama.text = vendorNama
 
                     tvPesananId.text = pesananId
                     tvPesananStatus.text = status
@@ -108,6 +108,7 @@ class DetailPesananActivity : AppCompatActivity() {
                     tvPesananTanggal.text = jadwal.withTimestamptoDateFormat()
                     tvPesananJam.text = jadwal.withTimestamptoTimeFormat()
 
+                    setupView()
                 }
             }
     }
@@ -123,7 +124,7 @@ class DetailPesananActivity : AppCompatActivity() {
                     menuPesananList.add(menuPesanan)
                 }
 
-                detailPesananAdapter.setItems(menuPesananList)
+                detailPesananPemesananAdapter.setItems(menuPesananList)
             }
         }
     }
@@ -131,9 +132,9 @@ class DetailPesananActivity : AppCompatActivity() {
     private fun setupView() {
         recyclerView = binding.rvPesanan
         recyclerView.layoutManager = LinearLayoutManager(this)
-        detailPesananAdapter = DetailPesananAdapter(this, getString(R.string.vendor), "tidak perlu")
-        recyclerView.adapter = detailPesananAdapter
-        detailPesananAdapter.setItems(menuPesananList)
+        detailPesananPemesananAdapter = DetailPesananPemesananAdapter(this, getString(R.string.vendor), status, tvPesananTotalPembayaran, tvPesananSubtotal, tvPesananSubtotalValue, ongkir, vendorId, "tidak perlu")
+        recyclerView.adapter = detailPesananPemesananAdapter
+        detailPesananPemesananAdapter.setItems(menuPesananList)
     }
 
     private fun setupAction() {
@@ -164,5 +165,16 @@ class DetailPesananActivity : AppCompatActivity() {
 
     private fun setUI() {
         tvVendorNama.text = getString(R.string.rangkuman_pesanan)
+        when (fromWhere) {
+            getString(R.string.from_vendor_beranda) -> {
+                btnSelesaikan.visibility = View.VISIBLE
+                btnBatalkan.visibility = View.VISIBLE
+            }
+            getString(R.string.from_vendor_riwayat) -> {
+                btnSelesaikan.visibility = View.GONE
+                btnBatalkan.visibility = View.GONE
+                binding.viewButton.visibility = View.GONE
+            }
+        }
     }
 }

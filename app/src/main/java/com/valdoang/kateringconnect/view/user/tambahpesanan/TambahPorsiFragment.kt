@@ -33,13 +33,13 @@ class TambahPorsiFragment : DialogFragment() {
     private var db = Firebase.firestore
     private var jumlah = ""
     private var subtotal = ""
-    private var totalPembayaran = ""
     private lateinit var etJumlah: EditText
     private lateinit var tvTotalPembayaran: TextView
     private var total = 0L
     private var sJumlah = 0L
     private var sSubtotal = 0L
-    private var sTotalPembayaran = 0L
+
+    //TODO: TAMBAHKAN PEMBAYARAN DIGITAL
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -58,24 +58,24 @@ class TambahPorsiFragment : DialogFragment() {
         firebaseAuth = Firebase.auth
 
         val mArgs = arguments
-        val pesananId = mArgs!!.getString("id")
+        val pesananId = mArgs!!.getString("pesananId")
+        val menuPesananId = mArgs.getString("menuPesananId")
 
         etJumlah = binding.edJumlah
         tvTotalPembayaran = binding.tvTotalPembayaran
 
         closeDialog()
-        setupData(pesananId!!)
-        tambahPorsi(pesananId)
+        setupData(pesananId!!, menuPesananId!!)
+        tambahPorsi(pesananId, menuPesananId)
         return root
     }
 
-    private fun setupData(pesananId : String) {
-        val ref = db.collection("pesanan").document(pesananId)
+    private fun setupData(pesananId : String, menuPesananId: String) {
+        val ref = db.collection("pesanan").document(pesananId).collection("menuPesanan").document(menuPesananId)
         ref.get().addOnSuccessListener { document ->
                 if (document != null) {
                     jumlah = document.data?.get("jumlah").toString()
                     subtotal = document.data?.get("subtotal").toString()
-                    totalPembayaran = document.data?.get("totalHarga").toString()
                     val hargaPerPorsi = document.data?.get("hargaPerPorsi").toString()
 
                     etJumlah.allChangedListener { etjumlah ->
@@ -88,19 +88,18 @@ class TambahPorsiFragment : DialogFragment() {
                             //untuk updateMap
                             sJumlah = etjumlah.toLong() + jumlah.toLong()
                             sSubtotal = total + subtotal.toLong()
-                            sTotalPembayaran = total + totalPembayaran.toLong()
                         }
                     }
                 }
             }
     }
 
-    private fun tambahPorsi(pesananId: String) {
+    private fun tambahPorsi(pesananId: String, menuPesananId: String) {
         binding.btnPesan.setOnClickListener {
             val updateMap = mapOf(
                 "jumlah" to sJumlah.toString(),
                 "subtotal" to sSubtotal.toString(),
-                "totalHarga" to sTotalPembayaran.toString()
+                "tambahPorsi" to true
             )
 
             when {
@@ -108,7 +107,7 @@ class TambahPorsiFragment : DialogFragment() {
                     etJumlah.error = getString(R.string.entry_jumlah)
                 }
                 else -> {
-                    db.collection("pesanan").document(pesananId)
+                    db.collection("pesanan").document(pesananId).collection("menuPesanan").document(menuPesananId)
                         .update(updateMap).addOnSuccessListener {
                             dismiss()
                             val intent = Intent(requireContext(), PemesananBerhasilActivity::class.java)

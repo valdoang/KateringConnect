@@ -12,6 +12,12 @@
         tools:layout="@layout/fragment_user_beranda" />
 
     <fragment
+        android:id="@+id/navigation_user_pesanan"
+        android:name="com.valdoang.kateringconnect.view.user.main.ui.pesanan.UserPesananFragment"
+        android:label="@string/pesanan_saya"
+        tools:layout="@layout/fragment_user_pesanan" />
+
+    <fragment
         android:id="@+id/navigation_user_riwayat"
         android:name="com.valdoang.kateringconnect.view.user.main.ui.riwayat.UserRiwayatFragment"
         android:label="@string/title_riwayat"

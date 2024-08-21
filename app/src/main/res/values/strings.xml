@@ -380,4 +380,11 @@
     <string name="jumlah_alamat">%1$s Pesanan • %2$s</string>
     <string name="alamat_penerima">Alamat Penerima</string>
     <string name="tambah_porsi">Tambah Porsi</string>
+    <string name="subtotal_jumlah">Subtotal (%1$s Pesanan)</string>
+    <string name="nama_menu_detail_pesanan">%1$s - %2$s</string>
+    <string name="porsi_added_user">Porsi telah ditambahkan</string>
+    <string name="porsi_added_vendor">Porsi ditambahkan oleh pembeli</string>
+    <string name="pesanan_saya">Pesanan Saya</string>
+    <string name="from_vendor_beranda">Dari Beranda Vendor</string>
+    <string name="from_vendor_riwayat">Dari Riwayat Vendor</string>
 </resources>

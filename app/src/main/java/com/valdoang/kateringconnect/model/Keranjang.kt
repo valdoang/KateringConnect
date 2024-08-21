@@ -10,5 +10,6 @@ data class Keranjang(
     var namaOpsi: String? = null,
     var catatan: String? = null,
     var hargaPerPorsi: String? = null,
-    var subtotal: String? = null
+    var subtotal: String? = null,
+    var tambahPorsi: Boolean? = false
 )

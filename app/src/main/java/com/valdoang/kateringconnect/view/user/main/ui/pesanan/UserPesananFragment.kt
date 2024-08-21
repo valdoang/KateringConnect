@@ -1,4 +1,4 @@
-package com.valdoang.kateringconnect.view.user.main.ui.riwayat
+package com.valdoang.kateringconnect.view.user.main.ui.pesanan
 
 import android.content.Intent
 import android.os.Bundle
@@ -15,14 +15,14 @@ import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.valdoang.kateringconnect.R
 import com.valdoang.kateringconnect.adapter.UserPesananRiwayatAdapter
-import com.valdoang.kateringconnect.databinding.FragmentUserRiwayatBinding
+import com.valdoang.kateringconnect.databinding.FragmentUserPesananBinding
 import com.valdoang.kateringconnect.model.Pesanan
 import com.valdoang.kateringconnect.utils.Cons
 import com.valdoang.kateringconnect.view.both.chat.ChatActivity
 import com.valdoang.kateringconnect.view.user.detailpemesanan.DetailPemesananActivity
 
-class UserRiwayatFragment : Fragment() {
-    private var _binding: FragmentUserRiwayatBinding? = null
+class UserPesananFragment : Fragment() {
+    private var _binding: FragmentUserPesananBinding? = null
 
     // This property is only valid between onCreateView and
     // onDestroyView.
@@ -40,7 +40,7 @@ class UserRiwayatFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
 
-        _binding = FragmentUserRiwayatBinding.inflate(inflater, container, false)
+        _binding = FragmentUserPesananBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
         firebaseAuth = Firebase.auth
@@ -57,8 +57,8 @@ class UserRiwayatFragment : Fragment() {
     private fun setupData() {
         progressBar.visibility = View.VISIBLE
         val userId = firebaseAuth.currentUser!!.uid
-        val vendorRef = db.collection("pesanan").whereEqualTo("userId", userId).whereIn("status", listOf(getString(
-            R.string.status_selesai), getString(R.string.status_batal)))
+        val vendorRef = db.collection("pesanan").whereEqualTo("userId", userId).whereEqualTo("status", getString(
+            R.string.status_proses))
         vendorRef.addSnapshotListener{ snapshot,_ ->
             progressBar.visibility = View.GONE
             if (snapshot != null) {
@@ -71,7 +71,7 @@ class UserRiwayatFragment : Fragment() {
                     }
                 }
 
-                pesananList.sortByDescending { pesanan ->
+                pesananList.sortBy { pesanan ->
                     pesanan.jadwal
                 }
 
@@ -86,13 +86,13 @@ class UserRiwayatFragment : Fragment() {
                 })
 
                 if (pesananList.isEmpty()) {
-                    binding.noHistoryAnimationUser.visibility = View.VISIBLE
-                    binding.tvEmptyData.visibility = View.VISIBLE
+                    binding.noDataAnimation.visibility = View.VISIBLE
+                    binding.tvNoData.visibility = View.VISIBLE
 
                 }
                 else {
-                    binding.noHistoryAnimationUser.visibility = View.GONE
-                    binding.tvEmptyData.visibility = View.GONE
+                    binding.noDataAnimation.visibility = View.GONE
+                    binding.tvNoData.visibility = View.GONE
                 }
             }
         }

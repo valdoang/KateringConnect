@@ -33,6 +33,8 @@ class NilaiActivity : AppCompatActivity() {
     private var vendorId: String? = null
     private var totalNilai = 0.0
 
+    //TODO: SESUAIKAN GET DATABASE
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityNilaiBinding.inflate(layoutInflater)

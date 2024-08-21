@@ -10,6 +10,7 @@ import com.valdoang.kateringconnect.view.user.main.ui.akun.UserAkunFragment
 import com.valdoang.kateringconnect.view.user.main.ui.beranda.UserBerandaFragment
 import com.valdoang.kateringconnect.view.user.main.ui.riwayat.UserRiwayatFragment
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.valdoang.kateringconnect.view.user.main.ui.pesanan.UserPesananFragment
 
 class UserMainActivity : AppCompatActivity() {
 
@@ -32,15 +33,16 @@ class UserMainActivity : AppCompatActivity() {
 
     private fun setupNavigation() {
         // Define fragments to display in viewPager2
-        val listOfFragments = listOf(UserBerandaFragment(), UserRiwayatFragment(), UserAkunFragment())
+        val listOfFragments = listOf(UserBerandaFragment(), UserPesananFragment(), UserRiwayatFragment(), UserAkunFragment())
         viewPager.adapter = ViewPagerAdapter(this, listOfFragments)
         viewPager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
             override fun onPageSelected(position: Int) {
                 super.onPageSelected(position)
                 when (position) {
                     0 -> navView.menu.findItem(R.id.navigation_user_beranda).isChecked = true
-                    1 -> navView.menu.findItem(R.id.navigation_user_riwayat).isChecked = true
-                    2 -> navView.menu.findItem(R.id.navigation_user_akun).isChecked = true
+                    1 -> navView.menu.findItem(R.id.navigation_user_pesanan).isChecked = true
+                    2 -> navView.menu.findItem(R.id.navigation_user_riwayat).isChecked = true
+                    3 -> navView.menu.findItem(R.id.navigation_user_akun).isChecked = true
 
                 }
             }
@@ -52,14 +54,17 @@ class UserMainActivity : AppCompatActivity() {
                 R.id.navigation_user_beranda -> {
                     viewPager.setCurrentItem(0, true)
                     return@setOnItemSelectedListener true
-
                 }
-                R.id.navigation_user_riwayat -> {
+                R.id.navigation_user_pesanan -> {
                     viewPager.setCurrentItem(1, true)
                     return@setOnItemSelectedListener true
                 }
-                R.id.navigation_user_akun -> {
+                R.id.navigation_user_riwayat -> {
                     viewPager.setCurrentItem(2, true)
+                    return@setOnItemSelectedListener true
+                }
+                R.id.navigation_user_akun -> {
+                    viewPager.setCurrentItem(3, true)
                     return@setOnItemSelectedListener true
                 }
             }

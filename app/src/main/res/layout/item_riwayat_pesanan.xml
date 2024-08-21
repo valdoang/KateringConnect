@@ -96,6 +96,23 @@
         app:layout_constraintTop_toBottomOf="@id/tv_pemesanan_menu"
         tools:text="875.000" />
 
+    <TextView
+        android:id="@+id/tv_porsi_add"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/porsi_added_vendor"
+        android:visibility="gone"
+        android:textSize="12sp"
+        android:fontFamily="@font/poppins"
+        android:textColor="@color/orange"
+        android:layout_marginTop="8dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginBottom="18dp"
+        app:layout_constraintVertical_bias="0.0"
+        app:layout_constraintTop_toBottomOf="@id/tv_pemesanan_total"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
     <View
         android:layout_width="match_parent"
         android:layout_height="3dp"

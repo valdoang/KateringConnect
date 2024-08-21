@@ -43,6 +43,7 @@ class VendorBerandaRiwayatAdapter(
             }
 
             binding.apply {
+                var mTambahPorsi = false
                 val menuPesananRef = db.collection("pesanan").document(pesanan.id!!).collection("menuPesanan")
                 menuPesananRef.addSnapshotListener { menuPesananSnapshot, _ ->
                     if (menuPesananSnapshot != null) {
@@ -51,6 +52,10 @@ class VendorBerandaRiwayatAdapter(
                         for (data in menuPesananSnapshot) {
                             val subtotal = data.get("subtotal").toString().toLong()
                             val jumlah = data.get("jumlah").toString().toInt()
+                            val tambahPorsi = data.get("tambahPorsi")
+                            if (tambahPorsi == true) {
+                                mTambahPorsi = true
+                            }
                             subtotalTemp += subtotal
                             jumlahTemp += jumlah
                         }
@@ -60,23 +65,31 @@ class VendorBerandaRiwayatAdapter(
                         tvPemesananMenu.text = context.getString(R.string.jumlah_alamat, jumlahTemp.toString(), context.getString(R.string.tv_address_city, pesanan.userAlamat, pesanan.userKota))
                         tvPemesananTotal.text = sTotalHarga.withNumberingFormat()
                     }
+
+                    if (pesanan.status == context.getString(R.string.status_proses)) {
+                        tvPemesananStatus.visibility = View.GONE
+                        if (mTambahPorsi) {
+                            tvPorsiAdd.visibility = View.VISIBLE
+                        } else {
+                            tvPorsiAdd.visibility = View.GONE
+                        }
+                    } else if (pesanan.status == context.getString(R.string.status_selesai)) {
+                        tvPemesananStatus.text = context.getString(R.string.status_selesai)
+                        tvPemesananStatus.setTextColor(context.resources.getColor(R.color.green_200))
+                        tvPemesananStatus.background = context.resources.getDrawable(R.drawable.status_selesai_bg)
+                        tvPorsiAdd.visibility = View.GONE
+                    } else if (pesanan.status == context.getString(R.string.status_batal)) {
+                        tvPemesananStatus.text = context.getString(R.string.status_batal)
+                        tvPemesananStatus.setTextColor(context.resources.getColor(R.color.grey_200))
+                        tvPemesananStatus.background = context.resources.getDrawable(R.drawable.status_batal_bg)
+                        tvPorsiAdd.visibility = View.GONE
+                    }
                 }
 
                 tvPemesananDate.text = pesanan.jadwal?.withTimestampToDateTimeFormat()
                 Glide.with(context).load(pesanan.vendorFoto).error(R.drawable.default_profile).into(ivUserVendor)
                 tvPemesananName.text = pesanan.vendorNama
 
-                if (pesanan.status == context.getString(R.string.status_proses)) {
-                    tvPemesananStatus.visibility = View.GONE
-                } else if (pesanan.status == context.getString(R.string.status_selesai)) {
-                    tvPemesananStatus.text = context.getString(R.string.status_selesai)
-                    tvPemesananStatus.setTextColor(context.resources.getColor(R.color.green_200))
-                    tvPemesananStatus.background = context.resources.getDrawable(R.drawable.status_selesai_bg)
-                } else if (pesanan.status == context.getString(R.string.status_batal)) {
-                    tvPemesananStatus.text = context.getString(R.string.status_batal)
-                    tvPemesananStatus.setTextColor(context.resources.getColor(R.color.grey_200))
-                    tvPemesananStatus.background = context.resources.getDrawable(R.drawable.status_batal_bg)
-                }
             }
         }
     }

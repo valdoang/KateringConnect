@@ -33,6 +33,8 @@ class BeriNilaiFragment : DialogFragment() {
     private var menuNama = ""
     private var jumlahPesanan = ""
 
+    //TODO: SESUAIKAN SET DATABASE
+
 
     override fun onCreateView(
         inflater: LayoutInflater,

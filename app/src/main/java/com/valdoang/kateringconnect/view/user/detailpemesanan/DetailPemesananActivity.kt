@@ -1,9 +1,13 @@
-package com.valdoang.kateringconnect.view.vendor.detailriwayat
+package com.valdoang.kateringconnect.view.user.detailpemesanan
 
+import android.os.Build
 import android.os.Bundle
 import android.view.View
+import android.widget.Button
 import android.widget.TextView
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.DialogFragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.auth.FirebaseAuth
@@ -11,85 +15,116 @@ import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.valdoang.kateringconnect.R
-import com.valdoang.kateringconnect.adapter.DetailPesananAdapter
-import com.valdoang.kateringconnect.databinding.ActivityDetailPesananRiwayatBinding
+import com.valdoang.kateringconnect.adapter.DetailPesananPemesananAdapter
+import com.valdoang.kateringconnect.databinding.ActivityDetailPesananPemesananBinding
 import com.valdoang.kateringconnect.model.Keranjang
 import com.valdoang.kateringconnect.utils.Cons
 import com.valdoang.kateringconnect.utils.withNumberingFormat
 import com.valdoang.kateringconnect.utils.withTimestamptoDateFormat
 import com.valdoang.kateringconnect.utils.withTimestamptoTimeFormat
+import com.valdoang.kateringconnect.view.user.berinilai.BeriNilaiFragment
 
-class DetailRiwayatPesananActivity : AppCompatActivity() {
-    private lateinit var binding: ActivityDetailPesananRiwayatBinding
+class DetailPemesananActivity : AppCompatActivity() {
+    private lateinit var binding: ActivityDetailPesananPemesananBinding
     private lateinit var firebaseAuth: FirebaseAuth
     private var db = Firebase.firestore
     private var pesananId: String? = null
     private var vendorId = ""
-    private lateinit var tvVendorNama: TextView
+    private var status = ""
+    private var ongkir = 0L
     private lateinit var tvUserNama: TextView
     private lateinit var tvUserAlamat: TextView
     private lateinit var tvUserTelepon: TextView
+    private lateinit var tvVendorNama: TextView
     private lateinit var tvPesananId: TextView
     private lateinit var tvPesananStatus: TextView
+    private lateinit var tvPesananTotalPembayaran: TextView
+    private lateinit var tvPesananSubtotal: TextView
     private lateinit var tvPesananOngkir: TextView
     private lateinit var tvPesananMetodePembayaran: TextView
     private lateinit var tvPesananTanggal: TextView
     private lateinit var tvPesananJam: TextView
-    private lateinit var tvPesananTotalPembayaran: TextView
-    private lateinit var tvPesananSubtotal: TextView
-    private lateinit var tvPesananSubtotalValue: TextView
+    private lateinit var btnBeriNilai: Button
+    private lateinit var btnPesanLagi: Button
+    private lateinit var tvTotalPembayaran: TextView
+    private lateinit var tvSubtotal: TextView
+    private lateinit var tvSubtotalValue: TextView
     private var menuPesananList: ArrayList<Keranjang> = ArrayList()
     private lateinit var recyclerView: RecyclerView
-    private lateinit var detailPesananAdapter: DetailPesananAdapter
+    private lateinit var detailPesananPemesananAdapter: DetailPesananPemesananAdapter
+    private lateinit var viewButton: View
 
+    @RequiresApi(Build.VERSION_CODES.N)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivityDetailPesananRiwayatBinding.inflate(layoutInflater)
+        binding = ActivityDetailPesananPemesananBinding.inflate(layoutInflater)
         setContentView(binding.root)
         supportActionBar?.hide()
 
-        firebaseAuth = Firebase.auth
-
+        firebaseAuth =Firebase.auth
+        
         pesananId = intent.getStringExtra(Cons.EXTRA_ID)
 
-        tvVendorNama = binding.tvNamaVendor
         tvUserNama = binding.tvUserName
         tvUserAlamat = binding.tvAddress
         tvUserTelepon = binding.tvNoPhone
+        tvVendorNama = binding.tvNamaVendor
         tvPesananId = binding.tvIdValue
         tvPesananStatus = binding.tvStatusValue
+        tvPesananTotalPembayaran = binding.tvTotalValue
+        tvPesananSubtotal = binding.tvSubtotalValue
         tvPesananOngkir = binding.tvOngkirValue
         tvPesananMetodePembayaran = binding.tvPembayaranValue
         tvPesananTanggal = binding.tvTanggalValue
         tvPesananJam = binding.tvJamValue
+        btnBeriNilai = binding.btnBeriNilai
+        btnPesanLagi = binding.btnPesanLagi
+        viewButton = binding.viewButton
+        tvTotalPembayaran = binding.tvTotalValue
+        tvSubtotal = binding.tvSubtotal
+        tvSubtotalValue = binding.tvSubtotalValue
 
-        //TODO: KIRIM KE ADAPTER
-        tvPesananTotalPembayaran = binding.tvTotalValue
-        tvPesananSubtotal = binding.tvSubtotal
-        tvPesananSubtotalValue = binding.tvSubtotalValue
-
-        setupAction()
-        setUI()
         setupView()
         setupData()
         setupDataMenu()
+        setupAction()
+        hideUI()
+        editUI()
     }
 
     private fun setupData() {
         db.collection("pesanan").document(pesananId!!)
-            .get().addOnSuccessListener { pesanan->
+            .addSnapshotListener { pesanan,_ ->
                 if (pesanan != null) {
-                    val pesananId = pesanan.id
                     vendorId = pesanan.data?.get("vendorId").toString()
                     val vendorNama = pesanan.data?.get("vendorNama").toString()
-                    val status = pesanan.data?.get("status").toString()
+                    status = pesanan.data?.get("status").toString()
                     val jadwal = pesanan.data?.get("jadwal").toString()
                     val metodePembayaran = pesanan.data?.get("metodePembayaran").toString()
-                    val ongkir = pesanan.data?.get("ongkir").toString()
+                    ongkir = pesanan.data?.get("ongkir").toString().toLong()
                     val userNama = pesanan.data?.get("userNama").toString()
                     val userKota = pesanan.data?.get("userKota").toString()
                     val userAlamat = pesanan.data?.get("userAlamat").toString()
                     val userTelepon = pesanan.data?.get("userTelepon").toString()
+                    val nilai = pesanan.data?.get("nilai")
+
+                    if (status == getString(R.string.status_selesai) && nilai == null) {
+                        viewButton.visibility = View.VISIBLE
+                        btnBeriNilai.visibility = View.VISIBLE
+                        btnPesanLagi.visibility = View.VISIBLE
+                    }
+                    else if (status == getString(R.string.status_selesai) && nilai == true) {
+                        viewButton.visibility = View.VISIBLE
+                        btnBeriNilai.visibility = View.GONE
+                        btnPesanLagi.visibility = View.VISIBLE
+                    }
+                    else if (status == getString(R.string.status_batal) ) {
+                        viewButton.visibility = View.VISIBLE
+                        btnPesanLagi.visibility = View.VISIBLE
+                    }
+                    else if (status == getString(R.string.status_proses) ) {
+                        viewButton.visibility = View.GONE
+                    }
 
                     tvUserNama.text = userNama
                     tvUserAlamat.text = getString(R.string.tv_address_city, userAlamat, userKota)
@@ -103,6 +138,7 @@ class DetailRiwayatPesananActivity : AppCompatActivity() {
                     tvPesananTanggal.text = jadwal.withTimestamptoDateFormat()
                     tvPesananJam.text = jadwal.withTimestamptoTimeFormat()
 
+                    setupView()
                 }
             }
     }
@@ -118,7 +154,7 @@ class DetailRiwayatPesananActivity : AppCompatActivity() {
                     menuPesananList.add(menuPesanan)
                 }
 
-                detailPesananAdapter.setItems(menuPesananList)
+                detailPesananPemesananAdapter.setItems(menuPesananList)
             }
         }
     }
@@ -126,26 +162,39 @@ class DetailRiwayatPesananActivity : AppCompatActivity() {
     private fun setupView() {
         recyclerView = binding.rvPesanan
         recyclerView.layoutManager = LinearLayoutManager(this)
-        detailPesananAdapter = DetailPesananAdapter(this, getString(R.string.vendor), "tidak perlu")
-        recyclerView.adapter = detailPesananAdapter
-        detailPesananAdapter.setItems(menuPesananList)
+        detailPesananPemesananAdapter = DetailPesananPemesananAdapter(this, getString(R.string.pembeli), status, tvTotalPembayaran, tvSubtotal, tvSubtotalValue, ongkir, vendorId, pesananId!!)
+        recyclerView.adapter = detailPesananPemesananAdapter
+        detailPesananPemesananAdapter.setItems(menuPesananList)
     }
 
+    @RequiresApi(Build.VERSION_CODES.N)
     private fun setupAction() {
         binding.ibBack.setOnClickListener {
             finish()
         }
-        binding.titlePesanan.setOnClickListener {
-            val updateStatus = mapOf(
-                "status" to getString(R.string.status_proses)
-            )
-            db.collection("pesanan").document(pesananId!!).update(updateStatus)
+        btnBeriNilai.setOnClickListener {
+            val args = Bundle()
+            args.putString("id", pesananId)
+            val dialog: DialogFragment = BeriNilaiFragment()
+            dialog.arguments = args
+            dialog.show(this.supportFragmentManager, "beriNilaiDialog")
         }
+        /*btnPesanLagi.setOnClickListener {
+            val intent = Intent(this, CustomMenuActivity::class.java)
+            intent.putExtra(Cons.EXTRA_ID, vendorId)
+            intent.putExtra(Cons.EXTRA_SEC_ID, kategoriId)
+            intent.putExtra(Cons.EXTRA_THIRD_ID, menuId)
+            startActivity(intent)
+        }*/
     }
 
-    private fun setUI() {
+    private fun hideUI() {
         binding.btnSelesaikan.visibility = View.GONE
         binding.btnBatalkan.visibility = View.GONE
-        tvVendorNama.text = getString(R.string.rangkuman_pesanan)
+    }
+
+    private fun editUI() {
+        binding.titlePesanan.text = resources.getString(R.string.rincian_pesananmu)
+        binding.tvRincianPesanan.text = resources.getString(R.string.rincian_pesananmu)
     }
 }

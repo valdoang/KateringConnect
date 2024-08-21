@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.os.Build
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.RequiresApi
 import androidx.recyclerview.widget.RecyclerView
@@ -16,9 +17,9 @@ import com.valdoang.kateringconnect.model.Pesanan
 import com.valdoang.kateringconnect.utils.withNumberingFormat
 import com.valdoang.kateringconnect.utils.withTimestampToDateTimeFormat
 
-class UserRiwayatAdapter(
+class UserPesananRiwayatAdapter(
     private val context: Context
-) : RecyclerView.Adapter<UserRiwayatAdapter.MyViewHolder>() {
+) : RecyclerView.Adapter<UserPesananRiwayatAdapter.MyViewHolder>() {
 
     private val pesananList = ArrayList<Pesanan>()
     private var onItemClickCallback: OnItemClickCallback? = null
@@ -67,10 +68,9 @@ class UserRiwayatAdapter(
                 tvPemesananDate.text = pesanan.jadwal?.withTimestampToDateTimeFormat()
                 Glide.with(context).load(pesanan.vendorFoto).error(R.drawable.default_vendor_profile).into(ivUserVendor)
                 tvPemesananName.text = pesanan.vendorNama
+
                 if (pesanan.status == context.getString(R.string.status_proses)) {
-                    tvPemesananStatus.text = context.getString(R.string.status_proses)
-                    tvPemesananStatus.setTextColor(context.resources.getColor(R.color.orange))
-                    tvPemesananStatus.background = context.resources.getDrawable(R.drawable.status_proses_bg)
+                    tvPemesananStatus.visibility = View.GONE
                 } else if (pesanan.status == context.getString(R.string.status_selesai)) {
                     tvPemesananStatus.text = context.getString(R.string.status_selesai)
                     tvPemesananStatus.setTextColor(context.resources.getColor(R.color.green_200))

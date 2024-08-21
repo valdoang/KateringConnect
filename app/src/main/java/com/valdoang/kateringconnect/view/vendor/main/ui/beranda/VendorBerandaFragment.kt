@@ -81,6 +81,7 @@ class VendorBerandaFragment : Fragment() {
                     override fun onItemClicked(data: Pesanan) {
                         val intent = Intent(requireContext(), DetailPesananActivity::class.java)
                         intent.putExtra(Cons.EXTRA_ID, data.id)
+                        intent.putExtra(Cons.EXTRA_NAMA, getString(R.string.from_vendor_beranda))
                         startActivity(intent)
                     }
                 })

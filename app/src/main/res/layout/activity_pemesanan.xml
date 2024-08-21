@@ -346,7 +346,6 @@
                     android:id="@+id/rv_pesanan"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:visibility="gone"
                     android:overScrollMode="never"
                     app:layout_constraintTop_toBottomOf="@id/tv_rangkuman_pesanan"
                     tools:listitem="@layout/item_pesanan"/>

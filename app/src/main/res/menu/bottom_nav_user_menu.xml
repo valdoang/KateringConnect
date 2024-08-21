@@ -7,6 +7,11 @@
         android:title="@string/title_beranda" />
 
     <item
+        android:id="@+id/navigation_user_pesanan"
+        android:icon="@drawable/pesanan_icon"
+        android:title="@string/pesanan_saya" />
+
+    <item
         android:id="@+id/navigation_user_riwayat"
         android:icon="@drawable/riwayat_icon"
         android:title="@string/title_riwayat" />

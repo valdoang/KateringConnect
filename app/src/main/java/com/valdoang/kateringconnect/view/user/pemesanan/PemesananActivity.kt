@@ -51,10 +51,6 @@ class PemesananActivity : AppCompatActivity(), TimePickerFragment.DialogTimeList
     private var kotaUser = ""
     private var nomorUser = ""
     private var emailUser = ""
-    private var namaKontakAlamat = ""
-    private var nomorKontakAlamat = ""
-    private var alamatAlamat = ""
-    private var kotaAlamat = ""
     private var fotoUser = ""
     private var namaVendor = ""
     private var alamatVendor = ""
@@ -217,15 +213,14 @@ class PemesananActivity : AppCompatActivity(), TimePickerFragment.DialogTimeList
                 .document(alamatId!!)
             alamatRef.get().addOnSuccessListener { alamatSnapshot ->
                 if (alamatSnapshot != null) {
-                    namaKontakAlamat = alamatSnapshot.data?.get("namaKontak").toString()
-                    nomorKontakAlamat = alamatSnapshot.data?.get("nomorKontak").toString()
-                    alamatAlamat = alamatSnapshot.data?.get("alamat").toString()
-                    kotaAlamat = alamatSnapshot.data?.get("kota").toString()
+                    namaUser = alamatSnapshot.data?.get("namaKontak").toString()
+                    nomorUser = alamatSnapshot.data?.get("nomorKontak").toString()
+                    alamatUser = alamatSnapshot.data?.get("alamat").toString()
+                    kotaUser = alamatSnapshot.data?.get("kota").toString()
 
-                    binding.tvUserName.text = namaKontakAlamat
-                    binding.tvAddress.text =
-                        getString(R.string.tv_address_city, alamatAlamat, kotaAlamat)
-                    binding.tvNoPhone.text = nomorKontakAlamat
+                    binding.tvUserName.text = namaUser
+                    binding.tvAddress.text = getString(R.string.tv_address_city, alamatUser, kotaUser)
+                    binding.tvNoPhone.text = nomorUser
                 }
             }
         }

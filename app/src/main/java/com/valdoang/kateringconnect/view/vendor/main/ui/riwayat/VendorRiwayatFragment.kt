@@ -19,7 +19,7 @@ import com.valdoang.kateringconnect.databinding.FragmentVendorRiwayatBinding
 import com.valdoang.kateringconnect.model.Pesanan
 import com.valdoang.kateringconnect.utils.Cons
 import com.valdoang.kateringconnect.view.both.chat.ChatActivity
-import com.valdoang.kateringconnect.view.vendor.detailriwayat.DetailRiwayatPesananActivity
+import com.valdoang.kateringconnect.view.vendor.detailpesanan.DetailPesananActivity
 
 class VendorRiwayatFragment : Fragment() {
     private var _binding: FragmentVendorRiwayatBinding? = null
@@ -79,8 +79,9 @@ class VendorRiwayatFragment : Fragment() {
                 vendorBerandaRiwayatAdapter.setOnItemClickCallback(object :
                     VendorBerandaRiwayatAdapter.OnItemClickCallback {
                     override fun onItemClicked(data: Pesanan) {
-                        val intent = Intent(requireContext(), DetailRiwayatPesananActivity::class.java)
+                        val intent = Intent(requireContext(), DetailPesananActivity::class.java)
                         intent.putExtra(Cons.EXTRA_ID, data.id)
+                        intent.putExtra(Cons.EXTRA_NAMA, getString(R.string.from_vendor_riwayat))
                         startActivity(intent)
                     }
                 })
