@@ -33,8 +33,6 @@ class NilaiActivity : AppCompatActivity() {
     private var vendorId: String? = null
     private var totalNilai = 0.0
 
-    //TODO: SESUAIKAN GET DATABASE
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityNilaiBinding.inflate(layoutInflater)
@@ -63,6 +61,7 @@ class NilaiActivity : AppCompatActivity() {
             progressBar.visibility = View.GONE
             if (snapshot != null) {
                 nilaiList.clear()
+                totalNilai = 0.0
                 for (data in snapshot.documents) {
                     val nilai: Nilai? = data.toObject(Nilai::class.java)
                     if (nilai != null) {

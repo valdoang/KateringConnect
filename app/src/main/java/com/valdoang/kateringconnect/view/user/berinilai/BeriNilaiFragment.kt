@@ -2,12 +2,14 @@ package com.valdoang.kateringconnect.view.user.berinilai
 
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
+import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.Window
 import android.widget.Toast
+import androidx.annotation.RequiresApi
 import androidx.fragment.app.DialogFragment
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
@@ -15,6 +17,7 @@ import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.valdoang.kateringconnect.R
 import com.valdoang.kateringconnect.databinding.FragmentBeriNilaiBinding
+import java.util.stream.Collectors
 
 class BeriNilaiFragment : DialogFragment() {
 
@@ -29,13 +32,10 @@ class BeriNilaiFragment : DialogFragment() {
     private var userFoto = ""
     private var userNama = ""
     private var vendorId = ""
-    private var menuId = ""
     private var menuNama = ""
-    private var jumlahPesanan = ""
+    private var menuPesananList: ArrayList<String> = ArrayList()
 
-    //TODO: SESUAIKAN SET DATABASE
-
-
+    @RequiresApi(Build.VERSION_CODES.N)
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -61,17 +61,32 @@ class BeriNilaiFragment : DialogFragment() {
         return root
     }
 
+    @RequiresApi(Build.VERSION_CODES.N)
     private fun setupData(pesananId: String) {
-        val ref = db.collection("pesanan").document(pesananId)
-        ref.get().addOnSuccessListener {  document ->
-            if (document != null) {
-                userId = document.data?.get("userId").toString()
-                userFoto = document.data?.get("userFoto").toString()
-                userNama = document.data?.get("userNama").toString()
-                vendorId = document.data?.get("vendorId").toString()
-                menuId = document.data?.get("menuId").toString()
-                menuNama = document.data?.get("menuNama").toString()
-                jumlahPesanan = document.data?.get("jumlah").toString()
+        val pesananRef = db.collection("pesanan").document(pesananId)
+        pesananRef.get().addOnSuccessListener {  pesananSnapshot ->
+            if (pesananSnapshot != null) {
+                userId = pesananSnapshot.data?.get("userId").toString()
+                userFoto = pesananSnapshot.data?.get("userFoto").toString()
+                userNama = pesananSnapshot.data?.get("userNama").toString()
+                vendorId = pesananSnapshot.data?.get("vendorId").toString()
+            }
+        }
+
+        val menuPesananRef = db.collection("pesanan").document(pesananId).collection("menuPesanan")
+        menuPesananRef.get().addOnSuccessListener { menuPesananSnapshot ->
+            if (menuPesananSnapshot != null) {
+                menuPesananList.clear()
+                for (i in menuPesananSnapshot) {
+                    val namaMenu = i.data["namaMenu"].toString()
+                    val jumlah = i.data["jumlah"].toString()
+                    val sNama = getString(R.string.menu_jumlah, namaMenu, jumlah)
+                    menuPesananList.add(sNama)
+                }
+
+                menuNama = menuPesananList.stream().collect(
+                    Collectors.joining(", ")
+                )
             }
         }
     }
@@ -88,9 +103,7 @@ class BeriNilaiFragment : DialogFragment() {
                 "userFoto" to userFoto,
                 "userNama" to userNama,
                 "vendorId" to vendorId,
-                "menuId" to menuId,
                 "menuNama" to menuNama,
-                "jumlahPesanan" to jumlahPesanan,
                 "tanggal" to sTanggal,
                 "nilai" to sNilai,
                 "ulasan" to sUlasan

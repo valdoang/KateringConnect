@@ -16,7 +16,7 @@ import com.valdoang.kateringconnect.R
 import com.valdoang.kateringconnect.databinding.ItemPesananBinding
 import com.valdoang.kateringconnect.model.Keranjang
 import com.valdoang.kateringconnect.utils.withNumberingFormat
-import com.valdoang.kateringconnect.view.user.tambahpesanan.TambahPorsiFragment
+import com.valdoang.kateringconnect.view.user.tambahporsi.TambahPorsiFragment
 
 class DetailPesananPemesananAdapter(
     private val context: Context, private val user: String, private val status: String,
@@ -77,33 +77,29 @@ class DetailPesananPemesananAdapter(
 
                 if (menuPesanan.tambahPorsi == true) {
                     ivBadge.visibility = View.VISIBLE
-                    tvPorsiAdd.visibility = View.VISIBLE
                 } else {
                     ivBadge.visibility = View.GONE
-                    tvPorsiAdd.visibility = View.GONE
                 }
 
                 when (user) {
                     context.getString(R.string.pembeli) -> {
                         tvEdit.visibility = View.VISIBLE
-                        tvPorsiAdd.text = context.getString(R.string.porsi_added_user)
                     }
                     context.getString(R.string.vendor) -> {
                         tvEdit.visibility = View.GONE
-                        tvPorsiAdd.text = context.getString(R.string.porsi_added_vendor)
                     }
                 }
 
                 if (status == context.getString(R.string.status_selesai) ||  status == context.getString(R.string.status_batal)) {
                     tvEdit.visibility = View.GONE
                     ivBadge.visibility = View.GONE
-                    tvPorsiAdd.visibility = View.GONE
                 }
 
                 tvEdit.setOnClickListener {
                     val args = Bundle()
                     args.putString("pesananId", pesananId)
                     args.putString("menuPesananId", menuPesanan.id)
+                    args.putString("namaMenu", menuPesanan.namaMenu)
                     val dialog: DialogFragment = TambahPorsiFragment()
                     dialog.arguments = args
                     dialog.show((context as AppCompatActivity).supportFragmentManager, "tambahPorsiDialog")

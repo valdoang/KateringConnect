@@ -244,7 +244,8 @@
     <string name="tidak_ada_penilaian">Tidak ada penilaian</string>
     <string name="vendor_star">%1$s (%2$s)</string>
     <string name="jumlah_penilaian">%1$s penilaian</string>
-    <string name="menu_dipesan">Yang dipesan: %1$s %2$sx</string>
+    <string name="menu_dipesan">Yang dipesan: %1$s</string>
+    <string name="menu_jumlah">%1$s x%2$s</string>
     <string name="nilai_dan_ulasan">Nilai dan Ulasan</string>
     <string name="ongkos_kirim">Ongkos Kirim</string>
     <string name="tv_subtotal">Subtotal</string>
@@ -387,4 +388,9 @@
     <string name="pesanan_saya">Pesanan Saya</string>
     <string name="from_vendor_beranda">Dari Beranda Vendor</string>
     <string name="from_vendor_riwayat">Dari Riwayat Vendor</string>
+    <string name="int_null">0</string>
+    <string name="tambahan_biaya">Tambahan Biaya</string>
+    <string name="masukkan_jumlah_pesanan">Masukkan Jumlah Pesanan</string>
+    <string name="jumlah_porsi">Jumlah Porsi</string>
+    <string name="gambar">Gambar</string>
 </resources>

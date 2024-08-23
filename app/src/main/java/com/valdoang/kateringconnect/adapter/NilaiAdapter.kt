@@ -32,7 +32,7 @@ class NilaiAdapter(
                 tvUserName.text = nilai.userNama
                 rbStar.rating = nilai.nilai!!.toFloat()
                 tvUlasan.text = nilai.ulasan
-                tvMenu.text = context.getString(R.string.menu_dipesan, nilai.menuNama, nilai.jumlahPesanan)
+                tvMenu.text = context.getString(R.string.menu_dipesan, nilai.menuNama)
                 tvTanggal.text = nilai.tanggal!!.withTimestampToDateTimeFormat()
             }
         }

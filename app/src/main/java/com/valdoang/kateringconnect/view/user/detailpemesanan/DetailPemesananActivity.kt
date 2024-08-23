@@ -45,7 +45,6 @@ class DetailPemesananActivity : AppCompatActivity() {
     private lateinit var tvPesananTanggal: TextView
     private lateinit var tvPesananJam: TextView
     private lateinit var btnBeriNilai: Button
-    private lateinit var btnPesanLagi: Button
     private lateinit var tvTotalPembayaran: TextView
     private lateinit var tvSubtotal: TextView
     private lateinit var tvSubtotalValue: TextView
@@ -78,7 +77,6 @@ class DetailPemesananActivity : AppCompatActivity() {
         tvPesananTanggal = binding.tvTanggalValue
         tvPesananJam = binding.tvJamValue
         btnBeriNilai = binding.btnBeriNilai
-        btnPesanLagi = binding.btnPesanLagi
         viewButton = binding.viewButton
         tvTotalPembayaran = binding.tvTotalValue
         tvSubtotal = binding.tvSubtotal
@@ -111,16 +109,13 @@ class DetailPemesananActivity : AppCompatActivity() {
                     if (status == getString(R.string.status_selesai) && nilai == null) {
                         viewButton.visibility = View.VISIBLE
                         btnBeriNilai.visibility = View.VISIBLE
-                        btnPesanLagi.visibility = View.VISIBLE
                     }
                     else if (status == getString(R.string.status_selesai) && nilai == true) {
-                        viewButton.visibility = View.VISIBLE
+                        viewButton.visibility = View.GONE
                         btnBeriNilai.visibility = View.GONE
-                        btnPesanLagi.visibility = View.VISIBLE
                     }
                     else if (status == getString(R.string.status_batal) ) {
-                        viewButton.visibility = View.VISIBLE
-                        btnPesanLagi.visibility = View.VISIBLE
+                        viewButton.visibility = View.GONE
                     }
                     else if (status == getString(R.string.status_proses) ) {
                         viewButton.visibility = View.GONE
@@ -179,13 +174,6 @@ class DetailPemesananActivity : AppCompatActivity() {
             dialog.arguments = args
             dialog.show(this.supportFragmentManager, "beriNilaiDialog")
         }
-        /*btnPesanLagi.setOnClickListener {
-            val intent = Intent(this, CustomMenuActivity::class.java)
-            intent.putExtra(Cons.EXTRA_ID, vendorId)
-            intent.putExtra(Cons.EXTRA_SEC_ID, kategoriId)
-            intent.putExtra(Cons.EXTRA_THIRD_ID, menuId)
-            startActivity(intent)
-        }*/
     }
 
     private fun hideUI() {

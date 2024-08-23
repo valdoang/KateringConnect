@@ -7,7 +7,6 @@ data class Nilai(
     var userFoto: String? = null,
     var userNama: String? = null,
     var vendorId: String? = null,
-    var menuId: String? = null,
     var menuNama: String? = null,
     var jumlahPesanan: String? = null,
     var tanggal: String? = null,
