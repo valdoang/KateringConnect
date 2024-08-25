@@ -8,6 +8,7 @@
 
     <ImageButton
         android:id="@+id/ib_back"
+        android:contentDescription="@string/gambar"
         android:layout_width="35dp"
         android:layout_height="35dp"
         android:src="@drawable/ic_baseline_arrow_back_30"
@@ -97,6 +98,7 @@
                 app:layout_constraintTop_toBottomOf="@id/title_nama"
                 app:layout_constraintBottom_toBottomOf="parent"/>
             <ImageView
+                android:contentDescription="@string/gambar"
                 android:layout_width="35dp"
                 android:layout_height="35dp"
                 android:src="@drawable/ic_baseline_chevron_right_24"
@@ -149,6 +151,7 @@
                 app:layout_constraintTop_toBottomOf="@id/title_kota"
                 app:layout_constraintBottom_toBottomOf="parent"/>
             <ImageView
+                android:contentDescription="@string/gambar"
                 android:layout_width="35dp"
                 android:layout_height="35dp"
                 android:src="@drawable/ic_baseline_chevron_right_24"
@@ -201,6 +204,7 @@
                 app:layout_constraintTop_toBottomOf="@id/title_alamat"
                 app:layout_constraintBottom_toBottomOf="parent"/>
             <ImageView
+                android:contentDescription="@string/gambar"
                 android:layout_width="35dp"
                 android:layout_height="35dp"
                 android:src="@drawable/ic_baseline_chevron_right_24"
@@ -253,6 +257,7 @@
                 app:layout_constraintTop_toBottomOf="@id/title_telepon"
                 app:layout_constraintBottom_toBottomOf="parent"/>
             <ImageView
+                android:contentDescription="@string/gambar"
                 android:layout_width="35dp"
                 android:layout_height="35dp"
                 android:src="@drawable/ic_baseline_chevron_right_24"

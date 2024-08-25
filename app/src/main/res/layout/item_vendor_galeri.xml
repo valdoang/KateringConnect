@@ -24,6 +24,7 @@
 
             <ImageView
                 android:id="@+id/iv_user"
+                android:contentDescription="@string/gambar"
                 android:layout_width="150dp"
                 android:layout_height="150dp"
                 tools:srcCompat="@tools:sample/avatars"

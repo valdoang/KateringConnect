@@ -32,6 +32,7 @@
 
     <ImageView
         android:id="@+id/iv_success"
+        android:contentDescription="@string/gambar"
         android:layout_width="20dp"
         android:layout_height="20dp"
         android:src="@drawable/success_icon"

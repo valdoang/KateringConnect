@@ -8,6 +8,7 @@
 
     <ImageButton
         android:id="@+id/ib_back"
+        android:contentDescription="@string/gambar"
         android:layout_width="35dp"
         android:layout_height="35dp"
         android:src="@drawable/ic_baseline_arrow_back_30"
@@ -32,6 +33,7 @@
 
     <ImageButton
         android:id="@+id/ib_save"
+        android:contentDescription="@string/gambar"
         android:layout_width="35dp"
         android:layout_height="35dp"
         android:src="@drawable/ic_baseline_orange_check_30"
@@ -53,6 +55,7 @@
 
     <ImageView
         android:id="@+id/iv_foto"
+        android:contentDescription="@string/gambar"
         android:layout_width="150dp"
         android:layout_height="150dp"
         android:src="@drawable/addphoto"

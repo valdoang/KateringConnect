@@ -69,16 +69,20 @@ class UserPesananRiwayatAdapter(
                 Glide.with(context).load(pesanan.vendorFoto).error(R.drawable.default_vendor_profile).into(ivUserVendor)
                 tvPemesananName.text = pesanan.vendorNama
 
-                if (pesanan.status == context.getString(R.string.status_proses)) {
-                    tvPemesananStatus.visibility = View.GONE
-                } else if (pesanan.status == context.getString(R.string.status_selesai)) {
-                    tvPemesananStatus.text = context.getString(R.string.status_selesai)
-                    tvPemesananStatus.setTextColor(context.resources.getColor(R.color.green_200))
-                    tvPemesananStatus.background = context.resources.getDrawable(R.drawable.status_selesai_bg)
-                } else if (pesanan.status == context.getString(R.string.status_batal)) {
-                    tvPemesananStatus.text = context.getString(R.string.status_batal)
-                    tvPemesananStatus.setTextColor(context.resources.getColor(R.color.grey_200))
-                    tvPemesananStatus.background = context.resources.getDrawable(R.drawable.status_batal_bg)
+                when (pesanan.status) {
+                    context.getString(R.string.status_proses) -> {
+                        tvPemesananStatus.visibility = View.GONE
+                    }
+                    context.getString(R.string.status_selesai) -> {
+                        tvPemesananStatus.text = context.getString(R.string.status_selesai)
+                        tvPemesananStatus.setTextColor(context.resources.getColor(R.color.green_200))
+                        tvPemesananStatus.background = context.resources.getDrawable(R.drawable.status_selesai_bg)
+                    }
+                    context.getString(R.string.status_batal) -> {
+                        tvPemesananStatus.text = context.getString(R.string.status_batal)
+                        tvPemesananStatus.setTextColor(context.resources.getColor(R.color.grey_200))
+                        tvPemesananStatus.background = context.resources.getDrawable(R.drawable.status_batal_bg)
+                    }
                 }
             }
         }

@@ -20,6 +20,7 @@
 
             <ImageButton
                 android:id="@+id/ib_back"
+                android:contentDescription="@string/gambar"
                 android:layout_width="35dp"
                 android:layout_height="35dp"
                 android:elevation="2dp"
@@ -32,6 +33,7 @@
 
             <ImageView
                 android:id="@+id/iv_menu"
+                android:contentDescription="@string/gambar"
                 android:layout_width="match_parent"
                 android:layout_height="170dp"
                 android:scaleType="centerCrop"
@@ -200,6 +202,7 @@
 
                 <ImageButton
                     android:id="@+id/ib_less"
+                    android:contentDescription="@string/gambar"
                     android:layout_width="35dp"
                     android:layout_height="35dp"
                     android:src="@drawable/ic_baseline_remove_30"
@@ -236,6 +239,7 @@
 
                 <ImageButton
                     android:id="@+id/ib_more"
+                    android:contentDescription="@string/gambar"
                     android:layout_width="35dp"
                     android:layout_height="35dp"
                     android:src="@drawable/ic_baseline_add_24"

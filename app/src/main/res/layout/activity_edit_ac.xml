@@ -8,6 +8,7 @@
 
     <ImageButton
         android:id="@+id/ib_close"
+        android:contentDescription="@string/gambar"
         android:layout_width="35dp"
         android:layout_height="35dp"
         android:src="@drawable/ic_baseline_close_30"
@@ -32,6 +33,7 @@
 
     <ImageButton
         android:id="@+id/ib_save"
+        android:contentDescription="@string/gambar"
         android:layout_width="35dp"
         android:layout_height="35dp"
         android:src="@drawable/ic_baseline_orange_check_30"

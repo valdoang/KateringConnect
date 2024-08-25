@@ -18,6 +18,7 @@
         app:layout_constraintBottom_toBottomOf="parent">
         <ImageView
             android:id="@+id/iv_menu"
+            android:contentDescription="@string/gambar"
             android:layout_width="70dp"
             android:layout_height="70dp"
             android:scaleType="centerCrop"

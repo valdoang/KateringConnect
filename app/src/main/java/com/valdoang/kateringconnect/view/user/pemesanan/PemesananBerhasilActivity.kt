@@ -3,7 +3,6 @@ package com.valdoang.kateringconnect.view.user.pemesanan
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import androidx.core.content.ContentProviderCompat.requireContext
 import com.valdoang.kateringconnect.R
 import com.valdoang.kateringconnect.databinding.ActivityPemesananBerhasilBinding
 import com.valdoang.kateringconnect.utils.Cons

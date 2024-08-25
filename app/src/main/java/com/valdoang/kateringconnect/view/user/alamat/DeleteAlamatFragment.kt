@@ -8,17 +8,14 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.Window
-import android.widget.Toast
 import androidx.fragment.app.DialogFragment
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
-import com.google.firebase.storage.ktx.storage
 import com.valdoang.kateringconnect.R
 import com.valdoang.kateringconnect.databinding.FragmentAlertDialogBinding
 import com.valdoang.kateringconnect.model.GrupOpsi
 import com.valdoang.kateringconnect.model.Menu
-import com.valdoang.kateringconnect.view.vendor.menu.MenuActivity
 
 
 class DeleteAlamatFragment : DialogFragment() {
@@ -30,7 +27,6 @@ class DeleteAlamatFragment : DialogFragment() {
     private val binding get() = _binding!!
     private lateinit var firebaseAuth: FirebaseAuth
     private var db = Firebase.firestore
-    private var storageRef = Firebase.storage
     private var userId = ""
     private var alamatId: String? = null
     private lateinit var acGrupOpsiList: ArrayList<GrupOpsi>

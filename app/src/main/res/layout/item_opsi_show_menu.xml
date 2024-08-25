@@ -15,6 +15,7 @@
 
         <ImageView
             android:id="@+id/iv_expand_more"
+            android:contentDescription="@string/gambar"
             android:layout_width="24dp"
             android:layout_height="24dp"
             android:src="@drawable/ic_baseline_expand_more_24"
@@ -25,6 +26,7 @@
 
         <ImageView
             android:id="@+id/iv_expand_less"
+            android:contentDescription="@string/gambar"
             android:layout_width="24dp"
             android:layout_height="24dp"
             android:src="@drawable/ic_baseline_expand_less_24"

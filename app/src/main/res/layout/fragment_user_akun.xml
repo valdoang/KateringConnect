@@ -21,6 +21,7 @@
 
     <ImageButton
         android:id="@+id/ib_chat"
+        android:contentDescription="@string/gambar"
         android:layout_width="35dp"
         android:layout_height="35dp"
         android:src="@drawable/ic_baseline_chat_24"
@@ -81,6 +82,7 @@
 
                 <ImageView
                     android:id="@+id/iv_address"
+                    android:contentDescription="@string/gambar"
                     android:layout_width="20dp"
                     android:layout_height="20dp"
                     android:src="@drawable/address_icon"
@@ -125,6 +127,7 @@
 
                 <ImageView
                     android:id="@+id/iv_no_phone"
+                    android:contentDescription="@string/gambar"
                     android:layout_width="20dp"
                     android:layout_height="20dp"
                     android:src="@drawable/phone_icon"
@@ -171,6 +174,7 @@
 
             <ImageView
                 android:id="@+id/iv_edit_profile"
+                android:contentDescription="@string/gambar"
                 android:layout_width="60dp"
                 android:layout_height="60dp"
                 android:src="@drawable/edit_profile"
@@ -211,6 +215,7 @@
 
             <ImageView
                 android:id="@+id/iv_logout"
+                android:contentDescription="@string/gambar"
                 android:layout_width="60dp"
                 android:layout_height="60dp"
                 android:src="@drawable/logout"

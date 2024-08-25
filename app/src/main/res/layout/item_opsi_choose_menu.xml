@@ -22,7 +22,7 @@
             android:layout_height="70dp"
             android:scaleType="centerCrop"
             tools:srcCompat="@drawable/menu"
-            android:contentDescription="Foto Menu" />
+            android:contentDescription="@string/gambar" />
     </androidx.cardview.widget.CardView>
 
     <TextView

@@ -9,16 +9,12 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.Window
 import androidx.fragment.app.DialogFragment
-import com.google.android.play.integrity.internal.i
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.valdoang.kateringconnect.R
 import com.valdoang.kateringconnect.databinding.FragmentAlertDialogBinding
-import com.valdoang.kateringconnect.model.KategoriMenu
-import com.valdoang.kateringconnect.model.Menu
 import com.valdoang.kateringconnect.utils.Cons
-import com.valdoang.kateringconnect.view.vendor.menu.MenuActivity
 
 
 class DeleteKeranjangFragment : DialogFragment() {

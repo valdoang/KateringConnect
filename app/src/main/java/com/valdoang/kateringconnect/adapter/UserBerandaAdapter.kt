@@ -9,11 +9,8 @@ import android.view.ViewGroup
 import androidx.annotation.RequiresApi
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.google.firebase.firestore.ktx.firestore
-import com.google.firebase.ktx.Firebase
 import com.valdoang.kateringconnect.R
 import com.valdoang.kateringconnect.databinding.ItemUserBerandaBinding
-import com.valdoang.kateringconnect.model.Star
 import com.valdoang.kateringconnect.model.Vendor
 import com.valdoang.kateringconnect.utils.roundOffDecimal
 import com.valdoang.kateringconnect.utils.withNumberingFormat
@@ -24,7 +21,6 @@ class UserBerandaAdapter(
 
     private val vendorList = ArrayList<Vendor>()
     private var onItemClickCallback: OnItemClickCallback? = null
-    private var db = Firebase.firestore
 
     @SuppressLint("NotifyDataSetChanged")
     fun setItems(itemList: List<Vendor>) {

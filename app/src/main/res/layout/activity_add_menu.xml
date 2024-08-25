@@ -20,6 +20,7 @@
 
             <ImageButton
                 android:id="@+id/ib_back"
+                android:contentDescription="@string/gambar"
                 android:layout_width="35dp"
                 android:layout_height="35dp"
                 android:src="@drawable/ic_baseline_arrow_back_30"
@@ -48,6 +49,7 @@
 
         <ImageButton
             android:id="@+id/ib_save"
+            android:contentDescription="@string/gambar"
             android:layout_width="35dp"
             android:layout_height="35dp"
             android:src="@drawable/ic_baseline_orange_check_30"
@@ -69,6 +71,7 @@
 
         <ImageView
             android:id="@+id/iv_edit_photo"
+            android:contentDescription="@string/gambar"
             android:layout_width="120dp"
             android:layout_height="120dp"
             android:src="@drawable/addphoto"
@@ -129,7 +132,7 @@
                 android:inputType="text" />
         </com.google.android.material.textfield.TextInputLayout>
 
-        /<TextView
+        <TextView
             android:id="@+id/tv_desc"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

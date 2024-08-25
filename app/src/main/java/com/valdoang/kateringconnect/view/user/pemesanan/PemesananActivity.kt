@@ -380,7 +380,7 @@ class PemesananActivity : AppCompatActivity(), TimePickerFragment.DialogTimeList
     private fun setupView() {
         recyclerView = binding.rvPesanan
         recyclerView.layoutManager = LinearLayoutManager(this)
-        pesananAdapter = PesananAdapter(this)
+        pesananAdapter = PesananAdapter(this, vendorId!!)
         recyclerView.adapter = pesananAdapter
         pesananAdapter.setItems(pesananList)
     }

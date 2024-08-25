@@ -42,10 +42,10 @@ class OpsiAdapter(
                 rbNamaGrupOpsi.text = opsi.nama
 
                 if (opsi.isChecked == true) {
-                    if (temp == "") {
-                        temp = opsi.id!!
+                    temp = if (temp == "") {
+                        opsi.id!!
                     } else {
-                        temp = "null"
+                        "null"
                     }
                 }
 

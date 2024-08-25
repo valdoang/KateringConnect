@@ -36,6 +36,7 @@
         android:orientation="horizontal">
 
         <ImageView
+            android:contentDescription="@string/gambar"
             android:layout_width="28dp"
             android:layout_height="28dp"
             android:src="@drawable/ic_baseline_add_24"

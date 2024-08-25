@@ -16,7 +16,7 @@ import com.valdoang.kateringconnect.utils.withNumberingFormat
 
 
 class PesananAdapter(
-    private val context: Context
+    private val context: Context, private val vendorId: String
 ) : RecyclerView.Adapter<PesananAdapter.MyViewHolder>() {
 
     private val pesananList = ArrayList<Keranjang>()
@@ -42,8 +42,14 @@ class PesananAdapter(
                 onItemClickCallback?.onItemClicked(pesanan)
             }
             binding.apply {
+                val kategoriMenuRef = db.collection("user").document(vendorId).collection("kategoriMenu").document(pesanan.kategoriMenuId!!)
+                kategoriMenuRef.get().addOnSuccessListener { snapshot ->
+                    if (snapshot != null) {
+                        val namaKategori = snapshot.data?.get("nama").toString()
+                        tvNamaMenu.text = context.getString(R.string.nama_menu_detail_pesanan, pesanan.namaMenu, namaKategori)
+                    }
+                }
                 tvJumlahPesanan.text = context.getString(R.string.tv_jumlah_pesanan, pesanan.jumlah)
-                tvNamaMenu.text = pesanan.namaMenu
                 tvNamaOpsi.text = pesanan.namaOpsi
                 tvCatatan.text = pesanan.catatan
                 tvSubtotal.text = pesanan.subtotal?.withNumberingFormat()

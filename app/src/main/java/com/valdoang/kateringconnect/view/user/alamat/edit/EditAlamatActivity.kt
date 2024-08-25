@@ -10,7 +10,6 @@ import com.google.firebase.ktx.Firebase
 import com.valdoang.kateringconnect.databinding.ActivityEditAlamatBinding
 import com.valdoang.kateringconnect.utils.Cons
 import com.valdoang.kateringconnect.view.user.alamat.DeleteAlamatFragment
-import com.valdoang.kateringconnect.view.vendor.menu.edit.EditNamaMenuActivity
 
 class EditAlamatActivity : AppCompatActivity() {
     private lateinit var binding: ActivityEditAlamatBinding

@@ -26,8 +26,6 @@ import com.valdoang.kateringconnect.R
 import com.valdoang.kateringconnect.databinding.ActivityEditAkunBinding
 import com.valdoang.kateringconnect.utils.Cons
 import com.valdoang.kateringconnect.utils.getImageUri
-import com.valdoang.kateringconnect.view.user.main.UserMainActivity
-import com.valdoang.kateringconnect.view.vendor.main.VendorMainActivity
 import java.util.*
 
 
@@ -39,7 +37,6 @@ class EditAkunActivity : AppCompatActivity() {
     private lateinit var progressBar: ProgressBar
     private lateinit var ivEditPhoto: ImageView
     private var currentImageUri: Uri? = null
-    private var foto = ""
     private var nama = ""
     private var kota = ""
     private var alamat = ""

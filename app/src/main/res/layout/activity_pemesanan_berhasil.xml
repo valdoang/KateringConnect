@@ -6,6 +6,7 @@
 
     <ImageButton
         android:id="@+id/ib_back"
+        android:contentDescription="@string/gambar"
         android:layout_width="35dp"
         android:layout_height="35dp"
         android:src="@drawable/ic_baseline_close_30"
@@ -17,6 +18,7 @@
 
     <ImageView
         android:id="@+id/iv_success"
+        android:contentDescription="@string/gambar"
         android:layout_width="150dp"
         android:layout_height="150dp"
         android:src="@drawable/success_icon"

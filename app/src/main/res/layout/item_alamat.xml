@@ -8,6 +8,7 @@
 
     <ImageView
         android:id="@+id/iv_alamat"
+        android:contentDescription="@string/gambar"
         android:layout_width="20dp"
         android:layout_height="20dp"
         android:src="@drawable/rumah_icon"

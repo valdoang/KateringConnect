@@ -122,9 +122,6 @@
             android:name=".view.vendor.detailpesanan.DetailPesananActivity"
             android:exported="false" />
         <activity
-            android:name=".view.vendor.detailriwayat.DetailRiwayatPesananActivity"
-            android:exported="false" />
-        <activity
             android:name=".view.user.detailpemesanan.DetailPemesananActivity"
             android:exported="false" />
         <activity

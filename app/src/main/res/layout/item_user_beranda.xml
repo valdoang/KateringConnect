@@ -36,6 +36,7 @@
 
     <ImageView
         android:id="@+id/iv_katering_kategori"
+        android:contentDescription="@string/gambar"
         android:layout_width="14dp"
         android:layout_height="14dp"
         android:layout_marginTop="2dp"
@@ -57,6 +58,7 @@
 
     <ImageView
         android:id="@+id/iv_katering_star"
+        android:contentDescription="@string/gambar"
         android:layout_width="14dp"
         android:layout_height="14dp"
         android:src="@drawable/star_icon"
@@ -78,6 +80,7 @@
 
     <ImageView
         android:id="@+id/iv_katering_ongkir"
+        android:contentDescription="@string/gambar"
         android:layout_width="16dp"
         android:layout_height="16dp"
         android:src="@drawable/ongkir_icon"

@@ -54,6 +54,7 @@
 
                 <ImageView
                     android:id="@+id/iv_down"
+                    android:contentDescription="@string/gambar"
                     android:layout_width="24dp"
                     android:layout_height="24dp"
                     android:src="@drawable/ic_baseline_expand_more_24"
@@ -86,6 +87,7 @@
 
             <ImageButton
                 android:id="@+id/ib_city"
+                android:contentDescription="@string/gambar"
                 android:layout_width="35dp"
                 android:layout_height="35dp"
                 android:src="@drawable/ic_baseline_location_city_black_24"
@@ -97,6 +99,7 @@
 
             <ImageButton
                 android:id="@+id/ib_chat"
+                android:contentDescription="@string/gambar"
                 android:layout_width="35dp"
                 android:layout_height="35dp"
                 android:src="@drawable/ic_baseline_chat_24"
@@ -160,6 +163,7 @@
             android:layout_height="match_parent">
 
             <ImageView
+                android:contentDescription="@string/gambar"
                 android:layout_width="30dp"
                 android:layout_height="30dp"
                 android:src="@drawable/keranjang_icon"
