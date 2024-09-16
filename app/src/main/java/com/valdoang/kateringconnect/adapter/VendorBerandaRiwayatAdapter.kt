@@ -87,9 +87,14 @@ class VendorBerandaRiwayatAdapter(
                 }
 
                 tvPemesananDate.text = pesanan.jadwal?.withTimestampToDateTimeFormat()
-                Glide.with(context).load(pesanan.vendorFoto).error(R.drawable.default_profile).into(ivUserVendor)
-                tvPemesananName.text = pesanan.vendorNama
-
+                Glide.with(context).load(pesanan.userFoto).error(R.drawable.default_profile).into(ivUserVendor)
+                val userRef = db.collection("user").document(pesanan.userId!!)
+                userRef.get().addOnSuccessListener {
+                    if (it != null) {
+                        val namaUser = it.data?.get("nama").toString()
+                        tvPemesananName.text = namaUser
+                    }
+                }
             }
         }
     }

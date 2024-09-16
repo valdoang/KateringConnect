@@ -29,7 +29,7 @@
         android:contentDescription="@string/gambar"
         android:layout_width="10dp"
         android:layout_height="10dp"
-        android:visibility="visible"
+        android:visibility="gone"
         android:src="@drawable/ic_baseline_dot_24"
         app:tint="@color/orange"
         android:layout_marginTop="-3dp"

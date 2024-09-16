@@ -2,11 +2,6 @@ package com.valdoang.kateringconnect.model
 
 data class Pesanan(
     var id: String? = null,
-    /*var menuId: String? = null,
-    var kategoriId: String? = null,
-    var menuNama: String? = null,
-    var namaOpsi: String? = null,
-    var menuKeterangan: String? = null,*/
     var userId: String? = null,
     var userNama: String? = null,
     var userKota: String? = null,
@@ -17,13 +12,8 @@ data class Pesanan(
     var vendorId: String? = null,
     var vendorNama: String? = null,
     var status: String? = null,
-    /*var jumlah: String? = null,
-    var catatan: String? = null,*/
     var jadwal: String? = null,
     var metodePembayaran: String? = null,
-    /*var totalHarga: String? = null,
-    var subtotal: String? = null,
-    var hargaPerPorsi: String? = null,*/
     var ongkir: String? = null,
     var nilai: Boolean? = null
 )
