@@ -15,5 +15,5 @@ object Cons {
     const val MIDTRANS_CLIENT_KEY = "SB-Mid-client-V6BKGaGeogDhYGsP"
 
     //Sesuaikan menurut IP saat ini
-    const val MIDTRANS_BASE_URL = "http://192.168.1.32:5000/"
+    const val MIDTRANS_BASE_URL = "http://192.168.1.98:5000/"
 }

@@ -14,6 +14,7 @@ import com.google.firebase.ktx.Firebase
 import com.valdoang.kateringconnect.adapter.GalleryAdapter
 import com.valdoang.kateringconnect.databinding.ActivityGaleriBinding
 import com.valdoang.kateringconnect.model.Gallery
+import com.valdoang.kateringconnect.view.both.detailgaleri.DetailGaleriFragment
 
 class GaleriActivity : AppCompatActivity() {
     private lateinit var binding: ActivityGaleriBinding
@@ -67,6 +68,7 @@ class GaleriActivity : AppCompatActivity() {
                     override fun onItemClicked(data: Gallery) {
                         val args = Bundle()
                         args.putString("galleryId", data.id)
+                        args.putString("vendorId", userId)
                         val newFragment = DetailGaleriFragment()
                         newFragment.arguments = args
                         newFragment.show(supportFragmentManager, "detailGaleriFragment")

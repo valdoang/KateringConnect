@@ -187,7 +187,7 @@ class UserBerandaFragment : Fragment() {
                         i.ongkir = ongkir
 
                     } catch (e: Exception) {
-                        Log.d(ContentValues.TAG, e.localizedMessage as String)
+                        Log.d("Ongkir", e.localizedMessage as String)
                     }
 
                     val nilaiRef = db.collection("nilai").whereEqualTo("vendorId", i.id)
@@ -209,14 +209,18 @@ class UserBerandaFragment : Fragment() {
                                 }
                             }
 
-                            val sizeNilai = starList.size
-                            val nilaiStar = totalNilai/sizeNilai
+                            val sizeNilai: Int = starList.size
+                            val nilaiStar: Double = totalNilai/sizeNilai
 
                             i.sizeNilai = sizeNilai
-                            i.nilai = nilaiStar
+                            if (nilaiStar.isNaN()) {
+                                i.nilai = 0.0
+                            } else {
+                                i.nilai = nilaiStar
+                            }
 
-                            vendorList.sortBy { vendor ->
-                                vendor.ongkir
+                            vendorList.sortByDescending { vendor ->
+                                vendor.nilai
                             }
 
                             progressBar.visibility = View.GONE
