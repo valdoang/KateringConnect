@@ -184,6 +184,8 @@
     <string name="fail_upload_menu">Gagal Menambahkan Menu</string>
     <string name="success_upload_gallery">Berhasil Menambahkan Foto</string>
     <string name="fail_upload_gallery">Gagal Menambahkan Foto</string>
+    <string name="success_selesaikan_pesanan">Berhasil Menyelesaikan Pesanan</string>
+    <string name="fail_selesaikan_pesanan">Gagal Menyelesaikan Pesanan</string>
     <string name="tidak">Tidak</string>
     <string name="ya">Ya</string>
     <string name="logout_alert">Apakah Anda yakin ingin keluar?</string>
@@ -352,4 +354,7 @@
     <string name="lewatkan">Lewatkan</string>
     <string name="tampilkan_kota_lain">Tampilkan kota lain</string>
     <string name="bagikan_penilaianmu">Bagikan penilaianmu</string>
+    <string name="bukti_pengiriman">Bukti Pengiriman</string>
+    <string name="ambil_foto">Ambil foto</string>
+    <string name="tv_reminder">* Harap pastikan foto menampilkan pesanan dan penerima dengan baik dan jelas.</string>
 </resources>

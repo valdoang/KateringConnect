@@ -1,5 +1,6 @@
 package com.valdoang.kateringconnect.view.vendor.detailpesanan
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.widget.Button
@@ -142,24 +143,23 @@ class DetailPesananActivity : AppCompatActivity() {
             finish()
         }
         btnSelesaikan.setOnClickListener {
-            val updateStatus = mapOf(
-                "status" to getString(R.string.status_selesai)
-            )
-            db.collection("pesanan").document(pesananId!!).update(updateStatus)
-
+            val intent = Intent(this, SelesaikanPesananActivity::class.java)
+            intent.putExtra(Cons.EXTRA_ID, pesananId)
+            startActivity(intent)
             it.visibility = View.GONE
             btnBatalkan.visibility = View.GONE
             finish()
         }
         btnBatalkan.setOnClickListener {
-            val updateStatus = mapOf(
+            //TODO: TAMBAHKAN BATALKAN ACTIVITY ATAU DIALOG
+            /*val updateStatus = mapOf(
                 "status" to getString(R.string.status_batal)
             )
             db.collection("pesanan").document(pesananId!!).update(updateStatus)
 
             btnSelesaikan.visibility = View.GONE
             it.visibility = View.GONE
-            finish()
+            finish()*/
         }
     }
 

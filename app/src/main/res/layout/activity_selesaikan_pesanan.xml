@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".view.vendor.galeri.AddGaleriActivity">
+    tools:context=".view.vendor.detailpesanan.SelesaikanPesananActivity">
 
     <ImageButton
         android:id="@+id/ib_back"
@@ -19,14 +19,14 @@
         app:layout_constraintStart_toStartOf="parent"/>
 
     <TextView
-        android:id="@+id/title_tambah_galeri"
+        android:id="@+id/title_bukti_pengiriman"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
-        android:text="@string/title_tambah_galeri"
+        android:layout_marginStart="24dp"
+        android:text="@string/bukti_pengiriman"
         android:fontFamily="@font/poppins_bold"
         android:textColor="@color/black"
-        android:layout_marginStart="24dp"
         android:textSize="20sp"
         app:layout_constraintStart_toEndOf="@id/ib_back"
         app:layout_constraintTop_toTopOf="parent" />
@@ -61,7 +61,7 @@
         android:src="@drawable/addphoto"
         android:layout_marginTop="64dp"
         android:scaleType="centerCrop"
-        app:layout_constraintTop_toBottomOf="@id/title_tambah_galeri"
+        app:layout_constraintTop_toBottomOf="@id/title_bukti_pengiriman"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"/>
 
@@ -70,12 +70,26 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
-        android:text="@string/put_foto"
+        android:text="@string/ambil_foto"
         android:fontFamily="@font/poppins_bold"
         android:textColor="@color/green"
         android:textSize="16sp"
         app:layout_constraintEnd_toEndOf="@id/iv_foto"
         app:layout_constraintStart_toStartOf="@id/iv_foto"
         app:layout_constraintTop_toBottomOf="@id/iv_foto" />
+
+    <TextView
+        android:id="@+id/tv_reminder"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:text="@string/tv_reminder"
+        android:fontFamily="@font/poppins_semibold"
+        android:textColor="@color/black"
+        android:textSize="14sp"
+        android:gravity="center"
+        app:layout_constraintTop_toBottomOf="@id/tv_add_photo" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
