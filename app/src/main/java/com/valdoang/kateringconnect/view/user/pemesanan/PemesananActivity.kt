@@ -253,7 +253,7 @@ class PemesananActivity : AppCompatActivity(), TimePickerFragment.DialogTimeList
         intent.putExtra(Cons.EXTRA_NAMA, getString(R.string.from_pemesanan))
         startActivity(intent)
 
-        val sStatus = getString(R.string.status_proses)
+        val sStatus = getString(R.string.status_butuh_konfirmasi_vendor)
         val sDate = calendar.timeInMillis.toString()
 
         val pemesananMap = hashMapOf(

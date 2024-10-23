@@ -25,6 +25,7 @@ import com.valdoang.kateringconnect.utils.withTimestamptoTimeFormat
 import com.valdoang.kateringconnect.view.user.berinilai.BeriNilaiFragment
 
 class DetailPemesananActivity : AppCompatActivity() {
+    //TODO: UNTUK KONFIRMASI TELAH MENERIMA PESANAN, BERIKAN OTOMATIS TELAH MENERIMA JIKA MELEBIHI H+1
     private lateinit var binding: ActivityDetailPesananPemesananBinding
     private lateinit var firebaseAuth: FirebaseAuth
     private var db = Firebase.firestore
@@ -45,6 +46,8 @@ class DetailPemesananActivity : AppCompatActivity() {
     private lateinit var tvPesananTanggal: TextView
     private lateinit var tvPesananJam: TextView
     private lateinit var btnBeriNilai: Button
+    private lateinit var btnPesananTelahDiterima: Button
+    private lateinit var btnPesananBelumDiterima: Button
     private lateinit var tvTotalPembayaran: TextView
     private lateinit var tvSubtotal: TextView
     private lateinit var tvSubtotalValue: TextView
@@ -77,6 +80,8 @@ class DetailPemesananActivity : AppCompatActivity() {
         tvPesananTanggal = binding.tvTanggalValue
         tvPesananJam = binding.tvJamValue
         btnBeriNilai = binding.btnBeriNilai
+        btnPesananTelahDiterima = binding.btnPesananTelahDiterima
+        btnPesananBelumDiterima = binding.btnPesananBelumDiterima
         viewButton = binding.viewButton
         tvTotalPembayaran = binding.tvTotalValue
         tvSubtotal = binding.tvSubtotal
@@ -106,9 +111,16 @@ class DetailPemesananActivity : AppCompatActivity() {
                     val userTelepon = pesanan.data?.get("userTelepon").toString()
                     val nilai = pesanan.data?.get("nilai")
 
-                    if (status == getString(R.string.status_selesai) && nilai == null) {
+                    if (status == getString(R.string.status_butuh_konfirmasi_pengguna)) {
+                        viewButton.visibility = View.VISIBLE
+                        btnPesananTelahDiterima.visibility = View.VISIBLE
+                        btnPesananBelumDiterima.visibility = View.VISIBLE
+                    }
+                    else if (status == getString(R.string.status_selesai) && nilai == null) {
                         viewButton.visibility = View.VISIBLE
                         btnBeriNilai.visibility = View.VISIBLE
+                        btnPesananTelahDiterima.visibility = View.GONE
+                        btnPesananBelumDiterima.visibility = View.GONE
                     }
                     else if (status == getString(R.string.status_selesai) && nilai == true) {
                         viewButton.visibility = View.GONE
@@ -173,6 +185,18 @@ class DetailPemesananActivity : AppCompatActivity() {
             val dialog: DialogFragment = BeriNilaiFragment()
             dialog.arguments = args
             dialog.show(this.supportFragmentManager, "beriNilaiDialog")
+        }
+        btnPesananTelahDiterima.setOnClickListener {
+            val updateStatus = mapOf(
+                "status" to getString(R.string.status_selesai)
+            )
+            db.collection("pesanan").document(pesananId!!).update(updateStatus)
+
+            it.visibility = View.GONE
+            finish()
+        }
+        btnPesananBelumDiterima.setOnClickListener {
+            //TODO: TAMBAHKAN COMPLAIN KE ADMIN
         }
     }
 

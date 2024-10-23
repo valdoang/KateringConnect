@@ -70,8 +70,20 @@ class UserPesananRiwayatAdapter(
                 tvPemesananName.text = pesanan.vendorNama
 
                 when (pesanan.status) {
+                    context.getString(R.string.status_butuh_konfirmasi_vendor) -> {
+                        tvPemesananStatus.text = context.getString(R.string.menunggu_konfirmasi)
+                        tvPemesananStatus.setTextColor(context.resources.getColor(R.color.blue))
+                        tvPemesananStatus.background = context.resources.getDrawable(R.drawable.status_butuh_konfirmasi_bg)
+                    }
+                    context.getString(R.string.status_butuh_konfirmasi_pengguna) -> {
+                        tvPemesananStatus.text = context.getString(R.string.butuh_konfirmasi)
+                        tvPemesananStatus.setTextColor(context.resources.getColor(R.color.blue))
+                        tvPemesananStatus.background = context.resources.getDrawable(R.drawable.status_butuh_konfirmasi_bg)
+                    }
                     context.getString(R.string.status_proses) -> {
-                        tvPemesananStatus.visibility = View.GONE
+                        tvPemesananStatus.text = context.getString(R.string.status_proses)
+                        tvPemesananStatus.setTextColor(context.resources.getColor(R.color.orange))
+                        tvPemesananStatus.background = context.resources.getDrawable(R.drawable.status_proses_bg)
                     }
                     context.getString(R.string.status_selesai) -> {
                         tvPemesananStatus.text = context.getString(R.string.status_selesai)
@@ -82,6 +94,11 @@ class UserPesananRiwayatAdapter(
                         tvPemesananStatus.text = context.getString(R.string.status_batal)
                         tvPemesananStatus.setTextColor(context.resources.getColor(R.color.grey_200))
                         tvPemesananStatus.background = context.resources.getDrawable(R.drawable.status_batal_bg)
+                    }
+                    context.getString(R.string.status_ditolak) -> {
+                        tvPemesananStatus.text = context.getString(R.string.status_ditolak)
+                        tvPemesananStatus.setTextColor(context.resources.getColor(R.color.red))
+                        tvPemesananStatus.background = context.resources.getDrawable(R.drawable.status_ditolak_bg)
                     }
                 }
             }

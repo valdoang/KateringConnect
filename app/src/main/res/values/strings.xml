@@ -197,9 +197,15 @@
     <string name="fail_pemesanan">Gagal Melakukan Pemesanan</string>
     <string name="fail_penambahan">Gagal Melakukan Penambahan Porsi</string>
     <string name="pemesanan_berhasil">Pesanan Berhasil Ditambahkan</string>
+    <string name="status_butuh_konfirmasi_vendor">Butuh Konfirmasi Vendor</string>
+    <string name="status_butuh_konfirmasi_pengguna">Butuh Konfirmasi Pengguna</string>
+    <string name="butuh_konfirmasi">Butuh Konfirmasi</string>
+    <string name="menunggu_konfirmasi">Menunggu Konfirmasi</string>
     <string name="status_proses">Proses</string>
     <string name="status_selesai">Selesai</string>
     <string name="status_batal">Batal</string>
+    <string name="status_ditolak">Ditolak</string>
+    <string name="menolak">Menolak</string>
     <string name="data_kosong">Data Kosong</string>
     <string name="tv_status">Status</string>
     <string name="tv_address_city">%1$s, %2$s</string>
@@ -357,4 +363,10 @@
     <string name="bukti_pengiriman">Bukti Pengiriman</string>
     <string name="ambil_foto">Ambil foto</string>
     <string name="tv_reminder">* Harap pastikan foto menampilkan pesanan dan penerima dengan baik dan jelas.</string>
+    <string name="terima_pesanan">Terima Pesanan</string>
+    <string name="tolak_pesanan">Tolak Pesanan</string>
+    <string name="pesanan_telah_diterima">Pesanan Telah Diterima</string>
+    <string name="pesanan_belum_diterima">Pesanan Belum Diterima</string>
+    <string name="berikan_pendapat_anda">Berikan pendapat anda</string>
+    <string name="title_alasan_pembatalan">Kenapa anda ingin membatalkan pesanan ini?</string>
 </resources>

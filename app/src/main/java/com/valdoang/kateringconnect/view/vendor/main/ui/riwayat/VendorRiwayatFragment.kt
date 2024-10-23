@@ -58,7 +58,7 @@ class VendorRiwayatFragment : Fragment() {
         progressBar.visibility = View.VISIBLE
         val userId= firebaseAuth.currentUser!!.uid
         val ref = db.collection("pesanan").whereEqualTo("vendorId", userId).whereIn("status", listOf(getString(
-            R.string.status_selesai), getString(R.string.status_batal)))
+            R.string.status_selesai), getString(R.string.status_batal), getString(R.string.status_ditolak), getString(R.string.status_butuh_konfirmasi_pengguna)))
         ref.addSnapshotListener{ snapshot,_ ->
             progressBar.visibility = View.GONE
             if (snapshot != null) {

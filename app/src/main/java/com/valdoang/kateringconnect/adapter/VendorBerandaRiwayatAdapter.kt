@@ -66,23 +66,46 @@ class VendorBerandaRiwayatAdapter(
                         tvPemesananTotal.text = sTotalHarga.withNumberingFormat()
                     }
 
-                    if (pesanan.status == context.getString(R.string.status_proses)) {
-                        tvPemesananStatus.visibility = View.GONE
-                        if (mTambahPorsi) {
-                            tvPorsiAdd.visibility = View.VISIBLE
-                        } else {
+                    when (pesanan.status) {
+                        context.getString(R.string.status_butuh_konfirmasi_vendor) -> {
+                            tvPemesananStatus.text = context.getString(R.string.butuh_konfirmasi)
+                            tvPemesananStatus.setTextColor(context.resources.getColor(R.color.blue))
+                            tvPemesananStatus.background = context.resources.getDrawable(R.drawable.status_butuh_konfirmasi_bg)
+                        }
+                        context.getString(R.string.status_butuh_konfirmasi_pengguna) -> {
+                            tvPemesananStatus.text = context.getString(R.string.menunggu_konfirmasi)
+                            tvPemesananStatus.setTextColor(context.resources.getColor(R.color.blue))
+                            tvPemesananStatus.background = context.resources.getDrawable(R.drawable.status_butuh_konfirmasi_bg)
+                        }
+                        context.getString(R.string.status_proses) -> {
+                            tvPemesananStatus.text = context.getString(R.string.status_proses)
+                            tvPemesananStatus.setTextColor(context.resources.getColor(R.color.orange))
+                            tvPemesananStatus.background = context.resources.getDrawable(R.drawable.status_proses_bg)
+
+                            if (mTambahPorsi) {
+                                tvPorsiAdd.visibility = View.VISIBLE
+                            } else {
+                                tvPorsiAdd.visibility = View.GONE
+                            }
+                        }
+                        context.getString(R.string.status_selesai) -> {
+                            tvPemesananStatus.text = context.getString(R.string.status_selesai)
+                            tvPemesananStatus.setTextColor(context.resources.getColor(R.color.green_200))
+                            tvPemesananStatus.background = context.resources.getDrawable(R.drawable.status_selesai_bg)
                             tvPorsiAdd.visibility = View.GONE
                         }
-                    } else if (pesanan.status == context.getString(R.string.status_selesai)) {
-                        tvPemesananStatus.text = context.getString(R.string.status_selesai)
-                        tvPemesananStatus.setTextColor(context.resources.getColor(R.color.green_200))
-                        tvPemesananStatus.background = context.resources.getDrawable(R.drawable.status_selesai_bg)
-                        tvPorsiAdd.visibility = View.GONE
-                    } else if (pesanan.status == context.getString(R.string.status_batal)) {
-                        tvPemesananStatus.text = context.getString(R.string.status_batal)
-                        tvPemesananStatus.setTextColor(context.resources.getColor(R.color.grey_200))
-                        tvPemesananStatus.background = context.resources.getDrawable(R.drawable.status_batal_bg)
-                        tvPorsiAdd.visibility = View.GONE
+                        context.getString(R.string.status_batal) -> {
+                            tvPemesananStatus.text = context.getString(R.string.status_batal)
+                            tvPemesananStatus.setTextColor(context.resources.getColor(R.color.grey_200))
+                            tvPemesananStatus.background = context.resources.getDrawable(R.drawable.status_batal_bg)
+                            tvPorsiAdd.visibility = View.GONE
+                        }
+                        context.getString(R.string.status_ditolak) -> {
+                            tvPemesananStatus.text = context.getString(R.string.menolak)
+                            tvPemesananStatus.setTextColor(context.resources.getColor(R.color.red))
+                            tvPemesananStatus.background = context.resources.getDrawable(R.drawable.status_ditolak_bg)
+                            tvPorsiAdd.visibility = View.GONE
+                        }
                     }
                 }
 

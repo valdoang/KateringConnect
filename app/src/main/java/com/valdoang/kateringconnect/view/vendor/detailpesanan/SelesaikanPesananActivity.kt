@@ -9,6 +9,7 @@ import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.ktx.storage
@@ -19,7 +20,6 @@ import com.valdoang.kateringconnect.utils.getImageUri
 import java.util.*
 
 class SelesaikanPesananActivity : AppCompatActivity() {
-    //TODO: BELUM DITES RUN
     private lateinit var binding: ActivitySelesaikanPesananBinding
     private var pesananId: String? = null
     private lateinit var firebaseAuth: FirebaseAuth
@@ -35,6 +35,7 @@ class SelesaikanPesananActivity : AppCompatActivity() {
         setContentView(binding.root)
         supportActionBar?.hide()
 
+        firebaseAuth = Firebase.auth
         pesananId = intent.getStringExtra(Cons.EXTRA_ID)
         progressBar = binding.progressBar
         ibSave = binding.ibSave
@@ -75,7 +76,7 @@ class SelesaikanPesananActivity : AppCompatActivity() {
                             val mapBuktiPengiriman = mapOf(
                                 "fotoBuktiPengiriman" to uri.toString(),
                                 "storageKeys" to filename,
-                                "status" to getString(R.string.status_selesai)
+                                "status" to getString(R.string.status_butuh_konfirmasi_pengguna)
                             )
                             db.collection("pesanan").document(pesananId!!).update(mapBuktiPengiriman)
                                 .addOnSuccessListener {

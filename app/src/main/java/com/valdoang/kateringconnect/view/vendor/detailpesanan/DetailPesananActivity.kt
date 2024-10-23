@@ -6,6 +6,7 @@ import android.view.View
 import android.widget.Button
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.DialogFragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.auth.FirebaseAuth
@@ -20,8 +21,10 @@ import com.valdoang.kateringconnect.utils.Cons
 import com.valdoang.kateringconnect.utils.withNumberingFormat
 import com.valdoang.kateringconnect.utils.withTimestamptoDateFormat
 import com.valdoang.kateringconnect.utils.withTimestamptoTimeFormat
+import com.valdoang.kateringconnect.view.user.berinilai.BeriNilaiFragment
 
 class DetailPesananActivity : AppCompatActivity() {
+    //TODO: UNTUK KONFIRMASI PESANAN, BERIKAN OTOMATIS MENOLAK JIKA MELEBIHI JADWAL PESANAN
     private lateinit var binding: ActivityDetailPesananPemesananBinding
     private lateinit var firebaseAuth: FirebaseAuth
     private var db = Firebase.firestore
@@ -42,6 +45,8 @@ class DetailPesananActivity : AppCompatActivity() {
     private lateinit var tvPesananJam: TextView
     private lateinit var btnSelesaikan: Button
     private lateinit var btnBatalkan: Button
+    private lateinit var btnTerimaPesanan: Button
+    private lateinit var btnTolakPesanan: Button
     private var menuPesananList: ArrayList<Keranjang> = ArrayList()
     private lateinit var recyclerView: RecyclerView
     private lateinit var detailPesananPemesananAdapter: DetailPesananPemesananAdapter
@@ -72,6 +77,8 @@ class DetailPesananActivity : AppCompatActivity() {
         tvPesananJam = binding.tvJamValue
         btnSelesaikan = binding.btnSelesaikan
         btnBatalkan = binding.btnBatalkan
+        btnTerimaPesanan = binding.btnTerimaPesanan
+        btnTolakPesanan = binding.btnTolakPesanan
         tvPesananTotalPembayaran = binding.tvTotalValue
         tvPesananSubtotal = binding.tvSubtotal
         tvPesananSubtotalValue = binding.tvSubtotalValue
@@ -110,6 +117,7 @@ class DetailPesananActivity : AppCompatActivity() {
                     tvPesananJam.text = jadwal.withTimestamptoTimeFormat()
 
                     setupView()
+                    setUI()
                 }
             }
     }
@@ -161,14 +169,50 @@ class DetailPesananActivity : AppCompatActivity() {
             it.visibility = View.GONE
             finish()*/
         }
+        btnTerimaPesanan.setOnClickListener {
+            val updateStatus = mapOf(
+                "status" to getString(R.string.status_proses)
+            )
+            db.collection("pesanan").document(pesananId!!).update(updateStatus)
+
+            it.visibility = View.GONE
+            btnTolakPesanan.visibility = View.GONE
+            finish()
+        }
+        btnTolakPesanan.setOnClickListener {
+            val args = Bundle()
+            args.putString("id", pesananId)
+            val dialog: DialogFragment = BatalkanPesananFragment()
+            dialog.arguments = args
+            dialog.show(this.supportFragmentManager, "batalkanPesananDialog")
+            /*val updateStatus = mapOf(
+                "status" to getString(R.string.status_ditolak)
+            )
+            db.collection("pesanan").document(pesananId!!).update(updateStatus)
+
+            btnTerimaPesanan.visibility = View.GONE
+            it.visibility = View.GONE*/
+        }
     }
 
     private fun setUI() {
         tvVendorNama.text = getString(R.string.rangkuman_pesanan)
         when (fromWhere) {
             getString(R.string.from_vendor_beranda) -> {
-                btnSelesaikan.visibility = View.VISIBLE
-                btnBatalkan.visibility = View.VISIBLE
+                when (status) {
+                    getString(R.string.status_butuh_konfirmasi_vendor) -> {
+                        btnSelesaikan.visibility = View.GONE
+                        btnBatalkan.visibility = View.GONE
+                        btnTerimaPesanan.visibility = View.VISIBLE
+                        btnTolakPesanan.visibility = View.VISIBLE
+                    }
+                    getString(R.string.status_proses) -> {
+                        btnSelesaikan.visibility = View.VISIBLE
+                        btnBatalkan.visibility = View.VISIBLE
+                        btnTerimaPesanan.visibility = View.GONE
+                        btnTolakPesanan.visibility = View.GONE
+                    }
+                }
             }
             getString(R.string.from_vendor_riwayat) -> {
                 btnSelesaikan.visibility = View.GONE
