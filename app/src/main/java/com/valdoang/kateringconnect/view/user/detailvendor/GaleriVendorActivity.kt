@@ -14,7 +14,7 @@ import com.valdoang.kateringconnect.adapter.GalleryAdapter
 import com.valdoang.kateringconnect.databinding.ActivityGaleriBinding
 import com.valdoang.kateringconnect.model.Gallery
 import com.valdoang.kateringconnect.utils.Cons
-import com.valdoang.kateringconnect.view.vendor.galeri.DetailGaleriFragment
+import com.valdoang.kateringconnect.view.both.detailgaleri.DetailGaleriFragment
 
 class GaleriVendorActivity : AppCompatActivity() {
     private lateinit var binding: ActivityGaleriBinding
@@ -68,6 +68,7 @@ class GaleriVendorActivity : AppCompatActivity() {
                     override fun onItemClicked(data: Gallery) {
                         val args = Bundle()
                         args.putString("galleryId", data.id)
+                        args.putString("vendorId", vendorId)
                         val newFragment = DetailGaleriFragment()
                         newFragment.arguments = args
                         newFragment.show(supportFragmentManager, "detailGaleriFragment")

@@ -169,6 +169,7 @@ class EditGrupOpsiActivity : AppCompatActivity() {
                 edAddHargaOpsi.setText(data.harga)
 
                 edAddNamaOpsi.beforeChangedListener(btnSimpan)
+                edAddHargaOpsi.beforeChangedListener(btnSimpan)
 
                 tvHapus.setOnClickListener {
                     val listPosition = opsiList.indexOfFirst {

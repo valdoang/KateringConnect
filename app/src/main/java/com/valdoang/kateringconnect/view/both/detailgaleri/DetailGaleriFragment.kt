@@ -1,4 +1,4 @@
-package com.valdoang.kateringconnect.view.vendor.galeri
+package com.valdoang.kateringconnect.view.both.detailgaleri
 
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
@@ -20,6 +20,7 @@ import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.ktx.storage
 import com.valdoang.kateringconnect.R
 import com.valdoang.kateringconnect.databinding.FragmentDetailGaleriBinding
+import com.valdoang.kateringconnect.view.vendor.galeri.DeleteGaleriFragment
 
 class DetailGaleriFragment : DialogFragment() {
     private var _binding: FragmentDetailGaleriBinding? = null
@@ -59,9 +60,10 @@ class DetailGaleriFragment : DialogFragment() {
 
         val mArgs = arguments
         val galleryId = mArgs!!.getString("galleryId")
+        val vendorId = mArgs.getString("vendorId")
 
         setCv()
-        setData(galleryId!!)
+        setData(galleryId!!, vendorId!!)
         deleteData(galleryId)
 
 
@@ -80,8 +82,8 @@ class DetailGaleriFragment : DialogFragment() {
             }
     }
 
-    private fun setData(galleryId: String) {
-        val galeriRef = db.collection("user").document(userId).collection("galeri").document(galleryId)
+    private fun setData(galleryId: String, vendorId: String) {
+        val galeriRef = db.collection("user").document(vendorId).collection("galeri").document(galleryId)
         galeriRef.get().addOnSuccessListener {document ->
             if (document != null) {
                 val foto = document.data?.get("foto").toString()

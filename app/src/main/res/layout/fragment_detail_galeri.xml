@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/dialog_rounded"
-    tools:context=".view.vendor.galeri.DetailGaleriFragment">
+    tools:context=".view.both.detailgaleri.DetailGaleriFragment">
 
     <androidx.cardview.widget.CardView
         android:id="@+id/cv_foto"
