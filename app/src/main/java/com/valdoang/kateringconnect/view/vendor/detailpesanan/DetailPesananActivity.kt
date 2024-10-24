@@ -53,6 +53,8 @@ class DetailPesananActivity : AppCompatActivity() {
     private lateinit var tvPesananTotalPembayaran: TextView
     private lateinit var tvPesananSubtotal: TextView
     private lateinit var tvPesananSubtotalValue: TextView
+    private lateinit var tvAlasan: TextView
+    private lateinit var tvAlasanValue: TextView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -82,6 +84,8 @@ class DetailPesananActivity : AppCompatActivity() {
         tvPesananTotalPembayaran = binding.tvTotalValue
         tvPesananSubtotal = binding.tvSubtotal
         tvPesananSubtotalValue = binding.tvSubtotalValue
+        tvAlasan = binding.tvAlasan
+        tvAlasanValue = binding.tvAlasanValue
 
         setupAction()
         setUI()
@@ -104,6 +108,7 @@ class DetailPesananActivity : AppCompatActivity() {
                     val userKota = pesanan.data?.get("userKota").toString()
                     val userAlamat = pesanan.data?.get("userAlamat").toString()
                     val userTelepon = pesanan.data?.get("userTelepon").toString()
+                    val alasan = pesanan.data?.get("alasan").toString()
 
                     tvUserNama.text = userNama
                     tvUserAlamat.text = getString(R.string.tv_address_city, userAlamat, userKota)
@@ -115,6 +120,25 @@ class DetailPesananActivity : AppCompatActivity() {
                     tvPesananMetodePembayaran.text = metodePembayaran
                     tvPesananTanggal.text = jadwal.withTimestamptoDateFormat()
                     tvPesananJam.text = jadwal.withTimestamptoTimeFormat()
+                    tvAlasanValue.text = alasan
+
+                    when (status) {
+                        getString(R.string.status_ditolak) -> {
+                            tvPesananStatus.text = getString(R.string.menolak)
+                            tvAlasan.text = getString(R.string.alasan_penolakan)
+                            tvAlasan.visibility = View.VISIBLE
+                            tvAlasanValue.visibility = View.VISIBLE
+                        }
+                        getString(R.string.status_batal) -> {
+                            tvAlasan.text = getString(R.string.alasan_pembatalan)
+                            tvAlasan.visibility = View.VISIBLE
+                            tvAlasanValue.visibility = View.VISIBLE
+                        }
+                        else -> {
+                            tvAlasan.visibility = View.GONE
+                            tvAlasanValue.visibility = View.GONE
+                        }
+                    }
 
                     setupView()
                     setUI()
@@ -154,44 +178,34 @@ class DetailPesananActivity : AppCompatActivity() {
             val intent = Intent(this, SelesaikanPesananActivity::class.java)
             intent.putExtra(Cons.EXTRA_ID, pesananId)
             startActivity(intent)
-            it.visibility = View.GONE
-            btnBatalkan.visibility = View.GONE
             finish()
         }
         btnBatalkan.setOnClickListener {
-            //TODO: TAMBAHKAN BATALKAN ACTIVITY ATAU DIALOG
-            /*val updateStatus = mapOf(
-                "status" to getString(R.string.status_batal)
-            )
-            db.collection("pesanan").document(pesananId!!).update(updateStatus)
+            val args = Bundle()
+            args.putString("id", pesananId)
+            val dialog: DialogFragment = BatalkanPesananFragment()
+            dialog.arguments = args
+            dialog.show(this.supportFragmentManager, "batalkanPesananDialog")
 
-            btnSelesaikan.visibility = View.GONE
             it.visibility = View.GONE
-            finish()*/
+            btnSelesaikan.visibility = View.GONE
         }
         btnTerimaPesanan.setOnClickListener {
             val updateStatus = mapOf(
                 "status" to getString(R.string.status_proses)
             )
             db.collection("pesanan").document(pesananId!!).update(updateStatus)
-
-            it.visibility = View.GONE
-            btnTolakPesanan.visibility = View.GONE
             finish()
         }
         btnTolakPesanan.setOnClickListener {
             val args = Bundle()
             args.putString("id", pesananId)
-            val dialog: DialogFragment = BatalkanPesananFragment()
+            val dialog: DialogFragment = TolakPesananFragment()
             dialog.arguments = args
-            dialog.show(this.supportFragmentManager, "batalkanPesananDialog")
-            /*val updateStatus = mapOf(
-                "status" to getString(R.string.status_ditolak)
-            )
-            db.collection("pesanan").document(pesananId!!).update(updateStatus)
+            dialog.show(this.supportFragmentManager, "tolakPesananDialog")
 
+            it.visibility = View.GONE
             btnTerimaPesanan.visibility = View.GONE
-            it.visibility = View.GONE*/
         }
     }
 

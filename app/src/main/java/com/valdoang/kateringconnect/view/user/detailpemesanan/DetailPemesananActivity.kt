@@ -55,6 +55,8 @@ class DetailPemesananActivity : AppCompatActivity() {
     private lateinit var recyclerView: RecyclerView
     private lateinit var detailPesananPemesananAdapter: DetailPesananPemesananAdapter
     private lateinit var viewButton: View
+    private lateinit var tvAlasan: TextView
+    private lateinit var tvAlasanValue: TextView
 
     @RequiresApi(Build.VERSION_CODES.N)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -86,6 +88,8 @@ class DetailPemesananActivity : AppCompatActivity() {
         tvTotalPembayaran = binding.tvTotalValue
         tvSubtotal = binding.tvSubtotal
         tvSubtotalValue = binding.tvSubtotalValue
+        tvAlasan = binding.tvAlasan
+        tvAlasanValue = binding.tvAlasanValue
 
         setupView()
         setupData()
@@ -110,6 +114,7 @@ class DetailPemesananActivity : AppCompatActivity() {
                     val userAlamat = pesanan.data?.get("userAlamat").toString()
                     val userTelepon = pesanan.data?.get("userTelepon").toString()
                     val nilai = pesanan.data?.get("nilai")
+                    val alasan = pesanan.data?.get("alasan").toString()
 
                     if (status == getString(R.string.status_butuh_konfirmasi_pengguna)) {
                         viewButton.visibility = View.VISIBLE
@@ -128,6 +133,15 @@ class DetailPemesananActivity : AppCompatActivity() {
                     }
                     else if (status == getString(R.string.status_batal) ) {
                         viewButton.visibility = View.GONE
+                        tvAlasan.text = getString(R.string.alasan_pembatalan)
+                        tvAlasan.visibility = View.VISIBLE
+                        tvAlasanValue.visibility = View.VISIBLE
+                    }
+                    else if (status == getString(R.string.status_ditolak) ) {
+                        viewButton.visibility = View.GONE
+                        tvAlasan.text = getString(R.string.alasan_penolakan)
+                        tvAlasan.visibility = View.VISIBLE
+                        tvAlasanValue.visibility = View.VISIBLE
                     }
                     else if (status == getString(R.string.status_proses) ) {
                         viewButton.visibility = View.GONE
@@ -144,6 +158,7 @@ class DetailPemesananActivity : AppCompatActivity() {
                     tvPesananMetodePembayaran.text = metodePembayaran
                     tvPesananTanggal.text = jadwal.withTimestamptoDateFormat()
                     tvPesananJam.text = jadwal.withTimestamptoTimeFormat()
+                    tvAlasanValue.text = alasan
 
                     setupView()
                 }

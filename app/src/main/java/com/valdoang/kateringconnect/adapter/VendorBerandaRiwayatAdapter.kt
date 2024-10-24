@@ -71,6 +71,12 @@ class VendorBerandaRiwayatAdapter(
                             tvPemesananStatus.text = context.getString(R.string.butuh_konfirmasi)
                             tvPemesananStatus.setTextColor(context.resources.getColor(R.color.blue))
                             tvPemesananStatus.background = context.resources.getDrawable(R.drawable.status_butuh_konfirmasi_bg)
+
+                            if (mTambahPorsi) {
+                                tvPorsiAdd.visibility = View.VISIBLE
+                            } else {
+                                tvPorsiAdd.visibility = View.GONE
+                            }
                         }
                         context.getString(R.string.status_butuh_konfirmasi_pengguna) -> {
                             tvPemesananStatus.text = context.getString(R.string.menunggu_konfirmasi)

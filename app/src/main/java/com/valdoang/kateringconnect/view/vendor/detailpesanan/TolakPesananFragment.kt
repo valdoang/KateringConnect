@@ -16,7 +16,7 @@ import com.google.firebase.ktx.Firebase
 import com.valdoang.kateringconnect.R
 import com.valdoang.kateringconnect.databinding.FragmentTolakBatalkanPesananBinding
 
-class BatalkanPesananFragment : DialogFragment() {
+class TolakPesananFragment : DialogFragment() {
     private var _binding: FragmentTolakBatalkanPesananBinding? = null
 
     // This property is only valid between onCreateView and
@@ -55,22 +55,22 @@ class BatalkanPesananFragment : DialogFragment() {
             val sAlasan = binding.edAlasan.text.toString().trim()
 
             val alasanMap = mapOf(
-                "status" to getString(R.string.status_batal),
+                "status" to getString(R.string.status_ditolak),
                 "alasan" to sAlasan
             )
             db.collection("pesanan").document(pesananId).update(alasanMap)
                 .addOnSuccessListener {
-                    Toast.makeText(requireContext(), R.string.success_batalkan_pesanan, Toast.LENGTH_SHORT).show()
+                    Toast.makeText(requireContext(), R.string.success_tolak_pesanan, Toast.LENGTH_SHORT).show()
                     dismiss()
                 }
                 .addOnFailureListener {
-                    Toast.makeText(requireContext(), R.string.fail_batalkan_pesanan, Toast.LENGTH_SHORT).show()
+                    Toast.makeText(requireContext(), R.string.fail_tolak_pesanan, Toast.LENGTH_SHORT).show()
                 }
         }
     }
 
     private fun setUI() {
-        binding.titleAlasan.text = getString(R.string.title_alasan_pembatalan)
+        binding.titleAlasan.text = getString(R.string.title_alasan_penolakan)
     }
 
     private fun closeDialog() {

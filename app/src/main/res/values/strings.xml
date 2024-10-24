@@ -213,6 +213,10 @@
     <string name="batalkan">Batalkan</string>
     <string name="ok">OK</string>
     <string name="fail_set_rating">Gagal Memberikan Penilaian</string>
+    <string name="fail_batalkan_pesanan">Gagal Membatalkan Pesanan</string>
+    <string name="success_batalkan_pesanan">Berhasil Membatalkan Pesanan</string>
+    <string name="fail_tolak_pesanan">Gagal Menolak Pesanan</string>
+    <string name="success_tolak_pesanan">Berhasil Menolak Pesanan</string>
     <string name="tidak_ada_penilaian">Tidak ada penilaian</string>
     <string name="vendor_star">%1$s (%2$s)</string>
     <string name="jumlah_penilaian">%1$s penilaian</string>
@@ -369,4 +373,7 @@
     <string name="pesanan_belum_diterima">Pesanan Belum Diterima</string>
     <string name="berikan_pendapat_anda">Berikan pendapat anda</string>
     <string name="title_alasan_pembatalan">Kenapa anda ingin membatalkan pesanan ini?</string>
+    <string name="title_alasan_penolakan">Kenapa anda ingin menolak pesanan ini?</string>
+    <string name="alasan_pembatalan">Alasan Pembatalan</string>
+    <string name="alasan_penolakan">Alasan Penolakan</string>
 </resources>

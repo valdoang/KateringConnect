@@ -19,13 +19,14 @@ import com.valdoang.kateringconnect.view.both.alertdialog.LogoutFragment
 import com.valdoang.kateringconnect.view.both.chat.ChatActivity
 
 class UserAkunFragment : Fragment() {
+    //TODO: UBAH UI
 
     private var _binding: FragmentUserAkunBinding? = null
     private lateinit var firebaseAuth: FirebaseAuth
     private var db = Firebase.firestore
     private val binding get() = _binding!!
     private lateinit var tvName: TextView
-    private lateinit var tvAddress: TextView
+    private lateinit var tvEmail: TextView
     private lateinit var tvNoPhone: TextView
     private lateinit var ivUserAkun: ImageView
 
@@ -40,7 +41,7 @@ class UserAkunFragment : Fragment() {
         firebaseAuth = FirebaseAuth.getInstance()
 
         tvName = binding.tvUserAkunName
-        tvAddress = binding.tvAddress
+        tvEmail = binding.tvEmail
         tvNoPhone = binding.tvNoPhone
         ivUserAkun= binding.ivUserAkun
 
@@ -63,21 +64,21 @@ class UserAkunFragment : Fragment() {
 
                 Glide.with(this).load(foto).error(R.drawable.default_profile).into(ivUserAkun)
                 tvName.text = nama
-                tvAddress.text = getString(R.string.tv_address_city, alamat, kota)
+                tvEmail.text = getString(R.string.tv_address_city, alamat, kota)
                 tvNoPhone.text = telepon
             }
         }
     }
 
     private fun setupAction() {
-        binding.cvEditProfile.setOnClickListener{
+        /*binding.cvEditProfile.setOnClickListener{
             val intent = Intent(requireContext(), EditAkunActivity::class.java)
             startActivity(intent)
         }
         binding.cvLogout.setOnClickListener{
             val dialog = LogoutFragment()
             dialog.show(this.parentFragmentManager, "logoutDialog")
-        }
+        }*/
         binding.ibChat.setOnClickListener {
             val intent = Intent(requireContext(), ChatActivity::class.java)
             startActivity(intent)

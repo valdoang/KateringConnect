@@ -1,20 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/dialog_rounded">
 
     <TextView
-        android:id="@+id/title_alasan_pembatalan"
-        android:layout_width="300dp"
+        android:id="@+id/title_alasan"
+        android:layout_width="250dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
-        android:text="@string/title_alasan_pembatalan"
+        tools:text="@string/title_alasan_pembatalan"
         android:fontFamily="@font/poppins_bold"
         android:textColor="@color/black"
-        android:layout_marginStart="100dp"
-        android:layout_marginEnd="100dp"
+        android:layout_marginStart="50dp"
+        android:layout_marginEnd="50dp"
         android:textSize="18sp"
         android:gravity="center"
         app:layout_constraintEnd_toEndOf="parent"
@@ -34,7 +35,7 @@
         app:layout_constraintEnd_toEndOf="parent"/>
 
     <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/alasanPembatalanEditTextLayout"
+        android:id="@+id/alasanEditTextLayout"
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         app:boxCornerRadiusBottomStart="10dp"
         app:boxCornerRadiusTopEnd="10dp"
@@ -47,10 +48,10 @@
         android:layout_marginEnd="32dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/title_alasan_pembatalan">
+        app:layout_constraintTop_toBottomOf="@+id/title_alasan">
 
         <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/ed_comment"
+            android:id="@+id/ed_alasan"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:hint="@string/berikan_pendapat_anda"
@@ -74,7 +75,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/alasanPembatalanEditTextLayout"/>
+        app:layout_constraintTop_toBottomOf="@+id/alasanEditTextLayout"/>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

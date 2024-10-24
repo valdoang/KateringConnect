@@ -90,7 +90,7 @@ class DetailPesananPemesananAdapter(
                     }
                 }
 
-                if (status == context.getString(R.string.status_selesai) ||  status == context.getString(R.string.status_batal)) {
+                if (status == context.getString(R.string.status_selesai) ||  status == context.getString(R.string.status_batal) || status == context.getString(R.string.status_ditolak)) {
                     tvEdit.visibility = View.GONE
                     ivBadge.visibility = View.GONE
                 }

@@ -181,6 +181,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:overScrollMode="never"
+                    android:visibility="visible"
                     app:layout_constraintTop_toBottomOf="@id/tv_nama_vendor"
                     tools:listitem="@layout/item_pesanan"/>
 
@@ -345,6 +346,35 @@
                     app:layout_constraintEnd_toEndOf="parent"/>
 
                 <TextView
+                    android:id="@+id/tv_alasan"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="1dp"
+                    tools:text="@string/alasan_pembatalan"
+                    android:visibility="gone"
+                    android:textSize="14sp"
+                    android:fontFamily="@font/poppins"
+                    android:textColor="@color/black"
+                    app:layout_constraintTop_toBottomOf="@id/tv_status"
+                    app:layout_constraintStart_toStartOf="@id/tv_status"/>
+
+                <TextView
+                    android:id="@+id/tv_alasan_value"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:maxWidth="200dp"
+                    android:layout_marginTop="1dp"
+                    android:layout_marginEnd="16dp"
+                    tools:text="Bahan tidak mencukupi"
+                    android:visibility="gone"
+                    android:gravity="end"
+                    android:textSize="14sp"
+                    android:fontFamily="@font/poppins"
+                    android:textColor="@color/black"
+                    app:layout_constraintTop_toBottomOf="@id/tv_status_value"
+                    app:layout_constraintEnd_toEndOf="parent"/>
+
+                <TextView
                     android:id="@+id/tv_pembayaran"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -353,8 +383,8 @@
                     android:textSize="14sp"
                     android:fontFamily="@font/poppins"
                     android:textColor="@color/black"
-                    app:layout_constraintTop_toBottomOf="@id/tv_status"
-                    app:layout_constraintStart_toStartOf="@id/tv_status"/>
+                    app:layout_constraintTop_toBottomOf="@id/tv_alasan"
+                    app:layout_constraintStart_toStartOf="@id/tv_alasan"/>
 
                 <TextView
                     android:id="@+id/tv_pembayaran_value"
@@ -366,7 +396,7 @@
                     android:textSize="14sp"
                     android:fontFamily="@font/poppins"
                     android:textColor="@color/black"
-                    app:layout_constraintTop_toBottomOf="@id/tv_status_value"
+                    app:layout_constraintTop_toBottomOf="@id/tv_alasan_value"
                     app:layout_constraintEnd_toEndOf="parent"/>
 
                 <TextView
