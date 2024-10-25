@@ -18,10 +18,12 @@ import com.valdoang.kateringconnect.model.Gallery
 import com.valdoang.kateringconnect.model.Star
 import com.valdoang.kateringconnect.utils.Cons
 import com.valdoang.kateringconnect.utils.roundOffDecimal
+import com.valdoang.kateringconnect.utils.withCurrencyFormat
 import com.valdoang.kateringconnect.utils.withNumberingFormat
 import com.valdoang.kateringconnect.view.both.editakun.EditAkunActivity
 import com.valdoang.kateringconnect.view.both.alertdialog.LogoutFragment
 import com.valdoang.kateringconnect.view.both.chat.ChatActivity
+import com.valdoang.kateringconnect.view.both.kcwallet.KcwalletActivity
 import com.valdoang.kateringconnect.view.both.nilai.NilaiActivity
 import com.valdoang.kateringconnect.view.vendor.galeri.GaleriActivity
 import com.valdoang.kateringconnect.view.vendor.menu.MenuActivity
@@ -43,6 +45,7 @@ class VendorAkunFragment : Fragment() {
     private var nama: String? = null
     private var vendorId = ""
     private var totalNilai = 0.0
+    private lateinit var tvSaldo: TextView
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -59,6 +62,7 @@ class VendorAkunFragment : Fragment() {
         tvAddress = binding.tvAddress
         tvNoPhone = binding.tvNoPhone
         ivVendorAkun = binding.ivVendorAkun
+        tvSaldo = binding.tvKcwallet
 
         starList = arrayListOf()
         galleryList = arrayListOf()
@@ -111,6 +115,11 @@ class VendorAkunFragment : Fragment() {
                 val kota = document.data?.get("kota").toString()
                 val alamat = document.data?.get("alamat").toString()
                 val telepon = document.data?.get("telepon").toString()
+                var saldo = document.data?.get("saldo")
+                if (saldo == null) {
+                    saldo = "0"
+                }
+                tvSaldo.text = getString(R.string.rupiah_text, saldo.toString().withNumberingFormat())
 
                 Glide.with(this).load(foto).error(R.drawable.default_vendor_profile).into(ivVendorAkun)
                 tvName.text = nama
@@ -121,6 +130,10 @@ class VendorAkunFragment : Fragment() {
     }
 
     private fun setupAction() {
+        binding.clKcwallet.setOnClickListener {
+            val intent = Intent(requireContext(), KcwalletActivity::class.java)
+            startActivity(intent)
+        }
         binding.clStar.setOnClickListener {
             val intent = Intent(requireContext(), NilaiActivity::class.java)
             intent.putExtra(Cons.EXTRA_ID, vendorId)

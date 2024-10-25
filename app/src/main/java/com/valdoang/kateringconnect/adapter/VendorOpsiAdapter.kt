@@ -8,7 +8,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.valdoang.kateringconnect.R
 import com.valdoang.kateringconnect.databinding.ItemVendorOpsiBinding
 import com.valdoang.kateringconnect.model.Opsi
-import com.valdoang.kateringconnect.utils.withCurrencyFormat
+import com.valdoang.kateringconnect.utils.withNumberingFormat
 
 class VendorOpsiAdapter(
     private val context: Context
@@ -38,7 +38,7 @@ class VendorOpsiAdapter(
 
             binding.apply {
                 tvNamaOpsi.text = opsi.nama
-                tvHargaOpsi.text = context.getString(R.string.harga_opsi, opsi.harga?.withCurrencyFormat())
+                tvHargaOpsi.text = context.getString(R.string.harga_opsi, opsi.harga?.withNumberingFormat())
             }
         }
     }

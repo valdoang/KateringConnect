@@ -195,6 +195,7 @@
     <string name="pilih_waktu">Pilih waktu</string>
     <string name="pilih_tanggal">Pilih tanggal</string>
     <string name="fail_pemesanan">Gagal Melakukan Pemesanan</string>
+    <string name="fail_topup">Gagal Melakukan Top Up</string>
     <string name="fail_penambahan">Gagal Melakukan Penambahan Porsi</string>
     <string name="pemesanan_berhasil">Pesanan Berhasil Ditambahkan</string>
     <string name="status_butuh_konfirmasi_vendor">Butuh Konfirmasi Vendor</string>
@@ -345,6 +346,9 @@
     <string name="digital">Digital</string>
     <string name="jumlah_porsi_transaksi">- %1$sx %2$s</string>
     <string name="ongkos_kirim_transaksi">- Ongkos Kirim</string>
+    <string name="admin_transaksi">- Biaya Admin</string>
+    <string name="topup_transaksi">- Top Up KC Wallet</string>
+    <string name="topup_kc_wallet">Top Up KC Wallet</string>
     <string name="digital_desc">Opsi pembayaran digital akan tampil setelah pesan</string>
     <string name="jumlah_alamat">%1$s Pesanan • %2$s</string>
     <string name="alamat_penerima">Alamat Penerima</string>
@@ -376,4 +380,19 @@
     <string name="title_alasan_penolakan">Kenapa anda ingin menolak pesanan ini?</string>
     <string name="alasan_pembatalan">Alasan Pembatalan</string>
     <string name="alasan_penolakan">Alasan Penolakan</string>
+    <string name="kc_wallet">KC Wallet</string>
+    <string name="saldo_anda">Saldo Anda</string>
+    <string name="cek_mutasi">Cek mutasi dompet</string>
+    <string name="top_up">Top up</string>
+    <string name="top_up_kapital">Top Up</string>
+    <string name="tv_admin_topup">• Terdapat biaya admin Rp1.000</string>
+    <string name="nominal_top_up">Nominal Top Up</string>
+    <string name="min_top_up">• Minimum top up Rp20.000</string>
+    <string name="catatan">Catatan:</string>
+    <string name="mutasi">Mutasi</string>
+    <string name="kredit">Kredit</string>
+    <string name="debit">Debit</string>
+    <string name="mutasi_kredit">+Rp%1$s</string>
+    <string name="mutasi_debit">-Rp%1$s</string>
+    <string name="belum_terdapat_transaksi">Belum terdapat transaksi</string>
 </resources>

@@ -18,6 +18,12 @@
         tools:replace="android:allowBackup, usesCleartextTraffic"
         tools:targetApi="31">
         <activity
+            android:name=".view.both.kcwallet.MutasiActivity"
+            android:exported="false" />
+        <activity
+            android:name=".view.both.kcwallet.KcwalletActivity"
+            android:exported="false" />
+        <activity
             android:name=".view.vendor.detailpesanan.SelesaikanPesananActivity"
             android:exported="false" />
         <activity

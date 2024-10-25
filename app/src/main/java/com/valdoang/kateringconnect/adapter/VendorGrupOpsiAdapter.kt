@@ -58,7 +58,7 @@ class VendorGrupOpsiAdapter(
 
                 //Setup View
                 val recyclerView: RecyclerView = rvOpsiAktif
-                val opsiAktifAdapter = OpsiAktifAdapter(grupOpsi.id!!)
+                val opsiAktifAdapter = OpsiAktifAdapter(context, grupOpsi.id!!)
                 recyclerView.layoutManager = LinearLayoutManager(context)
                 recyclerView.adapter = opsiAktifAdapter
                 opsiAktifAdapter.setItems(opsiList)

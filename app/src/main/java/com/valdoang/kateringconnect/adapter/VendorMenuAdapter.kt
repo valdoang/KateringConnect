@@ -11,10 +11,11 @@ import com.bumptech.glide.Glide
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
+import com.valdoang.kateringconnect.R
 import com.valdoang.kateringconnect.databinding.ItemVendorMenuBinding
 import com.valdoang.kateringconnect.model.Menu
 import com.valdoang.kateringconnect.utils.Cons
-import com.valdoang.kateringconnect.utils.withCurrencyFormat
+import com.valdoang.kateringconnect.utils.withNumberingFormat
 import com.valdoang.kateringconnect.view.vendor.menu.edit.EditMenuActivity
 
 class VendorMenuAdapter(
@@ -37,7 +38,7 @@ class VendorMenuAdapter(
             binding.apply {
                 Glide.with(context).load(menu.foto).into(ivMenu)
                 tvMenuName.text = menu.nama
-                tvMenuPrice.text = menu.harga?.withCurrencyFormat()
+                tvMenuPrice.text = context.getString(R.string.rupiah_text, menu.harga?.withNumberingFormat())
                 tvEdit.setOnClickListener {
                     val intent = Intent(context, EditMenuActivity::class.java)
                     intent.putExtra(Cons.EXTRA_ID, kategoriMenuId)

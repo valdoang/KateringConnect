@@ -14,21 +14,23 @@ import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.valdoang.kateringconnect.R
 import com.valdoang.kateringconnect.databinding.FragmentUserAkunBinding
+import com.valdoang.kateringconnect.utils.withCurrencyFormat
+import com.valdoang.kateringconnect.utils.withNumberingFormat
 import com.valdoang.kateringconnect.view.both.editakun.EditAkunActivity
 import com.valdoang.kateringconnect.view.both.alertdialog.LogoutFragment
 import com.valdoang.kateringconnect.view.both.chat.ChatActivity
+import com.valdoang.kateringconnect.view.both.kcwallet.KcwalletActivity
 
 class UserAkunFragment : Fragment() {
-    //TODO: UBAH UI
-
     private var _binding: FragmentUserAkunBinding? = null
     private lateinit var firebaseAuth: FirebaseAuth
     private var db = Firebase.firestore
     private val binding get() = _binding!!
     private lateinit var tvName: TextView
-    private lateinit var tvEmail: TextView
+    private lateinit var tvAddress: TextView
     private lateinit var tvNoPhone: TextView
     private lateinit var ivUserAkun: ImageView
+    private lateinit var tvSaldo: TextView
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -41,9 +43,10 @@ class UserAkunFragment : Fragment() {
         firebaseAuth = FirebaseAuth.getInstance()
 
         tvName = binding.tvUserAkunName
-        tvEmail = binding.tvEmail
+        tvAddress = binding.tvAddress
         tvNoPhone = binding.tvNoPhone
         ivUserAkun= binding.ivUserAkun
+        tvSaldo = binding.tvKcwallet
 
 
         setupAccount()
@@ -61,24 +64,33 @@ class UserAkunFragment : Fragment() {
                 val kota = document.data?.get("kota").toString()
                 val alamat = document.data?.get("alamat").toString()
                 val telepon = document.data?.get("telepon").toString()
+                var saldo = document.data?.get("saldo")
+                if (saldo == null) {
+                    saldo = "0"
+                }
+                tvSaldo.text = getString(R.string.rupiah_text, saldo.toString().withNumberingFormat())
 
                 Glide.with(this).load(foto).error(R.drawable.default_profile).into(ivUserAkun)
                 tvName.text = nama
-                tvEmail.text = getString(R.string.tv_address_city, alamat, kota)
+                tvAddress.text = getString(R.string.tv_address_city, alamat, kota)
                 tvNoPhone.text = telepon
             }
         }
     }
 
     private fun setupAction() {
-        /*binding.cvEditProfile.setOnClickListener{
+        binding.clKcwallet.setOnClickListener {
+            val intent = Intent(requireContext(), KcwalletActivity::class.java)
+            startActivity(intent)
+        }
+        binding.cvEditProfile.setOnClickListener{
             val intent = Intent(requireContext(), EditAkunActivity::class.java)
             startActivity(intent)
         }
         binding.cvLogout.setOnClickListener{
             val dialog = LogoutFragment()
             dialog.show(this.parentFragmentManager, "logoutDialog")
-        }*/
+        }
         binding.ibChat.setOnClickListener {
             val intent = Intent(requireContext(), ChatActivity::class.java)
             startActivity(intent)

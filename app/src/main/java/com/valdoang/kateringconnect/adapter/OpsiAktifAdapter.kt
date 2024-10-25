@@ -1,6 +1,7 @@
 package com.valdoang.kateringconnect.adapter
 
 import android.annotation.SuppressLint
+import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.*
@@ -8,12 +9,14 @@ import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
+import com.valdoang.kateringconnect.R
 import com.valdoang.kateringconnect.databinding.ItemOpsiAktifBinding
 import com.valdoang.kateringconnect.model.Opsi
-import com.valdoang.kateringconnect.utils.withCurrencyFormat
+import com.valdoang.kateringconnect.utils.withNumberingFormat
 
 
 class OpsiAktifAdapter(
+    private val context: Context,
     private val grupOpsiId: String
 ) : RecyclerView.Adapter<OpsiAktifAdapter.MyViewHolder>() {
 
@@ -33,7 +36,7 @@ class OpsiAktifAdapter(
         fun bind(opsi: Opsi) {
             binding.apply {
                 tvGrupOpsiName.text = opsi.nama
-                tvGrupOpsiPrice.text = opsi.harga?.withCurrencyFormat()
+                tvGrupOpsiPrice.text = context.getString(R.string.rupiah_text, opsi.harga?.withNumberingFormat())
                 switchButton.isChecked = opsi.aktif == true
 
                 val userId = FirebaseAuth.getInstance().currentUser!!.uid
