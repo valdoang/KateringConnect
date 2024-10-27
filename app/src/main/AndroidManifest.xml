@@ -18,10 +18,28 @@
         tools:replace="android:allowBackup, usesCleartextTraffic"
         tools:targetApi="31">
         <activity
-            android:name=".view.both.kcwallet.MutasiActivity"
+            android:name=".view.all.kcwallet.RiwayatTarikDanaActivity"
             android:exported="false" />
         <activity
-            android:name=".view.both.kcwallet.KcwalletActivity"
+            android:name=".view.all.kcwallet.TopupActivity"
+            android:exported="false" />
+        <activity
+            android:name=".view.all.kcwallet.TarikDanaBerhasilActivity"
+            android:exported="false" />
+        <activity
+            android:name=".view.all.kcwallet.TarikDanaActivity"
+            android:exported="false" />
+        <activity
+            android:name=".view.all.kcwallet.AddEditRekeningBankActivity"
+            android:exported="false" />
+        <activity
+            android:name=".view.all.kcwallet.RekeningBankActivity"
+            android:exported="false" />
+        <activity
+            android:name=".view.all.kcwallet.MutasiActivity"
+            android:exported="false" />
+        <activity
+            android:name=".view.all.kcwallet.KcwalletActivity"
             android:exported="false" />
         <activity
             android:name=".view.vendor.detailpesanan.SelesaikanPesananActivity"
@@ -101,16 +119,16 @@
             android:name=".view.vendor.menu.kategori.AddKategoriActivity"
             android:exported="false" />
         <activity
-            android:name=".view.both.chat.RoomChatActivity"
+            android:name=".view.all.chat.RoomChatActivity"
             android:exported="false" />
         <activity
-            android:name=".view.both.chat.ChatActivity"
+            android:name=".view.all.chat.ChatActivity"
             android:exported="false" />
         <activity
-            android:name=".view.both.nilai.NilaiActivity"
+            android:name=".view.all.nilai.NilaiActivity"
             android:exported="false" />
         <activity
-            android:name=".view.both.splash.SplashScreenActivity"
+            android:name=".view.all.splash.SplashScreenActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -143,29 +161,29 @@
             android:name=".view.vendor.galeri.AddGaleriActivity"
             android:exported="false" />
         <activity
-            android:name=".view.both.editakun.EditAkunActivity"
+            android:name=".view.all.editakun.EditAkunActivity"
             android:exported="false" />
         <activity
-            android:name=".view.both.editakun.EditNamaAkunActivity"
+            android:name=".view.all.editakun.EditNamaAkunActivity"
             android:exported="false" />
         <activity
-            android:name=".view.both.editakun.EditKotaAkunActivity"
+            android:name=".view.all.editakun.EditKotaAkunActivity"
             android:exported="false" />
         <activity
-            android:name=".view.both.editakun.EditAlamatAkunActivity"
+            android:name=".view.all.editakun.EditAlamatAkunActivity"
             android:exported="false" />
         <activity
-            android:name=".view.both.editakun.EditTeleponAkunActivity"
+            android:name=".view.all.editakun.EditTeleponAkunActivity"
             android:exported="false" />
         <activity
             android:name=".view.vendor.main.VendorMainActivity"
             android:exported="false"
             android:label="@string/title_activity_vendor_main" />
         <activity
-            android:name=".view.both.register.RegisterActivity"
+            android:name=".view.all.register.RegisterActivity"
             android:exported="false" />
         <activity
-            android:name=".view.both.login.LoginActivity"
+            android:name=".view.all.login.LoginActivity"
             android:exported="false" />
         <activity
             android:name=".view.user.main.UserMainActivity"

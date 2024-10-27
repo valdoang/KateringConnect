@@ -18,7 +18,7 @@ import com.valdoang.kateringconnect.adapter.VendorBerandaRiwayatAdapter
 import com.valdoang.kateringconnect.databinding.FragmentVendorRiwayatBinding
 import com.valdoang.kateringconnect.model.Pesanan
 import com.valdoang.kateringconnect.utils.Cons
-import com.valdoang.kateringconnect.view.both.chat.ChatActivity
+import com.valdoang.kateringconnect.view.all.chat.ChatActivity
 import com.valdoang.kateringconnect.view.vendor.detailpesanan.DetailPesananActivity
 
 class VendorRiwayatFragment : Fragment() {

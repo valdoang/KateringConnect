@@ -14,7 +14,7 @@ import com.valdoang.kateringconnect.adapter.GalleryAdapter
 import com.valdoang.kateringconnect.databinding.ActivityGaleriBinding
 import com.valdoang.kateringconnect.model.Gallery
 import com.valdoang.kateringconnect.utils.Cons
-import com.valdoang.kateringconnect.view.both.detailgaleri.DetailGaleriFragment
+import com.valdoang.kateringconnect.view.all.detailgaleri.DetailGaleriFragment
 
 class GaleriVendorActivity : AppCompatActivity() {
     private lateinit var binding: ActivityGaleriBinding

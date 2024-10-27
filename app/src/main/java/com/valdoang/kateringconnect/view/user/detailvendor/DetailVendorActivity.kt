@@ -24,8 +24,8 @@ import com.valdoang.kateringconnect.model.Star
 import com.valdoang.kateringconnect.utils.Cons
 import com.valdoang.kateringconnect.utils.roundOffDecimal
 import com.valdoang.kateringconnect.utils.withNumberingFormat
-import com.valdoang.kateringconnect.view.both.chat.RoomChatActivity
-import com.valdoang.kateringconnect.view.both.nilai.NilaiActivity
+import com.valdoang.kateringconnect.view.all.chat.RoomChatActivity
+import com.valdoang.kateringconnect.view.all.nilai.NilaiActivity
 import com.valdoang.kateringconnect.view.user.pemesanan.PemesananActivity
 
 class DetailVendorActivity : AppCompatActivity() {

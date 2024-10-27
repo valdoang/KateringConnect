@@ -206,6 +206,7 @@
     <string name="status_selesai">Selesai</string>
     <string name="status_batal">Batal</string>
     <string name="status_ditolak">Ditolak</string>
+    <string name="status_gagal">Gagal</string>
     <string name="menolak">Menolak</string>
     <string name="data_kosong">Data Kosong</string>
     <string name="tv_status">Status</string>
@@ -388,6 +389,7 @@
     <string name="tv_admin_topup">• Terdapat biaya admin Rp1.000</string>
     <string name="nominal_top_up">Nominal Top Up</string>
     <string name="min_top_up">• Minimum top up Rp20.000</string>
+    <string name="min_tarik_dana">• Minimum tarik dana Rp20.000</string>
     <string name="catatan">Catatan:</string>
     <string name="mutasi">Mutasi</string>
     <string name="kredit">Kredit</string>
@@ -395,4 +397,29 @@
     <string name="mutasi_kredit">+Rp%1$s</string>
     <string name="mutasi_debit">-Rp%1$s</string>
     <string name="belum_terdapat_transaksi">Belum terdapat transaksi</string>
+    <string name="tarik_dana">Tarik dana</string>
+    <string name="info_rekening_bank">Info rekening bank</string>
+    <string name="bank_tujuan_penarikan_dana">Bank Tujuan Penarikan Dana</string>
+    <string name="nama_bank">Nama bank</string>
+    <string name="nomor_rekening">Nomor rekening</string>
+    <string name="ubah_rekening">Ubah rekening</string>
+    <string name="tambah_rekening">Tambah rekening</string>
+    <string name="nama_pemilik_rekening">Nama pemilik rekening</string>
+    <string name="tambah_rekening_bank">Tambah Rekening Bank</string>
+    <string name="fail_tambah_rekening_bank">Gagal Menambahs Rekening Bank</string>
+    <string name="ubah_rekening_bank">Ubah Rekening Bank</string>
+    <string name="fail_ubah_rekening_bank">Gagal Mengubah Rekening Bank</string>
+    <string name="tarik_dana_kapital">Tarik Dana</string>
+    <string name="kirim_ke">Kirim ke</string>
+    <string name="nominal_penarikan">Nominal Penarikan</string>
+    <string name="tambah_rekening_required">Tambahkan rekening bank untuk dapat melakukan penarikan dana</string>
+    <string name="wajib_diisi">Wajib Diisi</string>
+    <string name="fail_tarik_dana">Gagal penarikan dana</string>
+    <string name="tv_harap_tunggu">* Harap tunggu maksimal 1x24 jam</string>
+    <string name="permintaan_penarikan_dana_berhasil">Permintaan Penarikan Dana Berhasil</string>
+    <string name="belum_ada_penarikan_dana">Belum ada penarikan dana</string>
+    <string name="riwayat_tarik_dana">Riwayat Tarik Dana</string>
+    <string name="diajukan_pada">Diajukan pada</string>
+    <string name="senilai">Senilai</string>
+    <string name="nominal">Nominal</string>
 </resources>

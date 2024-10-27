@@ -38,6 +38,7 @@
         android:id="@+id/tv_keterangan"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:maxWidth="250dp"
         tools:text="Top Up KC Wallet"
         android:visibility="visible"
         android:textSize="14sp"

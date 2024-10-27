@@ -1,7 +1,6 @@
 package com.valdoang.kateringconnect.view.user.main.ui.beranda
 
 import android.app.Activity
-import android.content.ContentValues
 import android.content.Intent
 import android.location.Address
 import android.location.Geocoder
@@ -30,7 +29,7 @@ import com.valdoang.kateringconnect.databinding.FragmentUserBerandaBinding
 import com.valdoang.kateringconnect.model.Star
 import com.valdoang.kateringconnect.model.Vendor
 import com.valdoang.kateringconnect.utils.Cons
-import com.valdoang.kateringconnect.view.both.chat.ChatActivity
+import com.valdoang.kateringconnect.view.all.chat.ChatActivity
 import com.valdoang.kateringconnect.view.user.alamat.AlamatActivity
 import com.valdoang.kateringconnect.view.user.detailvendor.DetailVendorActivity
 import com.valdoang.kateringconnect.view.user.keranjang.AllKeranjangActivity

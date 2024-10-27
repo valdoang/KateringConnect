@@ -18,13 +18,12 @@ import com.valdoang.kateringconnect.model.Gallery
 import com.valdoang.kateringconnect.model.Star
 import com.valdoang.kateringconnect.utils.Cons
 import com.valdoang.kateringconnect.utils.roundOffDecimal
-import com.valdoang.kateringconnect.utils.withCurrencyFormat
 import com.valdoang.kateringconnect.utils.withNumberingFormat
-import com.valdoang.kateringconnect.view.both.editakun.EditAkunActivity
-import com.valdoang.kateringconnect.view.both.alertdialog.LogoutFragment
-import com.valdoang.kateringconnect.view.both.chat.ChatActivity
-import com.valdoang.kateringconnect.view.both.kcwallet.KcwalletActivity
-import com.valdoang.kateringconnect.view.both.nilai.NilaiActivity
+import com.valdoang.kateringconnect.view.all.editakun.EditAkunActivity
+import com.valdoang.kateringconnect.view.all.alertdialog.LogoutFragment
+import com.valdoang.kateringconnect.view.all.chat.ChatActivity
+import com.valdoang.kateringconnect.view.all.kcwallet.KcwalletActivity
+import com.valdoang.kateringconnect.view.all.nilai.NilaiActivity
 import com.valdoang.kateringconnect.view.vendor.galeri.GaleriActivity
 import com.valdoang.kateringconnect.view.vendor.menu.MenuActivity
 

@@ -14,7 +14,7 @@ import com.google.firebase.ktx.Firebase
 import com.valdoang.kateringconnect.adapter.GalleryAdapter
 import com.valdoang.kateringconnect.databinding.ActivityGaleriBinding
 import com.valdoang.kateringconnect.model.Gallery
-import com.valdoang.kateringconnect.view.both.detailgaleri.DetailGaleriFragment
+import com.valdoang.kateringconnect.view.all.detailgaleri.DetailGaleriFragment
 
 class GaleriActivity : AppCompatActivity() {
     private lateinit var binding: ActivityGaleriBinding

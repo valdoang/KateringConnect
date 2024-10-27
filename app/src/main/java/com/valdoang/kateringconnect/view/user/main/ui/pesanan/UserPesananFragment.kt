@@ -18,7 +18,7 @@ import com.valdoang.kateringconnect.adapter.UserPesananRiwayatAdapter
 import com.valdoang.kateringconnect.databinding.FragmentUserPesananBinding
 import com.valdoang.kateringconnect.model.Pesanan
 import com.valdoang.kateringconnect.utils.Cons
-import com.valdoang.kateringconnect.view.both.chat.ChatActivity
+import com.valdoang.kateringconnect.view.all.chat.ChatActivity
 import com.valdoang.kateringconnect.view.user.detailpemesanan.DetailPemesananActivity
 
 class UserPesananFragment : Fragment() {

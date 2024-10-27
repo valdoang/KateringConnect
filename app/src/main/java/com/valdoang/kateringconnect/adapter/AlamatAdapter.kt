@@ -11,7 +11,7 @@ import com.valdoang.kateringconnect.R
 import com.valdoang.kateringconnect.databinding.ItemAlamatBinding
 import com.valdoang.kateringconnect.model.Alamat
 import com.valdoang.kateringconnect.utils.Cons
-import com.valdoang.kateringconnect.view.both.editakun.EditAkunActivity
+import com.valdoang.kateringconnect.view.all.editakun.EditAkunActivity
 import com.valdoang.kateringconnect.view.user.alamat.edit.EditAlamatActivity
 
 
