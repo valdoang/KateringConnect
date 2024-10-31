@@ -138,8 +138,8 @@ class TarikDanaActivity : AppCompatActivity() {
                 "status" to sStatus
             )
 
-            val sSaldo = saldoKCWallet.toLong() - totalPenarikan
-            val sPenarikanDana = penarikanDana.toLong() + totalPenarikan
+            val sSaldo = saldoKCWallet.toDouble() - totalPenarikan
+            val sPenarikanDana = penarikanDana.toDouble() + totalPenarikan
 
             val kcwalletMap = mapOf(
                 "saldo" to sSaldo.toString(),

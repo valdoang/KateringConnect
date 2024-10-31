@@ -102,7 +102,7 @@
                         android:contentDescription="@string/gambar"
                         android:layout_width="20dp"
                         android:layout_height="20dp"
-                        android:src="@drawable/kcwallet_logo"
+                        android:src="@drawable/wallet_512"
                         android:layout_marginTop="10dp"
                         android:layout_marginStart="10dp"
                         android:layout_marginBottom="10dp"

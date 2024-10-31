@@ -116,10 +116,10 @@ class TopupActivity : AppCompatActivity(), TransactionFinishedCallback {
 
         progressBar.visibility = View.VISIBLE
         newMutasi.set(mutasiMap).addOnSuccessListener {
-            val newSaldo = saldoUser.toLong() + sNominal.toLong()
+            val newSaldo = saldoUser.toDouble() + sNominal.toDouble()
 
             val saldoMap = mapOf(
-                "saldo" to newSaldo
+                "saldo" to newSaldo.toString()
             )
             userRef.update(saldoMap)
             finish()

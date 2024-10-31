@@ -16,6 +16,10 @@ fun Long.withNumberingFormat(): String {
     return NumberFormat.getNumberInstance().format(this.toDouble())
 }
 
+fun Double.withNumberingFormat(): String {
+    return NumberFormat.getNumberInstance().format(this)
+}
+
 fun String.withCurrencyFormat(): String {
     val mCurrencyFormat = NumberFormat.getCurrencyInstance()
     return mCurrencyFormat.format(this.toLong())

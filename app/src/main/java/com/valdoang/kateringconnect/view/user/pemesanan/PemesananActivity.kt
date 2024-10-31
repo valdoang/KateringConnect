@@ -12,22 +12,13 @@ import android.widget.*
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
+import androidx.fragment.app.DialogFragment
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
-import com.midtrans.sdk.corekit.callback.TransactionFinishedCallback
-import com.midtrans.sdk.corekit.core.MidtransSDK
-import com.midtrans.sdk.corekit.core.TransactionRequest
-import com.midtrans.sdk.corekit.models.BillingAddress
-import com.midtrans.sdk.corekit.models.CustomerDetails
-import com.midtrans.sdk.corekit.models.ItemDetails
-import com.midtrans.sdk.corekit.models.ShippingAddress
-import com.midtrans.sdk.corekit.models.snap.TransactionResult
-import com.midtrans.sdk.uikit.SdkUIFlowBuilder
 import com.valdoang.kateringconnect.R
 import com.valdoang.kateringconnect.adapter.PesananAdapter
 import com.valdoang.kateringconnect.databinding.ActivityPemesananBinding
@@ -40,11 +31,13 @@ import java.text.SimpleDateFormat
 import java.util.*
 
 
-class PemesananActivity : AppCompatActivity(), TimePickerFragment.DialogTimeListener,
-    TransactionFinishedCallback {
+class PemesananActivity : AppCompatActivity(), TimePickerFragment.DialogTimeListener{
     private lateinit var binding: ActivityPemesananBinding
-    private lateinit var firebaseAuth: FirebaseAuth
+    private var firebaseAuth = FirebaseAuth.getInstance()
     private var db = Firebase.firestore
+    private var userId = firebaseAuth.currentUser!!.uid
+    private val userRef = db.collection("user").document(userId)
+    private val newMutasi = userRef.collection("mutasi").document()
     private val calendar = Calendar.getInstance()
     private var namaUser = ""
     private var alamatUser = ""
@@ -57,8 +50,7 @@ class PemesananActivity : AppCompatActivity(), TimePickerFragment.DialogTimeList
     private var fotoVendor = ""
     private val dateFormat = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
     private val timeFormat = SimpleDateFormat("HH:mm", Locale.getDefault())
-    private var totalHarga = 0L
-    private var userId = ""
+    private var totalHarga = 0.0
     private var vendorId: String? = null
     private var alamatId: String? = null
     private var ongkir: String? = null
@@ -71,12 +63,12 @@ class PemesananActivity : AppCompatActivity(), TimePickerFragment.DialogTimeList
     private var pesananList: ArrayList<Keranjang> = ArrayList()
     private lateinit var recyclerView: RecyclerView
     private lateinit var pesananAdapter: PesananAdapter
-    private var subtotal = 0L
+    private var subtotal = 0.0
     private lateinit var rgMetodePembayaran: RadioGroup
     private val newPesanan = db.collection("pesanan").document()
     private var newPesananId = newPesanan.id
-    private var itemDetails: ArrayList<ItemDetails> = ArrayList()
     private var sMetodePembayaran = ""
+    private var saldoKcWallet = ""
 
     @RequiresApi(Build.VERSION_CODES.N)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -84,9 +76,6 @@ class PemesananActivity : AppCompatActivity(), TimePickerFragment.DialogTimeList
         binding = ActivityPemesananBinding.inflate(layoutInflater)
         setContentView(binding.root)
         supportActionBar?.hide()
-
-        firebaseAuth = Firebase.auth
-        userId = firebaseAuth.currentUser!!.uid
 
         vendorId = intent.getStringExtra(Cons.EXTRA_ID)
         alamatId = intent.getStringExtra(Cons.EXTRA_SEC_ID)
@@ -108,7 +97,7 @@ class PemesananActivity : AppCompatActivity(), TimePickerFragment.DialogTimeList
             }
 
         binding.tunai.setOnCheckedChangeListener(checkListener)
-        binding.digital.setOnCheckedChangeListener(checkListener)
+        binding.kcWallet.setOnCheckedChangeListener(checkListener)
 
         setupAction()
         setupView()
@@ -116,7 +105,6 @@ class PemesananActivity : AppCompatActivity(), TimePickerFragment.DialogTimeList
         setupPemesanan()
         setupRangkumanPesanan()
         datePicker()
-        setupMidtrans()
         pemesanan()
     }
 
@@ -128,14 +116,14 @@ class PemesananActivity : AppCompatActivity(), TimePickerFragment.DialogTimeList
         pesananRef.addSnapshotListener { pesananSnapshot, _ ->
             if (pesananSnapshot != null) {
                 pesananList.clear()
-                subtotal = 0L
+                subtotal = 0.0
                 for (data in pesananSnapshot.documents) {
                     val pesanan: Keranjang? = data.toObject(Keranjang::class.java)
                     if (pesanan != null) {
                         pesanan.id = data.id
                         pesananList.add(pesanan)
                     }
-                    val subtotalTemp = data.data?.get("subtotal").toString().toLong()
+                    val subtotalTemp = data.data?.get("subtotal").toString().toDouble()
                     subtotal += subtotalTemp
                 }
 
@@ -161,7 +149,7 @@ class PemesananActivity : AppCompatActivity(), TimePickerFragment.DialogTimeList
 
                 binding.tvOngkirValue.text = ongkir!!.withNumberingFormat()
 
-                totalHarga = ongkir!!.toLong() + subtotal
+                totalHarga = ongkir!!.toDouble() + subtotal
                 binding.totalHarga.text = totalHarga.withNumberingFormat()
 
                 if (pesananList.isEmpty()) {
@@ -192,8 +180,7 @@ class PemesananActivity : AppCompatActivity(), TimePickerFragment.DialogTimeList
             }
         }
 
-        val userRef = db.collection("user").document(userId)
-        userRef.get().addOnSuccessListener { userSnapshot ->
+        userRef.addSnapshotListener { userSnapshot,_ ->
             if (userSnapshot != null) {
                 namaUser = userSnapshot.data?.get("nama").toString()
                 kotaUser = userSnapshot.data?.get("kota").toString()
@@ -201,10 +188,12 @@ class PemesananActivity : AppCompatActivity(), TimePickerFragment.DialogTimeList
                 nomorUser = userSnapshot.data?.get("telepon").toString()
                 fotoUser = userSnapshot.data?.get("foto").toString()
                 emailUser = userSnapshot.data?.get("email").toString()
+                saldoKcWallet = userSnapshot.data?.get("saldo").toString()
 
                 binding.tvUserName.text = namaUser
                 binding.tvAddress.text = getString(R.string.tv_address_city, alamatUser, kotaUser)
                 binding.tvNoPhone.text = nomorUser
+                binding.kcWallet.text = getString(R.string.rupiah_text, saldoKcWallet.withNumberingFormat())
             }
         }
 
@@ -230,9 +219,10 @@ class PemesananActivity : AppCompatActivity(), TimePickerFragment.DialogTimeList
         sMetodePembayaran = ""
         rgMetodePembayaran.setOnCheckedChangeListener { _, checkedId ->
             val rbJenisAkun: RadioButton = findViewById(checkedId)
-            when (rbJenisAkun.text) {
-                getString(R.string.tunai) -> sMetodePembayaran = getString(R.string.tunai)
-                getString(R.string.digital) -> sMetodePembayaran = getString(R.string.digital)
+            if (rbJenisAkun.text == getString(R.string.tunai)) {
+                sMetodePembayaran = getString(R.string.tunai)
+            } else {
+                sMetodePembayaran = getString(R.string.kc_wallet)
             }
         }
 
@@ -241,8 +231,8 @@ class PemesananActivity : AppCompatActivity(), TimePickerFragment.DialogTimeList
                 getString(R.string.tunai) -> {
                     addPesananIntoDatabase()
                 }
-                getString(R.string.digital) -> {
-                    startMidtransPayment()
+                getString(R.string.kc_wallet) -> {
+                    kcWalletPayment()
                 }
             }
         }
@@ -298,83 +288,50 @@ class PemesananActivity : AppCompatActivity(), TimePickerFragment.DialogTimeList
                 pesananKeranjangRef.delete()
             }
 
-            val keranjangRef =
-                db.collection("user").document(userId).collection("keranjang").document(vendorId!!)
+            val keranjangRef = db.collection("user").document(userId).collection("keranjang").document(vendorId!!)
             keranjangRef.delete()
+
+            if (sMetodePembayaran == getString(R.string.kc_wallet)) {
+                val sTanggal = System.currentTimeMillis().toString()
+                val sJenis = getString(R.string.debit)
+                val sKeterangan = getString(R.string.pemesanan_katering)
+
+                val mutasiMap = hashMapOf(
+                    "tanggal" to sTanggal,
+                    "jenis" to sJenis,
+                    "keterangan" to sKeterangan,
+                    "nominal" to totalHarga.toString(),
+                )
+
+                val sSaldo = saldoKcWallet.toDouble() - totalHarga
+
+                newMutasi.set(mutasiMap).addOnSuccessListener {
+                    val saldoMap = mapOf(
+                        "saldo" to sSaldo.toString()
+                    )
+
+                    userRef.update(saldoMap)
+                } .addOnFailureListener {
+                    progressBar.visibility = View.GONE
+                    Toast.makeText(this, getString(R.string.fail_pemesanan), Toast.LENGTH_SHORT).show()
+                }
+            }
         }.addOnFailureListener {
             progressBar.visibility = View.GONE
             Toast.makeText(this, getString(R.string.fail_pemesanan), Toast.LENGTH_SHORT).show()
         }
     }
 
-    private fun startMidtransPayment() {
-        itemDetails.clear()
-        for (i in pesananList) {
-            val detail = ItemDetails(
-                i.id,
-                i.subtotal!!.toDouble(),
-                1,
-                getString(R.string.jumlah_porsi_transaksi, i.jumlah, i.namaMenu)
-            )
-            itemDetails.add(detail)
-        }
-
-        val ongkirDetail = ItemDetails(
-            System.currentTimeMillis().toString(),
-            ongkir!!.toDouble(),
-            1,
-            getString(R.string.ongkos_kirim_transaksi)
-        )
-        itemDetails.add(ongkirDetail)
-
-        val transactionReq = TransactionRequest(newPesananId, totalHarga.toDouble())
-
-        uiKitDetails(transactionReq)
-        transactionReq.itemDetails = itemDetails
-
-        MidtransSDK.getInstance().transactionRequest = transactionReq
-        MidtransSDK.getInstance().startPaymentUiFlow(this)
-    }
-
-    private fun setupMidtrans() {
-        SdkUIFlowBuilder.init()
-            .setClientKey(Cons.MIDTRANS_CLIENT_KEY)
-            .setContext(this)
-            .setTransactionFinishedCallback(this)
-            .setMerchantBaseUrl(Cons.MIDTRANS_BASE_URL)
-            .enableLog(true)
-            .setLanguage("id")
-            .buildSDK()
-    }
-
-    private fun uiKitDetails(transactionRequest: TransactionRequest) {
-        val customerDetails = CustomerDetails()
-        customerDetails.customerIdentifier = namaUser
-        customerDetails.phone = nomorUser
-        customerDetails.firstName = namaUser
-        customerDetails.email = emailUser
-        val shippingAddress = ShippingAddress()
-        shippingAddress.address = alamatUser
-        shippingAddress.city = kotaUser
-        customerDetails.shippingAddress = shippingAddress
-        val billingAddress = BillingAddress()
-        billingAddress.address = alamatUser
-        billingAddress.city = kotaUser
-        customerDetails.billingAddress = billingAddress
-
-        transactionRequest.customerDetails = customerDetails
-    }
-
-    override fun onTransactionFinished(result: TransactionResult?) {
-        if (result != null) {
-            if (result.response != null) {
-                if (result.status == TransactionResult.STATUS_SUCCESS) {
-                    addPesananIntoDatabase()
-                } else if (result.status == TransactionResult.STATUS_PENDING || result.status == TransactionResult.STATUS_FAILED) {
-                    finish()
-                }
-            }
-        }
+    private fun kcWalletPayment() {
+       if (saldoKcWallet.toDouble() < totalHarga) {
+           val args = Bundle()
+           args.putString("totalHarga", totalHarga.toString())
+           val dialog: DialogFragment = KcWalletNotEnoughFragment()
+           dialog.arguments = args
+           dialog.show(this.supportFragmentManager, "KcWalletNotEnoughDialog")
+       } else {
+           addPesananIntoDatabase()
+       }
     }
 
     private fun setupView() {

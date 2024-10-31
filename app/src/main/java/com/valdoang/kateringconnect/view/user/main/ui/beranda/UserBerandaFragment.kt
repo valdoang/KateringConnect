@@ -29,7 +29,9 @@ import com.valdoang.kateringconnect.databinding.FragmentUserBerandaBinding
 import com.valdoang.kateringconnect.model.Star
 import com.valdoang.kateringconnect.model.Vendor
 import com.valdoang.kateringconnect.utils.Cons
+import com.valdoang.kateringconnect.utils.withNumberingFormat
 import com.valdoang.kateringconnect.view.all.chat.ChatActivity
+import com.valdoang.kateringconnect.view.all.kcwallet.KcwalletActivity
 import com.valdoang.kateringconnect.view.user.alamat.AlamatActivity
 import com.valdoang.kateringconnect.view.user.detailvendor.DetailVendorActivity
 import com.valdoang.kateringconnect.view.user.keranjang.AllKeranjangActivity
@@ -119,6 +121,9 @@ class UserBerandaFragment : Fragment() {
                 if (document != null) {
                     userKota = document.data?.get("kota").toString()
                     userAlamat = document.data?.get("alamat").toString()
+                    val saldo = document.data?.get("saldo").toString()
+
+                    binding.tvKcwallet.text = getString(R.string.rupiah_text, saldo.withNumberingFormat())
                     setupDataVendor()
                 }
             }
@@ -335,6 +340,11 @@ class UserBerandaFragment : Fragment() {
         binding.cvKeranjang.setOnClickListener {
             val intent = Intent(requireContext(), AllKeranjangActivity::class.java)
             intent.putExtra(Cons.EXTRA_ID, alamatId.toString())
+            startActivity(intent)
+        }
+
+        binding.cvKcwallet.setOnClickListener {
+            val intent = Intent(requireContext(), KcwalletActivity::class.java)
             startActivity(intent)
         }
     }

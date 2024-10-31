@@ -350,6 +350,7 @@
     <string name="admin_transaksi">- Biaya Admin</string>
     <string name="topup_transaksi">- Top Up KC Wallet</string>
     <string name="topup_kc_wallet">Top Up KC Wallet</string>
+    <string name="pemesanan_katering">Pemesanan Katering</string>
     <string name="digital_desc">Opsi pembayaran digital akan tampil setelah pesan</string>
     <string name="jumlah_alamat">%1$s Pesanan • %2$s</string>
     <string name="alamat_penerima">Alamat Penerima</string>
@@ -422,4 +423,5 @@
     <string name="diajukan_pada">Diajukan pada</string>
     <string name="senilai">Senilai</string>
     <string name="nominal">Nominal</string>
+    <string name="isi_ulang_sekarang">Isi ulang sekarang</string>
 </resources>
