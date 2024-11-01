@@ -18,6 +18,10 @@
         tools:replace="android:allowBackup, usesCleartextTraffic"
         tools:targetApi="31">
         <activity
+            android:name=".view.admin.AdminMainActivity"
+            android:exported="false"
+            android:label="@string/title_activity_admin_main" />
+        <activity
             android:name=".view.all.kcwallet.RiwayatTarikDanaActivity"
             android:exported="false" />
         <activity

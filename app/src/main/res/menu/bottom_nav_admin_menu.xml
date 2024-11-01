@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/navigation_admin_transfer_dana"
+        android:icon="@drawable/transfer_dana_icon"
+        android:title="@string/transfer_dana" />
+
+    <item
+        android:id="@+id/navigation_admin_chat"
+        android:icon="@drawable/chat_icon"
+        android:title="@string/chat" />
+
+    <item
+        android:id="@+id/navigation_admin_pengaturan"
+        android:icon="@drawable/pengaturan_icon"
+        android:title="@string/pengaturan" />
+
+</menu>

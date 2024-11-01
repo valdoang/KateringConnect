@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mobile_navigation"
+    app:startDestination="@+id/navigation_admin_transfer_dana">
+
+    <fragment
+        android:id="@+id/navigation_admin_transfer_dana"
+        android:name="com.valdoang.kateringconnect.view.admin.ui.transferdana.AdminTransferDanaFragment"
+        android:label="@string/transfer_dana"
+        tools:layout="@layout/fragment_admin_transfer_dana" />
+
+    <fragment
+        android:id="@+id/navigation_admin_chat"
+        android:name="com.valdoang.kateringconnect.view.admin.ui.chat.AdminChatFragment"
+        android:label="@string/chat"
+        tools:layout="@layout/fragment_admin_chat" />
+
+    <fragment
+        android:id="@+id/navigation_admin_pengaturan"
+        android:name="com.valdoang.kateringconnect.view.admin.ui.pengaturan.AdminPengaturanFragment"
+        android:label="@string/pengaturan"
+        tools:layout="@layout/fragment_admin_pengaturan" />
+</navigation>

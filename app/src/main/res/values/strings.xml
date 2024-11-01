@@ -168,6 +168,7 @@
     <string name="keluar">Keluar</string>
     <string name="pembeli">Pembeli</string>
     <string name="vendor">Vendor</string>
+    <string name="admin">Admin</string>
     <string name="entry_email">Masukkan Email</string>
     <string name="not_valid_email">Alamat Email Tidak Valid</string>
     <string name="entry_password">Masukkan Password</string>
@@ -424,4 +425,8 @@
     <string name="senilai">Senilai</string>
     <string name="nominal">Nominal</string>
     <string name="isi_ulang_sekarang">Isi ulang sekarang</string>
+    <string name="title_activity_admin_main">AdminMainActivity</string>
+    <string name="transfer_dana">Transfer Dana</string>
+    <string name="pengaturan">Pengaturan</string>
+    <string name="no_transfer_dana">Belum ada dana yang perlu ditransfer ke bank pengguna</string>
 </resources>
