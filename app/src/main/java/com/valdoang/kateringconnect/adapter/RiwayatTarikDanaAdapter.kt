@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.valdoang.kateringconnect.R
 import com.valdoang.kateringconnect.databinding.ItemTarikDanaBinding
 import com.valdoang.kateringconnect.model.TarikDana
+import com.valdoang.kateringconnect.utils.withNumberingFormat
 import com.valdoang.kateringconnect.utils.withTimestampToDateTimeFormat
 
 class RiwayatTarikDanaAdapter(
@@ -29,7 +30,7 @@ class RiwayatTarikDanaAdapter(
             binding.apply {
                 tvIdTarikDana.text = tarikDana.id
                 tvTanggal.text = tarikDana.tanggalPengajuan?.withTimestampToDateTimeFormat()
-                tvNominal.text = context.getString(R.string.rupiah_text, tarikDana.nominal)
+                tvNominal.text = context.getString(R.string.rupiah_text, tarikDana.nominal?.withNumberingFormat())
 
                 when (tarikDana.status) {
                     context.getString(R.string.status_proses) -> {

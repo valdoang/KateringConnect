@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/white_200"
     tools:context=".view.admin.ui.transferdana.AdminTransferDanaFragment">
 
     <LinearLayout
@@ -51,7 +52,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginBottom="57dp"
-            tools:listitem="@layout/item_riwayat_pesanan"/>
+            tools:listitem="@layout/item_transfer_dana"/>
 
     </LinearLayout>
 

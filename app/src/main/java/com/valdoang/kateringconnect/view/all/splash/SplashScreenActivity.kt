@@ -12,6 +12,7 @@ import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.valdoang.kateringconnect.R
 import com.valdoang.kateringconnect.databinding.ActivitySplashScreenBinding
+import com.valdoang.kateringconnect.view.admin.AdminMainActivity
 import com.valdoang.kateringconnect.view.all.login.LoginActivity
 import com.valdoang.kateringconnect.view.user.main.UserMainActivity
 import com.valdoang.kateringconnect.view.vendor.main.VendorMainActivity
@@ -46,6 +47,11 @@ class SplashScreenActivity : AppCompatActivity() {
                         }
                         getString(R.string.vendor) -> {
                             intent = Intent(this, VendorMainActivity::class.java)
+                            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                            startActivity(intent)
+                        }
+                        getString(R.string.admin) -> {
+                            intent = Intent(this, AdminMainActivity::class.java)
                             intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
                             startActivity(intent)
                         }

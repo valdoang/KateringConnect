@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.valdoang.kateringconnect.databinding.FragmentAdminPengaturanBinding
+import com.valdoang.kateringconnect.view.all.alertdialog.LogoutFragment
 
 class AdminPengaturanFragment : Fragment() {
 
@@ -22,6 +23,11 @@ class AdminPengaturanFragment : Fragment() {
     ): View {
         _binding = FragmentAdminPengaturanBinding.inflate(inflater, container, false)
         val root: View = binding.root
+
+        binding.tvLogout.setOnClickListener{
+            val dialog = LogoutFragment()
+            dialog.show(this.parentFragmentManager, "logoutDialog")
+        }
 
         return root
     }

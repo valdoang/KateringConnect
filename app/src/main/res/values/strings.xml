@@ -181,6 +181,7 @@
     <string name="minimum_character">Minimal 8 Karakter</string>
     <string name="success_upload_photo">Berhasil Mengubah Foto</string>
     <string name="fail_upload_photo">Gagal Mengubah Foto</string>
+    <string name="fail_upload_bukti_transfer">Gagal Mengirim Bukti Transfer</string>
     <string name="success_upload_menu">Berhasil Menambahkan Menu</string>
     <string name="fail_upload_menu">Gagal Menambahkan Menu</string>
     <string name="success_upload_gallery">Berhasil Menambahkan Foto</string>
@@ -429,4 +430,8 @@
     <string name="transfer_dana">Transfer Dana</string>
     <string name="pengaturan">Pengaturan</string>
     <string name="no_transfer_dana">Belum ada dana yang perlu ditransfer ke bank pengguna</string>
+    <string name="rincian_transfer_dana">Rincian Transfer Dana</string>
+    <string name="transfer_ke">Transfer ke</string>
+    <string name="kirim_bukti_transfer">Kirim bukti transfer</string>
+    <string name="tv_pengajuan">Mengajukan penarikan dana sejumlah</string>
 </resources>
