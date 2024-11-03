@@ -8,5 +8,7 @@ data class TarikDana(
     val nominal: String? = null,
     val nomorRekening: String? = null,
     val status: String? = null,
-    val userId: String? = null
+    val userId: String? = null,
+    val tanggalDibayarkan: String? = null,
+    val fotoBuktiTransfer: String? = null
 )

@@ -9,20 +9,15 @@ import android.widget.ProgressBar
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.valdoang.kateringconnect.R
-import com.valdoang.kateringconnect.adapter.RiwayatTarikDanaAdapter
 import com.valdoang.kateringconnect.adapter.TransferDanaAdapter
-import com.valdoang.kateringconnect.adapter.UserBerandaAdapter
 import com.valdoang.kateringconnect.databinding.FragmentAdminTransferDanaBinding
 import com.valdoang.kateringconnect.model.TarikDana
-import com.valdoang.kateringconnect.model.Vendor
 import com.valdoang.kateringconnect.utils.Cons
-import com.valdoang.kateringconnect.view.admin.detailtransferdana.DetailTransferDanaActivity
-import com.valdoang.kateringconnect.view.user.detailvendor.DetailVendorActivity
+import com.valdoang.kateringconnect.view.admin.transferdana.DetailTransferDanaActivity
+import com.valdoang.kateringconnect.view.admin.transferdana.RiwayatTransferDanaActivity
 
 class AdminTransferDanaFragment : Fragment() {
 
@@ -31,9 +26,7 @@ class AdminTransferDanaFragment : Fragment() {
     // This property is only valid between onCreateView and
     // onDestroyView.
     private val binding get() = _binding!!
-    private lateinit var firebaseAuth: FirebaseAuth
     private var db = Firebase.firestore
-    private var userId = ""
     private var transferDanaList: ArrayList<TarikDana> = ArrayList()
     private lateinit var recyclerView: RecyclerView
     private lateinit var transferDanaAdapter: TransferDanaAdapter
@@ -48,12 +41,11 @@ class AdminTransferDanaFragment : Fragment() {
         _binding = FragmentAdminTransferDanaBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
-        firebaseAuth = Firebase.auth
-        userId = firebaseAuth.currentUser!!.uid
         progressBar = binding.progressBar
 
         setupView()
         setupData()
+        setupAction()
 
         return root
     }
@@ -104,6 +96,13 @@ class AdminTransferDanaFragment : Fragment() {
                     binding.tvNoData.visibility = View.GONE
                 }
             }
+        }
+    }
+
+    private fun setupAction() {
+        binding.ibHistory.setOnClickListener {
+            val intent = Intent(requireContext(), RiwayatTransferDanaActivity::class.java)
+            startActivity(intent)
         }
     }
 

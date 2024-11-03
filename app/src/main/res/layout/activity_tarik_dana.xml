@@ -65,7 +65,7 @@
                 android:layout_height="wrap_content"
                 android:text="@string/kirim_ke"
                 android:fontFamily="@font/poppins_semibold"
-                android:textColor="@color/grey_200"
+                android:textColor="@color/black"
                 android:textSize="14sp"
                 android:layout_marginTop="8dp"
                 android:layout_marginStart="8dp"
@@ -169,7 +169,7 @@
         android:text="@string/nominal_penarikan"
         android:fontFamily="@font/poppins_semibold"
         android:textSize="16sp"
-        android:textColor="@color/grey_200"
+        android:textColor="@color/black"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/view1" />
 

@@ -1,4 +1,4 @@
-package com.valdoang.kateringconnect.view.admin.detailtransferdana
+package com.valdoang.kateringconnect.view.admin.transferdana
 
 import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity

@@ -51,8 +51,10 @@ class ChatActivity : AppCompatActivity() {
                 for (data in snapshot.documents) {
                     val chat: Chat? = data.toObject(Chat::class.java)
                     if (chat != null) {
-                        chat.otherId = data.id
-                        chatList.add(chat)
+                        if (data.id != Cons.ADMIN_ID) {
+                            chat.otherId = data.id
+                            chatList.add(chat)
+                        }
                     }
                 }
 
@@ -93,6 +95,11 @@ class ChatActivity : AppCompatActivity() {
     private fun setupAction() {
         binding.ibBack.setOnClickListener {
             finish()
+        }
+        binding.cvAdmin.setOnClickListener {
+            val intent = Intent(applicationContext, RoomChatActivity::class.java)
+            intent.putExtra(Cons.EXTRA_ID, Cons.ADMIN_ID)
+            startActivity(intent)
         }
     }
 }

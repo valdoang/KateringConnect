@@ -55,7 +55,7 @@ fun String.withTimestampToDateTimeFormat(): String {
 }
 
 fun String.withTimestampToDateTimeFormat2(): String {
-    val format = SimpleDateFormat("dd/MM/yyyy H:mm", Locale.ENGLISH)
+    val format = SimpleDateFormat("dd/MM/yyyy H:mm", Locale.getDefault())
     val date = format.format(this.toLong())
     val parse = format.parse(date) as Date
     val dateParse = DateFormat.getDateInstance(DateFormat.SHORT).format(parse)

@@ -1,5 +1,6 @@
 package com.valdoang.kateringconnect.view.all.kcwallet
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.widget.ProgressBar
@@ -10,9 +11,11 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
+import com.valdoang.kateringconnect.R
 import com.valdoang.kateringconnect.adapter.RiwayatTarikDanaAdapter
 import com.valdoang.kateringconnect.databinding.ActivityRiwayatTarikDanaBinding
 import com.valdoang.kateringconnect.model.TarikDana
+import com.valdoang.kateringconnect.utils.Cons
 
 class RiwayatTarikDanaActivity : AppCompatActivity() {
     private lateinit var binding: ActivityRiwayatTarikDanaBinding
@@ -65,7 +68,20 @@ class RiwayatTarikDanaActivity : AppCompatActivity() {
                     it.tanggalPengajuan
                 }
 
+                tarikDanaList.sortBy {
+                    it.status
+                }
+
                 riwayatTarikDanaAdapter.setItems(tarikDanaList)
+                riwayatTarikDanaAdapter.setOnItemClickCallback(object :
+                    RiwayatTarikDanaAdapter.OnItemClickCallback {
+                    override fun onItemClicked(data: TarikDana) {
+                        val intent = Intent(this@RiwayatTarikDanaActivity, DetailRiwayatTarikTransferDanaActivity::class.java)
+                        intent.putExtra(Cons.EXTRA_ID, data.id)
+                        intent.putExtra(Cons.EXTRA_NAMA, getString(R.string.user))
+                        startActivity(intent)
+                    }
+                })
 
                 if (tarikDanaList.isEmpty()) {
                     binding.noDataAnimation.visibility = View.VISIBLE

@@ -40,7 +40,7 @@
         android:text="@string/nominal_top_up"
         android:fontFamily="@font/poppins_semibold"
         android:textSize="16sp"
-        android:textColor="@color/grey_200"
+        android:textColor="@color/black"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/title_tarik_dana" />
 

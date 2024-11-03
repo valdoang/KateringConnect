@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".view.admin.transferdana.DetailTransferDanaActivity">
+    tools:context=".view.all.kcwallet.DetailRiwayatTarikTransferDanaActivity">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/cl_title"
@@ -30,12 +30,12 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
-            android:layout_marginStart="24dp"
+            android:layout_marginStart="16dp"
             android:layout_marginBottom="8dp"
-            android:text="@string/rincian_transfer_dana"
+            android:text="@string/rincian_riwayat_transfer_dana"
             android:fontFamily="@font/poppins_bold"
             android:textColor="@color/black"
-            android:textSize="20sp"
+            android:textSize="18sp"
             app:layout_constraintStart_toEndOf="@id/ib_back"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"/>
@@ -62,9 +62,9 @@
                 android:id="@+id/tv_pengajuan"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Mengajukan penarikan dana sejumlah"
-                android:fontFamily="@font/poppins_semibold"
-                android:textColor="@color/grey_200"
+                android:text="@string/tv_pengajuan"
+                android:fontFamily="@font/poppins"
+                android:textColor="@color/black"
                 android:textSize="14sp"
                 android:layout_marginTop="4dp"
                 android:layout_marginStart="16dp"
@@ -87,7 +87,7 @@
                 app:layout_constraintBottom_toBottomOf="parent"/>
 
             <TextView
-                android:id="@+id/tv_tanggal"
+                android:id="@+id/tv_tanggal_pengajuan"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 tools:text="2 November 2024 10.40"
@@ -108,7 +108,7 @@
                 android:layout_marginStart="16dp"
                 app:civ_border_width="0.5dp"
                 app:civ_border_color="@color/grey"
-                app:layout_constraintTop_toBottomOf="@id/tv_tanggal"
+                app:layout_constraintTop_toBottomOf="@id/tv_tanggal_pengajuan"
                 app:layout_constraintStart_toStartOf="parent"/>
 
             <TextView
@@ -146,17 +146,30 @@
             android:layout_height="wrap_content">
 
             <TextView
-                android:id="@+id/tv_kirim_ke"
+                android:id="@+id/tv_tanggal_dibayarkan"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/kirim_ke"
+                tools:text="3 November 2024 10.40"
                 android:fontFamily="@font/poppins_semibold"
-                android:textColor="@color/grey_200"
+                android:textColor="@color/black"
                 android:textSize="14sp"
                 android:layout_marginTop="16dp"
                 android:layout_marginStart="16dp"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintStart_toStartOf="parent" />
+
+            <TextView
+                android:id="@+id/tv_dibayarkan_ke"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="4dp"
+                android:fontFamily="@font/poppins"
+                android:text="@string/telah_dibayarkan_ke"
+                android:textColor="@color/black"
+                android:textSize="14sp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tv_tanggal_dibayarkan" />
 
             <ImageView
                 android:id="@+id/iv_bank"
@@ -165,7 +178,7 @@
                 android:src="@drawable/bank_icon"
                 android:layout_marginTop="8dp"
                 android:layout_marginStart="16dp"
-                app:layout_constraintTop_toBottomOf="@id/tv_kirim_ke"
+                app:layout_constraintTop_toBottomOf="@id/tv_dibayarkan_ke"
                 app:layout_constraintStart_toStartOf="parent"/>
 
             <TextView
@@ -179,7 +192,7 @@
                 android:textSize="16sp"
                 android:layout_marginTop="8dp"
                 android:layout_marginStart="16dp"
-                app:layout_constraintTop_toBottomOf="@id/tv_kirim_ke"
+                app:layout_constraintTop_toBottomOf="@id/tv_dibayarkan_ke"
                 app:layout_constraintStart_toEndOf="@id/iv_bank" />
 
             <TextView
@@ -204,28 +217,28 @@
                 android:textColor="@color/black"
                 android:textSize="16sp"
                 android:layout_marginBottom="16dp"
+                app:layout_constraintVertical_bias="0.0"
                 app:layout_constraintTop_toBottomOf="@id/tv_nomor_rekening"
-                app:layout_constraintStart_toStartOf="@id/tv_nama_bank"
-                app:layout_constraintBottom_toBottomOf="parent"/>
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="@id/tv_nama_bank" />
+
+            <TextView
+                android:id="@+id/tv_lihat_bukti_transfer"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Lihat bukti transfer"
+                android:fontFamily="@font/poppins_semibold"
+                android:textColor="@color/green"
+                android:textSize="14sp"
+                android:layout_marginTop="16dp"
+                android:layout_marginBottom="16dp"
+                app:layout_constraintTop_toBottomOf="@id/tv_nama_pemilik_rekening"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"/>
         </androidx.constraintlayout.widget.ConstraintLayout>
 
     </androidx.cardview.widget.CardView>
-
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/btn_kirim_bukti_transfer"
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-        android:layout_width="0dp"
-        android:layout_height="60dp"
-        android:layout_marginStart="32dp"
-        android:layout_marginEnd="32dp"
-        android:layout_marginBottom="16dp"
-        android:fontFamily="@font/poppins_bold"
-        android:text="@string/kirim_bukti_transfer"
-        app:cornerRadius="10dp"
-        android:textSize="16sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent" />
 
     <ProgressBar
         android:id="@+id/progressBar"

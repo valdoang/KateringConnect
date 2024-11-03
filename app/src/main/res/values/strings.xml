@@ -169,6 +169,7 @@
     <string name="pembeli">Pembeli</string>
     <string name="vendor">Vendor</string>
     <string name="admin">Admin</string>
+    <string name="user">User</string>
     <string name="entry_email">Masukkan Email</string>
     <string name="not_valid_email">Alamat Email Tidak Valid</string>
     <string name="entry_password">Masukkan Password</string>
@@ -434,4 +435,9 @@
     <string name="transfer_ke">Transfer ke</string>
     <string name="kirim_bukti_transfer">Kirim bukti transfer</string>
     <string name="tv_pengajuan">Mengajukan penarikan dana sejumlah</string>
+    <string name="riwayat_transfer_dana">Riwayat Transfer Dana</string>
+    <string name="dibayarkan_pada">Dibayarkan pada</string>
+    <string name="rincian_riwayat_transfer_dana">Rincian Riwayat Transfer Dana</string>
+    <string name="rincian_riwayat_tarik_dana">Rincian Riwayat Tarik Dana</string>
+    <string name="telah_dibayarkan_ke">Telah dibayarkan ke</string>
 </resources>

@@ -63,13 +63,17 @@ class RoomChatActivity : AppCompatActivity() {
             if (document != null) {
                 val foto = document.data?.get("foto").toString()
                 val nama = document.data?.get("nama").toString()
-                val jenis = document.data?.get("jenis").toString()
 
-                if (jenis == getString(R.string.pembeli)) {
-                    Glide.with(applicationContext).load(foto).error(R.drawable.default_profile).into(ivUser)
-                }
-                else if (jenis == getString(R.string.vendor)) {
-                    Glide.with(applicationContext).load(foto).error(R.drawable.default_vendor_profile).into(ivUser)
+                when(document.data?.get("jenis").toString()) {
+                    getString(R.string.pembeli) -> {
+                        Glide.with(applicationContext).load(foto).error(R.drawable.default_profile).into(ivUser)
+                    }
+                    getString(R.string.vendor) -> {
+                        Glide.with(applicationContext).load(foto).error(R.drawable.default_vendor_profile).into(ivUser)
+                    }
+                    getString(R.string.admin) -> {
+                        ivUser.setImageResource(R.drawable.admin_icon)
+                    }
                 }
 
                 tvNama.text = nama
@@ -122,7 +126,7 @@ class RoomChatActivity : AppCompatActivity() {
                     roomChat.tanggal
                 }
 
-                recyclerView.scrollToPosition(roomChatList.size-1)
+                //recyclerView.scrollToPosition(roomChatList.size-1)
                 roomChatAdapter.setItems(roomChatList)
             }
         }

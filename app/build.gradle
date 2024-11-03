@@ -79,4 +79,7 @@ dependencies {
     //Midtrans SANDBOX
     implementation 'com.midtrans:uikit:2.3.0-SANDBOX'
     implementation 'com.midtrans:uikit:1.23.1'
+
+    //CircularProgressDrawable
+    implementation "androidx.swiperefreshlayout:swiperefreshlayout:1.1.0"
 }

@@ -16,6 +16,7 @@ class RiwayatTarikDanaAdapter(
 ) : RecyclerView.Adapter<RiwayatTarikDanaAdapter.MyViewHolder>() {
 
     private val tarikDanaList = ArrayList<TarikDana>()
+    private var onItemClickCallback: OnItemClickCallback? = null
 
     @SuppressLint("NotifyDataSetChanged")
     fun setItems(itemList: List<TarikDana>) {
@@ -24,9 +25,16 @@ class RiwayatTarikDanaAdapter(
         notifyDataSetChanged()
     }
 
+    fun setOnItemClickCallback(onItemClickCallback: OnItemClickCallback) {
+        this.onItemClickCallback = onItemClickCallback
+    }
+
     inner class MyViewHolder(private val binding: ItemTarikDanaBinding) :
         RecyclerView.ViewHolder(binding.root) {
         fun bind(tarikDana: TarikDana) {
+            binding.root.setOnClickListener {
+                onItemClickCallback?.onItemClicked(tarikDana)
+            }
             binding.apply {
                 tvIdTarikDana.text = tarikDana.id
                 tvTanggal.text = tarikDana.tanggalPengajuan?.withTimestampToDateTimeFormat()
@@ -42,11 +50,6 @@ class RiwayatTarikDanaAdapter(
                         tvStatus.text = context.getString(R.string.status_selesai)
                         tvStatus.setTextColor(context.resources.getColor(R.color.green_200))
                         tvStatus.background = context.resources.getDrawable(R.drawable.status_selesai_bg)
-                    }
-                    context.getString(R.string.status_gagal) -> {
-                        tvStatus.text = context.getString(R.string.status_gagal)
-                        tvStatus.setTextColor(context.resources.getColor(R.color.red))
-                        tvStatus.background = context.resources.getDrawable(R.drawable.status_ditolak_bg)
                     }
                 }
             }
@@ -64,5 +67,9 @@ class RiwayatTarikDanaAdapter(
 
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
         holder.bind(tarikDanaList[position])
+    }
+
+    interface OnItemClickCallback {
+        fun onItemClicked(data: TarikDana)
     }
 }
