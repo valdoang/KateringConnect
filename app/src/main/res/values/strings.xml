@@ -164,6 +164,7 @@
     <string name="already_exists_email">Email Sudah Ada</string>
     <string name="wrong_email_pass">Email atau Password Salah</string>
     <string name="can_not_blank">Tidak Boleh Ada Yang Kosong</string>
+    <string name="tidak_boleh_kosong">Tidak Boleh Kosong</string>
     <string name="add_photo_alert">Tambahkan Foto Terlebih Dahulu</string>
     <string name="keluar">Keluar</string>
     <string name="pembeli">Pembeli</string>
@@ -315,6 +316,7 @@
     <string name="jarak_max_error">Jarak pengantaran melebihi 60 km</string>
     <string name="minimal_pemesanan">Minimal Pemesanan</string>
     <string name="rupiah_text">Rp%1$s</string>
+    <string name="persen_text">%1$s%%</string>
     <string name="antar_ke">ANTAR KE</string>
     <string name="antar_kemana">Antar kemana?</string>
     <string name="tambah_alamat_baru">Tambah Alamat Baru</string>
@@ -440,4 +442,11 @@
     <string name="rincian_riwayat_transfer_dana">Rincian Riwayat Transfer Dana</string>
     <string name="rincian_riwayat_tarik_dana">Rincian Riwayat Tarik Dana</string>
     <string name="telah_dibayarkan_ke">Telah dibayarkan ke</string>
+    <string name="atur_potongan">Potongan hasil vendor tiap pesanan:</string>
+    <string name="atur_potongan_persen">Potongan hasil vendor tiap pesanan (%)</string>
+    <string name="atur_minimum_top_up">Minimum top up:</string>
+    <string name="atur_biaya_admin_top_up">Biaya admin top up:</string>
+    <string name="atur_minimum_tarik_dana">Minimum tarik dana:</string>
+    <string name="atur_biaya_admin_tarik_dana">Biaya admin tarik dana:</string>
+    <string name="atur_potongan_kapital">Atur Potongan</string>
 </resources>

@@ -63,20 +63,28 @@ class EditDeskripsiMenuActivity : AppCompatActivity() {
 
     private fun updateDeskripsi() {
         ibSave.setOnClickListener {
-            ibSave.visibility = View.GONE
-            progressBar.visibility = View.VISIBLE
-
             val userId = firebaseAuth.currentUser!!.uid
             val sKeterangan = etKeterangan.text.toString().trim()
             val updateMap = mapOf(
                 "keterangan" to sKeterangan
             )
-            val ref = db.collection("user").document(userId).collection("kategoriMenu").document(kategoriMenuId!!).collection("menu").document(menuId!!)
-            ref.update(updateMap).addOnSuccessListener {
-                finish()
-            } .addOnFailureListener {
-                Toast.makeText(this, R.string.gagal_mengubah, Toast.LENGTH_SHORT).show()
+            when {
+                sKeterangan.isEmpty() -> {
+                    etKeterangan.error = getString(R.string.tidak_boleh_kosong)
+                }
+                else -> {
+                    ibSave.visibility = View.GONE
+                    progressBar.visibility = View.VISIBLE
+
+                    val ref = db.collection("user").document(userId).collection("kategoriMenu").document(kategoriMenuId!!).collection("menu").document(menuId!!)
+                    ref.update(updateMap).addOnSuccessListener {
+                        finish()
+                    } .addOnFailureListener {
+                        Toast.makeText(this, R.string.gagal_mengubah, Toast.LENGTH_SHORT).show()
+                    }
+                }
             }
+
         }
     }
 

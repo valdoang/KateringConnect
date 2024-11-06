@@ -59,19 +59,27 @@ class EditKotaAkunActivity : AppCompatActivity() {
 
     private fun updateKota() {
         ibSave.setOnClickListener {
-            ibSave.visibility = View.GONE
-            progressBar.visibility = View.VISIBLE
-
             val userId = firebaseAuth.currentUser!!.uid
             val sKota = acKota.text.toString().trim()
             val updateMap = mapOf(
                 "kota" to sKota
             )
-            val ref = db.collection("user").document(userId)
-            ref.update(updateMap).addOnSuccessListener {
-                finish()
-            } .addOnFailureListener {
-                Toast.makeText(this, R.string.gagal_mengubah, Toast.LENGTH_SHORT).show()
+
+            when {
+                sKota.isEmpty() -> {
+                    acKota.error = getString(R.string.tidak_boleh_kosong)
+                }
+                else -> {
+                    ibSave.visibility = View.GONE
+                    progressBar.visibility = View.VISIBLE
+
+                    val ref = db.collection("user").document(userId)
+                    ref.update(updateMap).addOnSuccessListener {
+                        finish()
+                    } .addOnFailureListener {
+                        Toast.makeText(this, R.string.gagal_mengubah, Toast.LENGTH_SHORT).show()
+                    }
+                }
             }
         }
     }

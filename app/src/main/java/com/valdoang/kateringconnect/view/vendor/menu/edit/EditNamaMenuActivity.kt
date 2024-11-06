@@ -63,19 +63,26 @@ class EditNamaMenuActivity : AppCompatActivity() {
 
     private fun updateName() {
         ibSave.setOnClickListener {
-            ibSave.visibility = View.GONE
-            progressBar.visibility = View.VISIBLE
-
             val userId = firebaseAuth.currentUser!!.uid
             val sName = etNama.text.toString().trim()
             val updateMap = mapOf(
                 "nama" to sName
             )
-            val ref = db.collection("user").document(userId).collection("kategoriMenu").document(kategoriMenuId!!).collection("menu").document(menuId!!)
-            ref.update(updateMap).addOnSuccessListener {
-                finish()
-            } .addOnFailureListener {
-                Toast.makeText(this, R.string.gagal_mengubah, Toast.LENGTH_SHORT).show()
+            when {
+                sName.isEmpty() -> {
+                    etNama.error = getString(R.string.tidak_boleh_kosong)
+                }
+                else -> {
+                    ibSave.visibility = View.GONE
+                    progressBar.visibility = View.VISIBLE
+
+                    val ref = db.collection("user").document(userId).collection("kategoriMenu").document(kategoriMenuId!!).collection("menu").document(menuId!!)
+                    ref.update(updateMap).addOnSuccessListener {
+                        finish()
+                    } .addOnFailureListener {
+                        Toast.makeText(this, R.string.gagal_mengubah, Toast.LENGTH_SHORT).show()
+                    }
+                }
             }
         }
     }

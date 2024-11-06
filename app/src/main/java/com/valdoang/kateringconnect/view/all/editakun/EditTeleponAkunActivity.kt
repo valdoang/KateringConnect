@@ -59,19 +59,26 @@ class EditTeleponAkunActivity : AppCompatActivity() {
 
     private fun updateName() {
         ibSave.setOnClickListener {
-            ibSave.visibility = View.GONE
-            progressBar.visibility = View.VISIBLE
-
             val userId = firebaseAuth.currentUser!!.uid
             val sTelepon = etTelepon.text.toString().trim()
             val updateMap = mapOf(
                 "telepon" to sTelepon
             )
-            val ref = db.collection("user").document(userId)
-            ref.update(updateMap).addOnSuccessListener {
-                finish()
-            } .addOnFailureListener {
-                Toast.makeText(this, R.string.gagal_mengubah, Toast.LENGTH_SHORT).show()
+            when {
+                sTelepon.isEmpty() -> {
+                    etTelepon.error = getString(R.string.tidak_boleh_kosong)
+                }
+                else -> {
+                    ibSave.visibility = View.GONE
+                    progressBar.visibility = View.VISIBLE
+
+                    val ref = db.collection("user").document(userId)
+                    ref.update(updateMap).addOnSuccessListener {
+                        finish()
+                    } .addOnFailureListener {
+                        Toast.makeText(this, R.string.gagal_mengubah, Toast.LENGTH_SHORT).show()
+                    }
+                }
             }
         }
     }

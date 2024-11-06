@@ -18,6 +18,9 @@
         tools:replace="android:allowBackup, usesCleartextTraffic"
         tools:targetApi="31">
         <activity
+            android:name=".view.admin.ui.pengaturan.AturPotonganActivity"
+            android:exported="false" />
+        <activity
             android:name=".view.all.imageview.ImageViewActivity"
             android:exported="false" />
         <activity
