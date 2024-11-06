@@ -1,21 +1,24 @@
-package com.valdoang.kateringconnect.view.all.alertdialog
+package com.valdoang.kateringconnect.view.all.register
 
-import android.content.Intent
+import android.app.Activity
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.Window
 import androidx.fragment.app.DialogFragment
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.ktx.Firebase
 import com.valdoang.kateringconnect.R
 import com.valdoang.kateringconnect.databinding.FragmentAlertDialogBinding
-import com.valdoang.kateringconnect.view.all.login.LoginActivity
+import com.valdoang.kateringconnect.utils.Cons
 
 
-class LogoutFragment : DialogFragment() {
+class PotonganAlertFragment : DialogFragment() {
 
     private var _binding: FragmentAlertDialogBinding? = null
 
@@ -23,6 +26,8 @@ class LogoutFragment : DialogFragment() {
     // onDestroyView.
     private val binding get() = _binding!!
     private lateinit var firebaseAuth: FirebaseAuth
+    private var db = Firebase.firestore
+    private var mCallback: GetAnswer? = null
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -41,29 +46,45 @@ class LogoutFragment : DialogFragment() {
 
         setTvText()
         closeDialog()
-        logout()
+        register()
 
         return root
     }
 
     private fun setTvText() {
-        binding.tvAlert.text = resources.getString(R.string.logout_alert)
+        val adminRef = db.collection("user").document(Cons.ADMIN_ID)
+        adminRef.addSnapshotListener { adminSnapshot, _ ->
+            if (adminSnapshot != null) {
+                val potongan = adminSnapshot.data?.get("potongan").toString()
+                binding.tvAlert.text = resources.getString(R.string.potongan_alert, potongan)
+            }
+        }
     }
 
     private fun closeDialog() {
         binding.btnNo.setOnClickListener{
+            mCallback?.getAnswer(getString(R.string.tidak))
             dismiss()
         }
     }
 
-    private fun logout() {
+    private fun register() {
         binding.btnYes.setOnClickListener{
-            firebaseAuth.signOut()
-            Intent(activity, LoginActivity::class.java).also { intent ->
-                intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-                activity?.startActivity(intent)
-            }
+            mCallback?.getAnswer(getString(R.string.ya))
             dismiss()
+        }
+    }
+
+    interface GetAnswer {
+        fun getAnswer(answer: String)
+    }
+
+    override fun onAttach(activity: Activity) {
+        super.onAttach(activity)
+        try {
+            mCallback = activity as GetAnswer
+        } catch (e: ClassCastException) {
+            Log.d("MyDialog", "Activity doesn't implement the GetCatatan interface")
         }
     }
 

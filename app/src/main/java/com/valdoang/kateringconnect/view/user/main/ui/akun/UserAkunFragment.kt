@@ -16,7 +16,7 @@ import com.valdoang.kateringconnect.R
 import com.valdoang.kateringconnect.databinding.FragmentUserAkunBinding
 import com.valdoang.kateringconnect.utils.withNumberingFormat
 import com.valdoang.kateringconnect.view.all.editakun.EditAkunActivity
-import com.valdoang.kateringconnect.view.all.alertdialog.LogoutFragment
+import com.valdoang.kateringconnect.view.all.logout.LogoutFragment
 import com.valdoang.kateringconnect.view.all.chat.ChatActivity
 import com.valdoang.kateringconnect.view.all.kcwallet.KcwalletActivity
 

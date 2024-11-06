@@ -226,7 +226,7 @@
                 android:id="@+id/tv_lihat_bukti_transfer"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Lihat bukti transfer"
+                android:text="@string/lihat_bukti_transfer"
                 android:fontFamily="@font/poppins_semibold"
                 android:textColor="@color/green"
                 android:textSize="14sp"

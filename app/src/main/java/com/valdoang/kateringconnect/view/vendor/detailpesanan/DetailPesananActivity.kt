@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.widget.Button
+import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.DialogFragment
@@ -21,6 +22,7 @@ import com.valdoang.kateringconnect.utils.Cons
 import com.valdoang.kateringconnect.utils.withNumberingFormat
 import com.valdoang.kateringconnect.utils.withTimestamptoDateFormat
 import com.valdoang.kateringconnect.utils.withTimestamptoTimeFormat
+import com.valdoang.kateringconnect.view.all.imageview.ImageViewActivity
 import com.valdoang.kateringconnect.view.user.berinilai.BeriNilaiFragment
 
 class DetailPesananActivity : AppCompatActivity() {
@@ -31,6 +33,7 @@ class DetailPesananActivity : AppCompatActivity() {
     private var pesananId: String? = null
     private var fromWhere: String? = null
     private var vendorId = ""
+    private var userId = ""
     private var status = ""
     private var ongkir = 0L
     private lateinit var tvVendorNama: TextView
@@ -55,6 +58,8 @@ class DetailPesananActivity : AppCompatActivity() {
     private lateinit var tvPesananSubtotalValue: TextView
     private lateinit var tvAlasan: TextView
     private lateinit var tvAlasanValue: TextView
+    private var total = 0L
+    private lateinit var tvLihatBuktiPengiriman: TextView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -86,6 +91,7 @@ class DetailPesananActivity : AppCompatActivity() {
         tvPesananSubtotalValue = binding.tvSubtotalValue
         tvAlasan = binding.tvAlasan
         tvAlasanValue = binding.tvAlasanValue
+        tvLihatBuktiPengiriman = binding.tvLihatBuktiPengiriman
 
         setupAction()
         setUI()
@@ -99,6 +105,7 @@ class DetailPesananActivity : AppCompatActivity() {
             .addSnapshotListener { pesanan,_ ->
                 if (pesanan != null) {
                     val pesananId = pesanan.id
+                    userId = pesanan.data?.get("userId").toString()
                     vendorId = pesanan.data?.get("vendorId").toString()
                     status = pesanan.data?.get("status").toString()
                     val jadwal = pesanan.data?.get("jadwal").toString()
@@ -109,6 +116,7 @@ class DetailPesananActivity : AppCompatActivity() {
                     val userAlamat = pesanan.data?.get("userAlamat").toString()
                     val userTelepon = pesanan.data?.get("userTelepon").toString()
                     val alasan = pesanan.data?.get("alasan").toString()
+                    val fotoBuktiPengiriman = pesanan.data?.get("fotoBuktiPengiriman").toString()
 
                     tvUserNama.text = userNama
                     tvUserAlamat.text = getString(R.string.tv_address_city, userAlamat, userKota)
@@ -121,6 +129,11 @@ class DetailPesananActivity : AppCompatActivity() {
                     tvPesananTanggal.text = jadwal.withTimestamptoDateFormat()
                     tvPesananJam.text = jadwal.withTimestamptoTimeFormat()
                     tvAlasanValue.text = alasan
+                    tvLihatBuktiPengiriman.setOnClickListener {
+                        val intent = Intent(this, ImageViewActivity::class.java)
+                        intent.putExtra(Cons.EXTRA_NAMA, fotoBuktiPengiriman)
+                        startActivity(intent)
+                    }
 
                     when (status) {
                         getString(R.string.status_ditolak) -> {
@@ -134,9 +147,20 @@ class DetailPesananActivity : AppCompatActivity() {
                             tvAlasan.visibility = View.VISIBLE
                             tvAlasanValue.visibility = View.VISIBLE
                         }
-                        else -> {
+                        getString(R.string.selesai) -> {
                             tvAlasan.visibility = View.GONE
                             tvAlasanValue.visibility = View.GONE
+                            tvLihatBuktiPengiriman.visibility = View.VISIBLE
+                        }
+                        getString(R.string.status_butuh_konfirmasi_vendor) -> {
+                            tvAlasan.visibility = View.GONE
+                            tvAlasanValue.visibility = View.GONE
+                            tvLihatBuktiPengiriman.visibility = View.GONE
+                        }
+                        getString(R.string.status_butuh_konfirmasi_pengguna) -> {
+                            tvAlasan.visibility = View.GONE
+                            tvAlasanValue.visibility = View.GONE
+                            tvLihatBuktiPengiriman.visibility = View.VISIBLE
                         }
                     }
 
@@ -155,7 +179,10 @@ class DetailPesananActivity : AppCompatActivity() {
                     val menuPesanan: Keranjang = data.toObject(Keranjang::class.java)
                     menuPesanan.id = data.id
                     menuPesananList.add(menuPesanan)
+                    total += menuPesanan.subtotal!!.toLong()
                 }
+
+                total += ongkir
 
                 detailPesananPemesananAdapter.setItems(menuPesananList)
             }
@@ -183,6 +210,8 @@ class DetailPesananActivity : AppCompatActivity() {
         btnBatalkan.setOnClickListener {
             val args = Bundle()
             args.putString("id", pesananId)
+            args.putString("userId", userId)
+            args.putString("total", total.toString())
             val dialog: DialogFragment = BatalkanPesananFragment()
             dialog.arguments = args
             dialog.show(this.supportFragmentManager, "batalkanPesananDialog")
@@ -200,6 +229,8 @@ class DetailPesananActivity : AppCompatActivity() {
         btnTolakPesanan.setOnClickListener {
             val args = Bundle()
             args.putString("id", pesananId)
+            args.putString("userId", userId)
+            args.putString("total", total.toString())
             val dialog: DialogFragment = TolakPesananFragment()
             dialog.arguments = args
             dialog.show(this.supportFragmentManager, "tolakPesananDialog")

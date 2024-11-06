@@ -20,7 +20,7 @@ import com.valdoang.kateringconnect.utils.Cons
 import com.valdoang.kateringconnect.utils.roundOffDecimal
 import com.valdoang.kateringconnect.utils.withNumberingFormat
 import com.valdoang.kateringconnect.view.all.editakun.EditAkunActivity
-import com.valdoang.kateringconnect.view.all.alertdialog.LogoutFragment
+import com.valdoang.kateringconnect.view.all.logout.LogoutFragment
 import com.valdoang.kateringconnect.view.all.chat.ChatActivity
 import com.valdoang.kateringconnect.view.all.kcwallet.KcwalletActivity
 import com.valdoang.kateringconnect.view.all.nilai.NilaiActivity

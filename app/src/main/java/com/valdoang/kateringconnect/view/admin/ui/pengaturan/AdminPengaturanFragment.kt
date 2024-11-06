@@ -13,7 +13,7 @@ import com.valdoang.kateringconnect.R
 import com.valdoang.kateringconnect.databinding.FragmentAdminPengaturanBinding
 import com.valdoang.kateringconnect.utils.Cons
 import com.valdoang.kateringconnect.utils.withNumberingFormat
-import com.valdoang.kateringconnect.view.all.alertdialog.LogoutFragment
+import com.valdoang.kateringconnect.view.all.logout.LogoutFragment
 
 class AdminPengaturanFragment : Fragment() {
 
@@ -67,8 +67,33 @@ class AdminPengaturanFragment : Fragment() {
 
     private fun setupAction() {
         binding.tvAturPotongan.setOnClickListener {
-            val intent = Intent(requireContext(), AturPotonganActivity::class.java)
+            val intent = Intent(requireContext(), AturPengaturanActivity::class.java)
             intent.putExtra(Cons.EXTRA_NAMA, potongan)
+            intent.putExtra(Cons.EXTRA_SEC_NAMA, getString(R.string.atur_potongan_kapital))
+            startActivity(intent)
+        }
+        binding.tvAturMinTopUp.setOnClickListener {
+            val intent = Intent(requireContext(), AturPengaturanActivity::class.java)
+            intent.putExtra(Cons.EXTRA_NAMA, minTopUp)
+            intent.putExtra(Cons.EXTRA_SEC_NAMA, getString(R.string.atur_min_top_up))
+            startActivity(intent)
+        }
+        binding.tvAturAdminTopUp.setOnClickListener {
+            val intent = Intent(requireContext(), AturPengaturanActivity::class.java)
+            intent.putExtra(Cons.EXTRA_NAMA, adminTopUp)
+            intent.putExtra(Cons.EXTRA_SEC_NAMA, getString(R.string.atur_admin_top_up))
+            startActivity(intent)
+        }
+        binding.tvAturMinTarikDana.setOnClickListener {
+            val intent = Intent(requireContext(), AturPengaturanActivity::class.java)
+            intent.putExtra(Cons.EXTRA_NAMA, minTarikDana)
+            intent.putExtra(Cons.EXTRA_SEC_NAMA, getString(R.string.atur_min_tarik_dana))
+            startActivity(intent)
+        }
+        binding.tvAturAdminTarikDana.setOnClickListener {
+            val intent = Intent(requireContext(), AturPengaturanActivity::class.java)
+            intent.putExtra(Cons.EXTRA_NAMA, adminTarikDana)
+            intent.putExtra(Cons.EXTRA_SEC_NAMA, getString(R.string.atur_admin_tarik_dana))
             startActivity(intent)
         }
     }

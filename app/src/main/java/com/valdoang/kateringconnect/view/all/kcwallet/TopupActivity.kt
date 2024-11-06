@@ -1,16 +1,12 @@
 package com.valdoang.kateringconnect.view.all.kcwallet
 
-import android.content.Intent
 import android.os.Bundle
-import android.view.KeyEvent
 import android.view.View
 import android.widget.Button
 import android.widget.EditText
 import android.widget.ProgressBar
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.ContentProviderCompat.requireContext
-import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
@@ -24,7 +20,6 @@ import com.midtrans.sdk.corekit.models.ShippingAddress
 import com.midtrans.sdk.corekit.models.snap.TransactionResult
 import com.midtrans.sdk.uikit.SdkUIFlowBuilder
 import com.valdoang.kateringconnect.R
-import com.valdoang.kateringconnect.databinding.ActivityTarikDanaBinding
 import com.valdoang.kateringconnect.databinding.ActivityTopupBinding
 import com.valdoang.kateringconnect.utils.Cons
 import com.valdoang.kateringconnect.utils.allChangedListener
@@ -46,6 +41,8 @@ class TopupActivity : AppCompatActivity(), TransactionFinishedCallback {
     private var nomorUser = ""
     private var emailUser = ""
     private var saldoUser = ""
+    private var minTopUp = ""
+    private var adminTopUp = ""
     private var totalHarga = 0.0
     private lateinit var progressBar: ProgressBar
     private lateinit var edNominal: EditText
@@ -61,20 +58,32 @@ class TopupActivity : AppCompatActivity(), TransactionFinishedCallback {
         edNominal = binding.edNominal
         btnKonfirmasi = binding.btnKonfirmasi
 
-        edNominal.allChangedListener { nominal ->
-            val minTopUp = 20000.0
-
-            if (nominal == "") {
-                btnKonfirmasi.isEnabled = false
-            } else {
-                btnKonfirmasi.isEnabled = nominal.toLong() >= minTopUp
-            }
-        }
-
+        setupView()
         setupMidtrans()
         setupDataUser()
         topUp()
         closeDialog()
+    }
+
+    private fun setupView() {
+        val adminRef = db.collection("user").document(Cons.ADMIN_ID)
+        adminRef.addSnapshotListener { adminSnapshot, _ ->
+            if (adminSnapshot != null) {
+                minTopUp = adminSnapshot.data?.get("minTopUp").toString()
+                adminTopUp = adminSnapshot.data?.get("adminTopUp").toString()
+
+                binding.tvMinTopup.text = getString(R.string.min_top_up, minTopUp.withNumberingFormat())
+                binding.tvAdminTopup.text = getString(R.string.tv_admin, adminTopUp.withNumberingFormat())
+
+                edNominal.allChangedListener { nominal ->
+                    if (nominal == "") {
+                        btnKonfirmasi.isEnabled = false
+                    } else {
+                        btnKonfirmasi.isEnabled = nominal.toDouble() >= minTopUp.toDouble()
+                    }
+                }
+            }
+        }
     }
 
     private fun setupDataUser() {
@@ -116,7 +125,7 @@ class TopupActivity : AppCompatActivity(), TransactionFinishedCallback {
 
         progressBar.visibility = View.VISIBLE
         newMutasi.set(mutasiMap).addOnSuccessListener {
-            val newSaldo = saldoUser.toDouble() + sNominal.toDouble()
+            val newSaldo = saldoUser.toLong() + sNominal.toLong()
 
             val saldoMap = mapOf(
                 "saldo" to newSaldo.toString()
@@ -132,7 +141,6 @@ class TopupActivity : AppCompatActivity(), TransactionFinishedCallback {
 
     private fun startMidtransPayment() {
         val nominal = edNominal.text.toString().trim()
-        val biayaAdmin = 1000.0
         itemDetails.clear()
 
         val topUpDetail = ItemDetails(
@@ -145,13 +153,13 @@ class TopupActivity : AppCompatActivity(), TransactionFinishedCallback {
 
         val adminDetail = ItemDetails(
             "admin",
-            biayaAdmin,
+            adminTopUp.toDouble(),
             1,
             getString(R.string.admin_transaksi)
         )
         itemDetails.add(adminDetail)
 
-        totalHarga = nominal.toDouble() + biayaAdmin
+        totalHarga = nominal.toDouble() + adminTopUp.toDouble()
 
         val transactionReq = TransactionRequest(newMutasiId, totalHarga)
 

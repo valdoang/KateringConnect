@@ -50,7 +50,7 @@ class PemesananActivity : AppCompatActivity(), TimePickerFragment.DialogTimeList
     private var fotoVendor = ""
     private val dateFormat = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
     private val timeFormat = SimpleDateFormat("HH:mm", Locale.getDefault())
-    private var totalHarga = 0.0
+    private var totalHarga = 0L
     private var vendorId: String? = null
     private var alamatId: String? = null
     private var ongkir: String? = null
@@ -63,7 +63,7 @@ class PemesananActivity : AppCompatActivity(), TimePickerFragment.DialogTimeList
     private var pesananList: ArrayList<Keranjang> = ArrayList()
     private lateinit var recyclerView: RecyclerView
     private lateinit var pesananAdapter: PesananAdapter
-    private var subtotal = 0.0
+    private var subtotal = 0L
     private lateinit var rgMetodePembayaran: RadioGroup
     private val newPesanan = db.collection("pesanan").document()
     private var newPesananId = newPesanan.id
@@ -116,14 +116,14 @@ class PemesananActivity : AppCompatActivity(), TimePickerFragment.DialogTimeList
         pesananRef.addSnapshotListener { pesananSnapshot, _ ->
             if (pesananSnapshot != null) {
                 pesananList.clear()
-                subtotal = 0.0
+                subtotal = 0L
                 for (data in pesananSnapshot.documents) {
                     val pesanan: Keranjang? = data.toObject(Keranjang::class.java)
                     if (pesanan != null) {
                         pesanan.id = data.id
                         pesananList.add(pesanan)
                     }
-                    val subtotalTemp = data.data?.get("subtotal").toString().toDouble()
+                    val subtotalTemp = data.data?.get("subtotal").toString().toLong()
                     subtotal += subtotalTemp
                 }
 
@@ -149,7 +149,7 @@ class PemesananActivity : AppCompatActivity(), TimePickerFragment.DialogTimeList
 
                 binding.tvOngkirValue.text = ongkir!!.withNumberingFormat()
 
-                totalHarga = ongkir!!.toDouble() + subtotal
+                totalHarga = ongkir!!.toLong() + subtotal
                 binding.totalHarga.text = totalHarga.withNumberingFormat()
 
                 if (pesananList.isEmpty()) {
@@ -303,7 +303,7 @@ class PemesananActivity : AppCompatActivity(), TimePickerFragment.DialogTimeList
                     "nominal" to totalHarga.toString(),
                 )
 
-                val sSaldo = saldoKcWallet.toDouble() - totalHarga
+                val sSaldo = saldoKcWallet.toLong() - totalHarga
 
                 newMutasi.set(mutasiMap).addOnSuccessListener {
                     val saldoMap = mapOf(
@@ -323,7 +323,7 @@ class PemesananActivity : AppCompatActivity(), TimePickerFragment.DialogTimeList
     }
 
     private fun kcWalletPayment() {
-       if (saldoKcWallet.toDouble() < totalHarga) {
+       if (saldoKcWallet.toLong() < totalHarga) {
            val args = Bundle()
            args.putString("totalHarga", totalHarga.toString())
            val dialog: DialogFragment = KcWalletNotEnoughFragment()

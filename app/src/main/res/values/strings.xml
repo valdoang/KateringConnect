@@ -193,6 +193,7 @@
     <string name="tidak">Tidak</string>
     <string name="ya">Ya</string>
     <string name="logout_alert">Apakah Anda yakin ingin keluar?</string>
+    <string name="potongan_alert">Perlu diketahui bahwa setiap pesanan akan dikenakan potongan sebesar %1$s%%. \n\nApakah Anda bersedia melanjutkan registrasi dengan ketentuan ini?</string>
     <string name="success_delete_photo">Foto berhasil dihapus</string>
     <string name="delete_photo_alert">Apakah Anda yakin ingin \n menghapus foto ini?</string>
     <string name="hapus_foto">Hapus Foto</string>
@@ -355,7 +356,9 @@
     <string name="admin_transaksi">- Biaya Admin</string>
     <string name="topup_transaksi">- Top Up KC Wallet</string>
     <string name="topup_kc_wallet">Top Up KC Wallet</string>
+    <string name="penjualan_katering">Penjualan Katering</string>
     <string name="pemesanan_katering">Pemesanan Katering</string>
+    <string name="pengembalian_dana">Pengembalian Dana</string>
     <string name="digital_desc">Opsi pembayaran digital akan tampil setelah pesan</string>
     <string name="jumlah_alamat">%1$s Pesanan • %2$s</string>
     <string name="alamat_penerima">Alamat Penerima</string>
@@ -392,10 +395,10 @@
     <string name="cek_mutasi">Cek mutasi dompet</string>
     <string name="top_up">Top up</string>
     <string name="top_up_kapital">Top Up</string>
-    <string name="tv_admin_topup">• Terdapat biaya admin Rp1.000</string>
+    <string name="tv_admin">• Terdapat biaya admin Rp%1$s</string>
     <string name="nominal_top_up">Nominal Top Up</string>
-    <string name="min_top_up">• Minimum top up Rp20.000</string>
-    <string name="min_tarik_dana">• Minimum tarik dana Rp20.000</string>
+    <string name="min_top_up">• Minimum top up Rp%1$s</string>
+    <string name="min_tarik_dana">• Minimum tarik dana Rp%1$s</string>
     <string name="catatan">Catatan:</string>
     <string name="mutasi">Mutasi</string>
     <string name="kredit">Kredit</string>
@@ -449,4 +452,19 @@
     <string name="atur_minimum_tarik_dana">Minimum tarik dana:</string>
     <string name="atur_biaya_admin_tarik_dana">Biaya admin tarik dana:</string>
     <string name="atur_potongan_kapital">Atur Potongan</string>
+    <string name="atur_min_top_up">Atur Minimum Top Up</string>
+    <string name="min_top_up_rupiah">Minimum Top Up (Rp)</string>
+    <string name="atur_admin_top_up">Atur Admin Top Up</string>
+    <string name="admin_top_up_rupiah">Admin Top Up (Rp)</string>
+    <string name="atur_min_tarik_dana">Atur Minimum Tarik Dana</string>
+    <string name="min_tarik_dana_rupiah">Minimum Tarik Dana (Rp)</string>
+    <string name="atur_admin_tarik_dana">Atur Admin Tarik Dana</string>
+    <string name="admin_tarik_dana_rupiah">Admin Tarik Dana (Rp)</string>
+    <string name="potongan_db">potongan</string>
+    <string name="min_top_up_db">minTopUp</string>
+    <string name="admin_top_up_db">adminTopUp</string>
+    <string name="min_tarik_dana_db">minTarikDana</string>
+    <string name="admin_tarik_dana_db">adminTarikDana</string>
+    <string name="lihat_bukti_transfer">Lihat bukti transfer</string>
+    <string name="lihat_bukti_pengiriman">Lihat bukti pengiriman</string>
 </resources>

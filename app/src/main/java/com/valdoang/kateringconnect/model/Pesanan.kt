@@ -15,5 +15,6 @@ data class Pesanan(
     var jadwal: String? = null,
     var metodePembayaran: String? = null,
     var ongkir: String? = null,
-    var nilai: Boolean? = null
+    var nilai: Boolean? = null,
+    var fotoBuktiPengiriman: String? = null
 )

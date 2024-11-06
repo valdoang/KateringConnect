@@ -24,6 +24,9 @@ class TolakPesananFragment : DialogFragment() {
     private val binding get() = _binding!!
     private lateinit var firebaseAuth: FirebaseAuth
     private var db = Firebase.firestore
+    private var userId: String? = null
+    private var total: String? = null
+    private var saldoUser = ""
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -43,11 +46,51 @@ class TolakPesananFragment : DialogFragment() {
 
         val mArgs = arguments
         val pesananId = mArgs!!.getString("id")
+        userId = mArgs.getString("userId")
+        total = mArgs.getString("total")
 
         setUI()
+        getSaldo()
         batalkanPesanan(pesananId!!)
         closeDialog()
         return root
+    }
+
+    private fun getSaldo() {
+        val userRef = db.collection("user").document(userId!!)
+        userRef.addSnapshotListener { userSnapshot, _ ->
+            if (userSnapshot != null) {
+                saldoUser = userSnapshot.data?.get("saldo").toString()
+                if (saldoUser == "null") {
+                    saldoUser = "0"
+                }
+            }
+        }
+    }
+
+    private fun addMutasiIntoUserDatabase() {
+        val sDate = System.currentTimeMillis().toString()
+        val sJenis = getString(R.string.kredit)
+        val sKeterangan = getString(R.string.pengembalian_dana)
+
+        val mutasiMap = hashMapOf(
+            "tanggal" to sDate,
+            "jenis" to sJenis,
+            "keterangan" to sKeterangan,
+            "nominal" to total,
+        )
+
+        val userRef = db.collection("user").document(userId!!)
+        val newMutasi = userRef.collection("mutasi").document()
+        newMutasi.set(mutasiMap).addOnSuccessListener {
+            val newSaldo = saldoUser.toLong() + total!!.toLong()
+
+            val saldoMap = mapOf(
+                "saldo" to newSaldo.toString()
+            )
+            userRef.update(saldoMap)
+        }
+
     }
 
     private fun batalkanPesanan(pesananId: String) {
@@ -60,6 +103,7 @@ class TolakPesananFragment : DialogFragment() {
             )
             db.collection("pesanan").document(pesananId).update(alasanMap)
                 .addOnSuccessListener {
+                    addMutasiIntoUserDatabase()
                     Toast.makeText(requireContext(), R.string.success_tolak_pesanan, Toast.LENGTH_SHORT).show()
                     dismiss()
                 }

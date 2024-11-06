@@ -121,9 +121,12 @@ class UserBerandaFragment : Fragment() {
                 if (document != null) {
                     userKota = document.data?.get("kota").toString()
                     userAlamat = document.data?.get("alamat").toString()
-                    val saldo = document.data?.get("saldo").toString()
+                    var saldo = document.data?.get("saldo")
+                    if (saldo == null) {
+                        saldo = "0"
+                    }
 
-                    binding.tvKcwallet.text = getString(R.string.rupiah_text, saldo.withNumberingFormat())
+                    binding.tvKcwallet.text = getString(R.string.rupiah_text, saldo.toString().withNumberingFormat())
                     setupDataVendor()
                 }
             }

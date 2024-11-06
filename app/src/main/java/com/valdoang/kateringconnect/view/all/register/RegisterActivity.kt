@@ -13,10 +13,11 @@ import com.google.firebase.ktx.Firebase
 import com.valdoang.kateringconnect.R
 import com.valdoang.kateringconnect.databinding.ActivityRegisterBinding
 import com.valdoang.kateringconnect.view.all.login.LoginActivity
+import com.valdoang.kateringconnect.view.all.logout.LogoutFragment
 import com.valdoang.kateringconnect.view.user.main.UserMainActivity
 import com.valdoang.kateringconnect.view.vendor.main.VendorMainActivity
 
-class RegisterActivity : AppCompatActivity() {
+class RegisterActivity : AppCompatActivity(), PotonganAlertFragment.GetAnswer {
     private lateinit var binding: ActivityRegisterBinding
     private lateinit var firebaseAuth: FirebaseAuth
     private lateinit var etEmail: EditText
@@ -123,32 +124,69 @@ class RegisterActivity : AppCompatActivity() {
                     etPassword.error = getString(R.string.minimum_character)
                 }
                 else -> {
-                    progressBar.visibility = View.VISIBLE
-                    firebaseAuth.createUserWithEmailAndPassword(sEmail, sPassword)
-                        .addOnCompleteListener(this) { task ->
-                            if(task.isSuccessful) {
-                                val userId = FirebaseAuth.getInstance().currentUser!!.uid
+                    when(sJenisAkun) {
+                        getString(R.string.pembeli) -> {
+                            progressBar.visibility = View.VISIBLE
+                            firebaseAuth.createUserWithEmailAndPassword(sEmail, sPassword)
+                                .addOnCompleteListener(this) { task ->
+                                    if(task.isSuccessful) {
+                                        val userId = FirebaseAuth.getInstance().currentUser!!.uid
 
-                                db.collection("user").document(userId).set(userMap)
-                                when(sJenisAkun) {
-                                    getString(R.string.pembeli) -> {
+                                        db.collection("user").document(userId).set(userMap)
                                         intent = Intent(this, UserMainActivity::class.java)
                                         intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
                                         startActivity(intent)
-                                    }
-                                    getString(R.string.vendor) -> {
-                                        intent = Intent(this, VendorMainActivity::class.java)
-                                        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-                                        startActivity(intent)
+                                    } else {
+                                        progressBar.visibility = View.GONE
+                                        Toast.makeText(this, R.string.already_exists_email, Toast.LENGTH_SHORT).show()
                                     }
                                 }
-                            } else {
-                                progressBar.visibility = View.GONE
-                                Toast.makeText(this, R.string.already_exists_email, Toast.LENGTH_SHORT).show()
-                            }
                         }
+                        getString(R.string.vendor) -> {
+                            val dialog = PotonganAlertFragment()
+                            dialog.show(this.supportFragmentManager, "potonganDialog")
+                        }
+                    }
                 }
             }
+        }
+    }
+
+    override fun getAnswer(answer: String) {
+        if (answer == getString(R.string.ya)) {
+            val sName = etName.text.toString().trim()
+            val sNoPhone = etNoPhone.text.toString().trim()
+            val sCity = acCity.text.toString().trim()
+            val sAddress = etAddress.text.toString().trim()
+            val sEmail = etEmail.text.toString().trim()
+            val sPassword = etPassword.text.toString().trim()
+            val sJenisAkun = getString(R.string.vendor)
+
+            val userMap = hashMapOf(
+                "jenis" to sJenisAkun,
+                "nama" to sName,
+                "kota" to sCity,
+                "alamat" to sAddress,
+                "telepon" to sNoPhone,
+                "email" to sEmail
+            )
+
+            progressBar.visibility = View.VISIBLE
+            firebaseAuth.createUserWithEmailAndPassword(sEmail, sPassword)
+                .addOnCompleteListener(this) { task ->
+                    if(task.isSuccessful) {
+                        val userId = FirebaseAuth.getInstance().currentUser!!.uid
+
+                        db.collection("user").document(userId).set(userMap)
+                        intent = Intent(this, VendorMainActivity::class.java)
+                        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                        startActivity(intent)
+                    } else {
+                        progressBar.visibility = View.GONE
+                        Toast.makeText(this, R.string.already_exists_email, Toast.LENGTH_SHORT).show()
+                    }
+                }
+
         }
     }
 }

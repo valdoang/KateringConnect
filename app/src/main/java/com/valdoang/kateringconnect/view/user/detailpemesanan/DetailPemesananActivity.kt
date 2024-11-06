@@ -1,10 +1,14 @@
 package com.valdoang.kateringconnect.view.user.detailpemesanan
 
+import android.content.Intent
 import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.Button
+import android.widget.ProgressBar
 import android.widget.TextView
+import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.DialogFragment
@@ -22,6 +26,7 @@ import com.valdoang.kateringconnect.utils.Cons
 import com.valdoang.kateringconnect.utils.withNumberingFormat
 import com.valdoang.kateringconnect.utils.withTimestamptoDateFormat
 import com.valdoang.kateringconnect.utils.withTimestamptoTimeFormat
+import com.valdoang.kateringconnect.view.all.imageview.ImageViewActivity
 import com.valdoang.kateringconnect.view.user.berinilai.BeriNilaiFragment
 
 class DetailPemesananActivity : AppCompatActivity() {
@@ -57,6 +62,11 @@ class DetailPemesananActivity : AppCompatActivity() {
     private lateinit var viewButton: View
     private lateinit var tvAlasan: TextView
     private lateinit var tvAlasanValue: TextView
+    private var potongan = ""
+    private lateinit var progressBar: ProgressBar
+    private var saldoVendor = ""
+    private var total = 0L
+    private lateinit var tvLihatBuktiPengiriman: TextView
 
     @RequiresApi(Build.VERSION_CODES.N)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -65,7 +75,7 @@ class DetailPemesananActivity : AppCompatActivity() {
         setContentView(binding.root)
         supportActionBar?.hide()
 
-        firebaseAuth =Firebase.auth
+        firebaseAuth = Firebase.auth
         
         pesananId = intent.getStringExtra(Cons.EXTRA_ID)
 
@@ -90,13 +100,25 @@ class DetailPemesananActivity : AppCompatActivity() {
         tvSubtotalValue = binding.tvSubtotalValue
         tvAlasan = binding.tvAlasan
         tvAlasanValue = binding.tvAlasanValue
+        progressBar = binding.progressBar
+        tvLihatBuktiPengiriman = binding.tvLihatBuktiPengiriman
 
         setupView()
         setupData()
         setupDataMenu()
         setupAction()
+        setupPotongan()
         hideUI()
         editUI()
+    }
+
+    private fun setupPotongan() {
+        val adminRef = db.collection("user").document(Cons.ADMIN_ID)
+        adminRef.addSnapshotListener { adminSnapshot, _ ->
+            if (adminSnapshot != null) {
+                potongan = adminSnapshot.data?.get("potongan").toString()
+            }
+        }
     }
 
     private fun setupData() {
@@ -115,21 +137,26 @@ class DetailPemesananActivity : AppCompatActivity() {
                     val userTelepon = pesanan.data?.get("userTelepon").toString()
                     val nilai = pesanan.data?.get("nilai")
                     val alasan = pesanan.data?.get("alasan").toString()
+                    val fotoBuktiPengiriman = pesanan.data?.get("fotoBuktiPengiriman").toString()
 
                     if (status == getString(R.string.status_butuh_konfirmasi_pengguna)) {
                         viewButton.visibility = View.VISIBLE
                         btnPesananTelahDiterima.visibility = View.VISIBLE
                         btnPesananBelumDiterima.visibility = View.VISIBLE
+                        tvLihatBuktiPengiriman.visibility = View.VISIBLE
+
                     }
                     else if (status == getString(R.string.status_selesai) && nilai == null) {
                         viewButton.visibility = View.VISIBLE
                         btnBeriNilai.visibility = View.VISIBLE
                         btnPesananTelahDiterima.visibility = View.GONE
                         btnPesananBelumDiterima.visibility = View.GONE
+                        tvLihatBuktiPengiriman.visibility = View.VISIBLE
                     }
                     else if (status == getString(R.string.status_selesai) && nilai == true) {
                         viewButton.visibility = View.GONE
                         btnBeriNilai.visibility = View.GONE
+                        tvLihatBuktiPengiriman.visibility = View.VISIBLE
                     }
                     else if (status == getString(R.string.status_batal) ) {
                         viewButton.visibility = View.GONE
@@ -159,8 +186,23 @@ class DetailPemesananActivity : AppCompatActivity() {
                     tvPesananTanggal.text = jadwal.withTimestamptoDateFormat()
                     tvPesananJam.text = jadwal.withTimestamptoTimeFormat()
                     tvAlasanValue.text = alasan
+                    tvLihatBuktiPengiriman.setOnClickListener {
+                        val intent = Intent(this, ImageViewActivity::class.java)
+                        intent.putExtra(Cons.EXTRA_NAMA, fotoBuktiPengiriman)
+                        startActivity(intent)
+                    }
 
                     setupView()
+
+                    val vendorRef = db.collection("user").document(vendorId)
+                    vendorRef.addSnapshotListener { vendorSnapshot, _ ->
+                        if (vendorSnapshot != null) {
+                            saldoVendor = vendorSnapshot.data?.get("saldo").toString()
+                            if (saldoVendor == "null") {
+                                saldoVendor = "0"
+                            }
+                        }
+                    }
                 }
             }
     }
@@ -173,8 +215,11 @@ class DetailPemesananActivity : AppCompatActivity() {
                 for (data in menuPesananSnapshot) {
                     val menuPesanan: Keranjang = data.toObject(Keranjang::class.java)
                     menuPesanan.id = data.id
+                    total += menuPesanan.subtotal!!.toLong()
                     menuPesananList.add(menuPesanan)
                 }
+
+                total += ongkir
 
                 detailPesananPemesananAdapter.setItems(menuPesananList)
             }
@@ -187,6 +232,34 @@ class DetailPemesananActivity : AppCompatActivity() {
         detailPesananPemesananAdapter = DetailPesananPemesananAdapter(this, getString(R.string.pembeli), status, tvTotalPembayaran, tvSubtotal, tvSubtotalValue, ongkir, vendorId, pesananId!!)
         recyclerView.adapter = detailPesananPemesananAdapter
         detailPesananPemesananAdapter.setItems(menuPesananList)
+    }
+
+    private fun addMutasiIntoVendorDatabase() {
+        val sDate = System.currentTimeMillis().toString()
+        val sJenis = getString(R.string.kredit)
+        val sKeterangan = getString(R.string.penjualan_katering)
+        val sNominal = total*(100 - potongan.toLong())/100
+
+        val mutasiMap = hashMapOf(
+            "tanggal" to sDate,
+            "jenis" to sJenis,
+            "keterangan" to sKeterangan,
+            "nominal" to sNominal.toString(),
+        )
+
+        progressBar.visibility = View.VISIBLE
+        val vendorRef = db.collection("user").document(vendorId)
+        val newMutasi = vendorRef.collection("mutasi").document()
+        newMutasi.set(mutasiMap).addOnSuccessListener {
+            progressBar.visibility = View.GONE
+            val newSaldo = saldoVendor.toLong() + sNominal
+
+            val saldoMap = mapOf(
+                "saldo" to newSaldo.toString()
+            )
+            vendorRef.update(saldoMap)
+        }
+
     }
 
     @RequiresApi(Build.VERSION_CODES.N)
@@ -206,6 +279,7 @@ class DetailPemesananActivity : AppCompatActivity() {
                 "status" to getString(R.string.status_selesai)
             )
             db.collection("pesanan").document(pesananId!!).update(updateStatus)
+            addMutasiIntoVendorDatabase()
 
             it.visibility = View.GONE
             finish()

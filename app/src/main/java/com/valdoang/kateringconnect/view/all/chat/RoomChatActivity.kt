@@ -126,7 +126,7 @@ class RoomChatActivity : AppCompatActivity() {
                     roomChat.tanggal
                 }
 
-                //recyclerView.scrollToPosition(roomChatList.size-1)
+                recyclerView.scrollToPosition(roomChatList.size-1)
                 roomChatAdapter.setItems(roomChatList)
             }
         }

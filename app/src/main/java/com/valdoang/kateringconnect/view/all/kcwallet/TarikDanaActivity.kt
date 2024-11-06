@@ -15,6 +15,7 @@ import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.valdoang.kateringconnect.R
 import com.valdoang.kateringconnect.databinding.ActivityTarikDanaBinding
+import com.valdoang.kateringconnect.utils.Cons
 import com.valdoang.kateringconnect.utils.allChangedListener
 import com.valdoang.kateringconnect.utils.withNumberingFormat
 
@@ -33,8 +34,10 @@ class TarikDanaActivity : AppCompatActivity() {
     private var namaBank = ""
     private var nomorRekening = ""
     private var namaPemilikRekening = ""
-    private var totalPenarikan = 0.0
+    private var totalPenarikan = 0L
     private var penarikanDana = ""
+    private var minTarikDana = ""
+    private var adminTarikDana = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -46,28 +49,40 @@ class TarikDanaActivity : AppCompatActivity() {
         btnKonfirmasi = binding.btnKonfirmasi
         progressBar = binding.progressBar
 
-        edJumlahPenarikan.allChangedListener { nominal ->
-            val minTarikDana = 20000.0
-            val biayaAdmin = 1000.0
-            val totalMinPenarikan = minTarikDana + biayaAdmin
-
-
-            if (nominal == "") {
-                btnKonfirmasi.isEnabled = false
-            } else {
-                totalPenarikan = nominal.toLong() + biayaAdmin
-
-                if (saldoKCWallet.toLong() < totalPenarikan) {
-                    btnKonfirmasi.isEnabled = false
-                } else {
-                    btnKonfirmasi.isEnabled = totalPenarikan >= totalMinPenarikan
-                }
-            }
-        }
-
+        setupView()
         setupData()
         tarikDana()
         setupAction()
+    }
+
+    private fun setupView() {
+        val adminRef = db.collection("user").document(Cons.ADMIN_ID)
+        adminRef.addSnapshotListener { adminSnapshot, _ ->
+            if (adminSnapshot != null) {
+                minTarikDana = adminSnapshot.data?.get("minTarikDana").toString()
+                adminTarikDana = adminSnapshot.data?.get("adminTarikDana").toString()
+
+                binding.tvMinTarikDana.text = getString(R.string.min_tarik_dana, minTarikDana.withNumberingFormat())
+                binding.tvAdminTarikDana.text = getString(R.string.tv_admin, adminTarikDana.withNumberingFormat())
+
+                edJumlahPenarikan.allChangedListener { nominal ->
+                    val totalMinPenarikan = minTarikDana.toLong() + adminTarikDana.toLong()
+
+
+                    if (nominal == "") {
+                        btnKonfirmasi.isEnabled = false
+                    } else {
+                        totalPenarikan = nominal.toLong() + adminTarikDana.toLong()
+
+                        if (saldoKCWallet.toLong() < totalPenarikan) {
+                            btnKonfirmasi.isEnabled = false
+                        } else {
+                            btnKonfirmasi.isEnabled = totalPenarikan >= totalMinPenarikan
+                        }
+                    }
+                }
+            }
+        }
     }
 
     private fun setupData() {
@@ -138,8 +153,8 @@ class TarikDanaActivity : AppCompatActivity() {
                 "status" to sStatus
             )
 
-            val sSaldo = saldoKCWallet.toDouble() - totalPenarikan
-            val sPenarikanDana = penarikanDana.toDouble() + totalPenarikan
+            val sSaldo = saldoKCWallet.toLong() - totalPenarikan
+            val sPenarikanDana = penarikanDana.toLong() + totalPenarikan
 
             val kcwalletMap = mapOf(
                 "saldo" to sSaldo.toString(),
