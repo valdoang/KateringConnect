@@ -26,7 +26,9 @@ class TolakPesananFragment : DialogFragment() {
     private var db = Firebase.firestore
     private var userId: String? = null
     private var total: String? = null
+    private var pesananId: String? = null
     private var saldoUser = ""
+    private var metodePembayaran = ""
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -45,13 +47,14 @@ class TolakPesananFragment : DialogFragment() {
         firebaseAuth = Firebase.auth
 
         val mArgs = arguments
-        val pesananId = mArgs!!.getString("id")
+        pesananId = mArgs!!.getString("id")
         userId = mArgs.getString("userId")
         total = mArgs.getString("total")
 
         setUI()
         getSaldo()
-        batalkanPesanan(pesananId!!)
+        getMetodePembayaran()
+        tolakPesanan()
         closeDialog()
         return root
     }
@@ -64,6 +67,15 @@ class TolakPesananFragment : DialogFragment() {
                 if (saldoUser == "null") {
                     saldoUser = "0"
                 }
+            }
+        }
+    }
+
+    private fun getMetodePembayaran() {
+        val pesananRef = db.collection("pesanan").document(pesananId!!)
+        pesananRef.get().addOnSuccessListener {  pesananSnapshot->
+            if (pesananSnapshot != null) {
+                metodePembayaran = pesananSnapshot.data?.get("metodePembayaran").toString()
             }
         }
     }
@@ -93,7 +105,7 @@ class TolakPesananFragment : DialogFragment() {
 
     }
 
-    private fun batalkanPesanan(pesananId: String) {
+    private fun tolakPesanan() {
         binding.btnKirim.setOnClickListener {
             val sAlasan = binding.edAlasan.text.toString().trim()
 
@@ -101,9 +113,12 @@ class TolakPesananFragment : DialogFragment() {
                 "status" to getString(R.string.status_ditolak),
                 "alasan" to sAlasan
             )
-            db.collection("pesanan").document(pesananId).update(alasanMap)
+            db.collection("pesanan").document(pesananId!!).update(alasanMap)
                 .addOnSuccessListener {
-                    addMutasiIntoUserDatabase()
+                    if (metodePembayaran == getString(R.string.kc_wallet)) {
+                        addMutasiIntoUserDatabase()
+                    }
+
                     Toast.makeText(requireContext(), R.string.success_tolak_pesanan, Toast.LENGTH_SHORT).show()
                     dismiss()
                 }

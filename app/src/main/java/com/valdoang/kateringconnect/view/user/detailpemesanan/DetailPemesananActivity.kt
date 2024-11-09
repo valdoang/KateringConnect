@@ -3,12 +3,10 @@ package com.valdoang.kateringconnect.view.user.detailpemesanan
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import android.widget.Button
 import android.widget.ProgressBar
 import android.widget.TextView
-import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.DialogFragment
@@ -65,6 +63,7 @@ class DetailPemesananActivity : AppCompatActivity() {
     private var potongan = ""
     private lateinit var progressBar: ProgressBar
     private var saldoVendor = ""
+    private var metodePembayaran = ""
     private var total = 0L
     private lateinit var tvLihatBuktiPengiriman: TextView
 
@@ -129,7 +128,7 @@ class DetailPemesananActivity : AppCompatActivity() {
                     val vendorNama = pesanan.data?.get("vendorNama").toString()
                     status = pesanan.data?.get("status").toString()
                     val jadwal = pesanan.data?.get("jadwal").toString()
-                    val metodePembayaran = pesanan.data?.get("metodePembayaran").toString()
+                    metodePembayaran = pesanan.data?.get("metodePembayaran").toString()
                     ongkir = pesanan.data?.get("ongkir").toString().toLong()
                     val userNama = pesanan.data?.get("userNama").toString()
                     val userKota = pesanan.data?.get("userKota").toString()
@@ -234,7 +233,7 @@ class DetailPemesananActivity : AppCompatActivity() {
         detailPesananPemesananAdapter.setItems(menuPesananList)
     }
 
-    private fun addMutasiIntoVendorDatabase() {
+    private fun kcWalletPaymentAddMutasi() {
         val sDate = System.currentTimeMillis().toString()
         val sJenis = getString(R.string.kredit)
         val sKeterangan = getString(R.string.penjualan_katering)
@@ -262,6 +261,34 @@ class DetailPemesananActivity : AppCompatActivity() {
 
     }
 
+    private fun tunaiPaymentAddMutasi() {
+        val sDate = System.currentTimeMillis().toString()
+        val sJenis = getString(R.string.debit)
+        val sKeterangan = getString(R.string.penjualan_katering_tunai)
+        val sNominal = total * potongan.toLong() / 100
+
+        val mutasiMap = hashMapOf(
+            "tanggal" to sDate,
+            "jenis" to sJenis,
+            "keterangan" to sKeterangan,
+            "nominal" to sNominal.toString(),
+        )
+
+        progressBar.visibility = View.VISIBLE
+        val vendorRef = db.collection("user").document(vendorId)
+        val newMutasi = vendorRef.collection("mutasi").document()
+        newMutasi.set(mutasiMap).addOnSuccessListener {
+            progressBar.visibility = View.GONE
+            val newSaldo = saldoVendor.toLong() - sNominal
+
+            val saldoMap = mapOf(
+                "saldo" to newSaldo.toString()
+            )
+            vendorRef.update(saldoMap)
+        }
+
+    }
+
     @RequiresApi(Build.VERSION_CODES.N)
     private fun setupAction() {
         binding.ibBack.setOnClickListener {
@@ -279,7 +306,14 @@ class DetailPemesananActivity : AppCompatActivity() {
                 "status" to getString(R.string.status_selesai)
             )
             db.collection("pesanan").document(pesananId!!).update(updateStatus)
-            addMutasiIntoVendorDatabase()
+            when(metodePembayaran) {
+                getString(R.string.kc_wallet) -> {
+                    kcWalletPaymentAddMutasi()
+                }
+                getString(R.string.tunai) -> {
+                    tunaiPaymentAddMutasi()
+                }
+            }
 
             it.visibility = View.GONE
             finish()
