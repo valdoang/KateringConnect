@@ -1,5 +1,6 @@
 package com.valdoang.kateringconnect.view.vendor.detailpesanan
 
+import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.view.View
@@ -17,6 +18,8 @@ import com.valdoang.kateringconnect.R
 import com.valdoang.kateringconnect.databinding.ActivitySelesaikanPesananBinding
 import com.valdoang.kateringconnect.utils.Cons
 import com.valdoang.kateringconnect.utils.getImageUri
+import com.valdoang.kateringconnect.view.user.main.UserMainActivity
+import com.valdoang.kateringconnect.view.vendor.main.VendorMainActivity
 import java.util.*
 
 class SelesaikanPesananActivity : AppCompatActivity() {
@@ -80,7 +83,9 @@ class SelesaikanPesananActivity : AppCompatActivity() {
                             )
                             db.collection("pesanan").document(pesananId!!).update(mapBuktiPengiriman)
                                 .addOnSuccessListener {
-                                    finish()
+                                    val intent = Intent(this, VendorMainActivity::class.java)
+                                    intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                                    startActivity(intent)
                                     Toast.makeText(this, R.string.success_selesaikan_pesanan, Toast.LENGTH_SHORT).show()
                                 }
                                 .addOnFailureListener{

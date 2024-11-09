@@ -5,12 +5,14 @@ import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.valdoang.kateringconnect.R
 import com.valdoang.kateringconnect.databinding.ItemRiwayatPesananBinding
+import com.valdoang.kateringconnect.model.Keranjang
 import com.valdoang.kateringconnect.model.Pesanan
 import com.valdoang.kateringconnect.utils.withNumberingFormat
 import com.valdoang.kateringconnect.utils.withTimestampToDateTimeFormat
@@ -29,7 +31,6 @@ class VendorBerandaRiwayatAdapter(
         pesananList.addAll(itemList)
         notifyDataSetChanged()
     }
-
 
     fun setOnItemClickCallback(onItemClickCallback: OnItemClickCallback) {
         this.onItemClickCallback = onItemClickCallback
@@ -63,7 +64,7 @@ class VendorBerandaRiwayatAdapter(
                         val sTotalHarga = subtotalTemp + pesanan.ongkir!!.toLong()
 
                         tvPemesananMenu.text = context.getString(R.string.jumlah_alamat, jumlahTemp.toString(), context.getString(R.string.tv_address_city, pesanan.userAlamat, pesanan.userKota))
-                        tvPemesananTotal.text = sTotalHarga.withNumberingFormat()
+                        tvPemesananTotal.text = context.getString(R.string.total_metodepembayaran, sTotalHarga.withNumberingFormat(), pesanan.metodePembayaran)
                     }
 
                     when (pesanan.status) {

@@ -18,6 +18,9 @@
         tools:replace="android:allowBackup, usesCleartextTraffic"
         tools:targetApi="31">
         <activity
+            android:name=".view.vendor.detailpesanan.TagihTunaiActivity"
+            android:exported="false" />
+        <activity
             android:name=".view.admin.ui.pengaturan.AturPengaturanActivity"
             android:exported="false" />
         <activity

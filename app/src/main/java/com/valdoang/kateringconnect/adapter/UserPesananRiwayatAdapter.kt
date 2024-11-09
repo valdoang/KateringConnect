@@ -61,7 +61,7 @@ class UserPesananRiwayatAdapter(
                         val sTotalHarga = subtotalTemp + pesanan.ongkir!!.toLong()
 
                         tvPemesananMenu.text = context.getString(R.string.jumlah_alamat, jumlahTemp.toString(), context.getString(R.string.tv_address_city, pesanan.userAlamat, pesanan.userKota))
-                        tvPemesananTotal.text = sTotalHarga.withNumberingFormat()
+                        tvPemesananTotal.text = context.getString(R.string.total_metodepembayaran, sTotalHarga.withNumberingFormat(), pesanan.metodePembayaran)
                     }
                 }
 

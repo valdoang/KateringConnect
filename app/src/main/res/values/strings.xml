@@ -216,6 +216,9 @@
     <string name="data_kosong">Data Kosong</string>
     <string name="tv_status">Status</string>
     <string name="tv_address_city">%1$s, %2$s</string>
+    <string name="tanggal_jam">%1$s - %2$s</string>
+    <string name="terima_sebelum_tanggal">Terima pesanan sebelum %1$s - %2$s</string>
+    <string name="selesaikan_sebelum_tanggal">Selesaikan pesanan sebelum %1$s - %2$s</string>
     <string name="minimum_date">Hanya bisa memilih tanggal setelah hari ini. Pilih tanggal yang lain ya.</string>
     <string name="batalkan">Batalkan</string>
     <string name="ok">OK</string>
@@ -362,6 +365,7 @@
     <string name="pengembalian_dana">Pengembalian Dana</string>
     <string name="digital_desc">Opsi pembayaran digital akan tampil setelah pesan</string>
     <string name="jumlah_alamat">%1$s Pesanan • %2$s</string>
+    <string name="total_metodepembayaran">%1$s • %2$s</string>
     <string name="alamat_penerima">Alamat Penerima</string>
     <string name="tambah_porsi">Tambah Porsi</string>
     <string name="subtotal_jumlah">Subtotal (%1$s Pesanan)</string>
@@ -468,4 +472,9 @@
     <string name="admin_tarik_dana_db">adminTarikDana</string>
     <string name="lihat_bukti_transfer">Lihat bukti transfer</string>
     <string name="lihat_bukti_pengiriman">Lihat bukti pengiriman</string>
+    <string name="lanjut">Lanjut</string>
+    <string name="tv_tagih">Pastikan Anda menagih uang sesuai nominal.</string>
+    <string name="jadwal_pengantaran">Jadwal Pengantaran</string>
+    <string name="pesanan_dibuat">Pesanan Dibuat</string>
+    <string name="ditolak_karena_batas_waktu">Vendor kehabisan waktu untuk menerima pesanan</string>
 </resources>

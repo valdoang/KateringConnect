@@ -245,6 +245,7 @@ class PemesananActivity : AppCompatActivity(), TimePickerFragment.DialogTimeList
 
         val sStatus = getString(R.string.status_butuh_konfirmasi_vendor)
         val sDate = calendar.timeInMillis.toString()
+        val sOrderDate = System.currentTimeMillis().toString()
 
         val pemesananMap = hashMapOf(
             "userId" to userId,
@@ -260,7 +261,8 @@ class PemesananActivity : AppCompatActivity(), TimePickerFragment.DialogTimeList
             "status" to sStatus,
             "jadwal" to sDate,
             "ongkir" to ongkir.toString(),
-            "metodePembayaran" to sMetodePembayaran
+            "metodePembayaran" to sMetodePembayaran,
+            "pesananDibuat" to sOrderDate
         )
 
         progressBar.visibility = View.VISIBLE

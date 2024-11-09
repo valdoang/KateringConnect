@@ -41,16 +41,15 @@ class DetailPemesananActivity : AppCompatActivity() {
     private lateinit var tvUserTelepon: TextView
     private lateinit var tvVendorNama: TextView
     private lateinit var tvPesananId: TextView
+    private lateinit var tvPesananPesananDibuat: TextView
     private lateinit var tvPesananStatus: TextView
     private lateinit var tvPesananTotalPembayaran: TextView
     private lateinit var tvPesananSubtotal: TextView
     private lateinit var tvPesananOngkir: TextView
     private lateinit var tvPesananMetodePembayaran: TextView
-    private lateinit var tvPesananTanggal: TextView
-    private lateinit var tvPesananJam: TextView
+    private lateinit var tvPesananJadwalPengantaran: TextView
     private lateinit var btnBeriNilai: Button
     private lateinit var btnPesananTelahDiterima: Button
-    private lateinit var btnPesananBelumDiterima: Button
     private lateinit var tvTotalPembayaran: TextView
     private lateinit var tvSubtotal: TextView
     private lateinit var tvSubtotalValue: TextView
@@ -66,6 +65,7 @@ class DetailPemesananActivity : AppCompatActivity() {
     private var metodePembayaran = ""
     private var total = 0L
     private lateinit var tvLihatBuktiPengiriman: TextView
+    private lateinit var tvConfirmAlert: TextView
 
     @RequiresApi(Build.VERSION_CODES.N)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -83,16 +83,15 @@ class DetailPemesananActivity : AppCompatActivity() {
         tvUserTelepon = binding.tvNoPhone
         tvVendorNama = binding.tvNamaVendor
         tvPesananId = binding.tvIdValue
+        tvPesananPesananDibuat = binding.tvPesananDibuatValue
         tvPesananStatus = binding.tvStatusValue
         tvPesananTotalPembayaran = binding.tvTotalValue
         tvPesananSubtotal = binding.tvSubtotalValue
         tvPesananOngkir = binding.tvOngkirValue
         tvPesananMetodePembayaran = binding.tvPembayaranValue
-        tvPesananTanggal = binding.tvTanggalValue
-        tvPesananJam = binding.tvJamValue
+        tvPesananJadwalPengantaran = binding.tvJadwalPengantaranValue
         btnBeriNilai = binding.btnBeriNilai
         btnPesananTelahDiterima = binding.btnPesananTelahDiterima
-        btnPesananBelumDiterima = binding.btnPesananBelumDiterima
         viewButton = binding.viewButton
         tvTotalPembayaran = binding.tvTotalValue
         tvSubtotal = binding.tvSubtotal
@@ -101,6 +100,7 @@ class DetailPemesananActivity : AppCompatActivity() {
         tvAlasanValue = binding.tvAlasanValue
         progressBar = binding.progressBar
         tvLihatBuktiPengiriman = binding.tvLihatBuktiPengiriman
+        tvConfirmAlert = binding.confirmAlert
 
         setupView()
         setupData()
@@ -128,6 +128,7 @@ class DetailPemesananActivity : AppCompatActivity() {
                     val vendorNama = pesanan.data?.get("vendorNama").toString()
                     status = pesanan.data?.get("status").toString()
                     val jadwal = pesanan.data?.get("jadwal").toString()
+                    val pesananDibuat = pesanan.data?.get("pesananDibuat").toString()
                     metodePembayaran = pesanan.data?.get("metodePembayaran").toString()
                     ongkir = pesanan.data?.get("ongkir").toString().toLong()
                     val userNama = pesanan.data?.get("userNama").toString()
@@ -138,18 +139,20 @@ class DetailPemesananActivity : AppCompatActivity() {
                     val alasan = pesanan.data?.get("alasan").toString()
                     val fotoBuktiPengiriman = pesanan.data?.get("fotoBuktiPengiriman").toString()
 
+                    val confirmDate = jadwal.toLong() + 86400000L
+
                     if (status == getString(R.string.status_butuh_konfirmasi_pengguna)) {
+                        tvConfirmAlert.text = getString(R.string.selesaikan_sebelum_tanggal, confirmDate.toString().withTimestamptoDateFormat(), confirmDate.toString().withTimestamptoTimeFormat())
                         viewButton.visibility = View.VISIBLE
                         btnPesananTelahDiterima.visibility = View.VISIBLE
-                        btnPesananBelumDiterima.visibility = View.VISIBLE
                         tvLihatBuktiPengiriman.visibility = View.VISIBLE
+                        tvConfirmAlert.visibility = View.VISIBLE
 
                     }
                     else if (status == getString(R.string.status_selesai) && nilai == null) {
                         viewButton.visibility = View.VISIBLE
                         btnBeriNilai.visibility = View.VISIBLE
                         btnPesananTelahDiterima.visibility = View.GONE
-                        btnPesananBelumDiterima.visibility = View.GONE
                         tvLihatBuktiPengiriman.visibility = View.VISIBLE
                     }
                     else if (status == getString(R.string.status_selesai) && nilai == true) {
@@ -182,8 +185,8 @@ class DetailPemesananActivity : AppCompatActivity() {
                     tvPesananStatus.text = status
                     tvPesananOngkir.text = ongkir.withNumberingFormat()
                     tvPesananMetodePembayaran.text = metodePembayaran
-                    tvPesananTanggal.text = jadwal.withTimestamptoDateFormat()
-                    tvPesananJam.text = jadwal.withTimestamptoTimeFormat()
+                    tvPesananJadwalPengantaran.text = getString(R.string.tanggal_jam, jadwal.withTimestamptoDateFormat(), jadwal.withTimestamptoTimeFormat())
+                    tvPesananPesananDibuat.text = getString(R.string.tanggal_jam, pesananDibuat.withTimestamptoDateFormat(), pesananDibuat.withTimestamptoTimeFormat())
                     tvAlasanValue.text = alasan
                     tvLihatBuktiPengiriman.setOnClickListener {
                         val intent = Intent(this, ImageViewActivity::class.java)
@@ -317,9 +320,6 @@ class DetailPemesananActivity : AppCompatActivity() {
 
             it.visibility = View.GONE
             finish()
-        }
-        btnPesananBelumDiterima.setOnClickListener {
-            //TODO: TAMBAHKAN COMPLAIN KE ADMIN
         }
     }
 

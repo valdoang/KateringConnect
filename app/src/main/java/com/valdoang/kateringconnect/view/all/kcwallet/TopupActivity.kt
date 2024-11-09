@@ -175,7 +175,7 @@ class TopupActivity : AppCompatActivity(), TransactionFinishedCallback {
             .setClientKey(Cons.MIDTRANS_CLIENT_KEY)
             .setContext(this)
             .setTransactionFinishedCallback(this)
-            .setMerchantBaseUrl(Cons.MIDTRANS_BASE_URL)
+            .setMerchantBaseUrl(Cons.WARKOP88_URL)
             .enableLog(true)
             .setLanguage("id")
             .buildSDK()

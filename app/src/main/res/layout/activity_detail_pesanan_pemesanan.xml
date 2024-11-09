@@ -321,6 +321,32 @@
                     app:layout_constraintEnd_toEndOf="parent"/>
 
                 <TextView
+                    android:id="@+id/tv_pesanan_dibuat"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="1dp"
+                    android:text="@string/pesanan_dibuat"
+                    android:textSize="14sp"
+                    android:fontFamily="@font/poppins"
+                    android:textColor="@color/black"
+                    app:layout_constraintTop_toBottomOf="@id/tv_id"
+                    app:layout_constraintStart_toStartOf="@id/tv_id"/>
+
+                <TextView
+                    android:id="@+id/tv_pesanan_dibuat_value"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="1dp"
+                    android:layout_marginEnd="16dp"
+                    tools:text="15 Maret 2024 - 10.50"
+                    android:textSize="14sp"
+                    android:fontFamily="@font/poppins"
+                    android:textColor="@color/black"
+                    app:layout_constraintTop_toBottomOf="@id/tv_id_value"
+                    app:layout_constraintEnd_toEndOf="parent"/>
+
+
+                <TextView
                     android:id="@+id/tv_status"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -329,8 +355,8 @@
                     android:textSize="14sp"
                     android:fontFamily="@font/poppins"
                     android:textColor="@color/black"
-                    app:layout_constraintTop_toBottomOf="@id/tv_id"
-                    app:layout_constraintStart_toStartOf="@id/tv_id"/>
+                    app:layout_constraintTop_toBottomOf="@id/tv_pesanan_dibuat"
+                    app:layout_constraintStart_toStartOf="@id/tv_pesanan_dibuat"/>
 
                 <TextView
                     android:id="@+id/tv_status_value"
@@ -342,7 +368,7 @@
                     android:textSize="14sp"
                     android:fontFamily="@font/poppins"
                     android:textColor="@color/black"
-                    app:layout_constraintTop_toBottomOf="@id/tv_id_value"
+                    app:layout_constraintTop_toBottomOf="@id/tv_pesanan_dibuat_value"
                     app:layout_constraintEnd_toEndOf="parent"/>
 
                 <TextView
@@ -383,7 +409,7 @@
                     android:textSize="14sp"
                     android:fontFamily="@font/poppins"
                     android:textColor="@color/black"
-                    app:layout_constraintTop_toBottomOf="@id/tv_alasan"
+                    app:layout_constraintTop_toBottomOf="@id/tv_alasan_value"
                     app:layout_constraintStart_toStartOf="@id/tv_alasan"/>
 
                 <TextView
@@ -400,57 +426,32 @@
                     app:layout_constraintEnd_toEndOf="parent"/>
 
                 <TextView
-                    android:id="@+id/tv_tanggal"
+                    android:id="@+id/tv_jadwal_pengantaran"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="1dp"
-                    android:text="@string/tv_tanggal"
+                    android:layout_marginBottom="19dp"
+                    android:text="@string/jadwal_pengantaran"
                     android:textSize="14sp"
                     android:fontFamily="@font/poppins"
                     android:textColor="@color/black"
+                    app:layout_constraintVertical_bias="0.0"
+                    app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/tv_pembayaran"
                     app:layout_constraintStart_toStartOf="@id/tv_pembayaran"/>
 
                 <TextView
-                    android:id="@+id/tv_tanggal_value"
+                    android:id="@+id/tv_jadwal_pengantaran_value"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="1dp"
                     android:layout_marginEnd="16dp"
-                    tools:text="19 Maret 2024"
+                    tools:text="19 Maret 2024 - 12.00"
                     android:textSize="14sp"
                     android:fontFamily="@font/poppins"
                     android:textColor="@color/black"
                     app:layout_constraintTop_toBottomOf="@id/tv_pembayaran_value"
                     app:layout_constraintEnd_toEndOf="parent"/>
-
-                <TextView
-                    android:id="@+id/tv_jam"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="1dp"
-                    android:layout_marginBottom="19dp"
-                    android:text="@string/tv_jam"
-                    android:textSize="14sp"
-                    android:fontFamily="@font/poppins"
-                    android:textColor="@color/black"
-                    app:layout_constraintVertical_bias="0.0"
-                    app:layout_constraintTop_toBottomOf="@id/tv_tanggal"
-                    app:layout_constraintStart_toStartOf="@id/tv_tanggal"
-                    app:layout_constraintBottom_toBottomOf="parent"/>
-
-                <TextView
-                    android:id="@+id/tv_jam_value"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="1dp"
-                    android:layout_marginEnd="16dp"
-                    tools:text="09:00"
-                    android:textSize="14sp"
-                    android:fontFamily="@font/poppins"
-                    android:textColor="@color/black"
-                    app:layout_constraintTop_toBottomOf="@id/tv_tanggal_value"
-                    app:layout_constraintEnd_toEndOf="parent" />
 
                 <TextView
                     android:id="@+id/tv_lihat_bukti_pengiriman"
@@ -464,7 +465,7 @@
                     android:layout_marginTop="16dp"
                     android:layout_marginBottom="19dp"
                     app:layout_constraintVertical_bias="0.0"
-                    app:layout_constraintTop_toBottomOf="@id/tv_jam"
+                    app:layout_constraintTop_toBottomOf="@id/tv_jadwal_pengantaran"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"/>
@@ -513,6 +514,22 @@
                 app:layout_constraintTop_toBottomOf="@+id/btn_selesaikan"
                 app:layout_constraintBottom_toBottomOf="parent"/>
 
+            <TextView
+                android:id="@+id/confirm_alert"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                tools:text="@string/terima_sebelum_tanggal"
+                android:fontFamily="@font/poppins"
+                android:visibility="gone"
+                android:textSize="14sp"
+                android:textColor="@color/red"
+                android:layout_marginStart="32dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="32dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/cl_rincian_pesanan"/>
+
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btn_terima_pesanan"
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
@@ -528,7 +545,7 @@
                 android:textSize="16sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/cl_rincian_pesanan" />
+                app:layout_constraintTop_toBottomOf="@+id/confirm_alert" />
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btn_tolak_pesanan"
@@ -583,28 +600,10 @@
                 android:visibility="gone"
                 app:cornerRadius="10dp"
                 android:textSize="16sp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/cl_rincian_pesanan" />
-
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/btn_pesanan_belum_diterima"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                android:layout_width="0dp"
-                android:layout_height="55dp"
-                android:layout_marginStart="32dp"
-                android:layout_marginTop="8dp"
-                android:layout_marginEnd="32dp"
-                android:layout_marginBottom="16dp"
-                android:fontFamily="@font/poppins_bold"
-                android:text="@string/pesanan_belum_diterima"
-                android:visibility="gone"
-                app:cornerRadius="10dp"
-                android:textSize="16sp"
                 app:layout_constraintVertical_bias="0.0"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/btn_pesanan_telah_diterima"
+                app:layout_constraintTop_toBottomOf="@+id/confirm_alert"
                 app:layout_constraintBottom_toBottomOf="parent"/>
 
         </androidx.constraintlayout.widget.ConstraintLayout>

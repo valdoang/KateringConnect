@@ -2,6 +2,7 @@ package com.valdoang.kateringconnect.model
 
 data class Pesanan(
     var id: String? = null,
+    var pesananDibuat: String? = null,
     var userId: String? = null,
     var userNama: String? = null,
     var userKota: String? = null,

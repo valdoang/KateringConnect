@@ -17,5 +17,5 @@ object Cons {
 
     //Sesuaikan menurut IP saat ini
     const val MIDTRANS_BASE_URL = "http://192.168.100.64:5000/"
-    const val WARKOP88_URL = "http://192.168.1.24:5000"
+    const val WARKOP88_URL = "http://192.168.1.139:5000"
 }

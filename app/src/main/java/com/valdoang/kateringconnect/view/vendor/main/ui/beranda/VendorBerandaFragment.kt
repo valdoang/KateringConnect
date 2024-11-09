@@ -31,6 +31,7 @@ class VendorBerandaFragment : Fragment() {
     private var db = Firebase.firestore
     private lateinit var recyclerView: RecyclerView
     private lateinit var pesananList: ArrayList<Pesanan>
+    private lateinit var lateAcceptList: ArrayList<Pesanan>
     private lateinit var vendorBerandaRiwayatAdapter: VendorBerandaRiwayatAdapter
     private lateinit var progressBar: ProgressBar
 
@@ -52,6 +53,23 @@ class VendorBerandaFragment : Fragment() {
         setupAction()
         
         return root
+    }
+
+    private fun lateConfirm() {
+        val userId= firebaseAuth.currentUser!!.uid
+        val vendorRef = db.collection("pesanan").whereEqualTo("vendorId", userId).whereEqualTo("status",  getString(R.string.status_butuh_konfirmasi_vendor))
+        vendorRef.get().addOnSuccessListener {  vendorSnapshot ->
+            if (vendorSnapshot != null) {
+                lateAcceptList.clear()
+                for (data in vendorSnapshot.documents) {
+                    val pesanan: Pesanan? = data.toObject(Pesanan::class.java)
+                    if (pesanan != null) {
+                        pesanan.id = data.id
+                        lateAcceptList.add(pesanan)
+                    }
+                }
+            }
+        }
     }
 
     private fun setupData() {
