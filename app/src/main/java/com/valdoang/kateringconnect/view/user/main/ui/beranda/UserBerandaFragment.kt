@@ -39,7 +39,6 @@ import java.util.stream.Collectors
 import kotlin.math.roundToLong
 
 class UserBerandaFragment : Fragment() {
-
     private var _binding: FragmentUserBerandaBinding? = null
 
     // This property is only valid between onCreateView and

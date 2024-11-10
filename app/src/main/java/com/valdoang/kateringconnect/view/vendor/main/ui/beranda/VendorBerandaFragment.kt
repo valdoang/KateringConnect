@@ -27,11 +27,11 @@ class VendorBerandaFragment : Fragment() {
     // This property is only valid between onCreateView and
     // onDestroyView.
     private val binding get() = _binding!!
-    private lateinit var firebaseAuth: FirebaseAuth
+    private  var firebaseAuth = FirebaseAuth.getInstance()
+    private var userId = firebaseAuth.currentUser!!.uid
     private var db = Firebase.firestore
     private lateinit var recyclerView: RecyclerView
     private lateinit var pesananList: ArrayList<Pesanan>
-    private lateinit var lateAcceptList: ArrayList<Pesanan>
     private lateinit var vendorBerandaRiwayatAdapter: VendorBerandaRiwayatAdapter
     private lateinit var progressBar: ProgressBar
 
@@ -55,26 +55,8 @@ class VendorBerandaFragment : Fragment() {
         return root
     }
 
-    private fun lateConfirm() {
-        val userId= firebaseAuth.currentUser!!.uid
-        val vendorRef = db.collection("pesanan").whereEqualTo("vendorId", userId).whereEqualTo("status",  getString(R.string.status_butuh_konfirmasi_vendor))
-        vendorRef.get().addOnSuccessListener {  vendorSnapshot ->
-            if (vendorSnapshot != null) {
-                lateAcceptList.clear()
-                for (data in vendorSnapshot.documents) {
-                    val pesanan: Pesanan? = data.toObject(Pesanan::class.java)
-                    if (pesanan != null) {
-                        pesanan.id = data.id
-                        lateAcceptList.add(pesanan)
-                    }
-                }
-            }
-        }
-    }
-
     private fun setupData() {
         progressBar.visibility = View.VISIBLE
-        val userId= firebaseAuth.currentUser!!.uid
         val ref = db.collection("pesanan").whereEqualTo("vendorId", userId).whereIn("status", listOf(getString(
             R.string.status_proses), getString(R.string.status_butuh_konfirmasi_vendor)))
         ref.addSnapshotListener{ snapshot,_ ->
@@ -131,10 +113,5 @@ class VendorBerandaFragment : Fragment() {
             val intent = Intent(requireContext(), ChatActivity::class.java)
             startActivity(intent)
         }
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
     }
 }

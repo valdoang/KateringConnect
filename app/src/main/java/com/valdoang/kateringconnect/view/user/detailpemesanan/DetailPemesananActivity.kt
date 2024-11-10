@@ -28,11 +28,11 @@ import com.valdoang.kateringconnect.view.all.imageview.ImageViewActivity
 import com.valdoang.kateringconnect.view.user.berinilai.BeriNilaiFragment
 
 class DetailPemesananActivity : AppCompatActivity() {
-    //TODO: UNTUK KONFIRMASI TELAH MENERIMA PESANAN, BERIKAN OTOMATIS TELAH MENERIMA JIKA MELEBIHI H+1
     private lateinit var binding: ActivityDetailPesananPemesananBinding
     private lateinit var firebaseAuth: FirebaseAuth
     private var db = Firebase.firestore
     private var pesananId: String? = null
+    private var userId = ""
     private var vendorId = ""
     private var status = ""
     private var ongkir = 0L
@@ -63,6 +63,9 @@ class DetailPemesananActivity : AppCompatActivity() {
     private lateinit var progressBar: ProgressBar
     private var saldoVendor = ""
     private var metodePembayaran = ""
+    private var jadwal = ""
+    private var pesananDibuat = ""
+    private var confirmDate = 0L
     private var total = 0L
     private lateinit var tvLihatBuktiPengiriman: TextView
     private lateinit var tvConfirmAlert: TextView
@@ -124,11 +127,12 @@ class DetailPemesananActivity : AppCompatActivity() {
         db.collection("pesanan").document(pesananId!!)
             .addSnapshotListener { pesanan,_ ->
                 if (pesanan != null) {
+                    userId = pesanan.data?.get("userId").toString()
                     vendorId = pesanan.data?.get("vendorId").toString()
                     val vendorNama = pesanan.data?.get("vendorNama").toString()
                     status = pesanan.data?.get("status").toString()
-                    val jadwal = pesanan.data?.get("jadwal").toString()
-                    val pesananDibuat = pesanan.data?.get("pesananDibuat").toString()
+                    jadwal = pesanan.data?.get("jadwal").toString()
+                    pesananDibuat = pesanan.data?.get("pesananDibuat").toString()
                     metodePembayaran = pesanan.data?.get("metodePembayaran").toString()
                     ongkir = pesanan.data?.get("ongkir").toString().toLong()
                     val userNama = pesanan.data?.get("userNama").toString()
@@ -139,7 +143,7 @@ class DetailPemesananActivity : AppCompatActivity() {
                     val alasan = pesanan.data?.get("alasan").toString()
                     val fotoBuktiPengiriman = pesanan.data?.get("fotoBuktiPengiriman").toString()
 
-                    val confirmDate = jadwal.toLong() + 86400000L
+                    confirmDate = jadwal.toLong() + 86400000L
 
                     if (status == getString(R.string.status_butuh_konfirmasi_pengguna)) {
                         tvConfirmAlert.text = getString(R.string.selesaikan_sebelum_tanggal, confirmDate.toString().withTimestamptoDateFormat(), confirmDate.toString().withTimestamptoTimeFormat())
@@ -147,7 +151,7 @@ class DetailPemesananActivity : AppCompatActivity() {
                         btnPesananTelahDiterima.visibility = View.VISIBLE
                         tvLihatBuktiPengiriman.visibility = View.VISIBLE
                         tvConfirmAlert.visibility = View.VISIBLE
-
+                        lateConfirm()
                     }
                     else if (status == getString(R.string.status_selesai) && nilai == null) {
                         viewButton.visibility = View.VISIBLE
@@ -174,6 +178,9 @@ class DetailPemesananActivity : AppCompatActivity() {
                     }
                     else if (status == getString(R.string.status_proses) ) {
                         viewButton.visibility = View.GONE
+                    }
+                    else if (status == getString(R.string.status_butuh_konfirmasi_vendor)) {
+                        vendorLateConfirm()
                     }
 
                     tvUserNama.text = userNama
@@ -225,6 +232,78 @@ class DetailPemesananActivity : AppCompatActivity() {
 
                 detailPesananPemesananAdapter.setItems(menuPesananList)
             }
+        }
+    }
+
+    private fun lateConfirm() {
+        val currentDate = System.currentTimeMillis()
+        if (currentDate >= confirmDate) {
+            val updateStatus = mapOf(
+                "status" to getString(R.string.status_selesai)
+            )
+            db.collection("pesanan").document(pesananId!!).update(updateStatus)
+                .addOnSuccessListener {
+                    when(metodePembayaran) {
+                        getString(R.string.kc_wallet) -> {
+                            kcWalletPaymentAddMutasi()
+                        }
+                        getString(R.string.tunai) -> {
+                            tunaiPaymentAddMutasi()
+                        }
+                    }
+
+                    btnPesananTelahDiterima.visibility = View.GONE
+                    tvConfirmAlert.visibility = View.GONE
+                }
+        }
+    }
+
+    private fun vendorLateConfirm() {
+        val currentDate = System.currentTimeMillis()
+        val confirmDateVendor = pesananDibuat.toLong() + 86400000L
+
+        if (currentDate >= confirmDateVendor) {
+            val sAlasan = getString(R.string.ditolak_karena_batas_waktu)
+
+            val alasanMap = mapOf(
+                "status" to getString(R.string.status_ditolak),
+                "alasan" to sAlasan
+            )
+            db.collection("pesanan").document(pesananId!!).update(alasanMap)
+                .addOnSuccessListener {
+                    if (metodePembayaran == getString(R.string.kc_wallet)) {
+                        val sDate = currentDate.toString()
+                        val sJenis = getString(R.string.kredit)
+                        val sKeterangan = getString(R.string.pengembalian_dana)
+
+                        val mutasiMap = hashMapOf(
+                            "tanggal" to sDate,
+                            "jenis" to sJenis,
+                            "keterangan" to sKeterangan,
+                            "nominal" to total.toString(),
+                        )
+
+                        val userRef = db.collection("user").document(userId)
+                        userRef.get().addOnSuccessListener { userSnapshot ->
+                            if (userSnapshot != null) {
+                                var saldoUser = userSnapshot.data?.get("saldo").toString()
+                                if (saldoUser == "null") {
+                                    saldoUser = "0"
+                                }
+
+                                val newMutasi = userRef.collection("mutasi").document()
+                                newMutasi.set(mutasiMap).addOnSuccessListener {
+                                    val newSaldo = saldoUser.toLong() + total
+
+                                    val saldoMap = mapOf(
+                                        "saldo" to newSaldo.toString()
+                                    )
+                                    userRef.update(saldoMap)
+                                }
+                            }
+                        }
+                    }
+                }
         }
     }
 

@@ -24,7 +24,6 @@ import com.valdoang.kateringconnect.utils.withTimestamptoTimeFormat
 import com.valdoang.kateringconnect.view.all.imageview.ImageViewActivity
 
 class DetailPesananActivity : AppCompatActivity() {
-    //TODO: UNTUK KONFIRMASI PESANAN, BERIKAN OTOMATIS MENOLAK JIKA MELEBIHI JADWAL PESANAN
     private lateinit var binding: ActivityDetailPesananPemesananBinding
     private lateinit var firebaseAuth: FirebaseAuth
     private var db = Firebase.firestore
@@ -60,9 +59,11 @@ class DetailPesananActivity : AppCompatActivity() {
     private lateinit var tvLihatBuktiPengiriman: TextView
     private lateinit var tvConfirmAlert: TextView
     private var metodePembayaran: String? = null
-    private var saldoUser = ""
     private var pesananDibuat = ""
     private var confirmDate = 0L
+    private var potongan = ""
+    private var saldoVendor = ""
+    private var jadwal = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -102,6 +103,7 @@ class DetailPesananActivity : AppCompatActivity() {
         setupView()
         setupData()
         setupDataMenu()
+        setupPotongan()
     }
 
     private fun setupData() {
@@ -112,7 +114,7 @@ class DetailPesananActivity : AppCompatActivity() {
                     userId = pesanan.data?.get("userId").toString()
                     vendorId = pesanan.data?.get("vendorId").toString()
                     status = pesanan.data?.get("status").toString()
-                    val jadwal = pesanan.data?.get("jadwal").toString()
+                    jadwal = pesanan.data?.get("jadwal").toString()
                     pesananDibuat = pesanan.data?.get("pesananDibuat").toString()
                     metodePembayaran = pesanan.data?.get("metodePembayaran").toString()
                     ongkir = pesanan.data?.get("ongkir").toString().toLong()
@@ -148,6 +150,9 @@ class DetailPesananActivity : AppCompatActivity() {
                             tvAlasan.text = getString(R.string.alasan_penolakan)
                             tvAlasan.visibility = View.VISIBLE
                             tvAlasanValue.visibility = View.VISIBLE
+                            btnTerimaPesanan.visibility = View.GONE
+                            btnTolakPesanan.visibility = View.GONE
+                            tvConfirmAlert.visibility = View.GONE
                         }
                         getString(R.string.status_batal) -> {
                             tvAlasan.text = getString(R.string.alasan_pembatalan)
@@ -164,28 +169,28 @@ class DetailPesananActivity : AppCompatActivity() {
                             tvAlasan.visibility = View.GONE
                             tvAlasanValue.visibility = View.GONE
                             tvLihatBuktiPengiriman.visibility = View.GONE
+                            lateConfirm()
                         }
                         getString(R.string.status_butuh_konfirmasi_pengguna) -> {
                             tvAlasan.visibility = View.GONE
                             tvAlasanValue.visibility = View.GONE
                             tvLihatBuktiPengiriman.visibility = View.VISIBLE
+                            userLateConfirm()
                         }
                     }
 
                     setupView()
                     setUI()
 
-                   /* val userRef = db.collection("user").document(userId)
-                    userRef.addSnapshotListener { userSnapshot, _ ->
-                        if (userSnapshot != null) {
-                            saldoUser = userSnapshot.data?.get("saldo").toString()
-                            if (saldoUser == "null") {
-                                saldoUser = "0"
+                    val vendorRef = db.collection("user").document(vendorId)
+                    vendorRef.addSnapshotListener { vendorSnapshot, _ ->
+                        if (vendorSnapshot != null) {
+                            saldoVendor = vendorSnapshot.data?.get("saldo").toString()
+                            if (saldoVendor == "null") {
+                                saldoVendor = "0"
                             }
                         }
                     }
-
-                    otomatisMenolakPesanan()*/
                 }
             }
     }
@@ -209,55 +214,135 @@ class DetailPesananActivity : AppCompatActivity() {
         }
     }
 
-    /*private fun otomatisMenolakPesanan() {
-        if (status == getString(R.string.status_butuh_konfirmasi_vendor)) {
-            val currentDate = 1741266508432L
+    private fun lateConfirm() {
+        val currentDate = System.currentTimeMillis()
 
-            if (currentDate >= confirmDate) {
-                val sAlasan = getString(R.string.ditolak_karena_batas_waktu)
+        if (currentDate >= confirmDate) {
+            val sAlasan = getString(R.string.ditolak_karena_batas_waktu)
 
-                val alasanMap = mapOf(
-                    "status" to getString(R.string.status_ditolak),
-                    "alasan" to sAlasan
-                )
-                db.collection("pesanan").document(pesananId!!).update(alasanMap)
-                    .addOnSuccessListener {
-                        if (metodePembayaran == getString(R.string.kc_wallet)) {
-                            val sDate = System.currentTimeMillis().toString()
-                            val sJenis = getString(R.string.kredit)
-                            val sKeterangan = getString(R.string.pengembalian_dana)
+            val alasanMap = mapOf(
+                "status" to getString(R.string.status_ditolak),
+                "alasan" to sAlasan
+            )
+            db.collection("pesanan").document(pesananId!!).update(alasanMap)
+                .addOnSuccessListener {
+                    if (metodePembayaran == getString(R.string.kc_wallet)) {
+                        val sDate = currentDate.toString()
+                        val sJenis = getString(R.string.kredit)
+                        val sKeterangan = getString(R.string.pengembalian_dana)
 
-                            val mutasiMap = hashMapOf(
-                                "tanggal" to sDate,
-                                "jenis" to sJenis,
-                                "keterangan" to sKeterangan,
-                                "nominal" to total.toString(),
-                            )
+                        val mutasiMap = hashMapOf(
+                            "tanggal" to sDate,
+                            "jenis" to sJenis,
+                            "keterangan" to sKeterangan,
+                            "nominal" to total.toString(),
+                        )
 
-                            val userRef = db.collection("user").document(userId)
-                            userRef.addSnapshotListener { userSnapshot, _ ->
-                                if (userSnapshot != null) {
-                                    var saldoUser = userSnapshot.data?.get("saldo").toString()
-                                    if (saldoUser == "null") {
-                                        saldoUser = "0"
-                                    }
+                        val userRef = db.collection("user").document(userId)
+                        userRef.get().addOnSuccessListener { userSnapshot ->
+                            if (userSnapshot != null) {
+                                var saldoUser = userSnapshot.data?.get("saldo").toString()
+                                if (saldoUser == "null") {
+                                    saldoUser = "0"
+                                }
 
-                                    val newMutasi = userRef.collection("mutasi").document()
-                                    newMutasi.set(mutasiMap).addOnSuccessListener {
-                                        val newSaldo = saldoUser.toLong() + total
+                                val newMutasi = userRef.collection("mutasi").document()
+                                newMutasi.set(mutasiMap).addOnSuccessListener {
+                                    val newSaldo = saldoUser.toLong() + total
 
-                                        val saldoMap = mapOf(
-                                            "saldo" to newSaldo.toString()
-                                        )
-                                        userRef.update(saldoMap)
-                                    }
+                                    val saldoMap = mapOf(
+                                        "saldo" to newSaldo.toString()
+                                    )
+                                    userRef.update(saldoMap)
                                 }
                             }
                         }
                     }
+                }
+        }
+    }
+
+    private fun userLateConfirm() {
+        val currentDate = System.currentTimeMillis()
+        val userConfirmDate = jadwal.toLong() + 86400000L
+        if (currentDate >= userConfirmDate) {
+            val updateStatus = mapOf(
+                "status" to getString(R.string.status_selesai)
+            )
+            db.collection("pesanan").document(pesananId!!).update(updateStatus)
+                .addOnSuccessListener {
+                    when(metodePembayaran) {
+                        getString(R.string.kc_wallet) -> {
+                            kcWalletPaymentAddMutasi()
+                        }
+                        getString(R.string.tunai) -> {
+                            tunaiPaymentAddMutasi()
+                        }
+                    }
+                }
+        }
+    }
+
+    private fun setupPotongan() {
+        val adminRef = db.collection("user").document(Cons.ADMIN_ID)
+        adminRef.addSnapshotListener { adminSnapshot, _ ->
+            if (adminSnapshot != null) {
+                potongan = adminSnapshot.data?.get("potongan").toString()
             }
         }
-    }*/
+    }
+
+    private fun kcWalletPaymentAddMutasi() {
+        val sDate = System.currentTimeMillis().toString()
+        val sJenis = getString(R.string.kredit)
+        val sKeterangan = getString(R.string.penjualan_katering)
+        val sNominal = total*(100 - potongan.toLong())/100
+
+        val mutasiMap = hashMapOf(
+            "tanggal" to sDate,
+            "jenis" to sJenis,
+            "keterangan" to sKeterangan,
+            "nominal" to sNominal.toString(),
+        )
+
+        val vendorRef = db.collection("user").document(vendorId)
+        val newMutasi = vendorRef.collection("mutasi").document()
+        newMutasi.set(mutasiMap).addOnSuccessListener {
+            val newSaldo = saldoVendor.toLong() + sNominal
+
+            val saldoMap = mapOf(
+                "saldo" to newSaldo.toString()
+            )
+            vendorRef.update(saldoMap)
+        }
+
+    }
+
+    private fun tunaiPaymentAddMutasi() {
+        val sDate = System.currentTimeMillis().toString()
+        val sJenis = getString(R.string.debit)
+        val sKeterangan = getString(R.string.penjualan_katering_tunai)
+        val sNominal = total * potongan.toLong() / 100
+
+        val mutasiMap = hashMapOf(
+            "tanggal" to sDate,
+            "jenis" to sJenis,
+            "keterangan" to sKeterangan,
+            "nominal" to sNominal.toString(),
+        )
+
+        val vendorRef = db.collection("user").document(vendorId)
+        val newMutasi = vendorRef.collection("mutasi").document()
+        newMutasi.set(mutasiMap).addOnSuccessListener {
+            val newSaldo = saldoVendor.toLong() - sNominal
+
+            val saldoMap = mapOf(
+                "saldo" to newSaldo.toString()
+            )
+            vendorRef.update(saldoMap)
+        }
+
+    }
 
     private fun setupView() {
         recyclerView = binding.rvPesanan
