@@ -14,32 +14,25 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
-import com.midtrans.sdk.corekit.callback.TransactionFinishedCallback
-import com.midtrans.sdk.corekit.core.MidtransSDK
-import com.midtrans.sdk.corekit.core.TransactionRequest
-import com.midtrans.sdk.corekit.models.BillingAddress
-import com.midtrans.sdk.corekit.models.CustomerDetails
-import com.midtrans.sdk.corekit.models.ItemDetails
-import com.midtrans.sdk.corekit.models.ShippingAddress
-import com.midtrans.sdk.corekit.models.snap.TransactionResult
-import com.midtrans.sdk.uikit.SdkUIFlowBuilder
 import com.valdoang.kateringconnect.R
 import com.valdoang.kateringconnect.databinding.FragmentTambahPorsiBinding
 import com.valdoang.kateringconnect.utils.Cons
 import com.valdoang.kateringconnect.utils.allChangedListener
 import com.valdoang.kateringconnect.utils.withNumberingFormat
+import com.valdoang.kateringconnect.view.user.pemesanan.KcWalletNotEnoughFragment
 import com.valdoang.kateringconnect.view.user.pemesanan.PemesananBerhasilActivity
-import java.util.ArrayList
 
-class TambahPorsiFragment : DialogFragment(), TransactionFinishedCallback {
+class TambahPorsiFragment : DialogFragment() {
     private var _binding: FragmentTambahPorsiBinding? = null
 
     // This property is only valid between onCreateView and
     // onDestroyView.
     private val binding get() = _binding!!
-    private lateinit var firebaseAuth: FirebaseAuth
-    private var userId = ""
+    private var firebaseAuth = FirebaseAuth.getInstance()
+    private var userId = firebaseAuth.currentUser!!.uid
     private var db = Firebase.firestore
+    private val userRef = db.collection("user").document(userId)
+    private val newMutasi = userRef.collection("mutasi").document()
     private var jumlah = ""
     private var subtotal = ""
     private lateinit var etJumlah: EditText
@@ -49,7 +42,6 @@ class TambahPorsiFragment : DialogFragment(), TransactionFinishedCallback {
     private var sSubtotal = 0L
     private lateinit var rgMetodePembayaran: RadioGroup
     private lateinit var btnPesan: Button
-    private var itemDetails: ArrayList<ItemDetails> = ArrayList()
     private var pesananId: String? = null
     private var menuPesananId: String? = null
     private var namaMenu: String? = null
@@ -60,7 +52,8 @@ class TambahPorsiFragment : DialogFragment(), TransactionFinishedCallback {
     private var emailUser = ""
     private var metodePembayaran = ""
     private lateinit var tunai: RadioButton
-    private lateinit var digital: RadioButton
+    private lateinit var kcWallet: RadioButton
+    private var saldoKcWallet = ""
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -76,9 +69,6 @@ class TambahPorsiFragment : DialogFragment(), TransactionFinishedCallback {
             dialog!!.window?.requestFeature(Window.FEATURE_NO_TITLE)
         }
 
-        firebaseAuth = Firebase.auth
-        userId = firebaseAuth.currentUser!!.uid
-
         val mArgs = arguments
         pesananId = mArgs!!.getString("pesananId")
         menuPesananId = mArgs.getString("menuPesananId")
@@ -89,7 +79,7 @@ class TambahPorsiFragment : DialogFragment(), TransactionFinishedCallback {
         rgMetodePembayaran = binding.rgMetodePembayaran
         btnPesan = binding.btnPesan
         tunai = binding.tunai
-        digital = binding.digital
+        kcWallet = binding.kcWallet
 
         val checkListener =
             CompoundButton.OnCheckedChangeListener { _, isChecked ->
@@ -98,10 +88,9 @@ class TambahPorsiFragment : DialogFragment(), TransactionFinishedCallback {
                 }
             }
 
-        binding.tunai.setOnCheckedChangeListener(checkListener)
-        binding.digital.setOnCheckedChangeListener(checkListener)
+        tunai.setOnCheckedChangeListener(checkListener)
+        kcWallet.setOnCheckedChangeListener(checkListener)
 
-        setupMidtrans()
         setupUserData()
         closeDialog()
         setupData()
@@ -122,10 +111,10 @@ class TambahPorsiFragment : DialogFragment(), TransactionFinishedCallback {
                 when (metodePembayaran) {
                     getString(R.string.tunai) -> {
                         tunai.isChecked = true
-                        digital.isEnabled = false
+                        kcWallet.isEnabled = false
                     }
-                    getString(R.string.digital) -> {
-                        digital.isChecked = true
+                    getString(R.string.kc_wallet) -> {
+                        kcWallet.isChecked = true
                         tunai.isEnabled = false
                     }
                 }
@@ -136,6 +125,12 @@ class TambahPorsiFragment : DialogFragment(), TransactionFinishedCallback {
         userRef.get().addOnSuccessListener { userSnapshot ->
             if (userSnapshot != null) {
                 emailUser = userSnapshot.data?.get("email").toString()
+                saldoKcWallet = userSnapshot.data?.get("saldo").toString()
+                if (saldoKcWallet == "null") {
+                    saldoKcWallet = "0"
+                }
+
+                kcWallet.text = getString(R.string.rupiah_text, saldoKcWallet.withNumberingFormat())
             }
         }
     }
@@ -175,8 +170,8 @@ class TambahPorsiFragment : DialogFragment(), TransactionFinishedCallback {
                 getString(R.string.tunai) -> {
                     addTambahPorsiIntoDatabase()
                 }
-                getString(R.string.digital) -> {
-                    startMidtransPayment()
+                getString(R.string.kc_wallet) -> {
+                    kcWalletPayment()
                 }
             }
         }
@@ -195,69 +190,46 @@ class TambahPorsiFragment : DialogFragment(), TransactionFinishedCallback {
                 val intent = Intent(requireContext(), PemesananBerhasilActivity::class.java)
                 intent.putExtra(Cons.EXTRA_NAMA, getString(R.string.from_tambah_porsi))
                 startActivity(intent)
+
+                if (metodePembayaran == getString(R.string.kc_wallet)) {
+                    val sTanggal = System.currentTimeMillis().toString()
+                    val sJenis = getString(R.string.debit)
+                    val sKeterangan = getString(R.string.penambahan_porsi_katering)
+
+                    val mutasiMap = hashMapOf(
+                        "tanggal" to sTanggal,
+                        "jenis" to sJenis,
+                        "keterangan" to sKeterangan,
+                        "nominal" to total.toString(),
+                    )
+
+                    val sSaldo = saldoKcWallet.toLong() - total
+
+                    newMutasi.set(mutasiMap).addOnSuccessListener {
+                        val saldoMap = mapOf(
+                            "saldo" to sSaldo.toString()
+                        )
+
+                        userRef.update(saldoMap)
+                    } .addOnFailureListener {
+                        Toast.makeText(requireContext(), getString(R.string.fail_penambahan), Toast.LENGTH_SHORT).show()
+                    }
+                }
             }
             .addOnFailureListener {
                 Toast.makeText(requireContext(), R.string.fail_penambahan, Toast.LENGTH_SHORT).show()
             }
     }
 
-    private fun startMidtransPayment() {
-        itemDetails.clear()
-        val sJumlah = etJumlah.text.toString()
-
-        val detail = ItemDetails(
-            menuPesananId,
-            total.toDouble(),
-            1,
-            getString(R.string.jumlah_porsi_transaksi, sJumlah, namaMenu)
-        )
-        itemDetails.add(detail)
-
-        val transactionReq = TransactionRequest(System.currentTimeMillis().toString(), total.toDouble())
-
-        uiKitDetails(transactionReq)
-        transactionReq.itemDetails = itemDetails
-
-        MidtransSDK.getInstance().transactionRequest = transactionReq
-        MidtransSDK.getInstance().startPaymentUiFlow(context)
-    }
-
-    private fun setupMidtrans() {
-        SdkUIFlowBuilder.init()
-            .setClientKey(Cons.MIDTRANS_CLIENT_KEY)
-            .setContext(context)
-            .setTransactionFinishedCallback(this)
-            .setMerchantBaseUrl(Cons.MIDTRANS_BASE_URL)
-            .enableLog(true)
-            .setLanguage("id")
-            .buildSDK()
-    }
-
-    private fun uiKitDetails(transactionRequest: TransactionRequest) {
-        val customerDetails = CustomerDetails()
-        customerDetails.customerIdentifier = namaUser
-        customerDetails.phone = nomorUser
-        customerDetails.firstName = namaUser
-        customerDetails.email = emailUser
-        val shippingAddress = ShippingAddress()
-        shippingAddress.address = alamatUser
-        shippingAddress.city = kotaUser
-        customerDetails.shippingAddress = shippingAddress
-        val billingAddress = BillingAddress()
-        billingAddress.address = alamatUser
-        billingAddress.city = kotaUser
-        customerDetails.billingAddress = billingAddress
-
-        transactionRequest.customerDetails = customerDetails
-    }
-
-    override fun onTransactionFinished(result: TransactionResult?) {
-        if (result != null) {
-            if (result.response != null) {
-                if (result.status == TransactionResult.STATUS_SUCCESS) {
-                    addTambahPorsiIntoDatabase()
-                }
-            }
+    private fun kcWalletPayment() {
+        if (saldoKcWallet.toLong() < total) {
+            val args = Bundle()
+            args.putString("totalHarga", total.toString())
+            val dialog: DialogFragment = KcWalletNotEnoughFragment()
+            dialog.arguments = args
+            dialog.show(this.parentFragmentManager, "KcWalletNotEnoughDialog")
+        } else {
+            addTambahPorsiIntoDatabase()
         }
     }
 

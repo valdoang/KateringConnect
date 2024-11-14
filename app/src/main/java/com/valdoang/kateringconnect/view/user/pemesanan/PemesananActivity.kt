@@ -189,6 +189,9 @@ class PemesananActivity : AppCompatActivity(), TimePickerFragment.DialogTimeList
                 fotoUser = userSnapshot.data?.get("foto").toString()
                 emailUser = userSnapshot.data?.get("email").toString()
                 saldoKcWallet = userSnapshot.data?.get("saldo").toString()
+                if (saldoKcWallet == "null") {
+                    saldoKcWallet = "0"
+                }
 
                 binding.tvUserName.text = namaUser
                 binding.tvAddress.text = getString(R.string.tv_address_city, alamatUser, kotaUser)
