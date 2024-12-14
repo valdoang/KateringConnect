@@ -16,7 +16,9 @@ import com.google.firebase.ktx.Firebase
 import com.valdoang.kateringconnect.R
 import com.valdoang.kateringconnect.databinding.ActivityLoginBinding
 import com.valdoang.kateringconnect.view.admin.AdminMainActivity
+import com.valdoang.kateringconnect.view.all.register.DitolakActivity
 import com.valdoang.kateringconnect.view.all.register.RegisterActivity
+import com.valdoang.kateringconnect.view.all.register.SedangDiverifikasiActivity
 import com.valdoang.kateringconnect.view.user.main.UserMainActivity
 import com.valdoang.kateringconnect.view.vendor.main.VendorMainActivity
 
@@ -92,21 +94,35 @@ class LoginActivity : AppCompatActivity() {
         db.collection("user").document(userId).get()
             .addOnSuccessListener { document ->
                 if (document != null) {
-                    when(document.data?.get("jenis")?.toString()) {
-                        getString(R.string.pembeli) -> {
-                            intent = Intent(this, UserMainActivity::class.java)
+                    when(document.data?.get("statusPendaftaran").toString()) {
+                        getString(R.string.verifikasi) -> {
+                            intent = Intent(this, SedangDiverifikasiActivity::class.java)
                             intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
                             startActivity(intent)
                         }
-                        getString(R.string.vendor) -> {
-                            intent = Intent(this, VendorMainActivity::class.java)
+                        getString(R.string.ditolak) -> {
+                            intent = Intent(this, DitolakActivity::class.java)
                             intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
                             startActivity(intent)
                         }
-                        getString(R.string.admin) -> {
-                            intent = Intent(this, AdminMainActivity::class.java)
-                            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-                            startActivity(intent)
+                        else -> {
+                            when(document.data?.get("jenis")?.toString()) {
+                                getString(R.string.pembeli) -> {
+                                    intent = Intent(this, UserMainActivity::class.java)
+                                    intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                                    startActivity(intent)
+                                }
+                                getString(R.string.vendor) -> {
+                                    intent = Intent(this, VendorMainActivity::class.java)
+                                    intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                                    startActivity(intent)
+                                }
+                                getString(R.string.admin) -> {
+                                    intent = Intent(this, AdminMainActivity::class.java)
+                                    intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                                    startActivity(intent)
+                                }
+                            }
                         }
                     }
                 }

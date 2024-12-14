@@ -2,6 +2,11 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item
+        android:id="@+id/navigation_admin_verifikasi"
+        android:icon="@drawable/person_icon"
+        android:title="@string/verifikasi" />
+
+    <item
         android:id="@+id/navigation_admin_transfer_dana"
         android:icon="@drawable/transfer_dana_icon"
         android:title="@string/transfer_dana" />

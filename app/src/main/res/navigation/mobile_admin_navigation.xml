@@ -6,6 +6,12 @@
     app:startDestination="@+id/navigation_admin_transfer_dana">
 
     <fragment
+        android:id="@+id/navigation_admin_verifikasi"
+        android:name="com.valdoang.kateringconnect.view.admin.ui.verifikasi.AdminVerifikasiFragment"
+        android:label="@string/verifikasi"
+        tools:layout="@layout/fragment_admin_verifikasi" />
+
+    <fragment
         android:id="@+id/navigation_admin_transfer_dana"
         android:name="com.valdoang.kateringconnect.view.admin.ui.transferdana.AdminTransferDanaFragment"
         android:label="@string/transfer_dana"

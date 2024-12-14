@@ -166,6 +166,9 @@
     <string name="can_not_blank">Tidak Boleh Ada Yang Kosong</string>
     <string name="tidak_boleh_kosong">Tidak Boleh Kosong</string>
     <string name="add_photo_alert">Tambahkan Foto Terlebih Dahulu</string>
+    <string name="add_ktp_photo_alert">Tambahkan Foto KTP Terlebih Dahulu</string>
+    <string name="need_edit_alert">Perbaiki foto terlebih dahulu</string>
+    <string name="add_selfie_ktp_photo_alert">Tambahkan Foto Selfie KTP Terlebih Dahulu</string>
     <string name="keluar">Keluar</string>
     <string name="pembeli">Pembeli</string>
     <string name="vendor">Vendor</string>
@@ -227,6 +230,8 @@
     <string name="success_batalkan_pesanan">Berhasil Membatalkan Pesanan</string>
     <string name="fail_tolak_pesanan">Gagal Menolak Pesanan</string>
     <string name="success_tolak_pesanan">Berhasil Menolak Pesanan</string>
+    <string name="fail_tolak_pendaftaran">Gagal Menolak Pendaftaran</string>
+    <string name="success_tolak_pendaftaran">Berhasil Menolak Pendaftaran</string>
     <string name="tidak_ada_penilaian">Tidak ada penilaian</string>
     <string name="vendor_star">%1$s (%2$s)</string>
     <string name="jumlah_penilaian">%1$s penilaian</string>
@@ -393,6 +398,7 @@
     <string name="pesanan_belum_diterima">Pesanan Belum Diterima</string>
     <string name="berikan_pendapat_anda">Berikan pendapat anda</string>
     <string name="title_alasan_pembatalan">Kenapa anda ingin membatalkan pesanan ini?</string>
+    <string name="title_alasan_penolakan_pendaftaran">Kenapa anda ingin menolak pendaftaran ini?</string>
     <string name="title_alasan_penolakan">Kenapa anda ingin menolak pesanan ini?</string>
     <string name="alasan_pembatalan">Alasan Pembatalan</string>
     <string name="alasan_penolakan">Alasan Penolakan</string>
@@ -478,4 +484,18 @@
     <string name="jadwal_pengantaran">Jadwal Pengantaran</string>
     <string name="pesanan_dibuat">Pesanan Dibuat</string>
     <string name="ditolak_karena_batas_waktu">Vendor kehabisan waktu untuk menerima pesanan</string>
+    <string name="data_diri">Data Diri</string>
+    <string name="ktp">KTP</string>
+    <string name="selfie_ktp">Selfie KTP</string>
+    <string name="verifikasi">Verifikasi</string>
+    <string name="diterima">Diterima</string>
+    <string name="ditolak">Ditolak</string>
+    <string name="title_activity_ditolak">DitolakActivity</string>
+    <string name="pengguna_baru">Pengguna Baru</string>
+    <string name="terima_pendaftaran">Terima Pendaftaran</string>
+    <string name="tolak_pendaftaran">Tolak Pendaftaran</string>
+    <string name="belum_ada_pengguna_baru">Belum ada pengguna baru</string>
+    <string name="pendaftaran_kamu_ditolak">Pendaftaran kamu ditolak</string>
+    <string name="tv_silahkan_perbaiki">Silahkan diperbaiki terlebih dahulu.</string>
+    <string name="kirim_ulang_pendaftaran">Kirim Ulang Pendaftaran</string>
 </resources>

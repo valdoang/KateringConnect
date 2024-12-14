@@ -1,21 +1,24 @@
 package com.valdoang.kateringconnect.view.all.register
 
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.util.Patterns
 import android.view.View
 import android.widget.*
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
+import androidx.cardview.widget.CardView
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
+import com.google.firebase.storage.ktx.storage
 import com.valdoang.kateringconnect.R
 import com.valdoang.kateringconnect.databinding.ActivityRegisterBinding
+import com.valdoang.kateringconnect.utils.getImageUri
 import com.valdoang.kateringconnect.view.all.login.LoginActivity
-import com.valdoang.kateringconnect.view.all.logout.LogoutFragment
-import com.valdoang.kateringconnect.view.user.main.UserMainActivity
-import com.valdoang.kateringconnect.view.vendor.main.VendorMainActivity
+import java.util.*
 
 class RegisterActivity : AppCompatActivity(), PotonganAlertFragment.GetAnswer {
     private lateinit var binding: ActivityRegisterBinding
@@ -30,12 +33,21 @@ class RegisterActivity : AppCompatActivity(), PotonganAlertFragment.GetAnswer {
     private lateinit var etAddress: EditText
     private lateinit var progressBar: ProgressBar
     private var db = Firebase.firestore
+    private var ktpImageUri: Uri? = null
+    private var selfieKtpImageUri: Uri? = null
+    private lateinit var ivKtp: ImageView
+    private lateinit var ivSelfieKtp: ImageView
+    private lateinit var cvKtp: CardView
+    private lateinit var cvSelfieKtp: CardView
+    private var storageRef = Firebase.storage
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityRegisterBinding.inflate(layoutInflater)
         setContentView(binding.root)
         supportActionBar?.hide()
+
+        firebaseAuth = Firebase.auth
 
         etEmail = binding.edRegisterEmail
         etPassword = binding.edRegisterPassword
@@ -46,6 +58,10 @@ class RegisterActivity : AppCompatActivity(), PotonganAlertFragment.GetAnswer {
         etNoPhone = binding.edRegisterNoPhone
         etAddress = binding.edRegisterAddress
         progressBar = binding.progressBar
+        ivKtp = binding.ivKtp
+        ivSelfieKtp = binding.ivSelfieKtp
+        cvKtp = binding.cvKtp
+        cvSelfieKtp = binding.cvSelfieKtp
 
         setupAcCity()
         setupAction()
@@ -64,11 +80,34 @@ class RegisterActivity : AppCompatActivity(), PotonganAlertFragment.GetAnswer {
             startActivity(intent)
             finish()
         }
+        cvKtp.setOnClickListener {
+            ktpImageUri = getImageUri(this)
+            launcherIntentCamera.launch(ktpImageUri)
+        }
+        cvSelfieKtp.setOnClickListener {
+            selfieKtpImageUri = getImageUri(this)
+            launcherIntentCamera.launch(selfieKtpImageUri)
+        }
+    }
+
+    private val launcherIntentCamera = registerForActivityResult(
+        ActivityResultContracts.TakePicture()
+    ) { isSuccess ->
+        if (isSuccess) {
+            showImage()
+        }
+    }
+
+    private fun showImage() {
+        ktpImageUri?.let {
+            ivKtp.setImageURI(it)
+        }
+        selfieKtpImageUri?.let {
+            ivSelfieKtp.setImageURI(it)
+        }
     }
 
     private fun register() {
-        firebaseAuth = Firebase.auth
-
         var sJenisAkun = ""
         rgJenisAkun.setOnCheckedChangeListener { _, checkedId ->
             val rbJenisAkun: RadioButton = findViewById(checkedId)
@@ -85,6 +124,7 @@ class RegisterActivity : AppCompatActivity(), PotonganAlertFragment.GetAnswer {
             val sAddress = etAddress.text.toString().trim()
             val sEmail = etEmail.text.toString().trim()
             val sPassword = etPassword.text.toString().trim()
+            val statusPendaftaran = getString(R.string.verifikasi)
 
             val userMap = hashMapOf(
                 "jenis" to sJenisAkun,
@@ -92,24 +132,13 @@ class RegisterActivity : AppCompatActivity(), PotonganAlertFragment.GetAnswer {
                 "kota" to sCity,
                 "alamat" to sAddress,
                 "telepon" to sNoPhone,
-                "email" to sEmail
+                "email" to sEmail,
+                "statusPendaftaran" to statusPendaftaran
             )
 
             when {
                 sJenisAkun.isEmpty() -> {
                     Toast.makeText(this, R.string.can_not_blank, Toast.LENGTH_SHORT).show()
-                }
-                sName.isEmpty() -> {
-                    etName.error = getString(R.string.entry_name)
-                }
-                sCity.isEmpty() -> {
-                    acCity.error = getString(R.string.entry_city)
-                }
-                sAddress.isEmpty() -> {
-                    etAddress.error = getString(R.string.entry_address)
-                }
-                sNoPhone.isEmpty() -> {
-                    etNoPhone.error = getString(R.string.entry_no_phone)
                 }
                 sEmail.isEmpty() -> {
                     etEmail.error = getString(R.string.entry_email)
@@ -123,6 +152,24 @@ class RegisterActivity : AppCompatActivity(), PotonganAlertFragment.GetAnswer {
                 sPassword.length < 8 -> {
                     etPassword.error = getString(R.string.minimum_character)
                 }
+                ktpImageUri == null -> {
+                    Toast.makeText(this, R.string.add_ktp_photo_alert, Toast.LENGTH_SHORT).show()
+                }
+                selfieKtpImageUri == null -> {
+                    Toast.makeText(this, R.string.add_selfie_ktp_photo_alert, Toast.LENGTH_SHORT).show()
+                }
+                sName.isEmpty() -> {
+                    etName.error = getString(R.string.entry_name)
+                }
+                sCity.isEmpty() -> {
+                    acCity.error = getString(R.string.entry_city)
+                }
+                sAddress.isEmpty() -> {
+                    etAddress.error = getString(R.string.entry_address)
+                }
+                sNoPhone.isEmpty() -> {
+                    etNoPhone.error = getString(R.string.entry_no_phone)
+                }
                 else -> {
                     when(sJenisAkun) {
                         getString(R.string.pembeli) -> {
@@ -130,10 +177,42 @@ class RegisterActivity : AppCompatActivity(), PotonganAlertFragment.GetAnswer {
                             firebaseAuth.createUserWithEmailAndPassword(sEmail, sPassword)
                                 .addOnCompleteListener(this) { task ->
                                     if(task.isSuccessful) {
-                                        val userId = FirebaseAuth.getInstance().currentUser!!.uid
-
+                                        val userId = firebaseAuth.currentUser!!.uid
                                         db.collection("user").document(userId).set(userMap)
-                                        intent = Intent(this, UserMainActivity::class.java)
+
+                                        val ktpFilename = UUID.randomUUID().toString()
+                                        ktpImageUri?.let {
+                                            storageRef.getReference("userDoc").child(userId).child(ktpFilename)
+                                                .putFile(it)
+                                                .addOnSuccessListener { task ->
+                                                    task.metadata!!.reference!!.downloadUrl
+                                                        .addOnSuccessListener {uri ->
+                                                            val mapKtp = mapOf(
+                                                                "fotoKtp" to uri.toString(),
+                                                                "fotoKtpKeys" to ktpFilename
+                                                            )
+                                                            db.collection("user").document(userId).update(mapKtp)
+                                                        }
+                                                }
+                                        }
+
+                                        val selfieKtpFilename = UUID.randomUUID().toString()
+                                        selfieKtpImageUri?.let {
+                                            storageRef.getReference("userDoc").child(userId).child(selfieKtpFilename)
+                                                .putFile(it)
+                                                .addOnSuccessListener { task ->
+                                                    task.metadata!!.reference!!.downloadUrl
+                                                        .addOnSuccessListener {uri ->
+                                                            val mapSelfieKtp = mapOf(
+                                                                "fotoSelfieKtp" to uri.toString(),
+                                                                "fotoSelfieKtpKeys" to selfieKtpFilename
+                                                            )
+                                                            db.collection("user").document(userId).update(mapSelfieKtp)
+                                                        }
+                                                }
+                                        }
+
+                                        val intent = Intent(this, SedangDiverifikasiActivity::class.java)
                                         intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
                                         startActivity(intent)
                                     } else {
@@ -161,6 +240,7 @@ class RegisterActivity : AppCompatActivity(), PotonganAlertFragment.GetAnswer {
             val sEmail = etEmail.text.toString().trim()
             val sPassword = etPassword.text.toString().trim()
             val sJenisAkun = getString(R.string.vendor)
+            val statusPendaftaran = getString(R.string.verifikasi)
 
             val userMap = hashMapOf(
                 "jenis" to sJenisAkun,
@@ -168,7 +248,8 @@ class RegisterActivity : AppCompatActivity(), PotonganAlertFragment.GetAnswer {
                 "kota" to sCity,
                 "alamat" to sAddress,
                 "telepon" to sNoPhone,
-                "email" to sEmail
+                "email" to sEmail,
+                "statusPendaftaran" to statusPendaftaran
             )
 
             progressBar.visibility = View.VISIBLE
@@ -176,9 +257,41 @@ class RegisterActivity : AppCompatActivity(), PotonganAlertFragment.GetAnswer {
                 .addOnCompleteListener(this) { task ->
                     if(task.isSuccessful) {
                         val userId = FirebaseAuth.getInstance().currentUser!!.uid
-
                         db.collection("user").document(userId).set(userMap)
-                        intent = Intent(this, VendorMainActivity::class.java)
+
+                        val ktpFilename = UUID.randomUUID().toString()
+                        ktpImageUri?.let {
+                            storageRef.getReference("userDoc").child(userId).child(ktpFilename)
+                                .putFile(it)
+                                .addOnSuccessListener { task ->
+                                    task.metadata!!.reference!!.downloadUrl
+                                        .addOnSuccessListener {uri ->
+                                            val mapKtp = mapOf(
+                                                "fotoKtp" to uri.toString(),
+                                                "fotoKtpKeys" to ktpFilename
+                                            )
+                                            db.collection("user").document(userId).update(mapKtp)
+                                        }
+                                }
+                        }
+
+                        val selfieKtpFilename = UUID.randomUUID().toString()
+                        selfieKtpImageUri?.let {
+                            storageRef.getReference("userDoc").child(userId).child(selfieKtpFilename)
+                                .putFile(it)
+                                .addOnSuccessListener { task ->
+                                    task.metadata!!.reference!!.downloadUrl
+                                        .addOnSuccessListener {uri ->
+                                            val mapSelfieKtp = mapOf(
+                                                "fotoSelfieKtp" to uri.toString(),
+                                                "fotoSelfieKtpKeys" to selfieKtpFilename
+                                            )
+                                            db.collection("user").document(userId).update(mapSelfieKtp)
+                                        }
+                                }
+                        }
+
+                        val intent = Intent(this, SedangDiverifikasiActivity::class.java)
                         intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
                         startActivity(intent)
                     } else {

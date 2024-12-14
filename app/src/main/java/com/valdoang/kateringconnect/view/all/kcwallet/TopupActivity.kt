@@ -1,5 +1,6 @@
 package com.valdoang.kateringconnect.view.all.kcwallet
 
+import android.os.Build.VERSION_CODES.R
 import android.os.Bundle
 import android.view.View
 import android.widget.Button
@@ -72,8 +73,8 @@ class TopupActivity : AppCompatActivity(), TransactionFinishedCallback {
                 minTopUp = adminSnapshot.data?.get("minTopUp").toString()
                 adminTopUp = adminSnapshot.data?.get("adminTopUp").toString()
 
-                binding.tvMinTopup.text = getString(R.string.min_top_up, minTopUp.withNumberingFormat())
-                binding.tvAdminTopup.text = getString(R.string.tv_admin, adminTopUp.withNumberingFormat())
+                binding.tvMinTopup.text = getString(com.valdoang.kateringconnect.R.string.min_top_up, minTopUp.withNumberingFormat())
+                binding.tvAdminTopup.text = getString(com.valdoang.kateringconnect.R.string.tv_admin, adminTopUp.withNumberingFormat())
 
                 edNominal.allChangedListener { nominal ->
                     if (nominal == "") {
@@ -112,8 +113,8 @@ class TopupActivity : AppCompatActivity(), TransactionFinishedCallback {
 
     private fun addMutasiIntoDatabase() {
         val sDate = System.currentTimeMillis().toString()
-        val sJenis = getString(R.string.kredit)
-        val sKeterangan = getString(R.string.topup_kc_wallet)
+        val sJenis = getString(com.valdoang.kateringconnect.R.string.kredit)
+        val sKeterangan = getString(com.valdoang.kateringconnect.R.string.topup_kc_wallet)
         val sNominal = edNominal.text.toString().trim()
 
         val mutasiMap = hashMapOf(
@@ -134,7 +135,7 @@ class TopupActivity : AppCompatActivity(), TransactionFinishedCallback {
             finish()
         } .addOnFailureListener {
             progressBar.visibility = View.GONE
-            Toast.makeText(this, getString(R.string.fail_topup), Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, getString(com.valdoang.kateringconnect.R.string.fail_topup), Toast.LENGTH_SHORT).show()
         }
 
     }
@@ -147,7 +148,7 @@ class TopupActivity : AppCompatActivity(), TransactionFinishedCallback {
             "topUp",
             nominal.toDouble(),
             1,
-            getString(R.string.topup_transaksi)
+            getString(com.valdoang.kateringconnect.R.string.topup_transaksi)
         )
         itemDetails.add(topUpDetail)
 
@@ -155,7 +156,7 @@ class TopupActivity : AppCompatActivity(), TransactionFinishedCallback {
             "admin",
             adminTopUp.toDouble(),
             1,
-            getString(R.string.admin_transaksi)
+            getString(com.valdoang.kateringconnect.R.string.admin_transaksi)
         )
         itemDetails.add(adminDetail)
 
@@ -175,7 +176,7 @@ class TopupActivity : AppCompatActivity(), TransactionFinishedCallback {
             .setClientKey(Cons.MIDTRANS_CLIENT_KEY)
             .setContext(this)
             .setTransactionFinishedCallback(this)
-            .setMerchantBaseUrl(Cons.WARKOP88_URL)
+            .setMerchantBaseUrl(Cons.MIDTRANS_BASE_URL)
             .enableLog(true)
             .setLanguage("id")
             .buildSDK()

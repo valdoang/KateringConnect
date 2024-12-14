@@ -10,6 +10,7 @@ import com.valdoang.kateringconnect.databinding.ActivityAdminMainBinding
 import com.valdoang.kateringconnect.view.admin.ui.chat.AdminChatFragment
 import com.valdoang.kateringconnect.view.admin.ui.pengaturan.AdminPengaturanFragment
 import com.valdoang.kateringconnect.view.admin.ui.transferdana.AdminTransferDanaFragment
+import com.valdoang.kateringconnect.view.admin.ui.verifikasi.AdminVerifikasiFragment
 
 class AdminMainActivity : AppCompatActivity() {
 
@@ -31,16 +32,16 @@ class AdminMainActivity : AppCompatActivity() {
 
     private fun setupNavigation() {
         // Define fragments to display in viewPager2
-        val listOfFragments = listOf(AdminTransferDanaFragment(), AdminChatFragment(), AdminPengaturanFragment())
+        val listOfFragments = listOf(AdminVerifikasiFragment(), AdminTransferDanaFragment(), AdminChatFragment(), AdminPengaturanFragment())
         viewPager.adapter = ViewPagerAdapter(this, listOfFragments)
         viewPager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
             override fun onPageSelected(position: Int) {
                 super.onPageSelected(position)
                 when (position) {
-                    0 -> navView.menu.findItem(R.id.navigation_admin_transfer_dana).isChecked = true
-                    1 -> navView.menu.findItem(R.id.navigation_admin_chat).isChecked = true
-                    2 -> navView.menu.findItem(R.id.navigation_admin_pengaturan).isChecked = true
-
+                    0 -> navView.menu.findItem(R.id.navigation_admin_verifikasi).isChecked = true
+                    1 -> navView.menu.findItem(R.id.navigation_admin_transfer_dana).isChecked = true
+                    2 -> navView.menu.findItem(R.id.navigation_admin_chat).isChecked = true
+                    3 -> navView.menu.findItem(R.id.navigation_admin_pengaturan).isChecked = true
                 }
             }
         })
@@ -48,16 +49,20 @@ class AdminMainActivity : AppCompatActivity() {
         // Listen bottom navigation tabs change
         navView.setOnItemSelectedListener {
             when (it.itemId) {
-                R.id.navigation_admin_transfer_dana -> {
+                R.id.navigation_admin_verifikasi -> {
                     viewPager.setCurrentItem(0, true)
                     return@setOnItemSelectedListener true
                 }
-                R.id.navigation_admin_chat -> {
+                R.id.navigation_admin_transfer_dana -> {
                     viewPager.setCurrentItem(1, true)
                     return@setOnItemSelectedListener true
                 }
-                R.id.navigation_admin_pengaturan -> {
+                R.id.navigation_admin_chat -> {
                     viewPager.setCurrentItem(2, true)
+                    return@setOnItemSelectedListener true
+                }
+                R.id.navigation_admin_pengaturan -> {
+                    viewPager.setCurrentItem(3, true)
                     return@setOnItemSelectedListener true
                 }
             }
