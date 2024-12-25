@@ -17,8 +17,8 @@
         android:title="@string/chat" />
 
     <item
-        android:id="@+id/navigation_admin_pengaturan"
-        android:icon="@drawable/pengaturan_icon"
-        android:title="@string/pengaturan" />
+        android:id="@+id/navigation_admin"
+        android:icon="@drawable/admin"
+        android:title="@string/admin" />
 
 </menu>

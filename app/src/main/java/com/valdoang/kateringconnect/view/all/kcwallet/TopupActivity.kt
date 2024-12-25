@@ -1,6 +1,5 @@
 package com.valdoang.kateringconnect.view.all.kcwallet
 
-import android.os.Build.VERSION_CODES.R
 import android.os.Bundle
 import android.view.View
 import android.widget.Button
@@ -20,7 +19,6 @@ import com.midtrans.sdk.corekit.models.ItemDetails
 import com.midtrans.sdk.corekit.models.ShippingAddress
 import com.midtrans.sdk.corekit.models.snap.TransactionResult
 import com.midtrans.sdk.uikit.SdkUIFlowBuilder
-import com.valdoang.kateringconnect.R
 import com.valdoang.kateringconnect.databinding.ActivityTopupBinding
 import com.valdoang.kateringconnect.utils.Cons
 import com.valdoang.kateringconnect.utils.allChangedListener
@@ -44,6 +42,7 @@ class TopupActivity : AppCompatActivity(), TransactionFinishedCallback {
     private var saldoUser = ""
     private var minTopUp = ""
     private var adminTopUp = ""
+    private var totalPemasukanAdmin = ""
     private var totalHarga = 0.0
     private lateinit var progressBar: ProgressBar
     private lateinit var edNominal: EditText
@@ -72,6 +71,7 @@ class TopupActivity : AppCompatActivity(), TransactionFinishedCallback {
             if (adminSnapshot != null) {
                 minTopUp = adminSnapshot.data?.get("minTopUp").toString()
                 adminTopUp = adminSnapshot.data?.get("adminTopUp").toString()
+                totalPemasukanAdmin = adminSnapshot.data?.get("totalPemasukan").toString()
 
                 binding.tvMinTopup.text = getString(com.valdoang.kateringconnect.R.string.min_top_up, minTopUp.withNumberingFormat())
                 binding.tvAdminTopup.text = getString(com.valdoang.kateringconnect.R.string.tv_admin, adminTopUp.withNumberingFormat())
@@ -132,12 +132,36 @@ class TopupActivity : AppCompatActivity(), TransactionFinishedCallback {
                 "saldo" to newSaldo.toString()
             )
             userRef.update(saldoMap)
+            adminAddPemasukan()
             finish()
         } .addOnFailureListener {
             progressBar.visibility = View.GONE
             Toast.makeText(this, getString(com.valdoang.kateringconnect.R.string.fail_topup), Toast.LENGTH_SHORT).show()
         }
 
+    }
+
+    private fun adminAddPemasukan() {
+        val sDate = System.currentTimeMillis().toString()
+        val sKeterangan = getString(com.valdoang.kateringconnect.R.string.biaya_admin_topup)
+        val sNominal = adminTopUp
+
+        val mutasiMap = hashMapOf(
+            "tanggal" to sDate,
+            "keterangan" to sKeterangan,
+            "nominal" to sNominal,
+        )
+
+        val adminRef = db.collection("user").document(Cons.ADMIN_ID)
+        val newPemasukanRef = adminRef.collection("pemasukan").document()
+        newPemasukanRef.set(mutasiMap).addOnSuccessListener {
+            val newTotalPemasukan = totalPemasukanAdmin.toLong() + sNominal.toLong()
+
+            val totalPemasukanMap = mapOf(
+                "totalPemasukan" to newTotalPemasukan.toString()
+            )
+            adminRef.update(totalPemasukanMap)
+        }
     }
 
     private fun startMidtransPayment() {

@@ -26,6 +26,7 @@ class TarikDanaActivity : AppCompatActivity() {
     private var userId = firebaseAuth.currentUser!!.uid
     private var db = Firebase.firestore
     private var userRef = db.collection("user").document(userId)
+    private var mutasiRef = userRef.collection("mutasi").document()
     private var tarikDanaRef = db.collection("tarikDana").document()
     private var saldoKCWallet = ""
     private lateinit var edJumlahPenarikan: EditText
@@ -38,6 +39,7 @@ class TarikDanaActivity : AppCompatActivity() {
     private var penarikanDana = ""
     private var minTarikDana = ""
     private var adminTarikDana = ""
+    private var totalPemasukanAdmin = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -61,6 +63,7 @@ class TarikDanaActivity : AppCompatActivity() {
             if (adminSnapshot != null) {
                 minTarikDana = adminSnapshot.data?.get("minTarikDana").toString()
                 adminTarikDana = adminSnapshot.data?.get("adminTarikDana").toString()
+                totalPemasukanAdmin = adminSnapshot.data?.get("totalPemasukan").toString()
 
                 binding.tvMinTarikDana.text = getString(R.string.min_tarik_dana, minTarikDana.withNumberingFormat())
                 binding.tvAdminTarikDana.text = getString(R.string.tv_admin, adminTarikDana.withNumberingFormat())
@@ -153,6 +156,16 @@ class TarikDanaActivity : AppCompatActivity() {
                 "status" to sStatus
             )
 
+            val sJenis = getString(R.string.kredit)
+            val sKeterangan = getString(R.string.penarikan_dana)
+
+            val mutasiMap = hashMapOf(
+                "tanggal" to sDate,
+                "jenis" to sJenis,
+                "keterangan" to sKeterangan,
+                "nominal" to sNominal,
+            )
+
             val sSaldo = saldoKCWallet.toLong() - totalPenarikan
             val sPenarikanDana = penarikanDana.toLong() + totalPenarikan
 
@@ -163,6 +176,9 @@ class TarikDanaActivity : AppCompatActivity() {
 
             tarikDanaRef.set(tarikDanaMap).addOnSuccessListener {
                 userRef.update(kcwalletMap)
+                mutasiRef.set(mutasiMap)
+                adminAddPemasukan()
+
                 val intent = Intent(this, TarikDanaBerhasilActivity::class.java)
                 startActivity(intent)
                 finish()
@@ -170,6 +186,29 @@ class TarikDanaActivity : AppCompatActivity() {
                 progressBar.visibility = View.GONE
                 Toast.makeText(this, getString(R.string.fail_tarik_dana), Toast.LENGTH_SHORT).show()
             }
+        }
+    }
+
+    private fun adminAddPemasukan() {
+        val sDate = System.currentTimeMillis().toString()
+        val sKeterangan = getString(R.string.biaya_admin_tarik_dana)
+        val sNominal = adminTarikDana
+
+        val mutasiMap = hashMapOf(
+            "tanggal" to sDate,
+            "keterangan" to sKeterangan,
+            "nominal" to sNominal,
+        )
+
+        val adminRef = db.collection("user").document(Cons.ADMIN_ID)
+        val newPemasukanRef = adminRef.collection("pemasukan").document()
+        newPemasukanRef.set(mutasiMap).addOnSuccessListener {
+            val newTotalPemasukan = totalPemasukanAdmin.toLong() + sNominal.toLong()
+
+            val totalPemasukanMap = mapOf(
+                "totalPemasukan" to newTotalPemasukan.toString()
+            )
+            adminRef.update(totalPemasukanMap)
         }
     }
 

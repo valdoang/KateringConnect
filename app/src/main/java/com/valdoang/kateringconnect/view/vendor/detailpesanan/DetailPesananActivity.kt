@@ -62,6 +62,7 @@ class DetailPesananActivity : AppCompatActivity() {
     private var pesananDibuat = ""
     private var confirmDate = 0L
     private var potongan = ""
+    private var totalPemasukanAdmin = ""
     private var saldoVendor = ""
     private var jadwal = ""
 
@@ -288,6 +289,7 @@ class DetailPesananActivity : AppCompatActivity() {
         adminRef.addSnapshotListener { adminSnapshot, _ ->
             if (adminSnapshot != null) {
                 potongan = adminSnapshot.data?.get("potongan").toString()
+                totalPemasukanAdmin = adminSnapshot.data?.get("totalPemasukan").toString()
             }
         }
     }
@@ -314,6 +316,7 @@ class DetailPesananActivity : AppCompatActivity() {
                 "saldo" to newSaldo.toString()
             )
             vendorRef.update(saldoMap)
+            adminAddPemasukan()
         }
 
     }
@@ -340,8 +343,32 @@ class DetailPesananActivity : AppCompatActivity() {
                 "saldo" to newSaldo.toString()
             )
             vendorRef.update(saldoMap)
+            adminAddPemasukan()
         }
 
+    }
+
+    private fun adminAddPemasukan() {
+        val sDate = System.currentTimeMillis().toString()
+        val sKeterangan = getString(R.string.potongan_hasil_vendor)
+        val sNominal = total * potongan.toLong() / 100
+
+        val mutasiMap = hashMapOf(
+            "tanggal" to sDate,
+            "keterangan" to sKeterangan,
+            "nominal" to sNominal.toString(),
+        )
+
+        val adminRef = db.collection("user").document(Cons.ADMIN_ID)
+        val newPemasukanRef = adminRef.collection("pemasukan").document()
+        newPemasukanRef.set(mutasiMap).addOnSuccessListener {
+            val newTotalPemasukan = totalPemasukanAdmin.toLong() + sNominal
+
+            val totalPemasukanMap = mapOf(
+                "totalPemasukan" to newTotalPemasukan.toString()
+            )
+            adminRef.update(totalPemasukanMap)
+        }
     }
 
     private fun setupView() {

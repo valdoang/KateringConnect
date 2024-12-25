@@ -366,6 +366,10 @@
     <string name="topup_kc_wallet">Top Up KC Wallet</string>
     <string name="penjualan_katering">Penjualan Katering</string>
     <string name="penjualan_katering_tunai">Penjualan Katering Tunai</string>
+    <string name="penarikan_dana">Penarikan Dana</string>
+    <string name="potongan_hasil_vendor">Potongan Hasil Vendor</string>
+    <string name="biaya_admin_topup">Biaya Admin Top Up</string>
+    <string name="biaya_admin_tarik_dana">Biaya Admin Tarik Dana</string>
     <string name="pemesanan_katering">Pemesanan Katering</string>
     <string name="penambahan_porsi_katering">Penambahan Porsi Katering</string>
     <string name="pengembalian_dana">Pengembalian Dana</string>
@@ -498,4 +502,10 @@
     <string name="pendaftaran_kamu_ditolak">Pendaftaran kamu ditolak</string>
     <string name="tv_silahkan_perbaiki">Silahkan diperbaiki terlebih dahulu.</string>
     <string name="kirim_ulang_pendaftaran">Kirim Ulang Pendaftaran</string>
+    <string name="belum_ada_pesanan_masuk">Belum ada pesanan masuk</string>
+    <string name="total_pemasukan">Total Pemasukan</string>
+    <string name="cek_riwayat_pemasukan">Cek Riwayat Pemasukan</string>
+    <string name="atur_biaya">Atur Biaya</string>
+    <string name="riwayat_pemasukan">Riwayat Pemasukan</string>
+    <string name="belum_terdapat_riwayat_pemasukan">Belum Terdapat Pemasukan</string>
 </resources>

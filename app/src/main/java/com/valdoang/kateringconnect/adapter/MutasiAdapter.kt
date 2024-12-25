@@ -32,6 +32,10 @@ class MutasiAdapter(
                 tvIdMutasi.text = mutasi.id
                 tvKeterangan.text = mutasi.keterangan
                 when (mutasi.jenis) {
+                    null -> {
+                        tvNominal.text = context.getString(R.string.mutasi_kredit, mutasi.nominal?.withNumberingFormat())
+                        tvNominal.setTextColor(context.resources.getColor(R.color.green))
+                    }
                     context.getString(R.string.kredit) -> {
                         tvNominal.text = context.getString(R.string.mutasi_kredit, mutasi.nominal?.withNumberingFormat())
                         tvNominal.setTextColor(context.resources.getColor(R.color.green))

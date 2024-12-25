@@ -8,7 +8,7 @@ import com.valdoang.kateringconnect.R
 import com.valdoang.kateringconnect.adapter.ViewPagerAdapter
 import com.valdoang.kateringconnect.databinding.ActivityAdminMainBinding
 import com.valdoang.kateringconnect.view.admin.ui.chat.AdminChatFragment
-import com.valdoang.kateringconnect.view.admin.ui.pengaturan.AdminPengaturanFragment
+import com.valdoang.kateringconnect.view.admin.ui.admin.AdminFragment
 import com.valdoang.kateringconnect.view.admin.ui.transferdana.AdminTransferDanaFragment
 import com.valdoang.kateringconnect.view.admin.ui.verifikasi.AdminVerifikasiFragment
 
@@ -32,7 +32,7 @@ class AdminMainActivity : AppCompatActivity() {
 
     private fun setupNavigation() {
         // Define fragments to display in viewPager2
-        val listOfFragments = listOf(AdminVerifikasiFragment(), AdminTransferDanaFragment(), AdminChatFragment(), AdminPengaturanFragment())
+        val listOfFragments = listOf(AdminVerifikasiFragment(), AdminTransferDanaFragment(), AdminChatFragment(), AdminFragment())
         viewPager.adapter = ViewPagerAdapter(this, listOfFragments)
         viewPager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
             override fun onPageSelected(position: Int) {
@@ -41,7 +41,7 @@ class AdminMainActivity : AppCompatActivity() {
                     0 -> navView.menu.findItem(R.id.navigation_admin_verifikasi).isChecked = true
                     1 -> navView.menu.findItem(R.id.navigation_admin_transfer_dana).isChecked = true
                     2 -> navView.menu.findItem(R.id.navigation_admin_chat).isChecked = true
-                    3 -> navView.menu.findItem(R.id.navigation_admin_pengaturan).isChecked = true
+                    3 -> navView.menu.findItem(R.id.navigation_admin).isChecked = true
                 }
             }
         })
@@ -61,7 +61,7 @@ class AdminMainActivity : AppCompatActivity() {
                     viewPager.setCurrentItem(2, true)
                     return@setOnItemSelectedListener true
                 }
-                R.id.navigation_admin_pengaturan -> {
+                R.id.navigation_admin -> {
                     viewPager.setCurrentItem(3, true)
                     return@setOnItemSelectedListener true
                 }

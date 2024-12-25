@@ -1,6 +1,7 @@
 package com.valdoang.kateringconnect.view.user.main.ui.beranda
 
 import android.app.Activity
+import android.content.Context
 import android.content.Intent
 import android.location.Address
 import android.location.Geocoder
@@ -59,6 +60,7 @@ class UserBerandaFragment : Fragment() {
     private var starList: ArrayList<Star> = ArrayList()
     private var totalNilai = 0.0
     private var alamatId: String? = null
+    private lateinit var context: Context
 
     @RequiresApi(Build.VERSION_CODES.N)
     override fun onCreateView(
@@ -68,6 +70,7 @@ class UserBerandaFragment : Fragment() {
     ): View {
         _binding = FragmentUserBerandaBinding.inflate(inflater, container, false)
         val root: View = binding.root
+        context = inflater.context
 
         firebaseAuth = Firebase.auth
         userId = firebaseAuth.currentUser!!.uid
@@ -134,7 +137,7 @@ class UserBerandaFragment : Fragment() {
     @RequiresApi(Build.VERSION_CODES.N)
     private fun setupDataVendor() {
         progressBar.visibility = View.VISIBLE
-        val vendorRef = db.collection("user").whereEqualTo("jenis", "Vendor").whereIn("kota", listOf(userKota, addKota) )
+        val vendorRef = db.collection("user").whereEqualTo("jenis", "Vendor").whereEqualTo("statusPendaftaran", "Diterima").whereIn("kota", listOf(userKota, addKota) )
         vendorRef.addSnapshotListener{ snapshot,_ ->
             if (snapshot != null) {
                 vendorList.clear()
@@ -166,7 +169,7 @@ class UserBerandaFragment : Fragment() {
                     }
 
                     //Hitung Ongkos Kirim
-                    val coder = Geocoder(requireContext())
+                    val coder = Geocoder(context)
                     try {
                         val userAddress : List<Address> = coder.getFromLocationName(userAlamat,5)!!
                         val userLocation = userAddress[0]
@@ -237,7 +240,7 @@ class UserBerandaFragment : Fragment() {
                             userBerandaAdapter.setOnItemClickCallback(object :
                                 UserBerandaAdapter.OnItemClickCallback {
                                 override fun onItemClicked(data: Vendor) {
-                                    val intent = Intent(requireContext(), DetailVendorActivity::class.java)
+                                    val intent = Intent(context, DetailVendorActivity::class.java)
                                     intent.putExtra(Cons.EXTRA_ID, data.id)
                                     intent.putExtra(Cons.EXTRA_SEC_ID, alamatId.toString())
                                     intent.putExtra(Cons.EXTRA_ONGKIR, data.ongkir.toString())
@@ -297,7 +300,7 @@ class UserBerandaFragment : Fragment() {
             val acCity = view.findViewById<AutoCompleteTextView>(R.id.ac_add_city)
 
             val cities = resources.getStringArray(R.array.Cities)
-            val dropdownAdapter = ArrayAdapter(requireContext(), R.layout.dropdown_item, cities)
+            val dropdownAdapter = ArrayAdapter(context, R.layout.dropdown_item, cities)
             acCity.setAdapter(dropdownAdapter)
 
             acCity.setText(addKota, false)
@@ -330,23 +333,23 @@ class UserBerandaFragment : Fragment() {
         }
 
         binding.clAntarKe.setOnClickListener {
-            val intent = Intent(requireContext(), AlamatActivity::class.java)
+            val intent = Intent(context, AlamatActivity::class.java)
             startActivityForResult(intent, Cons.EXTRA_INT)
         }
 
         binding.ibChat.setOnClickListener {
-            val intent = Intent(requireContext(), ChatActivity::class.java)
+            val intent = Intent(context, ChatActivity::class.java)
             startActivity(intent)
         }
 
         binding.cvKeranjang.setOnClickListener {
-            val intent = Intent(requireContext(), AllKeranjangActivity::class.java)
+            val intent = Intent(context, AllKeranjangActivity::class.java)
             intent.putExtra(Cons.EXTRA_ID, alamatId.toString())
             startActivity(intent)
         }
 
         binding.cvKcwallet.setOnClickListener {
-            val intent = Intent(requireContext(), KcwalletActivity::class.java)
+            val intent = Intent(context, KcwalletActivity::class.java)
             startActivity(intent)
         }
     }

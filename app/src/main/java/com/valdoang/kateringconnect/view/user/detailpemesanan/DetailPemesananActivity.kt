@@ -60,6 +60,7 @@ class DetailPemesananActivity : AppCompatActivity() {
     private lateinit var tvAlasan: TextView
     private lateinit var tvAlasanValue: TextView
     private var potongan = ""
+    private var totalPemasukanAdmin = ""
     private lateinit var progressBar: ProgressBar
     private var saldoVendor = ""
     private var metodePembayaran = ""
@@ -119,6 +120,7 @@ class DetailPemesananActivity : AppCompatActivity() {
         adminRef.addSnapshotListener { adminSnapshot, _ ->
             if (adminSnapshot != null) {
                 potongan = adminSnapshot.data?.get("potongan").toString()
+                totalPemasukanAdmin = adminSnapshot.data?.get("totalPemasukan").toString()
             }
         }
     }
@@ -339,6 +341,7 @@ class DetailPemesananActivity : AppCompatActivity() {
                 "saldo" to newSaldo.toString()
             )
             vendorRef.update(saldoMap)
+            adminAddPemasukan()
         }
 
     }
@@ -367,8 +370,32 @@ class DetailPemesananActivity : AppCompatActivity() {
                 "saldo" to newSaldo.toString()
             )
             vendorRef.update(saldoMap)
+            adminAddPemasukan()
         }
 
+    }
+
+    private fun adminAddPemasukan() {
+        val sDate = System.currentTimeMillis().toString()
+        val sKeterangan = getString(R.string.potongan_hasil_vendor)
+        val sNominal = total * potongan.toLong() / 100
+
+        val mutasiMap = hashMapOf(
+            "tanggal" to sDate,
+            "keterangan" to sKeterangan,
+            "nominal" to sNominal.toString(),
+        )
+
+        val adminRef = db.collection("user").document(Cons.ADMIN_ID)
+        val newPemasukanRef = adminRef.collection("pemasukan").document()
+        newPemasukanRef.set(mutasiMap).addOnSuccessListener {
+            val newTotalPemasukan = totalPemasukanAdmin.toLong() + sNominal
+
+            val totalPemasukanMap = mapOf(
+                "totalPemasukan" to newTotalPemasukan.toString()
+            )
+            adminRef.update(totalPemasukanMap)
+        }
     }
 
     @RequiresApi(Build.VERSION_CODES.N)
@@ -398,7 +425,7 @@ class DetailPemesananActivity : AppCompatActivity() {
             }
 
             it.visibility = View.GONE
-            finish()
+            onBackPressed()
         }
     }
 

@@ -24,8 +24,8 @@
         tools:layout="@layout/fragment_admin_chat" />
 
     <fragment
-        android:id="@+id/navigation_admin_pengaturan"
-        android:name="com.valdoang.kateringconnect.view.admin.ui.pengaturan.AdminPengaturanFragment"
-        android:label="@string/pengaturan"
-        tools:layout="@layout/fragment_admin_pengaturan" />
+        android:id="@+id/navigation_admin"
+        android:name="com.valdoang.kateringconnect.view.admin.ui.admin.AdminFragment"
+        android:label="@string/admin"
+        tools:layout="@layout/fragment_admin" />
 </navigation>

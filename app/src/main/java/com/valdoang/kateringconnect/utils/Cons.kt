@@ -16,6 +16,5 @@ object Cons {
     const val ADMIN_ID = "QdSXDTcq8chSc7jj1uHPH8oJ43h1"
 
     //Sesuaikan menurut IP saat ini
-    const val MIDTRANS_BASE_URL = "http://192.168.100.64:5000/"
-    const val WARKOP88_URL = "http://192.168.1.139:5000"
+    const val MIDTRANS_BASE_URL = "http://192.168.1.116:5000"
 }

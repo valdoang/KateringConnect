@@ -1,4 +1,4 @@
-package com.valdoang.kateringconnect.view.admin.ui.pengaturan
+package com.valdoang.kateringconnect.view.admin.ui.admin
 
 import android.os.Bundle
 import android.text.InputType
@@ -12,7 +12,7 @@ import com.valdoang.kateringconnect.R
 import com.valdoang.kateringconnect.databinding.ActivityEditTextBinding
 import com.valdoang.kateringconnect.utils.Cons
 
-class AturPengaturanActivity : AppCompatActivity() {
+class AturBiayaActivity : AppCompatActivity() {
     private lateinit var binding: ActivityEditTextBinding
     private var firebaseAuth = FirebaseAuth.getInstance()
     private var adminId = firebaseAuth.currentUser!!.uid
